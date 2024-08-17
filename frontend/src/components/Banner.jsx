@@ -4,10 +4,11 @@ import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 
 export default function Banner() {
+  
   const navigate = useNavigate();
 
   const checkoutHandler = () => {
-    navigate("/signin?redirect=/quote");
+    navigate("/signin?redirect=/quote/:id");
   };
   return (
     <div style={{ paddingLeft: 0 }} className="py-4">
@@ -55,7 +56,7 @@ export default function Banner() {
                 Learn more
               </Link>
               <Button
-                to="/quote"
+                to="/quote/:id"
                 className="btn btn-outline-light btn-md"
                 role="button"
                 onClick={checkoutHandler}

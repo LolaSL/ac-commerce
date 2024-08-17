@@ -42,9 +42,9 @@ import FeaturedPage from './pages/FeaturedPage.jsx';
 import SellerEditPage from './pages/SellerEditPage.jsx';
 import SellersListPage from './pages/SellersListPage.jsx';
 import AirConditioningPage from './pages/AirConditioningPage.jsx';
-// import GetQoutePage from './pages/GetQoutePage.jsx';
+import GetQuotePage from './pages/.jsx';
 import ContactPage from './pages/ContactPage.jsx';
-// import DesignPage from './pages/DesignPage.jsx';
+import AcSizeCalculation from './pages/AcSizeCalculation.jsx';
 
 
 
@@ -168,6 +168,9 @@ function App() {
           }
         >
           <Nav className="flex-column text-white w-100 p-2" >
+          <Nav.Item>
+              <Link to="/ac-calculation" className="link-sellers fw-bold">AC Calculation</Link>
+            </Nav.Item>
             <Nav.Item>
               <strong>Categories</strong>
             </Nav.Item>
@@ -314,10 +317,9 @@ function App() {
               <Route path="/sellers/:id" element={<SellerPage />} />
               <Route path="/sellers/edit/:id" element={<SellerEditPage />} />
               <Route path="/air-conditioning" element={<AirConditioningPage />} />
-              {/* <Route path="/quote" element={<GetQoutePage />} /> */}
-              {/* <Route path="/design" element={<DesignPage />} /> */}
+              <Route path="/ac-calculation" element={<AcSizeCalculation />} />
+              <Route path="/quote/:id" element={<GetQuotePage />} />
               <Route path="/contact" element={<ContactPage />} />
-
               <Route path="/" element={<HomePage />} />
             </Routes>
           </Container>

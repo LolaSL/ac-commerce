@@ -16,7 +16,7 @@ export default function Banner() {
       >
         <div className="banner">
           <h1 className="mb-3 banner-title">
-            More reasons to stay with Cool-Commwerce
+            More reasons to stay with AC Commwerce
           </h1>
           <div className="d-flex justify-content-center align-items-center h-100">
             <div className="text-white">

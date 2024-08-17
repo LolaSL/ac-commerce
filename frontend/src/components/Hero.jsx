@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <header style={{ paddingLeft: 0 }}>
       <div
-        className="p-5 text-center bg-image banner "
+        className="p-5 text-center responsive banner "
         style={{
           backgroundImage: `url("/images/hero.jpg")`,
           height: 700,

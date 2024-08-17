@@ -152,6 +152,7 @@ productRouter.get(
     const page = query.page || 1;
     const category = query.category || '';
     const price = query.price || '';
+    const btu = query.btu || '';
     const rating = query.rating || '';
     const order = query.order || '';
     const searchQuery = query.query || '';
@@ -165,6 +166,7 @@ productRouter.get(
             },
           }
         : {};
+    const btuFilter = btu &&  btu !== 'all' ? {  btu } : {};
     const categoryFilter = category && category !== 'all' ? { category } : {};
     const ratingFilter =
       rating && rating !== 'all'
@@ -202,6 +204,7 @@ productRouter.get(
       ...categoryFilter,
       ...priceFilter,
       ...ratingFilter,
+      ...btuFilter
     })
       .sort(sortOrder)
       .skip(pageSize * (page - 1))
@@ -212,6 +215,7 @@ productRouter.get(
       ...categoryFilter,
       ...priceFilter,
       ...ratingFilter,
+      ...btuFilter
     });
     res.send({
       products,

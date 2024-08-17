@@ -7,13 +7,12 @@ import userRouter from './routes/userRoutes.js';
 import orderRouter from './routes/orderRoutes.js';
 import sellerRouter from './routes/sellerRoutes.js'
 import uploadRouter from "./routes/uploadRoutes.js";
-// import quoteRouter from './routes/quoteRoutes.js';
+import quoteRouter from './routes/quoteRoutes.js';
 // import designRouter from './routes/designRoutes.js';
 import contactRouter from './routes/contactRoutes.js'
 import cors from 'cors';
 
 dotenv.config();
-
 
 mongoose.connect(process.env.MONGODB_URI).then(() => {
     console.log("Connected to Mongo DB")
@@ -46,6 +45,7 @@ app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/sellers', sellerRouter);
 app.use('/api/contact', contactRouter);
+app.use('/api/quote', quoteRouter);
 app.get('/', (req, res) => {
     res.send('Server is ready')
 })

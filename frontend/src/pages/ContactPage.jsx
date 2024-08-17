@@ -36,7 +36,7 @@ const ContactPage = () => {
   };
 
   return (
-    <Container>
+    <Container className="pt-4">
       <Row className="my-4">
         <Col md={6}>
           <h2>Contact Us</h2>
@@ -88,7 +88,7 @@ const ContactPage = () => {
               />
             </Form.Group>
 
-            <Button variant="primary" type="submit" className="mt-4" disabled={loading}>
+            <Button variant="secondary" type="submit" className="mt-4" disabled={loading}>
               {loading ? 'Submitting...' : 'Submit'}
             </Button>
           </Form>
