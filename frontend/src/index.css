@@ -226,6 +226,89 @@ button.thumbnail {
 /* .btu-container{
   background-color: #d6d1d1;
 } */
+
+
+.upload-pdf {
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 20px;
+}
+
+.formData {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-control {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.btn {
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.uploaded {
+  margin-top: 20px;
+}
+
+.output-div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.inner-div {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.pdf-div {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pdf-div p {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .output-div {
+    grid-template-columns: 1fr;
+  }
+
+  .form-control {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .btn {
+    font-size: 14px;
+    padding: 8px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .upload-pdf {
+    padding: 10px;
+  }
+
+  .pdf-div p {
+    font-size: 16px;
+  }
+
+  .inner-div {
+    padding: 10px;
+  }
+}
+
 .hero-title, .header-title, .banner-title {
   position: relative;
   font-family: sans-serif;

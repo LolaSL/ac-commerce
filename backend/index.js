@@ -8,7 +8,6 @@ import orderRouter from './routes/orderRoutes.js';
 import sellerRouter from './routes/sellerRoutes.js'
 import uploadRouter from "./routes/uploadRoutes.js";
 import quoteRouter from './routes/quoteRoutes.js';
-// import designRouter from './routes/designRoutes.js';
 import contactRouter from './routes/contactRoutes.js'
 import cors from 'cors';
 
@@ -40,6 +39,7 @@ app.get("/api/keys/google", (req, res) => {
 
 app.use('/api/seed', seedRouter);
 app.use("/api/upload", uploadRouter);
+app.use("/files", express.static("files"));
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);

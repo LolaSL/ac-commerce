@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
 function BtuCalculator() {
+
   const [measurementSystem, setMeasurementSystem] = useState("meters");
   const [roomSize, setRoomSize] = useState("");
   const [ceilingHeight, setCeilingHeight] = useState("");
@@ -11,6 +12,7 @@ function BtuCalculator() {
   const [sunExposure, setSunExposure] = useState("Average");
   const [climate, setClimate] = useState("Average");
   const [btuResult, setBtuResult] = useState(null);
+
 
   const handleCalculate = () => {
     let area = parseFloat(roomSize);
@@ -28,7 +30,7 @@ function BtuCalculator() {
     }
 
     // Base BTU = Area in square meters * 500 (standard multiplier)
-    let baseBTU = area * 500;
+    let baseBTU = area * 550;
 
     // Add 1000 BTU/hr for each foot over 8 feet (2.44 meters)
     if (height > 2.44) {
@@ -57,7 +59,7 @@ function BtuCalculator() {
 
     // Adjust based on climate
     if (climate === "Hot") {
-      baseBTU *= 1.1; // Increase by 10% for hot climates
+      baseBTU *= 1.2; // Increase by 10% for hot climates
     } else if (climate === "Cold") {
       baseBTU *= 0.9; // Decrease by 10% for cold climates
     }
@@ -68,6 +70,7 @@ function BtuCalculator() {
         baseBTU *= 1.2; // Decrease by 20% for cold climates
       }
     setBtuResult(Math.round(baseBTU));
+ 
   };
 
   const handleClear = () => {

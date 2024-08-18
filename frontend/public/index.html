@@ -16,7 +16,25 @@
 
 <body>
   <script src="https://kit.fontawesome.com/61172e2478.js" crossorigin="anonymous"></script>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <!-- <script type="module">
+    import pdfjsDist from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/+esm'
+    </script> -->
+    <script src="assets/pspdfkit.js"></script>
+  
+  	<script>
+			PSPDFKit.load({
+				container: '#pspdfkit',
+				document: 'document.pdf',
+			})
+				.then(function (instance) {
+					console.log('PSPDFKit loaded', instance);
+				})
+				.catch(function (error) {
+					console.error(error.message);
+				});
+		</script>
+  
+    <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
 </body>
 

@@ -8,7 +8,7 @@ export default function Banner() {
   const navigate = useNavigate();
 
   const checkoutHandler = () => {
-    navigate("/signin?redirect=/quote/:id");
+    navigate("/signin?redirect=/upload-pdf");
   };
   return (
     <div style={{ paddingLeft: 0 }} className="py-4">

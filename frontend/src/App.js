@@ -42,7 +42,7 @@ import FeaturedPage from './pages/FeaturedPage.jsx';
 import SellerEditPage from './pages/SellerEditPage.jsx';
 import SellersListPage from './pages/SellersListPage.jsx';
 import AirConditioningPage from './pages/AirConditioningPage.jsx';
-import GetQuotePage from './pages/.jsx';
+import UploadPDF from './components/UploadPDF.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import AcSizeCalculation from './pages/AcSizeCalculation.jsx';
 
@@ -318,7 +318,7 @@ function App() {
               <Route path="/sellers/edit/:id" element={<SellerEditPage />} />
               <Route path="/air-conditioning" element={<AirConditioningPage />} />
               <Route path="/ac-calculation" element={<AcSizeCalculation />} />
-              <Route path="/quote/:id" element={<GetQuotePage />} />
+              <Route path="/upload-pdf" element={<UploadPDF />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/" element={<HomePage />} />
             </Routes>
