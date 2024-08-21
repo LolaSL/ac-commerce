@@ -20,7 +20,7 @@ const AcSizeCalculation = () => {
           watt-hours, or the energy released by burning one match. 1 watt is
           approximately 3.412 BTU per hour.
         </p>
-        <p>
+        <p className="ac-calculation">
           BTU is often used as a point of reference for comparing different
           fuels. Even though they're physical commodities and are quantified
           accordingly, such as by volume or barrels, they can be converted to
@@ -30,7 +30,7 @@ const AcSizeCalculation = () => {
           allows many different commodities with intrinsic energy properties,
           such as natural gas and oil, to be compared and contrasted.
         </p>
-        <p>
+        <p className="ac-calculation">
           BTU can also be used pragmatically as a point of reference for the
           amount of heat that an appliance generates; the higher the BTU rating
           of an appliance, the greater the heating capacity. As for air

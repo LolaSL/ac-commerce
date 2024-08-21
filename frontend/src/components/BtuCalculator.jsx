@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import axios from "axios";
 
 function BtuCalculator() {
-
   const [measurementSystem, setMeasurementSystem] = useState("meters");
   const [roomSize, setRoomSize] = useState("");
   const [ceilingHeight, setCeilingHeight] = useState("");
@@ -12,9 +12,9 @@ function BtuCalculator() {
   const [sunExposure, setSunExposure] = useState("Average");
   const [climate, setClimate] = useState("Average");
   const [btuResult, setBtuResult] = useState(null);
+  const [product, setProduct] = useState(null);
 
-
-  const handleCalculate = () => {
+  const handleCalculate = async () => {
     let area = parseFloat(roomSize);
     let height = parseFloat(ceilingHeight);
 
@@ -24,53 +24,61 @@ function BtuCalculator() {
     }
 
     if (measurementSystem === "feet") {
-      // Convert to meters
       area *= 0.092903;
       height *= 0.3048;
     }
 
-    // Base BTU = Area in square meters * 500 (standard multiplier)
     let baseBTU = area * 550;
 
-    // Add 1000 BTU/hr for each foot over 8 feet (2.44 meters)
     if (height > 2.44) {
       baseBTU += 1000 * Math.ceil((height - 2.44) / 0.305);
     }
 
-    // Add 600 BTU/hr for each additional person over 2
     if (numPeople > 2) {
       baseBTU += 600 * (numPeople - 2);
     }
 
-    // Add 4000 BTU/hr if the room is a kitchen
-    if ((roomType === "Kitchen") & (roomType ==="Entire Second Floor And Above")) {
+    if (
+      roomType === "Kitchen" ||
+      roomType === "Entire Second Floor And Above"
+    ) {
       baseBTU += 4000;
     }
-    else if (roomType === "Entire Second Floor And Above") {
-      baseBTU += 6000; // Decrease by 10%
-    }
 
-    // Adjust based on sun exposure
     if (sunExposure === "Full sunlight") {
-      baseBTU *= 1.2; // Increase by 20%
+      baseBTU *= 1.2;
     } else if (sunExposure === "Heavily shaded") {
-      baseBTU *= 0.9; // Decrease by 10%
+      baseBTU *= 0.9;
     }
 
-    // Adjust based on climate
     if (climate === "Hot") {
-      baseBTU *= 1.2; // Increase by 10% for hot climates
+      baseBTU *= 1.2;
     } else if (climate === "Cold") {
-      baseBTU *= 0.9; // Decrease by 10% for cold climates
+      baseBTU *= 0.9;
     }
-    // Adjust based on climate
+
     if (insulationCondition === "Average") {
-        baseBTU *= 1.1; // Increase by 10% for hot climates
-      } else if (insulationCondition === "Poor") {
-        baseBTU *= 1.2; // Decrease by 20% for cold climates
-      }
-    setBtuResult(Math.round(baseBTU));
- 
+      baseBTU *= 1.1;
+    } else if (insulationCondition === "Poor") {
+      baseBTU *= 1.2;
+    }
+
+   const roundedBTU = Math.round(baseBTU);
+    // if (baseBTU >= 5000) {
+    //   return (baseBTU = 6000);
+    // } else if (baseBTU >= 7000) {
+    //   return (baseBTU = 9000);
+    // }
+    setBtuResult(roundedBTU);
+
+    // Fetch the product by BTU
+    try {
+      const { data } = await axios.get(`/api/products/btu/${roundedBTU}`);
+      setProduct(data);
+    } catch (error) {
+      console.error("Product not found:", error);
+      setProduct(null);
+    }
   };
 
   const handleClear = () => {
@@ -82,8 +90,8 @@ function BtuCalculator() {
     setSunExposure("Average");
     setClimate("Average");
     setBtuResult(null);
+    setProduct(null);
   };
-
   return (
     <Container className="btu-container pt-2 pb-2 rounded">
       <Row className="my-4">
@@ -219,6 +227,14 @@ function BtuCalculator() {
         <Row className="my-4">
           <Col xs={12}>
             <h2>Estimated BTU: {btuResult}</h2>
+            {product ? (
+              <div>
+                <h3>{product.name}</h3>
+                <img src={product.image} alt={product.name} width="300px" />
+              </div>
+            ) : (
+              <p>No matching product found.</p>
+            )}
           </Col>
         </Row>
       )}

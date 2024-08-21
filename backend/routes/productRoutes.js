@@ -27,7 +27,7 @@ productRouter.post(
       numReviews: 0,
       description: 'sample description',
       description: 'sample description',
-      features: ['Heating','Cooling', 'Wi-Fi', 'Energy Saving', 'Remote Control', 'Led' ],
+      features: ['Heating', 'Cooling', 'Wi-Fi', 'Energy Saving', 'Remote Control', 'Led'],
       btu: 0,
       areaCoverage: 0,
       energyEfficiency: 0
@@ -105,8 +105,8 @@ productRouter.post(
       product.reviews.push(review);
       product.numReviews = product.reviews.length;
       product.rating =
-      product.reviews.reduce((a, c) => c.rating + a, 0) /
-      product.reviews.length;
+        product.reviews.reduce((a, c) => c.rating + a, 0) /
+        product.reviews.length;
       const updatedProduct = await product.save();
       res.status(201).send({
         message: 'Review Created',
@@ -160,44 +160,44 @@ productRouter.get(
     const queryFilter =
       searchQuery && searchQuery !== 'all'
         ? {
-            name: {
-              $regex: searchQuery,
-              $options: 'i',
-            },
-          }
+          name: {
+            $regex: searchQuery,
+            $options: 'i',
+          },
+        }
         : {};
-    const btuFilter = btu &&  btu !== 'all' ? {  btu } : {};
+    const btuFilter = btu && btu !== 'all' ? { btu } : {};
     const categoryFilter = category && category !== 'all' ? { category } : {};
     const ratingFilter =
       rating && rating !== 'all'
         ? {
-            rating: {
-              $gte: Number(rating),
-            },
-          }
+          rating: {
+            $gte: Number(rating),
+          },
+        }
         : {};
     const priceFilter =
       price && price !== 'all'
         ? {
-            // 1-50
-            price: {
-              $gte: Number(price.split('-')[0]),
-              $lte: Number(price.split('-')[1]),
-            },
-          }
+          // 1-50
+          price: {
+            $gte: Number(price.split('-')[0]),
+            $lte: Number(price.split('-')[1]),
+          },
+        }
         : {};
     const sortOrder =
       order === 'featured'
         ? { featured: -1 }
         : order === 'lowest'
-        ? { price: 1 }
-        : order === 'highest'
-        ? { price: -1 }
-        : order === 'toprated'
-        ? { rating: -1 }
-        : order === 'newest'
-        ? { createdAt: -1 }
-        : { _id: -1 };
+          ? { price: 1 }
+          : order === 'highest'
+            ? { price: -1 }
+            : order === 'toprated'
+              ? { rating: -1 }
+              : order === 'newest'
+                ? { createdAt: -1 }
+                : { _id: -1 };
 
     const products = await Product.find({
       ...queryFilter,
@@ -250,5 +250,18 @@ productRouter.get('/:id', async (req, res) => {
     res.status(404).send({ message: 'Product Not Found' });
   }
 });
-
+// Fetch product by BTU
+productRouter.get('/btu/:btu', async (req, res) => {
+  try {
+    const btu = Number(req.params.btu);
+    const product = await Product.findOne({ btu: btu });
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).json({ message: 'Product not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 export default productRouter;

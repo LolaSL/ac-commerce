@@ -4,6 +4,9 @@ import { v2 as cloudinary } from 'cloudinary';
 import streamifier from 'streamifier';
 import { isAdmin, isAuth } from '../utils.js';
 import PdfDetails from '../models/pdfDetails.js';
+import fs from "fs";
+import path from "path";
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -50,25 +53,53 @@ uploadRouter.post(
 
 uploadRouter.post("/upload-files",
   upload.single("file"), async (req, res) => {
-  console.log(req.file);
-  const title = req.body.title;
-  const fileName = req.file.filename;
-  try {
-    await PdfDetails.create({ title: title, pdf: fileName });
-    res.send({ status: "ok" });
-  } catch (error) {
-    res.json({ status: error });
-  }
-});
+    console.log(req.file);
+    const title = req.body.title;
+    const fileName = req.file.filename;
+    try {
+      await PdfDetails.create({ title: title, pdf: fileName });
+      res.send({ status: "ok" });
+    } catch (error) {
+      res.json({ status: error });
+    }
+  });
+
+
 
 uploadRouter.get("/get-files",
   async (req, res) => {
-  try {
-   PdfDetails.find({}).then((data) => {
-      res.send({ status: "ok", data: data });
-    });
-  } catch (error) {
+    try {
+      PdfDetails.find({}).then((data) => {
+        res.send({ status: "ok", data: data });
+      });
+    } catch (error) {
       res.json({ status: error });
+    }
+  });
+
+uploadRouter.delete("/delete-file/:id", async (req, res) => {
+  try {
+    const fileId = req.params.id;
+
+    // Find the PDF entry in the database
+    const pdfEntry = await PdfModel.findById(fileId);
+    if (!pdfEntry) {
+      return res.status(404).json({ message: "File not found" });
+    }
+
+    // Remove the file from the filesystem
+    const filePath = path.join(__dirname, "..", "files", pdfEntry.pdf);
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
+    // Remove the entry from the database
+    await PdfModel.findByIdAndDelete(fileId);
+
+    res.status(200).json({ message: "File deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting file:", error);
+    res.status(500).json({ message: "Error deleting file" });
   }
 });
 export default uploadRouter;

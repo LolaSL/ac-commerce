@@ -37,7 +37,7 @@ const ContactPage = () => {
 
   return (
     <Container className="pt-4">
-      <Row className="my-4">
+      <Row className="my-4 d-flex">
         <Col md={6}>
           <h2>Contact Us</h2>
           {responseMessage && <Alert variant="success">{responseMessage}</Alert>}
@@ -53,7 +53,6 @@ const ContactPage = () => {
                 required
               />
             </Form.Group>
-
             <Form.Group controlId="formEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control
@@ -64,7 +63,6 @@ const ContactPage = () => {
                 required
               />
             </Form.Group>
-
             <Form.Group controlId="formSubject">
               <Form.Label>Subject</Form.Label>
               <Form.Control
@@ -75,7 +73,6 @@ const ContactPage = () => {
                 required
               />
             </Form.Group>
-
             <Form.Group controlId="formMessage">
               <Form.Label>Message</Form.Label>
               <Form.Control
@@ -93,7 +90,7 @@ const ContactPage = () => {
             </Button>
           </Form>
         </Col>
-        <Col md={6}>
+        <Col md={6} >
           <h2>Our Office</h2>
           <p>1234 Street Name,</p>
           <p>City, State, Zip Code</p>
