@@ -44,7 +44,7 @@ import SellersListPage from './pages/SellersListPage.jsx';
 import AirConditioningPage from './pages/AirConditioningPage.jsx';
 import UploadPDF from './components/UploadPDF.jsx';
 import ContactPage from './pages/ContactPage.jsx';
-import AcSizeCalculation from './pages/AcSizeCalculation.jsx';
+
 
 
 
@@ -168,9 +168,9 @@ function App() {
           }
         >
           <Nav className="flex-column text-white w-100 p-2" >
-          <Nav.Item>
+          {/* <Nav.Item>
               <Link to="/ac-calculation" className="link-sellers fw-bold">AC Calculation</Link>
-            </Nav.Item>
+            </Nav.Item> */}
             <Nav.Item>
               <strong>Categories</strong>
             </Nav.Item>
@@ -317,7 +317,6 @@ function App() {
               <Route path="/sellers/:id" element={<SellerPage />} />
               <Route path="/sellers/edit/:id" element={<SellerEditPage />} />
               <Route path="/air-conditioning" element={<AirConditioningPage />} />
-              <Route path="/ac-calculation" element={<AcSizeCalculation />} />
               <Route path="/upload-pdf" element={<UploadPDF />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/" element={<HomePage />} />

@@ -166,7 +166,9 @@ productRouter.get(
           },
         }
         : {};
-    const btuFilter = btu && btu !== 'all' ? { btu } : {};
+        const btuFilter = btu && btu !== 'all'
+        ? { btu: { $gte: Number(btu) } }
+        : {};
     const categoryFilter = category && category !== 'all' ? { category } : {};
     const ratingFilter =
       rating && rating !== 'all'
@@ -250,18 +252,53 @@ productRouter.get('/:id', async (req, res) => {
     res.status(404).send({ message: 'Product Not Found' });
   }
 });
-// Fetch product by BTU
+
+// Update the '/btu/:btu' route to find the nearest product
 productRouter.get('/btu/:btu', async (req, res) => {
   try {
-    const btu = Number(req.params.btu);
-    const product = await Product.findOne({ btu: btu });
-    if (product) {
-      res.json(product);
+    const targetBTU = parseInt(req.params.btu);
+
+    // Find the closest matching product
+    const product = await Product.findOne({
+      btu: {
+        $gte: targetBTU,  // First, try to find a product with a BTU >= targetBTU
+      }
+    }).sort({ btu: 1 });
+
+    // If no product found with BTU >= targetBTU, find the closest lower BTU product
+    if (!product) {
+      const closestProduct = await Product.findOne({
+        btu: { $lte: targetBTU }  // Find the closest lower BTU product if none is found above
+      }).sort({ btu: -1 });
+
+      if (closestProduct) {
+        res.send(closestProduct);
+      } else {
+        res.status(404).send({ message: 'Product not found' });
+      }
     } else {
-      res.status(404).json({ message: 'Product not found' });
+      res.send(product);
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).send({ message: error.message });
   }
 });
+
+
+
+
+// Fetch product by BTU
+// productRouter.get('/btu/:btu', async (req, res) => {
+//   try {
+//     const btu = Number(req.params.btu);
+//     const product = await Product.findOne({ btu: btu });
+//     if (product) {
+//       res.json(product);
+//     } else {
+//       res.status(404).json({ message: 'Product not found' });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// });
 export default productRouter;

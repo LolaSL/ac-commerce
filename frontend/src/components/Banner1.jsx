@@ -1,7 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Banner() {
+  const navigate = useNavigate();
+
+  const checkoutHandler = () => {
+    navigate("/signin?redirect=/upload-pdf");
+  };
   return (
     <div style={{ paddingLeft: 0 }} className="py-4">
       <div
@@ -24,13 +31,14 @@ export default function Banner() {
                 Desing and project your own air conditioning at your property
               </p>
              
-              <Link
-                to="/design"
-                className="btn btn-outline-light btn-md me-2"
+              <Button
+                to="/quote/:id"
+                className="btn btn-outline-light btn-md"
                 role="button"
+                onClick={checkoutHandler}
               >
-                Design now
-              </Link>
+               Desing Now
+              </Button>
               
             </div>
           </div>

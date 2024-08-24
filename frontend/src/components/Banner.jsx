@@ -1,15 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
-import { useNavigate } from "react-router-dom";
+
 
 export default function Banner() {
   
-  const navigate = useNavigate();
 
-  const checkoutHandler = () => {
-    navigate("/signin?redirect=/upload-pdf");
-  };
   return (
     <div style={{ paddingLeft: 0 }} className="py-4">
       <div
@@ -43,7 +38,7 @@ export default function Banner() {
               </p>
               <Link
                 to="/products"
-                className="btn btn-outline-light btn-md me-2"
+                className="btn btn-outline-light btn-md me-4"
                 role="button"
               >
                 Shop Now
@@ -53,16 +48,9 @@ export default function Banner() {
                 className="btn btn-outline-light btn-md me-2"
                 role="button"
               >
-                Learn more
+                Learn More
               </Link>
-              <Button
-                to="/quote/:id"
-                className="btn btn-outline-light btn-md"
-                role="button"
-                onClick={checkoutHandler}
-              >
-                Get a Quote
-              </Button>
+
             </div>
           </div>
         </div>
