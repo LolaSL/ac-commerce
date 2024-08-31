@@ -166,9 +166,9 @@ productRouter.get(
           },
         }
         : {};
-        const btuFilter = btu && btu !== 'all'
-        ? { btu: { $gte: Number(btu) } }
-        : {};
+    const btuFilter = btu && btu !== 'all'
+      ? { btu: { $gte: Number(btu) } }
+      : {};
     const categoryFilter = category && category !== 'all' ? { category } : {};
     const ratingFilter =
       rating && rating !== 'all'

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import axios from "axios";
-import { Link } from 'react-router-dom';
-
+import { Link } from "react-router-dom";
 
 function BtuCalculator() {
   const [measurementSystem, setMeasurementSystem] = useState("meters");
@@ -33,7 +32,7 @@ function BtuCalculator() {
     let baseBTU = area * 500;
 
     if (height > 2.44) {
-      baseBTU +=1000 * Math.ceil((height - 2.44) / 0.305);
+      baseBTU += 1000 * Math.ceil((height - 2.44) / 0.305);
     }
 
     if (numPeople > 1) {
@@ -65,7 +64,7 @@ function BtuCalculator() {
       baseBTU *= 1.2;
     }
 
-   const roundedBTU = Math.round(baseBTU);
+    const roundedBTU = Math.round(baseBTU);
     setBtuResult(roundedBTU);
 
     // Fetch the product by BTU
@@ -222,22 +221,29 @@ function BtuCalculator() {
         </Col>
       </Row>
       {btuResult !== null && (
-  <Row className="my-4">
-    <Col xs={12}>
-      <h2>Estimated BTU: {btuResult}</h2>
-      {product ? (
-        <div>
-          <h3>{product.name}</h3>
-          <Link to={`/product/${product.slug}`}>
-            <img src={product.image} alt={product.name} width="300px" className="rounded pt-4" />
-          </Link>
+        <div className="result-container mt-4 p-4 ">
+          <Row className="my-4">
+            <Col xs={12}>
+              <h2>Estimated BTU: {btuResult}</h2>
+              {product ? (
+                <div >
+                  <h3>{product.name}</h3>
+                  <Link to={`/product/${product.slug}`}>
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      width="300px"
+                      className="img rounded pt-4"
+                    />
+                  </Link>
+                </div>
+              ) : (
+                <p>No matching product found.</p>
+              )}
+            </Col>
+          </Row>
         </div>
-      ) : (
-        <p>No matching product found.</p>
       )}
-    </Col>
-  </Row>
-)}
     </Container>
   );
 }

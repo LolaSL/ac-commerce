@@ -244,7 +244,7 @@ export default function SellersListPage() {
                 onChange={(e) => setInfo(e.target.value)}
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant="secondary" type="submit">
               Create
             </Button>
           </Form>

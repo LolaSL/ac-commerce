@@ -36,7 +36,7 @@ const ContactPage = () => {
   };
 
   return (
-    <Container className="pt-4">
+    <Container className="pt-4 contact-form">
       <Row className="my-4 d-flex">
         <Col md={6}>
           <h2>Contact Us</h2>
@@ -84,20 +84,19 @@ const ContactPage = () => {
                 required
               />
             </Form.Group>
-
-            <Button variant="secondary" type="submit" className="mt-4" disabled={loading}>
+            <Button variant="secondary" type="submit" className="mt-4 mb-4" disabled={loading}>
               {loading ? 'Submitting...' : 'Submit'}
             </Button>
           </Form>
         </Col>
         <Col md={6} >
           <h2>Our Office</h2>
-          <p>1234 Street Name,</p>
+          <p>1234 Street Name</p>
           <p>City, State, Zip Code</p>
           <p>Email: contact@example.com</p>
           <p>Phone: (123) 456-7890</p>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
     </Container>
   );
 };

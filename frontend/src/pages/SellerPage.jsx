@@ -110,7 +110,7 @@ export default function SellerPage() {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <>
-          <div>
+          <div className="seller">
             <h2>{seller.name}</h2>
             <p>Brand: {seller.brand}</p>
             <p>Information: {seller.info}</p>

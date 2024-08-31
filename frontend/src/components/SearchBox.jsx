@@ -15,7 +15,7 @@ export default function SearchBox() {
 
   return (
     <Form className="d-flex me-auto my-4 w-100" onSubmit={submitHandler}>
-      <InputGroup>
+      <InputGroup className="search-box">
         <FormControl
           type="text"
           name="q"
@@ -24,6 +24,7 @@ export default function SearchBox() {
           placeholder="search products..."
           aria-label="Search Products"
           aria-describedby="button-search"
+     
         ></FormControl>
         <Button variant="outline-secondary" type="submit" id="button-search">
           <i className="fas fa-search"></i>

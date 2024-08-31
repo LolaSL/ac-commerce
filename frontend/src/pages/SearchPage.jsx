@@ -140,6 +140,7 @@ export default function SearchPage() {
       <Helmet>
         <title>Search Products</title>
       </Helmet>
+      <div className="search">
       <Row>
         <Col md={3}>
           <h3>AC Unit</h3>
@@ -189,7 +190,7 @@ export default function SearchPage() {
             </ul>
           </div>
           <div>
-            <h3>Avg. Customer Review</h3>
+            <h3>Customer Review</h3>
             <ul>
               {ratings.map((r) => (
                 <li key={r.name}>
@@ -252,7 +253,7 @@ export default function SearchPage() {
                     <option value="newest">Newest Arrivals</option>
                     <option value="lowest">Price: Low to High</option>
                     <option value="highest">Price: High to Low</option>
-                    <option value="toprated">Avg. Customer Reviews</option>
+                    <option value="toprated">Customer Reviews</option>
                   </select>
                 </Col>
               </Row>
@@ -291,7 +292,8 @@ export default function SearchPage() {
             </>
           )}
         </Col>
-      </Row>
+        </Row>
+      </div>
     </div>
   );
 }

@@ -16,6 +16,9 @@ import { getError } from "../utils";
 import { Store } from "../Store";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { toast } from "react-toastify";
+import Image from "react-bootstrap/Image";
+
+
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -128,11 +131,11 @@ function ProductPage() {
     <div>
       <Row>
         <Col md={6}>
-          <img
+          <Image
             className="responsive"
             src={selectedImage || product.image}
                 alt={product.name}
-          ></img>
+          ></Image>
         </Col>
         <Col md={3}>
           <ListGroup variant="flush">

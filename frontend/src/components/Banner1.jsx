@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
+import Image from "react-bootstrap/Image";
 
 
 export default function Banner() {
@@ -11,35 +12,29 @@ export default function Banner() {
   };
   return (
     <div style={{ paddingLeft: 0 }} className="py-4">
-      <div
-        className="p-5 text-center responsive banner"
-        style={{
-          backgroundImage: `url("/images/banner1.jpg")`,
-          height: 700,
-          backgroundSize: "cover",
-          objectFit: "cover",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
-        <div className="banner">
-          <h1 className="mb-3 banner-title">
-            More reasons to stay with AC Commwerce
-          </h1>
-          <div className="d-flex justify-content-center align-items-center h-100">
-            <div className="text-white">
-              <p className="banner-paragraph mb-2">
-                Desing and project your own air conditioning at your property
-              </p>
-             
+      <div className="banner">
+        <h1 className="mb-3 banner1-title text-center">
+          Stay with AC Commwerce
+        </h1>{" "}
+        <Image
+          className="p-2 text-center responsive  mb-4"
+          src="/images/banner1.jpg"
+          alt="Header"
+        />
+        <div className="d-flex justify-content-center align-items-center h-100">
+          <div className="text">
+            <h3 className="banner1-paragraph mb-2">
+              Design and project your own air conditioning at your property
+            </h3>
+            <div className="d-flex justify-content-center">
               <Button
                 to="/quote/:id"
-                className="btn btn-outline-light btn-md"
+                className="btn btn-secondary btn-md"
                 role="button"
                 onClick={checkoutHandler}
               >
-               Desing Now
+                Desing Now
               </Button>
-              
             </div>
           </div>
         </div>

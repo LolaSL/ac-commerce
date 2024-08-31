@@ -1,5 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
+import Image from "react-bootstrap/Image";
+
 
 const AirConditioningPage = () => {
   return (
@@ -12,7 +14,7 @@ const AirConditioningPage = () => {
       </h1>
       <article >
         <div className="mb-4 text-center pb-4 ac-image">
-          <img
+          <Image
             src="/images/ac9.jpg"
             alt="Air Conditioners types"
             className="responsive"
@@ -156,7 +158,7 @@ const AirConditioningPage = () => {
           remove from their respective surrounding air..
         </p>{" "}
         <div className="mb-4 text-center pb-4 ac-image h-50">
-          <img
+          <Image
             src="/images/btu3.jpg"
             alt="Air Conditioners BTU"
             className="img"
@@ -177,7 +179,7 @@ const AirConditioningPage = () => {
           What is air conditioning, and how does it work?
         </h4>
         <div className="mb-4 text-center">
-          <img
+          <Image
             src="/images/ac2.jpg"
             alt="Air Conditioners work"
             className="responsive"
@@ -249,7 +251,7 @@ const AirConditioningPage = () => {
           Common problems with air conditioners and how to solve them?
         </h4>
         <div className="mb-4 text-center ">
-          <img
+          <Image
             src="/images/ac4.jpeg"
             alt="Air Conditioners work"
             className="responsive"

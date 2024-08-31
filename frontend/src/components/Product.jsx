@@ -5,6 +5,7 @@ import Rating from "./Rating";
 import axios from "axios";
 import { useContext } from "react";
 import { Store } from "../Store";
+import Image from "react-bootstrap/Image";
 
 function Product(props) {
   const { product } = props;
@@ -31,7 +32,7 @@ function Product(props) {
   return (
     <Card>
       <Link to={`/product/${product.slug}`}>
-        <img src={product.image} className="responsive" alt={product.name} />
+        <Image src={product.image} className="responsive" alt={product.name} />
       </Link>
       <Card.Body>
         <Link to={`/product/${product.slug}`}className="card-title text-secondary" >

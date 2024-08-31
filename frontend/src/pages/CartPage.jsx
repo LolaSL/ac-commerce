@@ -9,7 +9,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import Image from "react-bootstrap/Image";
 
 
 export default function CartPage() {
@@ -58,11 +58,11 @@ export default function CartPage() {
                 <ListGroup.Item key={item._id}>
                   <Row className="align-items-center">
                     <Col md={4}>
-                      <img
+                      <Image
                         src={item.image}
                         alt={item.name}
                         className="img-fluid rounded img-thumbnail"
-                      ></img>{" "}
+                      ></Image>{" "}
                       <Link to={`/product/${item.slug}`}>{item.name}</Link>
                     </Col>
                     <Col md={3}>

@@ -14,6 +14,9 @@ import MessageBox from '../components/MessageBox ';
 import { Store } from '../Store';
 import { getError } from '../utils';
 import { toast } from 'react-toastify';
+import Image from "react-bootstrap/Image";
+
+
 
 function reducer(state, action) {
   switch (action.type) {
@@ -251,11 +254,11 @@ export default function OrderPage() {
                   <ListGroup.Item key={item._id}>
                     <Row className="align-items-center">
                       <Col md={6}>
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.name}
                           className="img-fluid rounded img-thumbnail"
-                        ></img>{' '}
+                        ></Image>{' '}
                         <Link to={`/product/${item.slug}`}>{item.name}</Link>
                       </Col>
                       <Col md={3}>

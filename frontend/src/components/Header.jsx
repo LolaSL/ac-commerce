@@ -1,27 +1,27 @@
-import React from 'react';
+import React from "react";
+import Image from "react-bootstrap/Image";
+
+
 
 export default function Header() {
-    return (
-        <header style={{ paddingLeft: 0 }}>
-            <div
-                className='p-5 text-center responsive banner '
-                style={{ backgroundImage: `url("/images/home4.jpg")`,
-                    height: 700,
-                    backgroundSize: 'cover', 
-                    objectFit: 'cover', 
-                    backgroundRepeat: 'no-repeat'}}
-            >
-                <div className='mask'
-                >
-                    <div className=' d-flex justify-content-center align-items-center  h-100'>
-                        <div className=" header">
-                            <h1 className='header-title mb-3'>Discover The Ultimate Air</h1>
-                            <h3 className='header-info text-white mb-3'>Experience the perfect balance of comfort and energy efficiency with our state-of-the-art air</h3>
-                        </div>
-                    </div>
-                </div>
+  return (
+    <header style={{ paddingLeft: 0 ,  marginBottom:"20px"}}>
+        <div className="mask">
+          <div className="d-flex justify-content-center align-items-center h-100">
+            <div className="text">
+            <h1 className="header-title mb-3 text-center">Discover The Ultimate Air</h1>
+            <Image className="p-2 text-center responsive  mb-4" src="/images/home.jpg" alt="Header" />
+              <h3 className="header-info  mb-3">
+                Designed for Optimal Perfomance: Our Air conditioning units
+                combine cutting-edge technology, energy efficiency and
+                unparalleled cooling carabilities to transform your living or
+                work.
+            </h3>
+       
+            </div>
           </div>
-        </header>
-    );
-}
+        </div>
 
+    </header>
+  );
+}

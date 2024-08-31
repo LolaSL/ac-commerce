@@ -9,9 +9,6 @@ import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox.jsx";
 import MessageBox from "../components/MessageBox .jsx";
 
-
-
-
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -28,11 +25,13 @@ const reducer = (state, action) => {
 const HomePage = () => {
   const [{ loading, error, products }, dispatch] = useReducer(
     // logger
-      (reducer), {
-    products: [],
-    loading: true,
-    error: "",
-  });
+    reducer,
+    {
+      products: [],
+      loading: true,
+      error: "",
+    }
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,29 +48,32 @@ const HomePage = () => {
 
   return (
     <div>
-        <Helmet>
-          <title> Cool Commerce</title>
+      <Helmet>
+        <title> Cool Commerce</title>
       </Helmet>
       <article className="py-4 mb-4">
-        <h1 className="featured-title text-center pt-4 mb-4 fw-bold">Featured Products</h1>
+        <h1 className="featured-title text-center pt-4 mb-4 fw-bold">
+          Featured Products
+        </h1>
         <p className="py-2 mb-2 featured-products text-center">
-        Introducing our latest line of air conditioning units</p>
+          Introducing our latest line of air conditioning units
+        </p>
       </article>
       <div className="products">
         {loading ? (
           <LoadingBox />
         ) : error ? (
           <MessageBox variant="danger">{error}</MessageBox>
-          ) : (
-              <div>
-          <Row>
-            {products.map((product) => (
-              <Col key={product.slug} xs={12} md={4} lg={3} className="mb-3">
-                <Product product={product}></Product>
-              </Col>
-            ))}
-                </Row>
-              </div>
+        ) : (
+          <div>
+            <Row>
+              {products.map((product) => (
+                <Col key={product.slug} xs={12} md={4} lg={3} className="mb-3">
+                  <Product product={product}></Product>
+                </Col>
+              ))}
+            </Row>
+          </div>
         )}
       </div>
     </div>

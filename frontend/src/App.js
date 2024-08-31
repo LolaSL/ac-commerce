@@ -44,6 +44,7 @@ import SellersListPage from './pages/SellersListPage.jsx';
 import AirConditioningPage from './pages/AirConditioningPage.jsx';
 import UploadPDF from './components/UploadPDF.jsx';
 import ContactPage from './pages/ContactPage.jsx';
+import Footer from './components/Footer.jsx';
 
 
 
@@ -100,7 +101,12 @@ function App() {
                 <i className="fas fa-bars"></i>
               </Button>
               <LinkContainer to="/">
-                <Navbar.Brand>AC Commerce</Navbar.Brand>
+                <Navbar.Brand><h3>
+                <span>AC</span> Commerce
+                </h3>
+                <p>
+                Cooling Solutions For Every Space
+                </p></Navbar.Brand>
               </LinkContainer>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
@@ -168,27 +174,23 @@ function App() {
           }
         >
           <Nav className="flex-column text-white w-100 p-2" >
-          {/* <Nav.Item>
-              <Link to="/ac-calculation" className="link-sellers fw-bold">AC Calculation</Link>
-            </Nav.Item> */}
-            <Nav.Item>
+            <Nav.Item className='search-title'>
               <strong>Categories</strong>
             </Nav.Item>
             {categories.map((category) => (
               <Nav.Item key={category}>
                 <LinkContainer
                   to={{ pathname: '/search', search: `category=${category}` }}
-
                   onClick={() => setSidebarIsOpen(false)}
                 >
                   <Nav.Link>{category}</Nav.Link>
                 </LinkContainer>
               </Nav.Item>
             ))}
-            <Nav.Item>
+            <Nav.Item  className='search-title'>
               <Link to="/sellers" className="link-sellers fw-bold">Sellers</Link>
             </Nav.Item>
-            <Nav.Item>
+            <Nav.Item  className='search-title'>
               <Link to="/contact" className="link-contact fw-bold">Contact</Link>
             </Nav.Item>
           </Nav>
@@ -323,9 +325,7 @@ function App() {
             </Routes>
           </Container>
         </main>
-        <footer>
-          <div className="text-center py-4 ">&copy; {new Date().getFullYear()} AC Commerce. All rights reserved</div>
-        </footer>
+<Footer />
       </div>
     </BrowserRouter>
   );
