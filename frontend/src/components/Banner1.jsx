@@ -14,7 +14,7 @@ export default function Banner() {
     <div style={{ paddingLeft: 0 }} className="py-4">
       <div className="banner">
         <h1 className="mb-3 banner1-title text-center">
-          Stay with AC Commwerce
+          Stay with AC Commerce
         </h1>{" "}
         <Image
           className="p-2 text-center responsive  mb-4"
@@ -28,7 +28,7 @@ export default function Banner() {
             </h3>
             <div className="d-flex justify-content-center">
               <Button
-                to="/quote/:id"
+                to="/upload-pdf"
                 className="btn btn-secondary btn-md"
                 role="button"
                 onClick={checkoutHandler}

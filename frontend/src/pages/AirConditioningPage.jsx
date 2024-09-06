@@ -7,7 +7,7 @@ const AirConditioningPage = () => {
   return (
     <div className="site-container mt-3 pt-3">
       <Helmet>
-        <title>Shopping Cart</title>
+        <title>Air Conditioning</title>
       </Helmet>
       <h1 className="mb-3 text-center pb-3">
         Everything You Should Know About Air Conditioning.

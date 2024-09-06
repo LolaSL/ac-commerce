@@ -42,9 +42,11 @@ import FeaturedPage from './pages/FeaturedPage.jsx';
 import SellerEditPage from './pages/SellerEditPage.jsx';
 import SellersListPage from './pages/SellersListPage.jsx';
 import AirConditioningPage from './pages/AirConditioningPage.jsx';
-import UploadPDF from './components/UploadPDF.jsx';
+// import UploadPDF from './components/UploadPDF.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import Footer from './components/Footer.jsx';
+import AboutUs from './pages/AboutUs.jsx';
+import ExtractPdf from './components/ExtractPdf.jsx';
 
 
 
@@ -102,11 +104,11 @@ function App() {
               </Button>
               <LinkContainer to="/">
                 <Navbar.Brand><h3>
-                <span>AC</span> Commerce
+                  <span>AC</span> Commerce
                 </h3>
-                <p>
-                Cooling Solutions For Every Space
-                </p></Navbar.Brand>
+                  <p>
+                    Cooling Solutions For Every Space
+                  </p></Navbar.Brand>
               </LinkContainer>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
@@ -187,11 +189,16 @@ function App() {
                 </LinkContainer>
               </Nav.Item>
             ))}
-            <Nav.Item  className='search-title'>
+            <Nav.Item className='search-title'>
               <Link to="/sellers" className="link-sellers fw-bold">Sellers</Link>
             </Nav.Item>
-            <Nav.Item  className='search-title'>
+            <Nav.Item className='search-title'>
+              <Link to="/upload-pdf" className="link-service fw-bold">Services</Link>
+            </Nav.Item>
+            <Nav.Item className='search-title'>
               <Link to="/contact" className="link-contact fw-bold">Contact</Link>
+            </Nav.Item>    <Nav.Item className='search-title'>
+              <Link to="/about-us" className="link-contact fw-bold">About Us</Link>
             </Nav.Item>
           </Nav>
         </div>
@@ -318,14 +325,15 @@ function App() {
               <Route path="/sellers" element={<SellersPage />} />
               <Route path="/sellers/:id" element={<SellerPage />} />
               <Route path="/sellers/edit/:id" element={<SellerEditPage />} />
+              <Route path="/about-us" element={<AboutUs />} />
               <Route path="/air-conditioning" element={<AirConditioningPage />} />
-              <Route path="/upload-pdf" element={<UploadPDF />} />
+              <Route path="/upload-pdf" element={<ExtractPdf />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/" element={<HomePage />} />
             </Routes>
           </Container>
         </main>
-<Footer />
+        <Footer />
       </div>
     </BrowserRouter>
   );

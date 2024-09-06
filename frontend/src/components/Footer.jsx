@@ -13,7 +13,7 @@ const Footer = () => {
         <footer className="footer ">
           <Row className="bg-secondary text-white p-4">
             <Col className="col-md-6 col-lg-5 col-12 ft-1">
-                 <div> <i class="fa-solid fa-air-conditioner"> 
+                 <div> <i className="fa-solid fa-air-conditioner"> 
                  </i>               
              <h3>
                 <span>AC</span> Commerce
@@ -29,19 +29,19 @@ const Footer = () => {
               <div className="footer-icons d-flex mb-4">
                 <NavLink href="#">
                   {" "}
-                  <i class="fa-brands fa-facebook"></i>
+                  <i className="fa-brands fa-facebook"></i>
                 </NavLink>
                 <NavLink href="#">
                   {" "}
-                  <i class="fa-brands fa-twitter"></i>
+                  <i className="fa-brands fa-twitter"></i>
                 </NavLink>
                 <NavLink href="#">
                   {" "}
-                  <i class="fa-brands fa-instagram"></i>
+                  <i className="fa-brands fa-instagram"></i>
                 </NavLink>
                 <NavLink href="#">
                   {" "}
-                  <i class="fa-brands fa-linkedin-in"></i>
+                  <i className="fa-brands fa-linkedin-in"></i>
                 </NavLink>
               </div>
             </Col>
@@ -49,9 +49,6 @@ const Footer = () => {
               <h5>Quick Links</h5>
               <NavLink className="text-white" href="/">
                 Home
-              </NavLink>
-              <NavLink className="text-white" href="/about">
-                About
               </NavLink>
               <NavLink className="text-white" href="/products">
                 Products
@@ -62,20 +59,23 @@ const Footer = () => {
               <NavLink className="text-white" href="/upload-pdf">
                 Services
               </NavLink>
+              <NavLink className="text-white" href="/about-us">
+                About Us
+              </NavLink>
             </Col>
             <Col className="col-md-6 col-lg-4 col-12 ft-3">
               <h5>Contact</h5>
               <p>
-                <i class="fa-solid fa-phone-volume"></i> Phone: (123) 456-7890
+                <i className="fa-solid fa-phone-volume"></i> Phone: (123) 456-7890
               </p>
               <p>
-                <i class="fa-solid fa-envelope"></i>Email: contact@example.com
+                <i className="fa-solid fa-envelope"></i>Email: contact@example.com
               </p>
               <p>
-                <i class="fa-solid fa-paper-plane"></i> 1234 Street Name
+                <i className="fa-solid fa-paper-plane"></i> 1234 Street Name
               </p>
               <p>
-                <i class="fa-solid fa-paper-plane"></i>City, State, Zip Code
+                <i className="fa-solid fa-paper-plane"></i>City, State, Zip Code
               </p>
             </Col>
             <div className="last-footer bg-secondary">

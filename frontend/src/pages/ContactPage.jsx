@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
+import { Helmet } from "react-helmet-async";
 
 const ContactPage = () => {
   const [fullName, setFullName] = useState('');
@@ -36,6 +37,10 @@ const ContactPage = () => {
   };
 
   return (
+    <div className="site-container mt-3 pt-3">
+    <Helmet>
+      <title>Contact</title>
+    </Helmet>
     <Container className="pt-4 contact-form">
       <Row className="my-4 d-flex">
         <Col md={6}>
@@ -97,7 +102,7 @@ const ContactPage = () => {
           <p>Phone: (123) 456-7890</p>
           </Col>
         </Row>
-    </Container>
+    </Container></div>
   );
 };
 

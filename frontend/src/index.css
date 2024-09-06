@@ -32,19 +32,16 @@ main {
   position: relative;
   font-family: "Josefin Sans";
   text-transform: uppercase;
-  /* font-size: 2em; */
   letter-spacing: 4px;
   overflow: hidden;
   background: linear-gradient(
     90deg,
     #000,
-    #191970,
-    #000000,
-    #c0c0c0,
-    #000,
-    #f5fffa,
-    #000,
-    #708090
+    #a9a9a9,
+    #708090,
+    #778899,
+    #2f4f4f,
+    #000
   );
   background-repeat: no-repeat;
   background-size: 80%;
@@ -212,7 +209,7 @@ button:hover {
 }
 .navbar-brand h3 {
   font-weight: 700;
-  font-family: cursive;
+  font-family: Josefin Sans;
   letter-spacing: 2px;
   padding: 0.5rem 0;
   color: white;
@@ -253,11 +250,13 @@ h3 {
   font-size: 18px;
   padding: 7px;
 }
-.search-box{
-width: 100%;
+.search-box {
+  min-width: 100%;
 }
+
 .link-sellers,
 .link-contact,
+.link-service,
 .links {
   color: white;
   text-decoration: none;
@@ -377,30 +376,30 @@ embed {
   border-style: dotted;
   border-color: grey;
 }
-/* Responsive adjustments */
+
 @media (max-width: 768px) {
   .upload-pdf .header {
-    font-size: 1em; /* Slightly smaller font for smaller screens */
+    font-size: 1em;
     line-height: 40px;
-    padding: 8px; /* Reduce padding to save space */
+    padding: 8px;
   }
 }
 
-@media (max-device-width: 480px) {
+@media (max-width: 480px) {
   .upload-pdf .header {
-    font-size: 0.9em; /* Smaller font size for very small screens */
+    font-size: 0.9em;
     line-height: 36px;
-    padding: 8px; /* Further reduce padding */
+    padding: 8px;
   }
 
   .upload-pdf {
     flex-direction: column;
-    align-items: center; /* Center align content for small screens */
+    align-items: center;
   }
 
   .webviewer {
-    width: 100%; /* Ensure the viewer takes up full width */
-    height: auto; /* Adjust height to maintain aspect ratio */
+    width: 100%;
+    height: auto;
   }
 }
 
@@ -420,7 +419,7 @@ embed {
   }
 }
 
-@media (max-device-width: 480px) {
+@media (max-width: 480px) {
   .upload-pdf {
     padding: 10px;
   }
@@ -443,29 +442,25 @@ form.d-flex {
   width: 100%;
 }
 
-
- @media (min-width: 576px) {
-   .input-group {
+@media (min-width: 576px) {
+  .input-group {
     width: 80%;
   }
 }
 
 @media (min-width: 768px) {
-  /* For screens >= 768px */
   .input-group {
     width: 70%;
   }
 }
 
 @media (min-width: 992px) {
-  /* For screens >= 992px */
   .input-group {
     width: 60%;
   }
 }
 
 @media (min-width: 1200px) {
-  /* For screens >= 1200px */
   .input-group {
     width: 50%;
   }
@@ -482,13 +477,12 @@ form.d-flex {
 }
 
 .footer {
-  /* padding: 2rem 0; */
   margin-top: 15rem;
 }
 
 .ft-1 h3 {
   font-weight: 700;
-  font-family: cursive;
+  font-family: Josefin Sans;
   letter-spacing: 2px;
   padding: 0.5rem 0;
   text-shadow: 1px 1px 1px black;
@@ -548,8 +542,31 @@ form.d-flex {
   font-weight: 700;
 }
 
-@media (min-width: 1440) {
-.search-box{
-max-width: 80%;
+@media (min-width: 1440px) {
+  .search-box {
+    max-width: 80%;
+  }
 }
+
+.about-title,
+.mission-title,
+.goals-title {
+  position: center;
+  font-size: 70px;
+  font-family: Josefin Sans;
+  font-weight: 900;
+  text-transform: uppercase;
+  text-shadow: 1px 1px coral;
+}
+
+.about-paragraph {
+  padding: 10px;
+  font: 25px Arial, sans-serif;
+}
+.goals-paragraph {
+  font-weight: 500;
+  font-style: italic;
+  font-size: 22px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px coral;
 }
