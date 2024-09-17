@@ -72,13 +72,14 @@ userRouter.post(
       user.resetToken = token;
       await user.save();
 
+      //reset link
       console.log(`${baseUrl()}/reset-password/${token}`);
 
       mailgun()
         .messages()
         .send(
           {
-            from: 'Cool-Commerce <me@mg.yourdomain.com>',
+            from: 'Amazona <me@mg.yourdomain.com>',
             to: `${user.name} <${user.email}>`,
             subject: `Reset Password`,
             html: ` 

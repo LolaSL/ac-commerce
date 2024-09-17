@@ -125,6 +125,28 @@ const data = {
             
         },
     ],
+    serviceProviders: [
+        {
+          name: 'Test One Company',
+          email: "test-company1@example.com",
+          password: bcrypt.hashSync('12345', 8), // Ensure password is hashed
+          typeOfProvider: "designer",
+          phone: "1234567890",
+          company: "test-company1",
+          experience: 5, // Corrected to a Number
+          portfolio: "portfolio1.link",
+        },
+        {
+          name: 'Test Two Company',
+          email: "test-company2@example.com",
+          password: bcrypt.hashSync('123456', 8), // Ensure password is hashed
+          typeOfProvider: "designer",
+          phone: "1234567890",
+          company: "test-company2",
+          experience: 7, // Corrected to a Number
+          portfolio: "portfolio2.link",
+        },
+      ],
 }
 
 export default data;

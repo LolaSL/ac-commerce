@@ -4,6 +4,6 @@ import { Store } from '../Store';
 
 export default function ProtectedRoute({ children }) {
   const { state } = useContext(Store);
-  const { userInfo } = state;
-  return userInfo ? children : <Navigate to="/signin" />;
+  const { userInfo, serviceProviderInfo } = state;
+  return userInfo || serviceProviderInfo ? children : <Navigate to="/" />;
 }

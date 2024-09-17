@@ -40,8 +40,12 @@ const ContactPage = () => {
     <div className="site-container mt-3 pt-3">
     <Helmet>
       <title>Contact</title>
-    </Helmet>
-    <Container className="pt-4 contact-form">
+      </Helmet>
+      <div
+        className='p-5 text-center bg-image responsive'
+        style={{ backgroundImage: "url('/images/contact-us.jpg')", height: 900}}
+      >
+      <Container className="pt-4 contact-form">
       <Row className="my-4 d-flex">
         <Col md={6}>
           <h2>Contact Us</h2>
@@ -102,7 +106,7 @@ const ContactPage = () => {
           <p>Phone: (123) 456-7890</p>
           </Col>
         </Row>
-    </Container></div>
+    </Container></div></div>
   );
 };
 

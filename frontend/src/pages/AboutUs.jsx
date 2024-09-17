@@ -11,7 +11,7 @@ const AboutUs = () => {
         <div
           className="p-5 text-center responsive mb-3"
           style={{
-            backgroundImage: `url("/images/about-us1.jpg")`,
+            backgroundImage: `url("/images/about-us.jpg")`,
             height: 450,
             backgroundSize: "cover",
             objectFit: "cover",
@@ -23,7 +23,6 @@ const AboutUs = () => {
             About Us
           </h1>
         </div>
-        {/* <ul> */}
         <p className="about-paragraph mt-4 pb-2">
           AC Commerce is committed to complying with local laws and regulations
           and to applying a strict ethical code of conduct to all employees
@@ -38,7 +37,6 @@ const AboutUs = () => {
           AC Commerce continues to train its employees and use monitoring
           systems while practicing fair and transparent corporate governance.
         </p>
-        {/* </ul> */}
       </article>
       <article className="about mt-4 mb-4">
         <div

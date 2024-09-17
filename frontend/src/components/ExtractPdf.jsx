@@ -1,106 +1,3 @@
-// import React, { useState } from "react";
-// import { Form } from "react-bootstrap";
-// import { Helmet } from "react-helmet-async";
-// import BtuCalculator from "./BtuCalculator";
-// import Tesseract from "tesseract.js";
-// import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/webpack.mjs";
-// import * as pdfjsLib from "pdfjs-dist";
-
-// GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
-
-// const ExtractPdf = () => {
-//   const [extractedText, setExtractedText] = useState("");
-//   const [error, setError] = useState("");
-
-//   function extractText(event) {
-//     const file = event.target.files[0];
-//     if (file) {
-//       console.log("File uploaded:", file.name);
-
-//       const reader = new FileReader();
-//       reader.onload = function () {
-//         const typedarray = new Uint8Array(reader.result);
-
-//         // Load the PDF with pdfjs-dist
-//         getDocument(typedarray)
-//           .promise.then((pdf) => {
-//             console.log("PDF loaded");
-
-//             pdf.getPage(1).then((page) => {
-//               const scale = 2;
-//               const viewport = page.getViewport({ scale });
-
-//               const canvas = document.createElement("canvas");
-//               const context = canvas.getContext("2d");
-//               canvas.height = viewport.height;
-//               canvas.width = viewport.width;
-
-//               const renderContext = {
-//                 canvasContext: context,
-//                 viewport: viewport,
-//               };
-//               page.render(renderContext).promise.then(() => {
-//                 console.log("Page rendered");
-
-//                 Tesseract.recognize(canvas.toDataURL(), "eng", {
-//                   logger: (m) => console.log(m),
-//                 })
-//                   .then(({ data: { text } }) => {
-//                     console.log("Extracted Text:", text);
-//                     setExtractedText(text);
-//                   })
-//                   .catch((err) => {
-//                     console.error("Error extracting text with OCR:", err);
-//                     setError("Failed to extract text using OCR.");
-//                   });
-//               });
-//             });
-//           })
-//           .catch((err) => {
-//             console.error("Error loading PDF:", err);
-//             setError("Failed to load PDF.");
-//           });
-//       };
-//       reader.readAsArrayBuffer(file);
-//     } else {
-//       setError("No file uploaded.");
-//     }
-//   }
-
-//   return (
-//     <div>
-//       <Helmet>
-//         <title>UploadPDF</title>
-//       </Helmet>
-//       <div>
-//         <Form>
-//           <h1 className="header text-center fw-bold">Measurement System</h1>
-//           <Form.Group controlId="input">
-//             <Form.Label>Upload PDF file sample</Form.Label>
-//             <Form.Control
-//               type="file"
-//               accept="application/pdf"
-//               onChange={extractText}
-//               className="form-control mb-3"
-//             />
-//           </Form.Group>
-//         </Form>
-//       </div>
-//       {error && <div style={{ color: "red" }}>{error}</div>}{" "}
-//       {/* Display error messages */}
-//       <div>
-//         <h2>Extracted Text:</h2>
-//         <pre>{extractedText}</pre>
-//       </div>
-//       <div>
-//         <BtuCalculator />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ExtractPdf;
-
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
@@ -131,7 +28,7 @@ const ExtractPdf = () => {
             console.log("PDF loaded");
 
             pdf.getPage(1).then((page) => {
-              const scale = 2;
+              const scale = 4;
               const viewport = page.getViewport({ scale });
 
               const canvas = document.createElement("canvas");
@@ -173,20 +70,24 @@ const ExtractPdf = () => {
     }
   }
 
-  // Function to classify and extract room types and dimensions
+  // Function to classify and extract room types and dimensions, output JSON structure
   const classifyAndExtractData = (text) => {
     const roomPatterns = {
-      bedroom: /bed\s?room|br/i,
-      livingRoom: /living\s?room|lobby|lr/i,
+      bedroom: /bed\s?room|br|bdrm/i,
+      livingRoom: /living\s?room|lobby|lr|outdoor\s?living/i,
       kitchen: /kitchen|kit/i,
       toilet: /toilet|bath\s?room|wc/i,
       diningRoom: /dining\s?room|dr/i,
-      drawingRoom: /drawing\s?room|study/i,
-      officeRoom: /office|study/i,
-      lounge: /lounge|l/i, // New pattern for lounge
+      drawingRoom: /drawing\s?room|study|studyroom/i,
+      breakfastRoom: /breakfast\s?room|brkfst/i,
+      familyRoom: /family\s?room/i,
+      lounge: /lounge|l|mstr\s?suite/i,
+      hall: /hall/i, // Added hall pattern
     };
 
-    const dimensionPattern = /\d+['’]?\d*"?\s?[xX]\s?\d+['’]?\d*"?/g;
+    // Adjusted dimension pattern to handle more variations of foot and inch marks
+    const dimensionPattern =
+      /(\d{1,2})['’]?(\d{1,2})?"?\s*[xX]\s*(\d{1,2})['’]?(\d{1,2})?["”]?/g;
 
     // Preprocess text: clean up invalid characters
     const cleanedText = text
@@ -195,7 +96,6 @@ const ExtractPdf = () => {
       .trim();
 
     const lines = cleanedText.split("\n");
-
     let table = [];
 
     lines.forEach((line) => {
@@ -211,17 +111,22 @@ const ExtractPdf = () => {
         }
       }
 
-      if (!roomType) {
-        console.log("No room type matched for line:", line); // Debug log for unmatched lines
-      }
-
       // Extract dimensions
       const dimensions = line.match(dimensionPattern);
+      console.log("Matched dimensions:", dimensions);
+
       if (roomType && dimensions) {
         dimensions.forEach((dim) => {
           const [width, height] = dim
             .split(/[xX]/)
             .map((measure) => convertToFeet(measure.trim()));
+
+          // Skip invalid dimensions, e.g., kitchen size mismatch like 15'0"x12'0"
+          if (width > 100 || height > 100) {
+            console.warn("Suspicious dimension detected:", { width, height });
+            return; // Skip overly large dimensions
+          }
+
           const areaSqFt = width * height;
           const areaSqM = areaSqFt * 0.092903;
 
@@ -233,12 +138,15 @@ const ExtractPdf = () => {
             areaSqM: `${areaSqM.toFixed(2)} sqm`,
           });
         });
+      } else {
+        console.log(`No dimensions found for ${roomType}`);
       }
     });
 
     return table;
   };
 
+  // Function to convert measurements to feet
   const convertToFeet = (measure) => {
     const quotePattern = /(\d+)'(\d+)?"/; // For patterns like 12'8"
     const simplePattern = /\d+/; // For simple patterns like 12 or 10X12
@@ -254,6 +162,18 @@ const ExtractPdf = () => {
     return 0; // Default case if no pattern matches
   };
 
+  // Function to download extracted data as JSON
+  const downloadJson = () => {
+    const jsonContent = JSON.stringify(classifiedData, null, 2); // Convert data to JSON
+    const blob = new Blob([jsonContent], { type: "application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "extracted_data.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link); // Clean up
+  };
+
   return (
     <div>
       <Helmet>
@@ -261,9 +181,14 @@ const ExtractPdf = () => {
       </Helmet>
       <div>
         <Form>
-          <h1 className="header text-center fw-bold">Measurement System</h1>
+          <h1 className="measure-header text-center fw-bold mb-4">
+            Measurement System
+          </h1>
           <Form.Group controlId="input">
-            <Form.Label>Upload PDF file sample</Form.Label>
+            <Form.Label className="mb-4">
+              Upload PDF file sample.{" "}
+              <strong>*Please, use higher image resolution</strong>
+            </Form.Label>
             <Form.Control
               type="file"
               accept="application/pdf"
@@ -273,8 +198,8 @@ const ExtractPdf = () => {
           </Form.Group>
         </Form>
       </div>
-      {error && <div style={{ color: "red" }}>{error}</div>}{" "}
-      {/* Display error messages */}
+      {error && <div style={{ color: "red" }}>{error}</div>}
+      {/* Display the extracted text */}
       <div>
         <h2>Extracted Text:</h2>
         <pre>{extractedText}</pre>
@@ -284,6 +209,7 @@ const ExtractPdf = () => {
         <table className="table table-bordered">
           <thead>
             <tr>
+              <td>N/N</td>
               <th>Room Type</th>
               <th>Width (ft)</th>
               <th>Height (ft)</th>
@@ -294,6 +220,7 @@ const ExtractPdf = () => {
           <tbody>
             {classifiedData.map((item, index) => (
               <tr key={index}>
+                <td>{index}</td>
                 <td>{item.roomType}</td>
                 <td>{item.width}</td>
                 <td>{item.height}</td>
@@ -303,6 +230,11 @@ const ExtractPdf = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="my-3">
+        <button onClick={downloadJson} className="btn btn-primary">
+          Download JSON
+        </button>
       </div>
       <div>
         <BtuCalculator />

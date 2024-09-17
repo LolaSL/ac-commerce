@@ -47,22 +47,22 @@ import ContactPage from './pages/ContactPage.jsx';
 import Footer from './components/Footer.jsx';
 import AboutUs from './pages/AboutUs.jsx';
 import ExtractPdf from './components/ExtractPdf.jsx';
-
-
-
-
+import ServiceProviderLogin from './pages/ServiceProviderLogin.jsx';
+import ServiceProviderRegister from './pages/ServiceProviderRegister.jsx';
+import ServiceProviderProfile from './pages/ServiceProviderProfile.jsx';
 
 function App() {
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { fullBox, cart, userInfo } = state;
+  const { fullBox, cart, userInfo, serviceProviderInfo } = state;
 
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });
     localStorage.removeItem('userInfo');
+    localStorage.removeItem('serviceProviderInfo');
     localStorage.removeItem('shippingAddress');
     localStorage.removeItem('paymentMethod');
-    window.location.href = '/signin';
+    window.location.href = '/';
   };
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -144,6 +144,28 @@ function App() {
                       Sign In
                     </Link>
                   )}
+                  {serviceProviderInfo ? (
+                    <NavDropdown title={serviceProviderInfo.name} id="provider-nav-dropdown">
+                      <LinkContainer to="/serviceprovider/profile">
+                        <NavDropdown.Item>Service Provider Profile</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/serviceprovider/dashboard">
+                        <NavDropdown.Item>Dashboard</NavDropdown.Item>
+                      </LinkContainer>
+                      <NavDropdown.Divider />
+                      <Link
+                        className="dropdown-item"
+                        to="#signout"
+                        onClick={signoutHandler}
+                      >
+                        Log Out
+                      </Link>
+                    </NavDropdown>
+                  ) : (
+                    <Link className="nav-link" to="/serviceprovider/login">
+                      Service Provider Login
+                    </Link>
+                  )}
                   {userInfo && userInfo.isAdmin && (
                     <NavDropdown title="Admin" id="admin-nav-dropdown">
                       <LinkContainer to="/admin/dashboard">
@@ -211,6 +233,8 @@ function App() {
               <Route path="/search" element={<SearchPage />} />
               <Route path="/signin" element={<SignInPage />} />
               <Route path="/signup" element={<SignupPage />} />
+              <Route path="/serviceprovider/login" element={<ServiceProviderLogin />} />
+              <Route path="/serviceprovider/register" element={<ServiceProviderRegister />} />
               <Route
                 path="/forget-password"
                 element={<ForgetPasswordPage />}
@@ -219,7 +243,14 @@ function App() {
                 path="/reset-password/:token"
                 element={<ResetPasswordPage />}
               />
-
+              <Route
+                path="/serviceprovider/profile"
+                element={
+                  <ProtectedRoute>
+                    <ServiceProviderProfile/>
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/profile"
                 element={

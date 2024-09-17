@@ -35,7 +35,7 @@ uploadRouter.post(
     };
 
     const result = await streamUpload(req);
-    
+
     // Assuming you have productId and you're updating a product document
     const product = await Product.findById(req.body.productId);
     if (product) {

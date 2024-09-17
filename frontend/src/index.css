@@ -94,7 +94,7 @@ main {
 }
 
 .btn {
-  background-color: #f93f15;
+  background-color: #ec133e;
   color: white;
   text-shadow: 1px 1px 1px grey;
 }
@@ -114,7 +114,7 @@ main {
 }
 
 .rating span {
-  color: #f84716;
+  color:  #ec133e;
 }
 
 .product {
@@ -162,7 +162,6 @@ main {
   width: 100%;
   height: auto;
   border-radius: 15px;
-  box-shadow: 1px 1px 1px grey;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -177,7 +176,13 @@ main {
   height: 80px;
   object-fit: cover;
 }
+.link-cart{
+  text-decoration: none;
+  color: #f93f15;
+  font-weight: bold;
+  font-style: italic;
 
+}
 button {
   padding: 0.5rem 1rem;
   background-color: #f93f15;
@@ -221,12 +226,12 @@ button:hover {
   text-shadow: 1px 1px 1px black;
 }
 .navbar-brand span {
-  color: #f93f15;
+  color: #ec133e;
   text-shadow: 1px 1px 1px black;
 }
 
 .navbar-toggler {
-  background-color: #f93f15;
+  background-color: #ec133e;
 }
 .navbar-toggler:hover {
   background-color: grey;
@@ -330,6 +335,11 @@ h3 {
 button.thumbnail {
   padding: 0;
 }
+.bg-image {
+  background-color: #cccccc;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 .contact-form {
   font-weight: bold;
   color: grey;
@@ -356,15 +366,14 @@ p {
   flex-direction: column;
 }
 
-.header {
+.measure-header {
   width: 100%;
   height: 60px;
   padding: 8px 8px 8px 16px;
   box-sizing: border-box;
-  background: #00a5e4;
-  font-size: 1.2em;
+  font-size: 2.2em;
   line-height: 44px;
-  color: white;
+  color:#5a686d;
 }
 
 iframe,
@@ -489,7 +498,7 @@ form.d-flex {
 }
 
 .ft-1 span {
-  color: #f93f15;
+  color: #ec133e;
   text-shadow: 1px 1px 1px black;
 }
 
@@ -501,14 +510,14 @@ form.d-flex {
 .footer-icons i {
   padding: 0.4rem 0.5rem;
   background: #e1e1e1;
-  color: #f93f15;
+  color: #ec133e;
   margin: 0 0.5rem;
   border-radius: 50%;
   display: inline;
 }
 
 .footer-icons i:hover {
-  background: #f93f15;
+  background: #ec133e;
   color: #fff;
   transition: 0.6s;
   cursor: pointer;

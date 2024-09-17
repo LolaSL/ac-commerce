@@ -2,7 +2,6 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import Image from "react-bootstrap/Image";
 
-
 const AirConditioningPage = () => {
   return (
     <div className="site-container mt-3 pt-3">
@@ -12,7 +11,7 @@ const AirConditioningPage = () => {
       <h1 className="mb-3 text-center pb-3">
         Everything You Should Know About Air Conditioning.
       </h1>
-      <article >
+      <article>
         <div className="mb-4 text-center pb-4 ac-image">
           <Image
             src="/images/ac9.jpg"
@@ -131,7 +130,7 @@ const AirConditioningPage = () => {
         </p>
       </article>
       <article>
-      <h4 className="mb-3 pb-3">What is BTU?</h4>
+        <h4 className="mb-3 pb-3">What is BTU?</h4>
         <p className="ac-calculation">
           What is a BTU? The British Thermal Unit, or BTU, is an energy unit. It
           is approximately the energy needed to heat one pound of water by 1
@@ -253,7 +252,7 @@ const AirConditioningPage = () => {
         <div className="mb-4 text-center ">
           <Image
             src="/images/ac4.jpeg"
-            alt="Air Conditioners work"
+            alt="Air Conditioners problems"
             className="responsive"
           />
         </div>

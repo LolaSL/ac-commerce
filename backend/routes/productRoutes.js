@@ -284,21 +284,4 @@ productRouter.get('/btu/:btu', async (req, res) => {
   }
 });
 
-
-
-
-// Fetch product by BTU
-// productRouter.get('/btu/:btu', async (req, res) => {
-//   try {
-//     const btu = Number(req.params.btu);
-//     const product = await Product.findOne({ btu: btu });
-//     if (product) {
-//       res.json(product);
-//     } else {
-//       res.status(404).json({ message: 'Product not found' });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
 export default productRouter;

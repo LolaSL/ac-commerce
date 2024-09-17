@@ -9,6 +9,7 @@ import { Store } from '../Store';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 
+
 export default function SignupPage() {
   const navigate = useNavigate();
   const { search } = useLocation();
