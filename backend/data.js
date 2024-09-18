@@ -65,12 +65,12 @@ const data = {
             description: "12.000 BTU, Estimated Cooling Area 550 sq. ft., 115 Volt, ENERGY STAR Certified, Window Installation Kit, Slide-Out Washable Filter & Filter Alert, 3 Fan Speed Cooling.",
             features: "Wi-Fi",
             btu: 12000,
-            areaCoverage: 550, 
+            areaCoverage: 550,
             energyEfficiency: 10
 
         },
         {
- 
+
             name: "6.000 BTU Portable Air Conditioner",
             slug: "btu-portable-air-conditioner",
             category: "Portable Air Conditioner",
@@ -114,7 +114,7 @@ const data = {
             email: "test_one@example.com",
             subject: "test one",
             message: "Test ONE",
-            
+
         },
         {
 
@@ -122,31 +122,61 @@ const data = {
             email: "test_two@example.com",
             subject: "test Two",
             message: "Test TWO",
-            
+
         },
     ],
     serviceProviders: [
         {
-          name: 'Test One Company',
-          email: "test-company1@example.com",
-          password: bcrypt.hashSync('12345', 8), // Ensure password is hashed
-          typeOfProvider: "designer",
-          phone: "1234567890",
-          company: "test-company1",
-          experience: 5, // Corrected to a Number
-          portfolio: "portfolio1.link",
+            name: 'Test One Company',
+            email: 'test-company1@example.com',
+            password: bcrypt.hashSync('12345', 8),
+            typeOfProvider: 'designer',
+            phone: '1234567890',
+            company: 'test-company1',
+            experience: 5,
+            portfolio: 'portfolio1.link',
         },
         {
-          name: 'Test Two Company',
-          email: "test-company2@example.com",
-          password: bcrypt.hashSync('123456', 8), // Ensure password is hashed
-          typeOfProvider: "designer",
-          phone: "1234567890",
-          company: "test-company2",
-          experience: 7, // Corrected to a Number
-          portfolio: "portfolio2.link",
+            name: 'Test Two Company',
+            email: 'test-company2@example.com',
+            password: bcrypt.hashSync('123456', 8),
+            typeOfProvider: 'designer',
+            phone: '1234567890',
+            company: 'test-company2',
+            experience: 7,
+            portfolio: 'portfolio2.link',
         },
-      ],
+    ],
+    projects: [
+        {
+            name: "Residential House Design",
+            client: "John Doe",
+            dueDate: "2024-09-25",
+            status: "In Progress",
+            serviceProvider: "test-company1@example.com", // Replace with actual service provider ID
+        },
+        {
+            name: "Office Interior Renovation",
+            client: "ABC Corp",
+            dueDate: "2024-10-10",
+            status: "Completed",
+            serviceProvider: "test-company2@example.com", // Replace with actual service provider ID
+        },
+    ],
+    messages: [
+        {
+            client: "Jane Smith",
+            text: "Can we update the room layout?",
+            date: "2024-09-18",
+            serviceProvider: "", // Replace with actual service provider ID
+        },
+        {
+            client: "XYZ Corp",
+            text: "When will the next draft be ready?",
+            date: "2024-09-16",
+            serviceProvider: "", // Replace with actual service provider ID
+        },
+    ],
 }
 
 export default data;

@@ -50,6 +50,14 @@ import ExtractPdf from './components/ExtractPdf.jsx';
 import ServiceProviderLogin from './pages/ServiceProviderLogin.jsx';
 import ServiceProviderRegister from './pages/ServiceProviderRegister.jsx';
 import ServiceProviderProfile from './pages/ServiceProviderProfile.jsx';
+import ServiceProviderDashboard from './pages/ServiceProviderDashboard.jsx';
+import HoursPage from './pages/HoursPage.jsx';
+import EarningsPage from './pages/EarningsPage.jsx';
+import ProjectsPage from './pages/ProjectsPage.jsx';
+
+
+
+
 
 function App() {
 
@@ -247,7 +255,39 @@ function App() {
                 path="/serviceprovider/profile"
                 element={
                   <ProtectedRoute>
-                    <ServiceProviderProfile/>
+                    <ServiceProviderProfile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/serviceprovider/earnings"
+                element={
+                  <ProtectedRoute>
+                    <EarningsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/serviceprovider/hours"
+                element={
+                  <ProtectedRoute>
+                    <HoursPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/serviceprovider/projects"
+                element={
+                  <ProtectedRoute>
+                    <ProjectsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/serviceprovider/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <ServiceProviderDashboard />
                   </ProtectedRoute>
                 }
               />
@@ -353,6 +393,9 @@ function App() {
                   </AdminRoute>
                 }
               ></Route>
+              <Route path="/serviceprovider/profile/projects" element={<ProjectsPage />} />
+              <Route path="/serviceprovider/profile/earnings" element={<EarningsPage />} />
+              <Route path="/serviceprovider/profile/hours" element={<HoursPage />} />
               <Route path="/sellers" element={<SellersPage />} />
               <Route path="/sellers/:id" element={<SellerPage />} />
               <Route path="/sellers/edit/:id" element={<SellerEditPage />} />
