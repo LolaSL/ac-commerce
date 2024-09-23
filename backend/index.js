@@ -10,6 +10,7 @@ import uploadRouter from "./routes/uploadRoutes.js";
 import quoteRouter from './routes/quoteRoutes.js';
 import contactRouter from './routes/contactRoutes.js'
 import serviceProviderRouter from './routes/serviceProviderRoutes.js'
+import dashboardRouter from './routes/dashboardRouter.js';
 import cors from 'cors';
 
 dotenv.config();
@@ -48,6 +49,7 @@ app.use('/api/sellers', sellerRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/quote', quoteRouter);
 app.use('/api/service-providers', serviceProviderRouter)
+app.use('/api/dashboard', dashboardRouter)
 app.get('/', (req, res) => {
     res.send('Server is ready')
 })

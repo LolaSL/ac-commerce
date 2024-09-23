@@ -6,6 +6,7 @@ import Contact from '../models/contactModel.js';
 import ServiceProvider from '../models/serviceProviderModel.js';
 import Project from '../models/projectModel.js';
 import Message from '../models/messageModel.js';
+import Earnings from '../models/earningModel.js';
 import data from '../data.js';
 
 const seedRouter = express.Router();
@@ -21,6 +22,7 @@ seedRouter.get('/', async (req, res) => {
     await ServiceProvider.deleteMany({});
     await Project.deleteMany({});
     await Message.deleteMany({});
+    await Earnings.deleteMany({});
 
     // Seed Service Providers
     const createdServiceProviders = await ServiceProvider.insertMany(data.serviceProviders);
@@ -28,20 +30,34 @@ seedRouter.get('/', async (req, res) => {
     // Extract Service Provider IDs
     const serviceProviderIds = createdServiceProviders.map(sp => sp._id.toString());
 
-    // Update Projects and Messages with valid Service Provider IDs
+    // Update Projects with valid Service Provider IDs
     const projectsWithIds = data.projects.map((project, index) => ({
       ...project,
       serviceProvider: serviceProviderIds[index % serviceProviderIds.length],
     }));
 
+    // Seed Projects
+    const createdProjects = await Project.insertMany(projectsWithIds);
+
+    // Extract Project IDs
+    const projectIds = createdProjects.map(project => project._id.toString());
+
+    // Update Messages with valid Service Provider IDs
     const messagesWithIds = data.messages.map((message, index) => ({
       ...message,
       serviceProvider: serviceProviderIds[index % serviceProviderIds.length],
     }));
 
-    // Seed Projects and Messages
-    const createdProjects = await Project.insertMany(projectsWithIds);
+    // Update Earnings with valid Project IDs
+    const earningsWithIds = data.earnings.map((earning, index) => ({
+      ...earning,
+      serviceProvider: serviceProviderIds[index % serviceProviderIds.length],
+      projectName: projectIds[index % projectIds.length], // Assign valid Project IDs
+    }));
+    console.log('Earnings Seed Data:', earningsWithIds);
+    // Seed Messages and Earnings
     const createdMessages = await Message.insertMany(messagesWithIds);
+    const createdEarnings = await Earnings.insertMany(earningsWithIds);
 
     // Seed other collections
     const createdProducts = await Product.insertMany(data.products);
@@ -57,6 +73,7 @@ seedRouter.get('/', async (req, res) => {
       createdServiceProviders,
       createdProjects,
       createdMessages,
+      createdEarnings
     });
   } catch (error) {
     res.status(500).send({ message: 'Error seeding data', error: error.message });
@@ -64,4 +81,3 @@ seedRouter.get('/', async (req, res) => {
 });
 
 export default seedRouter;
-

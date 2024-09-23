@@ -1,54 +1,96 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Table} from 'react-bootstrap';
-import axios from 'axios';
+import React, { useContext, useEffect, useReducer } from "react";
+import axios from "axios";
+import { Store } from "../Store";
+import { getError } from "../utils";
+import { Container, Table } from "react-bootstrap";
 
-const ProjectsPage = () => {
-  const [projects, setProjects] = useState([]);
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loading: true };
+    case "FETCH_SUCCESS":
+      return { ...state, earnings: action.payload, loading: false };
+    case "FETCH_FAIL":
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+const EarningsPage = () => {
+  const { state } = useContext(Store);
+  const { serviceProviderInfo } = state;
+
+  const [{ loading, error, earnings }, dispatch] = useReducer(reducer, {
+    earnings: [],
+    loading: true,
+    error: "",
+  });
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchEarnings = async () => {
+      dispatch({ type: "FETCH_REQUEST" });
       try {
-        const { data } = await axios.get('/api/serviceProvider/projects', {
+        const token = serviceProviderInfo?.token;
+
+        if (!token) {
+          throw new Error("Not authenticated, please log in");
+        }
+
+        const { data } = await axios.get("/api/service-providers/earnings", {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${token}`,
           },
         });
-        setProjects(data);
+
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (error) {
-        console.error('Error fetching projects:', error);
+        dispatch({ type: "FETCH_FAIL", payload: getError(error) });
       }
     };
 
-    fetchProjects();
-  }, []);
+    fetchEarnings();
+  }, [serviceProviderInfo?.token]);
+
+  if (loading) return <p>Loading earnings...</p>;
+  if (error) return <p>Error loading earnings: {error}</p>;
 
   return (
     <Container>
-      <h1>Projects</h1>
+      <h1>Earnings</h1>
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>#</th>
             <th>Project Name</th>
-            <th>Client</th>
-            <th>Due Date</th>
+            <th>Hours Worked</th>
+            <th>Amount Earned</th>
+            <th>Date</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          {projects.map((project) => (
-            <tr key={project._id}>
-              <td>{project._id}</td>
-              <td>{project.name}</td>
-              <td>{project.client}</td>
-              <td>{project.dueDate}</td>
-              <td>{project.status}</td>
+          {earnings && earnings.length > 0 ? (
+            earnings.map((earning, index) => (
+              <tr key={earning._id}>
+                <td>{index + 1}</td>
+                <td>{earning.projectName.name}</td> {/* Access project name */}
+                <td>{earning.projectName.hoursWorked}</td>{" "}
+                {/* Access hours worked */}
+                <td>{earning.amount}</td>
+                <td>{new Date(earning.date).toLocaleDateString()}</td>
+                <td>{earning.status}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6">No earnings data found</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </Table>
     </Container>
   );
 };
 
-export default ProjectsPage;
+export default EarningsPage;

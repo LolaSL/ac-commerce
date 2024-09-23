@@ -1,26 +1,61 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Table } from 'react-bootstrap';
-import axios from 'axios';
+import React, { useContext, useEffect, useReducer } from "react";
+import axios from "axios";
+import { Store } from "../Store";
+import { getError } from "../utils";
+import { Container, Table } from "react-bootstrap";
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loading: true };
+    case "FETCH_SUCCESS":
+      return { ...state, earnings: action.payload, loading: false }; // Store earnings data
+    case "FETCH_FAIL":
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
 
 const HoursPage = () => {
-  const [hours, setHours] = useState([]);
+  const { state } = useContext(Store);
+  const { serviceProviderInfo } = state;
+
+  const [{ loading, error, earnings }, dispatch] = useReducer(reducer, {
+    earnings: [], // Initialize with an empty array for earnings
+    loading: true,
+    error: "",
+  });
 
   useEffect(() => {
-    const fetchHours = async () => {
+    const fetchEarnings = async () => {
+      dispatch({ type: "FETCH_REQUEST" });
       try {
-        const { data } = await axios.get('/api/serviceProvider/hours', {
+        const token = serviceProviderInfo?.token;
+
+        if (!token) {
+          throw new Error("Not authenticated, please log in");
+        }
+
+        const { data } = await axios.get("/api/service-providers/earnings", {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${token}`,
           },
         });
-        setHours(data);
+
+        // Log the API response
+        console.log("API Response:", data);
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (error) {
-        console.error('Error fetching hours:', error);
+        dispatch({ type: "FETCH_FAIL", payload: getError(error) });
       }
     };
 
-    fetchHours();
-  }, []);
+    fetchEarnings();
+  }, [serviceProviderInfo?.token]);
+
+  if (loading) return <p>Loading earnings...</p>;
+  if (error) return <p>Error loading earnings: {error}</p>;
 
   return (
     <Container>
@@ -35,14 +70,22 @@ const HoursPage = () => {
           </tr>
         </thead>
         <tbody>
-          {hours.map((hour) => (
-            <tr key={hour._id}>
-              <td>{hour._id}</td>
-              <td>{hour.projectName}</td>
-              <td>{hour.hoursWorked}</td>
-              <td>{hour.date}</td>
+          {earnings.length > 0 ? (
+            earnings.map((earning, index) => (
+              <tr key={earning._id}>
+                <td>{index + 1}</td>
+                <td>{earning.projectName.name}</td>{" "}
+                {/* Access project name here */}
+                <td>{earning.projectName.hoursWorked}</td>{" "}
+                {/* Access hours worked */}
+                <td>{new Date(earning.date).toLocaleDateString()}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="4">No earnings data found</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </Table>
     </Container>

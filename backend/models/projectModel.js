@@ -6,7 +6,8 @@ const projectSchema = new mongoose.Schema({
   client: { type: String, required: true },
   dueDate: { type: Date, required: true },
   status: { type: String, default: 'In Progress' },
-  serviceProvider: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  serviceProvider: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceProvider', required: true },
+  hoursWorked: { type: Number, default: 0 },
 });
 
 const Project = mongoose.model('Project', projectSchema);

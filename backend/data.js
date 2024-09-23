@@ -3,9 +3,9 @@ import bcrypt from 'bcryptjs';
 const data = {
     users: [
         {
-            name: 'Lola',
-            email: 'admin_unique@example.com',
-            password: bcrypt.hashSync('1223334444'),
+            name: 'Admin',
+            email: 'admin_uniqueA@example.com',
+            password: bcrypt.hashSync('55555'),
             isAdmin: true,
         },
         {
@@ -14,6 +14,8 @@ const data = {
             password: bcrypt.hashSync('123'),
             isAdmin: false,
         },
+        { name: "User1", email: "user1@example.com", password: "password123" },
+        { name: "User2", email: "user2@example.com", password: "password234" },
     ],
     products: [
         {
@@ -139,42 +141,88 @@ const data = {
         {
             name: 'Test Two Company',
             email: 'test-company2@example.com',
-            password: bcrypt.hashSync('123456', 8),
+            password: bcrypt.hashSync('test2company', 8),
             typeOfProvider: 'designer',
             phone: '1234567890',
             company: 'test-company2',
             experience: 7,
             portfolio: 'portfolio2.link',
         },
+        {
+            name: 'Test Three Company',
+            email: 'test-company3@example.com',
+            password: bcrypt.hashSync('test3company', 8),
+            typeOfProvider: 'Architect',
+            phone: '1234567890',
+            company: 'test-company3',
+            experience: 9,
+            portfolio: 'portfolio3.link',
+        },
     ],
     projects: [
         {
             name: "Residential House Design",
             client: "John Doe",
-            dueDate: "2024-09-25",
+            dueDate: "2024-09-23",
             status: "In Progress",
-            serviceProvider: "test-company1@example.com", // Replace with actual service provider ID
+            serviceProvider: "test-company1@example.com",
+            hoursWorked: 20,
         },
         {
             name: "Office Interior Renovation",
             client: "ABC Corp",
-            dueDate: "2024-10-10",
+            dueDate: "2024-09-10",
             status: "Completed",
-            serviceProvider: "test-company2@example.com", // Replace with actual service provider ID
+            serviceProvider: "test-company2@example.com",
+            hoursWorked: 40,
+        },
+        {
+            name: "Appartments Design",
+            client: "Michaella Donowan",
+            dueDate: "2024-11-23",
+            status: "In Progress",
+            serviceProvider: "test-company3@example.com",
+            hoursWorked: 53,
+        },
+        {
+            name: "Ventilation System Architecting",
+            client: "Venty Corp",
+            dueDate: "2024-12-31",
+            status: "Completed",
+            serviceProvider: "test-company3@example.com",
+            hoursWorked: 78,
         },
     ],
     messages: [
         {
-            client: "Jane Smith",
+            client: "John Doe",
             text: "Can we update the room layout?",
-            date: "2024-09-18",
-            serviceProvider: "", // Replace with actual service provider ID
+            date: "2024-08-18",
+            serviceProvider: "", 
         },
         {
-            client: "XYZ Corp",
-            text: "When will the next draft be ready?",
-            date: "2024-09-16",
-            serviceProvider: "", // Replace with actual service provider ID
+            client: "Michaella Donowan",
+            text: "When can we start nogotiation regarding the first draft be ready?",
+            date: "2024-09-20",
+            serviceProvider: "", 
+        },
+    ],
+    earnings: [
+        {
+            // projectName: "Residential House Design",
+            // serviceProvider: "test-company1@example.com",
+            amount: 500,
+            date: '2024-09-20',
+            hoursWorked: 20,
+            status: 'Pending',
+        },
+        {
+            // projectName: "Office Interior Renovation",
+            // serviceProvider: "test-company2@example.com",
+            amount: 1500,
+            date: '2024-09-29',
+            hoursWorked: 40,
+            status: 'Paid',
         },
     ],
 }

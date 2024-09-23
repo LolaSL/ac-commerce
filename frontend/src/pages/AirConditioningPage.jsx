@@ -19,31 +19,31 @@ const AirConditioningPage = () => {
             className="responsive"
           />
         </div>
-        <ul className="ac-types">
-          <li>
+ 
+          <p className="ac-calculation">
             Central Air Conditioner: A central air conditioner is usually the
             best choice if you have a large home or want to cool in more than
             one room. A central air conditioner circulates air throughout your
             home using a system of air ducts.{" "}
-          </li>
-          <li>
+          </p>
+          <p className="ac-calculation">
             Room Air Conditioners: Room air conditioners are perfect for cooling
             small spaces, like a single room or an apartment. Room air
             conditioners usually sit in a window or can be mounted on a wall.{" "}
-          </li>
-          <li>
+          </p>
+          <p className="ac-calculation">
             Ductless Mini-Split Air Conditioner: A ductless mini-split air
             conditioner is similar to a room air conditioner, but it doesn't
             need an air duct. Instead, a small air conditioner unit sits inside
             your home, and a small compressor sits outside.
-          </li>
-          <li>
+          </p>
+          <p className="ac-calculation">
             Portable Air Conditioner: A portable air conditioner is an excellent
             option if you need to cool a small space and you don't want to
             install a window air conditioner. Portable air conditioners can be
             moved from room to room, and they usually sit on the floor.
-          </li>
-          <li>
+          </p>
+          <p className="ac-calculation">
             A window air conditioner is a single unit with all of its components
             enclosed inside. It ejects heat out of its outdoor side and blows
             cool air into the room on the indoor side. As the name suggests, it
@@ -51,8 +51,8 @@ const AirConditioningPage = () => {
             conditioners have a filter that slides out so that it can be cleaned
             regularly for full AC efficiency. These air conditioners have
             controls on the unit & may also come with a remote.
-          </li>
-          <li>
+          </p>
+          <p className="ac-calculation">
             Floor-mounted air conditioners are designed for convenience if you
             prefer a mini-split but lack the required space for a wall mounted
             unit. The indoor unit of floor-mounted AC rests on the floor, and
@@ -60,8 +60,8 @@ const AirConditioningPage = () => {
             any ductwork. This arrangement is also ideal for spaces with tilted
             walls, such as attics, or building constructed with fragile
             materials such as glass.
-          </li>
-          <li>
+          </p>
+          <p className="ac-calculation">
             Smart air conditioners are a type of mini-split, window, or portable
             air conditioner that are IoT enabled. These ACs are connected to
             Wi-Fi and come with a native app providing global control through a
@@ -70,8 +70,8 @@ const AirConditioningPage = () => {
             scheduling, geofencing, comfy mode, temperature range control, and
             numerous other features. Utilizing these, you can achieve great
             comfort coupled with energy savings.
-          </li>
-          <li>
+          </p>
+          <p className="ac-calculation">
             Geothermal heating & cooling is considered a relatively new method,
             it works by utilizing the insulating properties of the earth. Since
             the temperatures under 4 to 6 feet of land remain consistent all
@@ -80,8 +80,8 @@ const AirConditioningPage = () => {
             system has piping that consists of a loop that circulates water
             between your home, a heat pump & the ground. They require intensive
             work to set up underground.
-          </li>
-          <li>
+          </p>
+          <p className="ac-calculation">
             Hybrid / Dual Fuel Air Conditioner system is one that combines a gas
             furnace with an electric air-source heat pump to deliver a
             cost-effective & efficient performance in terms of heating &
@@ -90,8 +90,8 @@ const AirConditioningPage = () => {
             electricity. You program the temperature at which the system
             switches from heat pump to furnace, or you can make the manual
             switch too.
-          </li>
-          <li>
+          </p>
+          <p className="ac-calculation">
             Evaporative coolers are sometimes categorized as air conditioning
             alternatives, even though technically, they are not air conditioners
             and differ in both mechanism and structure. This inclusion in the
@@ -99,8 +99,7 @@ const AirConditioningPage = () => {
             Unlike conventional AC systems with ducts and refrigeration cycles,
             evaporative coolers operate by drawing in warm air through
             water-saturated pads or media.
-          </li>
-        </ul>
+          </p>
       </article>
       <article>
         <h4 className="mb-4">

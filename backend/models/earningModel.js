@@ -2,12 +2,18 @@ import mongoose from 'mongoose';
 
 const earningSchema = new mongoose.Schema(
     {
-        serviceProvider: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceProvider', required: true },
+        projectName: { type: mongoose.Schema.Types.ObjectId, ref: 'Project', required: true },
+        serviceProvider: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceProvider', required: true }, // This field should exist
         amount: { type: Number, required: true },
         date: { type: Date, default: Date.now },
+        status: {
+            type: String,
+            enum: ['Paid', 'Pending', 'Failed'],
+            default: 'Pending',
+        },
     },
     { timestamps: true }
 );
 
-const Earning = mongoose.model('Earning', earningSchema);
-export default Earning;
+const Earnings = mongoose.model('Earnings', earningSchema);
+export default Earnings;
