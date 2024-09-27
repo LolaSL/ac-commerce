@@ -22,13 +22,12 @@ const ExtractPdf = () => {
       reader.onload = function () {
         const typedarray = new Uint8Array(reader.result);
 
-        // Load the PDF with pdfjs-dist
         getDocument(typedarray)
           .promise.then((pdf) => {
             console.log("PDF loaded");
 
             pdf.getPage(1).then((page) => {
-              const scale = 4;
+              const scale = 5;
               const viewport = page.getViewport({ scale });
 
               const canvas = document.createElement("canvas");
@@ -49,6 +48,7 @@ const ExtractPdf = () => {
                   .then(({ data: { text } }) => {
                     console.log("Extracted Text:", text);
                     setExtractedText(text);
+
                     const classifiedTable = classifyAndExtractData(text);
                     setClassifiedData(classifiedTable);
                   })
@@ -70,19 +70,19 @@ const ExtractPdf = () => {
     }
   }
 
-  // Function to classify and extract room types and dimensions, output JSON structure
   const classifyAndExtractData = (text) => {
     const roomPatterns = {
       bedroom: /bed\s?room|br|bdrm/i,
-      livingRoom: /living\s?room|lobby|lr|outdoor\s?living/i,
+      livingRoom: /living\s?room|lr|outdoor\s?living/i,
       kitchen: /kitchen|kit/i,
       toilet: /toilet|bath\s?room|wc/i,
       diningRoom: /dining\s?room|dr/i,
-      drawingRoom: /drawing\s?room|study|studyroom/i,
+      drawingRoom: /drawing\s?room|study|studyroom|pooja/i, // Added Pooja room
       breakfastRoom: /breakfast\s?room|brkfst/i,
       familyRoom: /family\s?room/i,
       lounge: /lounge|l|mstr\s?suite/i,
-      hall: /hall/i, // Added hall pattern
+      hall: /hall|parking/i, // Parking now under hall pattern
+      masterBed: /master\s?bed\s?room|mstr\s?bed/i,
     };
 
     // Adjusted dimension pattern to handle more variations of foot and inch marks
@@ -93,7 +93,8 @@ const ExtractPdf = () => {
     const cleanedText = text
       .replace(/[^\w\s.'"\dXx]/g, "") // Remove special characters
       .replace(/\s{2,}/g, " ") // Replace multiple spaces with single space
-      .trim();
+      .trim()
+      .toLowerCase();
 
     const lines = cleanedText.split("\n");
     let table = [];
@@ -115,31 +116,40 @@ const ExtractPdf = () => {
       const dimensions = line.match(dimensionPattern);
       console.log("Matched dimensions:", dimensions);
 
-      if (roomType && dimensions) {
-        dimensions.forEach((dim) => {
-          const [width, height] = dim
-            .split(/[xX]/)
-            .map((measure) => convertToFeet(measure.trim()));
+      // // Classify room types and process multiple matches
+      for (const [key, pattern] of Object.entries(roomPatterns)) {
+        const matches = line.match(new RegExp(pattern, "gi")) || [];
+        if (matches.length > 0) {
+          console.log(`Matched ${matches.length} ${key}(s)`);
 
-          // Skip invalid dimensions, e.g., kitchen size mismatch like 15'0"x12'0"
-          if (width > 100 || height > 100) {
-            console.warn("Suspicious dimension detected:", { width, height });
-            return; // Skip overly large dimensions
+          if (dimensions) {
+            dimensions.forEach((dim, index) => {
+              const [width, height] = dim
+                .split(/[xX]/)
+                .map((measure) => convertToFeet(measure.trim()));
+
+              if (width > 100 || height > 100) {
+                console.warn("Suspicious dimension detected:", {
+                  width,
+                  height,
+                });
+                return;
+              }
+              const areaSqFt = width * height;
+              const areaSqM = areaSqFt * 0.092903;
+
+              table.push({
+                roomType: key,
+                width: `${width.toFixed(2)} ft`,
+                height: `${height.toFixed(2)} ft`,
+                areaSqFt: `${areaSqFt.toFixed(2)} sqft`,
+                areaSqM: `${areaSqM.toFixed(2)} sqm`,
+              });
+            });
+          } else {
+            console.log(`No dimensions found for ${key}`);
           }
-
-          const areaSqFt = width * height;
-          const areaSqM = areaSqFt * 0.092903;
-
-          table.push({
-            roomType,
-            width: `${width.toFixed(2)} ft`,
-            height: `${height.toFixed(2)} ft`,
-            areaSqFt: `${areaSqFt.toFixed(2)} sqft`,
-            areaSqM: `${areaSqM.toFixed(2)} sqm`,
-          });
-        });
-      } else {
-        console.log(`No dimensions found for ${roomType}`);
+        }
       }
     });
 

@@ -31,7 +31,7 @@ export const isAuth = (req, res, next) => {
       if (err) {
         return res.status(401).send({ message: 'Invalid Token' });
       }
-      req.serviceProvider = decoded; // Ensure this sets the correct service provider data
+      req.serviceProvider = decoded;
       next();
     });
   } else {
@@ -47,13 +47,7 @@ serviceProviderRouter.get(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     try {
-      console.log('ServiceProvider Info:', req.serviceProvider); // Debugging
-
-      if (!req.serviceProvider || !req.serviceProvider._id) {
-        return res.status(400).send({ message: 'ServiceProvider not found' });
-      }
-
-      const projects = await Project.find({ serviceProvider: req.serviceProvider._id });
+         const projects = await Project.find({ serviceProvider: req.serviceProvider._id });
 
       if (projects.length === 0) {
         return res.status(404).send({ message: 'No projects available' });
@@ -61,7 +55,7 @@ serviceProviderRouter.get(
 
       res.status(200).send(projects);
     } catch (error) {
-      console.error('Error fetching projects:', error); // Log error details
+      console.error('Error fetching projects:', error);
       res.status(500).send({ message: 'Error loading projects' });
     }
   })
@@ -69,104 +63,53 @@ serviceProviderRouter.get(
 
 
 
-// Get all messages for a specific service provider
+
 serviceProviderRouter.get(
   '/messages',
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const messages = await Message.find({ serviceProvider: req.serviceProvider._id });
+    const serviceProviderId = req.serviceProvider._id
+    const messages = await Message.find({ serviceProvider: serviceProviderId });
     res.send(messages);
   })
 );
 
-// Get total earnings for a specific service provider
-// serviceProviderRouter.get(
-//   '/earnings',
-//   isAuth,
-//   expressAsyncHandler(async (req, res) => {
-//     const earnings = await Earnings.aggregate([
-//       { $match: { serviceProvider: req.serviceProvider._id } },
-//       { $group: { _id: null, totalEarnings: { $sum: '$amount' } } },
-//     ]);
-//     res.send(earnings.length ? earnings[0].totalEarnings : 0);
-//   })
-// );
+
 
 serviceProviderRouter.get(
   '/earnings',
   isAuth,
   expressAsyncHandler(async (req, res) => {
     try {
-      const earnings = await Earnings.find()
+      const serviceProviderId = req.serviceProvider._id
+      // Filter by the logged-in service provider's ID
+      const earnings = await Earnings.find({ serviceProvider: serviceProviderId })  // Filter earnings by logged-in service provider
         .populate({
-          path: 'projectName', // Reference project details
+          path: 'projectName', // Populate project details
           select: 'name hoursWorked', // Fetch project name and hoursWorked fields
         })
-        .populate('serviceProvider', 'name'); // Optionally populate service provider name
+        .populate('serviceProvider', 'name'); // Optionally populate service provider name (if needed)
 
       if (earnings.length === 0) {
-        res.status(404).send({ message: 'No earnings found' });
+        res.status(404).send({ message: 'No earnings found for this service provider' });
         return;
       }
 
-      res.status(200).send(earnings);
+      res.status(200).send(earnings);  // Send back the filtered earnings data
     } catch (error) {
       res.status(500).send({ message: error.message });
     }
   })
 );
-//   '/earnings',
-//   isAuth,
-//   expressAsyncHandler(async (req, res) => {
-//     // Log service provider ID for debugging
-//     console.log('Service Provider ID:', req.serviceProvider._id);
-
-//     // Aggregate the earnings data
-//     const earnings = await Earnings.aggregate([
-//       { $match: { serviceProvider: req.serviceProvider._id } },
-//       {
-//         $group: {
-//           _id: null,
-//           totalEarnings: { $sum: '$amount' },
-//           totalHours: { $sum: '$hoursWorked' },
-//         },
-//       },
-
-//     ]);
-
-//     // Log aggregated earnings data for debugging
-//     console.log('Aggregated Earnings:', earnings);
-
-//     // Check if earnings data is found
-//     if (earnings.length === 0) {
-//       console.log('No earnings data found for this service provider');
-//     }
-
-//     // Return the earnings and hours worked or zero if none found
-//     res.send(
-//       earnings.length
-//         ? { totalEarnings: earnings[0].totalEarnings, totalHours: earnings[0].totalHours }
-//         : { totalEarnings: 0, totalHours: 0 }
-//     );
-//   })
-// );
-// serviceProviderRouter.get(
-//   '/hours',
-//   isAuth,
-//   expressAsyncHandler(async (req, res) => {
-//     const projects = await Project.find({ serviceProvider: req.serviceProvider._id });
-//     const totalHours = projects.reduce((sum, project) => sum + project.hoursWorked, 0);
-//     res.send({ totalHours });
-//   })
-// );
 
 
 serviceProviderRouter.get(
   '/hours',
   isAuth,
   expressAsyncHandler(async (req, res) => {
+    const serviceProviderId = req.serviceProvider._id
     // Ensure req.serviceProvider._id contains the correct service provider ID
-    const earnings = await Earnings.find({ serviceProvider: req.serviceProvider._id }).populate('projectName');
+    const earnings = await Earnings.find({ serviceProvider: serviceProviderId }).populate('projectName');
 
     console.log('Earnings:', earnings); // Check what you're getting from the database
 
@@ -210,6 +153,62 @@ serviceProviderRouter.get(
   (req, res) => {
     res.send('Service Provider Dashboard');
   }
+);
+
+serviceProviderRouter.get(
+  '/dashboard/projects',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const totalProjects = await Project.find().populate('serviceProvider', 'name email');
+      if (!totalProjects) {
+        res.status(404).send({ message: 'No projects found' });
+        return;
+      }
+      res.status(200).send(totalProjects);
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  })
+);
+
+serviceProviderRouter.get(
+  '/dashboard/messages',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const totalMessages = await Message.find().populate('serviceProvider', 'name email');
+      if (!totalMessages) {
+        res.status(404).send({ message: 'No messages found' });
+        return;
+      }
+      res.status(200).send(totalMessages);
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  })
+);
+
+serviceProviderRouter.get(
+  '/dashboard/earnings',
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const totalEarnings = await Earnings.find()
+        .populate({
+          path: 'projectName',
+          select: 'name hoursWorked',
+        })
+        .populate('serviceProvider', 'name email');
+      if (!totalEarnings) {
+        res.status(404).send({ message: 'No earnings found' });
+        return;
+      }
+      res.status(200).send(totalEarnings);
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  })
 );
 
 
@@ -320,8 +319,5 @@ serviceProviderRouter.put(
     }
   })
 );
-
-
-
 
 export default serviceProviderRouter;

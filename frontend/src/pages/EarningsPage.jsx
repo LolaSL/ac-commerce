@@ -72,7 +72,7 @@ const EarningsPage = () => {
         <tbody>
           {earnings && earnings.length > 0 ? (
             earnings.map((earning, index) => (
-              <tr key={earning._id}>
+              <tr key={earning.index}>
                 <td>{index + 1}</td>
                 <td>{earning.projectName.name}</td> {/* Access project name */}
                 <td>{earning.projectName.hoursWorked}</td>{" "}

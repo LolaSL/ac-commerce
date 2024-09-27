@@ -187,44 +187,68 @@ const data = {
         {
             name: "Ventilation System Architecting",
             client: "Venty Corp",
-            dueDate: "2024-12-31",
-            status: "Completed",
+            dueDate: "2024-09-26",
+            status: "Paid",
             serviceProvider: "test-company3@example.com",
             hoursWorked: 78,
         },
     ],
     messages: [
         {
+            client: "ABC Corp",
+            text: "Can we upgrade the office layout?",
+            date: "2024-09-26",
+            serviceProvider: "",
+        },
+        {
+            client: "Venty Corp",
+            text: "When will we get the first transh for the first draft and previous milestone?",
+            date: "2024-09-15",
+            serviceProvider: "",
+        },
+        {
             client: "John Doe",
             text: "Can we update the room layout?",
             date: "2024-08-18",
-            serviceProvider: "", 
+            serviceProvider: "",
         },
         {
             client: "Michaella Donowan",
             text: "When can we start nogotiation regarding the first draft be ready?",
             date: "2024-09-20",
-            serviceProvider: "", 
+            serviceProvider: "",
         },
     ],
     earnings: [
         {
-            // projectName: "Residential House Design",
-            // serviceProvider: "test-company1@example.com",
+    
             amount: 500,
             date: '2024-09-20',
             hoursWorked: 20,
             status: 'Pending',
         },
         {
-            // projectName: "Office Interior Renovation",
-            // serviceProvider: "test-company2@example.com",
+       
             amount: 1500,
             date: '2024-09-29',
             hoursWorked: 40,
             status: 'Paid',
         },
-    ],
+        {
+           
+            amount: 699,
+            date: '2024-09-20',
+            hoursWorked:53,
+            status: 'Pending',
+        },
+        {
+       
+            amount: 2500,
+            date: '2024-09-27',
+            hoursWorked: 78,
+            status: 'Paid',
+        },
+    ]
 }
 
 export default data;

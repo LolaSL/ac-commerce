@@ -4,7 +4,6 @@ export const Store = createContext();
 
 const initialState = {
   fullBox: false,
-
   // Retrieve userInfo and serviceProviderInfo from localStorage
   userInfo: localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo'))
