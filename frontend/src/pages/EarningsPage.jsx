@@ -72,11 +72,10 @@ const EarningsPage = () => {
         <tbody>
           {earnings && earnings.length > 0 ? (
             earnings.map((earning, index) => (
-              <tr key={earning.index}>
+              <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{earning.projectName.name}</td> {/* Access project name */}
-                <td>{earning.projectName.hoursWorked}</td>{" "}
-                {/* Access hours worked */}
+                <td>{earning.projectName.name}</td>
+                <td>{earning.projectName.hoursWorked}</td>
                 <td>{earning.amount}</td>
                 <td>{new Date(earning.date).toLocaleDateString()}</td>
                 <td>{earning.status}</td>

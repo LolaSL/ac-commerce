@@ -68,8 +68,8 @@ const Projects = () => {
             </tr>
           </thead>
           <tbody>
-            {projects.map((project) => (
-              <tr key={project._id}>
+            {projects.map((project, index) => (
+              <tr key={index}>
                 <td>{project.name}</td>
                 <td>{project.status}</td>
                 <td>{project.hoursWorked}</td>

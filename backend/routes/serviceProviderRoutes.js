@@ -6,8 +6,8 @@ import Project from '../models/projectModel.js';
 import Message from '../models/messageModel.js';
 import Earnings from '../models/earningModel.js';
 import ServiceProvider from '../models/serviceProviderModel.js';
-import protectServiceProvider from '../authMiddleware.js';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 const generateToken = (serviceProvider) => {
   return jwt.sign(
@@ -47,7 +47,8 @@ serviceProviderRouter.get(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     try {
-         const projects = await Project.find({ serviceProvider: req.serviceProvider._id });
+      const serviceProviderId = req.serviceProvider._id
+      const projects = await Project.find({ serviceProvider: serviceProviderId });
 
       if (projects.length === 0) {
         return res.status(404).send({ message: 'No projects available' });
@@ -136,7 +137,6 @@ serviceProviderRouter.get(
 
 
 
-
 serviceProviderRouter.get(
   '/',
   isAuth,
@@ -146,71 +146,6 @@ serviceProviderRouter.get(
     res.send(serviceProviders);
   })
 );
-
-serviceProviderRouter.get(
-  '/dashboard',
-  protectServiceProvider,
-  (req, res) => {
-    res.send('Service Provider Dashboard');
-  }
-);
-
-serviceProviderRouter.get(
-  '/dashboard/projects',
-  isAuth,
-  expressAsyncHandler(async (req, res) => {
-    try {
-      const totalProjects = await Project.find().populate('serviceProvider', 'name email');
-      if (!totalProjects) {
-        res.status(404).send({ message: 'No projects found' });
-        return;
-      }
-      res.status(200).send(totalProjects);
-    } catch (error) {
-      res.status(500).send({ message: error.message });
-    }
-  })
-);
-
-serviceProviderRouter.get(
-  '/dashboard/messages',
-  isAuth,
-  expressAsyncHandler(async (req, res) => {
-    try {
-      const totalMessages = await Message.find().populate('serviceProvider', 'name email');
-      if (!totalMessages) {
-        res.status(404).send({ message: 'No messages found' });
-        return;
-      }
-      res.status(200).send(totalMessages);
-    } catch (error) {
-      res.status(500).send({ message: error.message });
-    }
-  })
-);
-
-serviceProviderRouter.get(
-  '/dashboard/earnings',
-  isAuth,
-  expressAsyncHandler(async (req, res) => {
-    try {
-      const totalEarnings = await Earnings.find()
-        .populate({
-          path: 'projectName',
-          select: 'name hoursWorked',
-        })
-        .populate('serviceProvider', 'name email');
-      if (!totalEarnings) {
-        res.status(404).send({ message: 'No earnings found' });
-        return;
-      }
-      res.status(200).send(totalEarnings);
-    } catch (error) {
-      res.status(500).send({ message: error.message });
-    }
-  })
-);
-
 
 // Service Provider Registration Route
 serviceProviderRouter.post(
@@ -278,44 +213,35 @@ serviceProviderRouter.post(
 
 serviceProviderRouter.put(
   '/profile/:id',
-  isAuth, // Ensure this middleware is correctly handling service provider authentication
+  isAuth, // Ensure proper authentication middleware is in place
   expressAsyncHandler(async (req, res) => {
-    const serviceProviderId = req.params.id;
+    try {
+      const serviceProvider = await ServiceProvider.findById(req.params.id);
+      if (!serviceProvider) {
+        return res.status(404).send({ message: 'Service Provider not found' });
+      }
 
-    // Check if the service provider ID is present in the request params
-    if (!serviceProviderId) {
-      return res.status(400).json({ message: "Service Provider ID is required." });
-    }
-
-    // Find the service provider by ID
-    const serviceProvider = await ServiceProvider.findById(serviceProviderId);
-
-    if (serviceProvider) {
-      // Update service provider fields based on the input
       serviceProvider.name = req.body.name || serviceProvider.name;
       serviceProvider.email = req.body.email || serviceProvider.email;
+      serviceProvider.typeOfProvider = req.body.typeOfProvider || serviceProvider.typeOfProvider;
+      serviceProvider.experience = req.body.experience || serviceProvider.experience;
 
-      // Update password if provided
+      // Handle password update only if provided
       if (req.body.password) {
-        // Ensure password is hashed before storing in the DB
         serviceProvider.password = bcrypt.hashSync(req.body.password, 8);
       }
 
-      // Save updated service provider details
-      const updatedServiceProvider = await serviceProvider.save();
-
-      // Return updated details along with a new token if necessary
+      await serviceProvider.save();
       res.send({
-        _id: updatedServiceProvider._id,
-        name: updatedServiceProvider.name,
-        email: updatedServiceProvider.email,
-        typeOfProvider: updatedServiceProvider.typeOfProvider,
-        experience: updatedServiceProvider.experience,
-        token: generateToken(updatedServiceProvider), // Generate a new token
+        _id: serviceProvider._id,
+        name: serviceProvider.name,
+        email: serviceProvider.email,
+        typeOfProvider: serviceProvider.typeOfProvider,
+        isAdmin: serviceProvider.isAdmin,
+        token: generateToken(serviceProvider),
       });
-    } else {
-      // Service provider not found
-      res.status(404).send({ message: 'Service provider not found' });
+    } catch (err) {
+      res.status(500).send({ message: err.message });
     }
   })
 );

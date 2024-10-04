@@ -50,6 +50,9 @@ const Footer = () => {
               <NavLink className="text-white" href="/">
                 Home
               </NavLink>
+                 <NavLink className="text-white" href="/about-us">
+                About Us
+              </NavLink>
               <NavLink className="text-white" href="/products">
                 Products
               </NavLink>
@@ -59,9 +62,9 @@ const Footer = () => {
               <NavLink className="text-white" href="/upload-pdf">
                 Services
               </NavLink>
-              <NavLink className="text-white" href="/about-us">
-                About Us
-              </NavLink>
+           
+              <NavLink className="text-white" href="/blogs">Blogs
+            </NavLink>
             </Col>
             <Col className="col-md-6 col-lg-4 col-12 ft-3">
               <h5>Contact</h5>

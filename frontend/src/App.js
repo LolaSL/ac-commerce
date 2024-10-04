@@ -42,19 +42,19 @@ import FeaturedPage from './pages/FeaturedPage.jsx';
 import SellerEditPage from './pages/SellerEditPage.jsx';
 import SellersListPage from './pages/SellersListPage.jsx';
 import AirConditioningPage from './pages/AirConditioningPage.jsx';
-// import UploadPDF from './components/UploadPDF.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import Footer from './components/Footer.jsx';
 import AboutUs from './pages/AboutUs.jsx';
-import ExtractPdf from './components/ExtractPdf.jsx';
+import ExtractPdf from './pages/ExtractPdf.jsx';
 import ServiceProviderLogin from './pages/ServiceProviderLogin.jsx';
 import ServiceProviderRegister from './pages/ServiceProviderRegister.jsx';
 import ServiceProviderProfile from './pages/ServiceProviderProfile.jsx';
-import ServiceProviderDashboard from './pages/ServiceProviderDashboard.jsx';
 import HoursPage from './pages/HoursPage.jsx';
 import EarningsPage from './pages/EarningsPage.jsx';
 import ProjectsPage from './pages/ProjectsPage.jsx';
-
+import AcInstallation from './pages/AcInstallation.jsx'
+import BlogsList from './pages/BlogsList.jsx';
+import BlogDetails from './pages/BlogDetails.jsx';
 
 
 
@@ -154,11 +154,17 @@ function App() {
                   )}
                   {serviceProviderInfo ? (
                     <NavDropdown title={serviceProviderInfo.name} id="provider-nav-dropdown">
-                      <LinkContainer to="/serviceprovider/profile">
+                      <LinkContainer to="/serviceprovider/profile/:id">
                         <NavDropdown.Item>Service Provider Profile</NavDropdown.Item>
                       </LinkContainer>
-                      <LinkContainer to="/serviceprovider/dashboard">
-                        <NavDropdown.Item>Dashboard</NavDropdown.Item>
+                      <LinkContainer to="/serviceprovider/projects">
+                        <NavDropdown.Item>Projects</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/serviceprovider/hours">
+                        <NavDropdown.Item>Hours</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/serviceprovider/earnings">
+                        <NavDropdown.Item>Earnings</NavDropdown.Item>
                       </LinkContainer>
                       <NavDropdown.Divider />
                       <Link
@@ -223,7 +229,7 @@ function App() {
               <Link to="/sellers" className="link-sellers fw-bold">Sellers</Link>
             </Nav.Item>
             <Nav.Item className='search-title'>
-              <Link to="/upload-pdf" className="link-service fw-bold">Services</Link>
+              <Link to="/blogs" className="link-blog fw-bold">Blogs</Link>
             </Nav.Item>
             <Nav.Item className='search-title'>
               <Link to="/contact" className="link-contact fw-bold">Contact</Link>
@@ -252,7 +258,7 @@ function App() {
                 element={<ResetPasswordPage />}
               />
               <Route
-                path="/serviceprovider/profile"
+                path="/serviceprovider/profile/:id"
                 element={
                   <ProtectedRoute>
                     <ServiceProviderProfile />
@@ -280,14 +286,6 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <ProjectsPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/serviceprovider/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <ServiceProviderDashboard />
                   </ProtectedRoute>
                 }
               />
@@ -401,8 +399,11 @@ function App() {
               <Route path="/sellers/edit/:id" element={<SellerEditPage />} />
               <Route path="/about-us" element={<AboutUs />} />
               <Route path="/air-conditioning" element={<AirConditioningPage />} />
+              <Route path="/ac-installation" element={<AcInstallation />} />
               <Route path="/upload-pdf" element={<ExtractPdf />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/blogs" element={<BlogsList />} />
+              <Route path="/blogs/:id" element={<BlogDetails />} />
               <Route path="/" element={<HomePage />} />
             </Routes>
           </Container>

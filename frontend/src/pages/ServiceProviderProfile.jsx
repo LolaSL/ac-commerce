@@ -6,7 +6,6 @@ import { Store } from "../Store";
 import { toast } from "react-toastify";
 import { getError } from "../utils";
 import axios from "axios";
-import NavLink from "react-bootstrap/NavLink";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
 
@@ -27,9 +26,14 @@ export default function ServiceProviderProfile() {
   const navigate = useNavigate();
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { serviceProviderInfo } = state;
-  const serviceProviderId = serviceProviderInfo?._id;
 
   const [name, setName] = useState(serviceProviderInfo?.name || "");
+  const [typeOfProvider, setTypeOfProvider] = useState(
+    serviceProviderInfo?.typeOfProvider || ""
+  );
+  const [experience, setExperience] = useState(
+    serviceProviderInfo?.experience || ""
+  );
   const [email, setEmail] = useState(serviceProviderInfo?.email || "");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -37,7 +41,8 @@ export default function ServiceProviderProfile() {
   const [{ loadingUpdate }, dispatch] = useReducer(reducer, {
     loadingUpdate: false,
   });
-
+  console.log(serviceProviderInfo);
+  console.log(serviceProviderInfo?._id);
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -45,15 +50,22 @@ export default function ServiceProviderProfile() {
       toast.error("Passwords do not match");
       return;
     }
-    if (!serviceProviderId) {
-      toast.error("Service Provider ID is missing.");
+
+    // Ensure serviceProviderInfo and _id exist
+    if (!serviceProviderInfo || !serviceProviderInfo._id) {
+      toast.error(
+        "Service Provider information is missing or you are not logged in."
+      );
       return;
     }
+
     try {
       const { data } = await axios.put(
-        `/api/service-providers/profile/${serviceProviderId}`, // Correct URL with ID
+        `/api/service-providers/profile/${serviceProviderInfo._id}`, // Directly using _id
         {
           name,
+          typeOfProvider,
+          experience,
           email,
           password: password || undefined,
         },
@@ -68,7 +80,6 @@ export default function ServiceProviderProfile() {
       toast.success("Service Provider updated successfully");
       navigate("/");
     } catch (err) {
-      console.error("Error:", err.response ? err.response.data : err.message);
       dispatch({ type: "UPDATE_FAIL" });
       toast.error(getError(err));
     }
@@ -89,33 +100,39 @@ export default function ServiceProviderProfile() {
       <div className="card p-3 mb-4">
         <h1 className="mt-2 mb-2-italic">{name}</h1>
         {serviceProviderInfo && (
-          <div>
-            <p>{serviceProviderInfo.typeOfProvider || "N/A"}</p>
-            <p>{serviceProviderInfo.experience || "N/A"}</p>
+          <div className="provider-update">
+            <p>{typeOfProvider}.</p>
+            <p>{experience} years.</p>
           </div>
         )}
+
         <div className="footer-icons d-flex mb-4">
-          <NavLink href="#" className="me-2">
-            <i className="fa-brands fa-facebook"></i>
-          </NavLink>
-          <NavLink href="#" className="me-2">
-            <i className="fa-brands fa-twitter"></i>
-          </NavLink>
-          <NavLink href="#" className="me-2">
-            <i className="fa-brands fa-instagram"></i>
-          </NavLink>
-          <NavLink href="#" className="me-2">
-            <i className="fa-brands fa-linkedin-in"></i>
-          </NavLink>
+          {/* Social media links */}
         </div>
       </div>
 
-      <form onSubmit={submitHandler}>
+      <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="name">
           <Form.Label>Name</Form.Label>
           <Form.Control
             value={name}
             onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="typeOfProvider">
+          <Form.Label>Profession</Form.Label>
+          <Form.Control
+            value={typeOfProvider}
+            onChange={(e) => setTypeOfProvider(e.target.value)}
+            required
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="experience">
+          <Form.Label>Experience</Form.Label>
+          <Form.Control
+            value={experience}
+            onChange={(e) => setExperience(e.target.value)} // Corrected this line
             required
           />
         </Form.Group>
@@ -149,7 +166,7 @@ export default function ServiceProviderProfile() {
             {loadingUpdate ? "Updating..." : "Update"}
           </Button>
         </div>
-      </form>
+      </Form>
     </Container>
   );
 }

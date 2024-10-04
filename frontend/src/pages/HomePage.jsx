@@ -6,18 +6,19 @@ import Hero from "../components/Hero.jsx";
 import Header1 from "../components/Header1.jsx";
 import Header2 from "../components/Header2.jsx";
 
+
 const HomePage = () => {
   return (
-    <div >
-        <Helmet>
-          <title>AC Commerce</title>
-      </Helmet> 
+    <div>
+      <Helmet>
+        <title>AC Commerce</title>
+      </Helmet>
       <Header2 />
-       <Header1 />
+      <Header1 />
       <Banner />
       <Banner1 />
       <Hero />
-    </div> 
+    </div>
   );
 };
 

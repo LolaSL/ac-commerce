@@ -26,7 +26,6 @@ productRouter.post(
       rating: 0,
       numReviews: 0,
       description: 'sample description',
-      description: 'sample description',
       features: ['Heating', 'Cooling', 'Wi-Fi', 'Energy Saving', 'Remote Control', 'Led'],
       btu: 0,
       areaCoverage: 0,

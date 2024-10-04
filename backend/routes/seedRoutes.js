@@ -7,6 +7,7 @@ import ServiceProvider from '../models/serviceProviderModel.js';
 import Project from '../models/projectModel.js';
 import Message from '../models/messageModel.js';
 import Earnings from '../models/earningModel.js';
+import Blog from '../models/blogModel.js';
 import data from '../data.js';
 
 const seedRouter = express.Router();
@@ -23,8 +24,9 @@ seedRouter.get('/', async (req, res) => {
     await Project.deleteMany({});
     await Message.deleteMany({});
     await Earnings.deleteMany({});
+    await Blog.deleteMany({});
 
-    // Seed Service Providers
+
     const createdServiceProviders = await ServiceProvider.insertMany(data.serviceProviders);
 
     // Extract Service Provider IDs
@@ -64,7 +66,7 @@ seedRouter.get('/', async (req, res) => {
     const createdUsers = await User.insertMany(data.users);
     const createdSellers = await Seller.insertMany(data.sellers);
     const createdContacts = await Contact.insertMany(data.contacts);
-
+    const createdBlogs = await Blog.insertMany(data.blogs);
     res.send({
       createdProducts,
       createdUsers,
@@ -73,7 +75,8 @@ seedRouter.get('/', async (req, res) => {
       createdServiceProviders,
       createdProjects,
       createdMessages,
-      createdEarnings
+      createdEarnings,
+      createdBlogs
     });
   } catch (error) {
     res.status(500).send({ message: 'Error seeding data', error: error.message });
