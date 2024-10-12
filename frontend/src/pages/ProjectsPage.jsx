@@ -57,14 +57,14 @@ const Projects = () => {
 
   return (
     <Container>
-      <h2>Your Projects</h2>
+      <h2 className="mt-4 mb-4 fw-bold"> Projects</h2>
       {projects.length > 0 ? (
         <Table striped bordered hover>
           <thead>
             <tr>
               <th>Name</th>
               <th>Status</th>
-              <th>Hours Worked</th>
+              <th>Time On Project</th>
             </tr>
           </thead>
           <tbody>

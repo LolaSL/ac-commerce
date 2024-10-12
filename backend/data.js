@@ -92,7 +92,7 @@ const data = {
             name: 'LG',
             brand: "LG",
             rating: 4.5,
-            info: "Lg is the one of popular and ",
+            info: "LG offers optimized Heating, Ventilation, and Air Conditioning for both commercial and residential solutions, ensuring fresh and crisp air for various environments.",
             numReviews: 15,
             isAdmin: false,
         },
@@ -100,8 +100,8 @@ const data = {
 
             name: 'Siemens',
             brand: "Siemens",
-            info: "Siemens is the one of popular and ",
-            rating: 3.5,
+            info: "Siemens develops products that are specifically tailored to the needs and requirements of our OEM partners. Seimens offer customized concepts, products and system solutions for air conditioning, refrigeration, boilers, burners, district heating and alternative forms of energy. ",
+            rating: 4.0,
             numReviews: 13,
             isAdmin: false,
         },
@@ -208,41 +208,51 @@ const data = {
     ],
     messages: [
         {
+            client: "John Doe",
+            text: "Can we update the room layout?",
+            date: "2024-08-18",
+            serviceProvider: "",
+            projectName: "Residential House Design"
+        },
+        {
             client: "ABC Corp",
             text: "Can we upgrade the office layout?",
             date: "2024-09-26",
             serviceProvider: "",
-        },
-        {
-            client: "Venty Corp",
-            text: "When will we get the first transh for the first draft and previous milestone?",
-            date: "2024-09-15",
-            serviceProvider: "",
+            projectName: "Office Interior Renovation"
         },
         {
             client: "Viki Crage",
             text: "Can we upgrade the construction layout?",
             date: "2024-09-25",
             serviceProvider: "",
+            projectName: "Construction Design",
         },
+
         {
             client: "Loft&Hubs Corp",
             text: "We obtained the last transh and last milestone",
             date: "2024-09-05",
             serviceProvider: "",
-        },
-        {
-            client: "John Doe",
-            text: "Can we update the room layout?",
-            date: "2024-08-18",
-            serviceProvider: "",
+            projectName: "Loft Renovation",
+
         },
         {
             client: "Michaella Donowan",
             text: "When can we start nogotiation regarding the first draft be ready?",
             date: "2024-09-20",
             serviceProvider: "",
+            projectName: "Appartments Design"
         },
+
+        {
+            client: "Venty Corp",
+            text: "When will we get the first transh for the first draft and previous milestone?",
+            date: "2024-09-15",
+            serviceProvider: "",
+            projectName: "Ventilation System Architecting"
+        },
+
     ],
     earnings: [
         {
@@ -319,7 +329,15 @@ const data = {
             content: " <h2>What is the Ideal AC Temperature for Summer?</h2> <p> The prime thing to bear in your mind is that there is a perfect temperature at which you can set  thermostat during the summer months. However, you cannot keep it at the same temperature during the day and night.</p> <p>The temperature has to vary. If we talk about the temperature during the day, the general rule is to keep a difference of -6.6 degrees Celsius between the indoor and outdoor temperatures. This should be done to ensure that if you have to go outdoors, the temperature difference is easily bearable by the body.</p><h3>Best Temperature for Day!</h3><p>The best temperature to run your AC during the day is 27 to 29 degrees Celsius. If you run your AC between or at these temperatures for eight hours, you can easily save 5-15% on the overall cooling cost. </p><p>Though this is an ideal setting for the AC temperature, the required AC temperature can vary a little based on various factors. These factors are the location of your house, the insulation of your house, the time of the day, etc. In areas like London, the ideal AC temperature is between 21 to 25 degrees Celsius.</p><h3>Best Temperature for Night!</h3><p>When it comes to nighttime, the temperature outdoors drops during the night, which is why you need to lower the AC temperature. The ideal temperature to set your AC to at night is 15 and 19 degrees Celsius. It is better to use sleep mode on your AC as it will turn OFF the AC after some time, saving you money.</p><h3>Can I Automate the Temperature Settings of the Air Conditioner?</h3><p>If you are a working-class person, it can be a bit inconvenient to turn the AC ON and OFF repeatedly. Moreover, keeping track of the temperature and adjusting it after coming from work can be irritating. This is where the need for automation or a programmable thermostat comes into the picture.</p><p>A programmable thermostat is an excellent device that can help keep your home at the right temperature while you are away. For example, if you are out, it will keep the temperature higher and reduce it to your set value when you are ready to come home. The device can be a great way to save more power.</p><h3>Essential Tips to Obtain the Best Out of Your AC in Summers!</h3><p>Ok, now we know what the ideal temperature for your AC for this summer is. But, it is not going to be enough. You will reap no benefits from setting the AC at 25 or 26 degrees Celsius if you haven’t taken care of the other factors.</p><p>So, here are some tips that you need to implement to get the best air conditioning installation this summer.</p><ul><li><strong>Use a ceiling fan:</strong> Using an AC is not going to be enough if you want to cool in multiple rooms. Cool air is heavy, which is why it accumulates wherever it is released. Therefore, it is necessary to have a ceiling fan that circulates the air. This will significantly affect your power bill.</li><li><strong>Keep the doors and windows closed:</strong> Your AC will not deliver performance if you leave the doors & windows open. You see, the AC captures the hot air in the room, cools it, and releases it back into the house. Hence, if the hot air outside is coming inside, the overall cooling effect will be hampered.</li><li><strong>Keep a check on the air filters:</strong> No matter what temperature your AC is set to, if the filters used in the AC are not clean, your AC will require more power to suck the air in and deliver cold air out. Hence, if your AC has removable filters, take them out and clean them on a regular basis.</li></ul><p>Keep all these things in mind, and you will never face high power bills due to your AC, at least.</p><h2>Common Problems with Air Conditioners</h2><p>With the summer months comes the summer heat. On a sweltering day with temperatures reaching triple digits and 100 percent humidity, the last thing anyone wants to deal with is a broken air conditioner. Here are some common problems many encounter with their air conditioners and tips to prevent them from happening to you. </p><h3>Just Plain Dirty</h3><p>One of the most common problems air conditioners face stems from the fact they are just plain dirty. Dirt can cause some serious issues when they build up in the air filter and on the coils. When this happens, the airflow from the machine into the room will decrease, and the unit will literally freeze, shutting down.</p><p>This problem can best be prevented by basic maintenance with regular cleaning of the filter and coils. Keeping the buildup of dirt and dust to a minimum will ensure your air conditioner can do its best in the hot months ahead.</p><h3>Leaking Refrigerant</h3> <p> Refrigerant is the lifeblood in your air conditioner that helps the hot and wet air around you become that nice cool and dry air you enjoy. A common problem is a leak in the tubing of the air conditioner that holds the refrigerant.</p><p>When the level of refrigerant is at the exact level recommended by manufacturers, the machine will work at its best. When there is more or less refrigerant than that level, the machine will not work at its best. If you add more refrigerant to your air conditioner with no improvement to the quality of air that comes out, you might have a leak. The best way to fix this problem is to call a professional who will be able to repair the leak and get your HVAC system back to the right levels again. With refrigerant distribution strictly controlled by our government, you cannot continue to re-charge a leaking system.</p><h3>Electric Control Failure</h3><p>If you tend to turn your air conditioner on and off frequently, a problem can develop with the electric controls. When the weather is hot and humid, you should leave the system on and just raise the temperature a maximum of 5 degrees when not home. If you think the unit is not keeping the temperature you wish, an electrical problem as simple as your thermostat may be the culprit.</p>",
             shortDescription: "3 Common Air Conditioning Problems And Tips To Prevent Them.",
             image: "https://metropha.com/wp-content/uploads/2018/03/How-to-Deal-with-Air-Conditioner-Issues-Air-Conditioner-Repair-in-Chattanooga-TN.jpg",
-        }
+        },
+        {
+            title: " Everything You Should Know About Air Conditioning.",
+            slug: "everything-you-should-know-about-air-conditioning.",
+            content: " <h2>Types of Air Conditioners.</h2><article><p>Central Air Conditioner: A central air conditioner is usually the   best choice if you have a large home or want to cool in more than one room. A central air conditioner circulates air throughout your home using a system of air ducts. </p><p> Room Air Conditioners: Room air conditioners are perfect for cooling   small spaces, like a single room or an apartment. Room air  conditioners usually sit in a window or can be mounted on a wall.</p><p> Ductless Mini-Split Air Conditioner: A ductless mini-split air conditioner is similar to a room air conditioner, but it doesn't need an air duct. Instead, a small air conditioner unit sits inside your home, and a small compressor sits outside.           </p>   <p>            Portable Air Conditioner: A portable air conditioner is an excellent  option if you need to cool a small space and you don't want to  install a window air conditioner. Portable air conditioners can be             moved from room to room, and they usually sit on the floor.</p><p>   A window air conditioner is a single unit with all of its components             enclosed inside. It ejects heat out of its outdoor side and blows             cool air into the room on the indoor side. As the name suggests, it             is installed in a window or by making a hole in the wall. Such air  conditioners have a filter that slides out so that it can be cleaned  regularly for full AC efficiency. These air conditioners have             controls on the unit & may also come with a remote.  </p>   <p>     Floor-mounted air conditioners are designed for convenience if you  prefer a mini-split but lack the required space for a wall mounted             unit. The indoor unit of floor-mounted AC rests on the floor, and             the outer unit can be installed without major site preparation or             any ductwork. This arrangement is also ideal for spaces with tilted   walls, such as attics, or building constructed with fragile             materials such as glass.           </p>   <p>            Smart air conditioners are a type of mini-split, window, or portable             air conditioner that are IoT enabled. These ACs are connected to             Wi-Fi and come with a native app providing global control through a             smartphone. Depending on the manufacturer, these air conditioners             come with numerous functionalities. Some of these include weekly             scheduling, geofencing, comfy mode, temperature range control, and             numerous other features. Utilizing these, you can achieve great             comfort coupled with energy savings.           </p>   <p>            Geothermal heating & cooling is considered a relatively new method,             it works by utilizing the insulating properties of the earth. Since             the temperatures under 4 to 6 feet of land remain consistent all             year regardless of the weather, geothermal technology takes             advantage of this to heat & cool your home more efficiently. This             system has piping that consists of a loop that circulates water             between your home, a heat pump & the ground. They require intensive             work to set up underground.           </p>   <p>            Hybrid / Dual Fuel Air Conditioner system is one that combines a gas             furnace with an electric air-source heat pump to deliver a             cost-effective & efficient performance in terms of heating &             cooling. Depending on the temperature outdoors, the system             automatically switches between burning fossil fuels and the usage of             electricity. You program the temperature at which the system             switches from heat pump to furnace, or you can make the manual             switch too.           </p>   <p>                       Evaporative coolers are sometimes categorized as air conditioning             alternatives, even though technically, they are not air conditioners             and differ in both mechanism and structure. This inclusion in the             list stems from their ability to effectively cool indoor spaces.             Unlike conventional AC systems with ducts and refrigeration cycles,             evaporative coolers operate by drawing in warm air through             water-saturated pads or media.</p></article>",
+            shortDescription: "Types of Air Conditioners.",
+            image: "https://accessglobal.media.clients.ellingtoncms.com/uploads/froala_editor/images/1728398396923.png",
+        },
+
 
     ]
 }

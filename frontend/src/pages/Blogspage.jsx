@@ -5,10 +5,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
-import { Store } from "../Store";
-import LoadingBox from "../components/LoadingBox";
-import MessageBox from "../components/MessageBox";
-import { getError } from "../utils";
+import { Store } from "../Store.js";
+import LoadingBox from "../components/LoadingBox.jsx";
+import MessageBox from "../components/MessageBox.jsx";
+import { getError } from "../utils.js";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -17,7 +17,7 @@ const reducer = (state, action) => {
     case "FETCH_SUCCESS":
       return {
         ...state,
-        products: action.payload.products,
+        blogs: action.payload.blogs,
         page: action.payload.page,
         pages: action.payload.pages,
         loading: false,
@@ -52,12 +52,12 @@ const reducer = (state, action) => {
   }
 };
 
-export default function ProductListPage() {
+export default function BlogsPage() {
   const [
     {
       loading,
       error,
-      products,
+      blogs,
       pages,
       loadingCreate,
       loadingDelete,
@@ -81,9 +81,12 @@ export default function ProductListPage() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/products/admin?page=${page}`, {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        });
+        const { data } = await axios.get(
+          `/api/blogs/admin/blogs-list?page=${page}`,
+          {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          }
+        );
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -102,15 +105,15 @@ export default function ProductListPage() {
       try {
         dispatch({ type: "CREATE_REQUEST" });
         const { data } = await axios.post(
-          "/api/products",
+         `/api/blogs/`,
           {},
           {
             headers: { Authorization: `Bearer ${userInfo.token}` },
           }
         );
-        toast.success("Product created successfully");
+        toast.success("Blog created successfully");
         dispatch({ type: "CREATE_SUCCESS" });
-        navigate(`/admin/product/${data.product._id}`);
+        navigate(`/admin/blog/${data.blog._id}`);
       } catch (err) {
         toast.error(getError(err));
         dispatch({ type: "CREATE_FAIL" });
@@ -118,14 +121,14 @@ export default function ProductListPage() {
     }
   };
 
-  const deleteHandler = async (product) => {
+  const deleteHandler = async (blog) => {
     if (window.confirm("Are you sure to delete?")) {
       try {
         dispatch({ type: "DELETE_REQUEST" });
-        await axios.delete(`/api/products/${product._id}`, {
+        await axios.delete(`/api/blogs/${blog._id}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
-        toast.success("Product deleted successfully");
+        toast.success("blog deleted successfully");
         dispatch({ type: "DELETE_SUCCESS" });
       } catch (err) {
         toast.error(getError(err));
@@ -138,12 +141,12 @@ export default function ProductListPage() {
     <div>
       <Row>
         <Col>
-          <h1>Products</h1>
+          <h1>Blogs</h1>
         </Col>
         <Col className="col text-end">
           <div>
             <Button type="button" onClick={createHandler}>
-              Create Product
+              Create Blog
             </Button>
           </div>
         </Col>
@@ -162,26 +165,23 @@ export default function ProductListPage() {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>NAME</th>
-                <th>PRICE</th>
-                <th>CATEGORY</th>
-                <th>BRAND</th>
+                <th>Title</th>
+                <th>shortDescription</th>
                 <th>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
-                <tr key={product._id}>
-                  <td>{product._id}</td>
-                  <td>{product.name}</td>
-                  <td>{product.price}</td>
-                  <td>{product.category}</td>
-                  <td>{product.brand}</td>
+              {blogs.map((blog) => (
+                <tr key={blog._id}>
+                  <td>{blog._id}</td>
+                  <td>{blog.title}</td>
+                  <td>{blog.shortDescription}</td>
+
                   <td>
                     <Button
                       type="button"
                       variant="light"
-                      onClick={() => navigate(`/admin/product/${product._id}`)}
+                      onClick={() => navigate(`/admin/blog/${blog._id}`)}
                     >
                       Edit
                     </Button>
@@ -189,7 +189,7 @@ export default function ProductListPage() {
                     <Button
                       type="button"
                       variant="light"
-                      onClick={() => deleteHandler(product)}
+                      onClick={() => deleteHandler(blog)}
                     >
                       Delete
                     </Button>
@@ -203,7 +203,7 @@ export default function ProductListPage() {
               <Link
                 className={x + 1 === Number(page) ? "btn text-bold" : "btn"}
                 key={x + 1}
-                to={`/admin/products?page=${x + 1}`}
+                to={`/admin/blogs?page=${x + 1}`}
               >
                 {x + 1}
               </Link>

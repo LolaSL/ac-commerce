@@ -9,7 +9,7 @@ import Form from "react-bootstrap/Form";
 import { toast } from "react-toastify";
 import { Store } from "../Store";
 import LoadingBox from "../components/LoadingBox";
-import MessageBox from "../components/MessageBox ";
+import MessageBox from "../components/MessageBox";
 import { getError } from "../utils";
 
 const reducer = (state, action) => {
@@ -97,28 +97,27 @@ export default function SellersListPage() {
 
   const createHandler = async (e) => {
     e.preventDefault();
-    if (window.confirm('Are you sure to create?')) {
+    if (window.confirm("Are you sure to create?")) {
       try {
-        dispatch({ type: 'CREATE_REQUEST' });
+        dispatch({ type: "CREATE_REQUEST" });
         const { data } = await axios.post(
-          '/api/sellers',
+          "/api/sellers",
           { name, brand, info },
           {
             headers: { Authorization: `Bearer ${userInfo.token}` },
           }
         );
-        console.log('Seller created successfully', data);
-        toast.success('Seller created successfully');
-        dispatch({ type: 'CREATE_SUCCESS' });
+        console.log("Seller created successfully", data);
+        toast.success("Seller created successfully");
+        dispatch({ type: "CREATE_SUCCESS" });
         navigate(`/sellers`);
         setShowCreateModal(false);
       } catch (err) {
         toast.error(getError(err));
-        dispatch({ type: 'CREATE_FAIL' });
+        dispatch({ type: "CREATE_FAIL" });
       }
     }
   };
-  
 
   const deleteHandler = async (seller) => {
     if (window.confirm("Are you sure to delete?")) {

@@ -11,14 +11,12 @@ import Button from "react-bootstrap/Button";
 import Rating from "../components/Rating";
 import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox";
-import MessageBox from "../components/MessageBox ";
+import MessageBox from "../components/MessageBox";
 import { getError } from "../utils";
 import { Store } from "../Store";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { toast } from "react-toastify";
 import Image from "react-bootstrap/Image";
-
-
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -134,7 +132,7 @@ function ProductPage() {
           <Image
             className="responsive"
             src={selectedImage || product.image}
-                alt={product.name}
+            alt={product.name}
           ></Image>
         </Col>
         <Col md={3}>
@@ -172,7 +170,7 @@ function ProductPage() {
             </ListGroup.Item>
             <ListGroup.Item>
               Description:
-              <p>{product.description}</p>
+              <p className="product-paragraph">{product.description}</p>
             </ListGroup.Item>
           </ListGroup>
         </Col>

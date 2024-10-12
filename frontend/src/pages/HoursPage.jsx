@@ -59,13 +59,13 @@ const HoursPage = () => {
 
   return (
     <Container>
-      <h1>Hours Worked</h1>
+      <h1 className="mt-4 mb-4 fw-bold">Work Duration</h1>
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>#</th>
             <th>Project Name</th>
-            <th>Hours Worked</th>
+            <th>Time On Project</th>
             <th>Date</th>
           </tr>
         </thead>
@@ -75,9 +75,7 @@ const HoursPage = () => {
               <tr key={earning._id}>
                 <td>{index + 1}</td>
                 <td>{earning.projectName.name}</td>{" "}
-                {/* Access project name here */}
                 <td>{earning.projectName.hoursWorked}</td>{" "}
-                {/* Access hours worked */}
                 <td>{new Date(earning.date).toLocaleDateString()}</td>
               </tr>
             ))

@@ -7,7 +7,7 @@ import userRouter from './routes/userRoutes.js';
 import orderRouter from './routes/orderRoutes.js';
 import sellerRouter from './routes/sellerRoutes.js'
 import uploadRouter from "./routes/uploadRoutes.js";
-import quoteRouter from './routes/quoteRoutes.js';
+// import quoteRouter from './routes/quoteRoutes.js';
 import contactRouter from './routes/contactRoutes.js'
 import serviceProviderRouter from './routes/serviceProviderRoutes.js'
 import blogRouter from './routes/blogRoutes.js'
@@ -47,7 +47,7 @@ app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/sellers', sellerRouter);
 app.use('/api/contact', contactRouter);
-app.use('/api/quote', quoteRouter);
+// app.use('/api/quote', quoteRouter);
 app.use('/api/service-providers', serviceProviderRouter)
 app.use('/api/blogs', blogRouter)
 app.get('/', (req, res) => {

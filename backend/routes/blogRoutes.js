@@ -2,41 +2,54 @@ import express from 'express';
 import Blog from '../models/blogModel.js';
 import expressAsyncHandler from 'express-async-handler';
 import { isAuth, isAdmin } from '../utils.js';
-
+import mongoose from 'mongoose';
 
 const blogRouter = express.Router();
 
-// Get all blogs
-blogRouter.get('/', async (req, res) => {
-    try {
-        const blogs = await Blog.find({});
-        res.json(blogs);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+const PAGE_SIZE = 10;
+
+// Middleware to validate ObjectId
+const validateObjectId = (req, res, next) => {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: `Invalid Blog ID: ${id}` });
     }
-});
+    next();
+};
+
+// Get all blogs
+blogRouter.get(
+    '/',
+    expressAsyncHandler(async (req, res) => {
+        try {
+            const blogs = await Blog.find({});
+            res.json(blogs);
+        } catch (err) {
+            res.status(500).json({ message: err.message });
+        }
+    })
+);
 
 // Get single blog by ID
-blogRouter.get('/:id', async (req, res) => {
-    try {
-        const blog = await Blog.findById(req.params.id);
-        if (!blog) return res.status(404).json({ message: 'Blog not found' });
-        res.json(blog);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
+blogRouter.get(
+    '/:id',
+    validateObjectId,
+    expressAsyncHandler(async (req, res) => {
+        try {
+            const blog = await Blog.findById(req.params.id);
+            if (!blog) {
+                return res.status(404).json({ message: 'Blog not found' });
+            }
+            res.json(blog);
+        } catch (err) {
+            res.status(500).json({ message: err.message });
+        }
+    })
+);
 
-blogRouter.get('/slug/:slug', async (req, res) => {
-    const blog = await Blog.findOne({ slug: req.params.slug });
-    if (blog) {
-        res.send(blog);
-    } else {
-        res.status(404).send({ message: 'Blog Not Found' });
-    }
-});
-
-blogRouter.post('/',
+// Create new blog
+blogRouter.post(
+    '/',
     isAuth,
     isAdmin,
     expressAsyncHandler(async (req, res) => {
@@ -51,13 +64,15 @@ blogRouter.post('/',
         res.send({ message: 'Blog Created', blog });
     })
 );
+
+// Update a blog
 blogRouter.put(
     '/:id',
     isAuth,
     isAdmin,
+    validateObjectId,
     expressAsyncHandler(async (req, res) => {
-        const blogId = req.params.id;
-        const blog = await Blog.findById(blogId);
+        const blog = await Blog.findById(req.params.id);
         if (blog) {
             blog.title = req.body.title;
             blog.slug = req.body.slug;
@@ -72,18 +87,43 @@ blogRouter.put(
     })
 );
 
+// Delete a blog
 blogRouter.delete(
     '/:id',
     isAuth,
     isAdmin,
+    validateObjectId,
     expressAsyncHandler(async (req, res) => {
         const blog = await Blog.findById(req.params.id);
         if (blog) {
             await blog.deleteOne();
-            res.send({ message: ' Blog Deleted' });
+            res.send({ message: 'Blog Deleted' });
         } else {
-            res.status(404).send({ message: ' Blog Not Found' });
+            res.status(404).send({ message: 'Blog Not Found' });
         }
     })
 );
+
+// Get blogs for admin with pagination
+blogRouter.get('/admin/blogs-list', async (req, res) => {
+    const page = parseInt(req.query.page) || 1; 
+    const limit = 10;
+    const skip = (page - 1) * limit; 
+
+    try {
+        const totalBlogs = await Blog.countDocuments(); 
+        const blogs = await Blog.find().skip(skip).limit(limit); 
+
+        res.json({
+            totalBlogs,
+            blogs,
+            currentPage: page,
+            totalPages: Math.ceil(totalBlogs / limit), 
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
+    }
+});
+
 export default blogRouter;

@@ -9,7 +9,7 @@ const reducer = (state, action) => {
     case "FETCH_REQUEST":
       return { ...state, loading: true };
     case "FETCH_SUCCESS":
-      return { ...state, earnings: action.payload, loading: false };
+      return { ...state, messages: action.payload, loading: false };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
     default:
@@ -17,18 +17,18 @@ const reducer = (state, action) => {
   }
 };
 
-const EarningsPage = () => {
+const MessagesPage = ({ messageId }) => {
   const { state } = useContext(Store);
   const { serviceProviderInfo } = state;
 
-  const [{ loading, error, earnings }, dispatch] = useReducer(reducer, {
-    earnings: [],
+  const [{ loading, error, messages }, dispatch] = useReducer(reducer, {
+    messages: [],
     loading: true,
     error: "",
   });
 
   useEffect(() => {
-    const fetchEarnings = async () => {
+    const fetchMessages = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
         const token = serviceProviderInfo?.token;
@@ -37,7 +37,7 @@ const EarningsPage = () => {
           throw new Error("Not authenticated, please log in");
         }
 
-        const { data } = await axios.get("/api/service-providers/earnings", {
+        const { data } = await axios.get(`/api/service-providers/messages`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -49,41 +49,39 @@ const EarningsPage = () => {
       }
     };
 
-    fetchEarnings();
-  }, [serviceProviderInfo?.token]);
+    fetchMessages();
+  }, [messageId, serviceProviderInfo?.token]);
 
-  if (loading) return <p>Loading earnings...</p>;
-  if (error) return <p>Error loading earnings: {error}</p>;
+  if (loading) return <p>Loading messages...</p>;
+  if (error) return <p>Error loading messgaes: {error}</p>;
 
   return (
     <Container>
-      <h1 className="mt-4 mb-4 fw-bold">Earnings</h1>
+      <h1 className="mt-4 mb-4 fw-bold">Messages</h1>
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>#</th>
+            <th>Client Name</th>
             <th>Project Name</th>
-            <th>Time On Project</th>
-            <th>Amount Earned</th>
+            <th>Message</th>
             <th>Date</th>
-            <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          {earnings && earnings.length > 0 ? (
-            earnings.map((earning, index) => (
+          {messages && messages.length > 0 ? (
+            messages.map((message, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{earning.projectName.name}</td>
-                <td>{earning.projectName.hoursWorked}</td>
-                <td>{earning.amount}</td>
-                <td>{new Date(earning.date).toLocaleDateString()}</td>
-                <td>{earning.status}</td>
+                <td>{message.client}</td>
+                <td>{message.projectName}</td>
+                <td>{message.text}</td>
+                <td>{new Date(message.date).toLocaleDateString()}</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6">No earnings data found</td>
+              <td colSpan="6">No messages data found</td>
             </tr>
           )}
         </tbody>
@@ -92,4 +90,4 @@ const EarningsPage = () => {
   );
 };
 
-export default EarningsPage;
+export default MessagesPage;

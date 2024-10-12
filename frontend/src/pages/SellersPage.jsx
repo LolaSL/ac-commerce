@@ -1,11 +1,12 @@
-import {  useEffect, useReducer} from "react";
-import axios from 'axios';
-import { getError } from '../utils';
-import LoadingBox from '../components/LoadingBox';
-import MessageBox from "../components/MessageBox ";
-import Rating from '../components/Rating';
-import { Link } from 'react-router-dom';
-
+import { useEffect, useReducer } from "react";
+import axios from "axios";
+import { getError } from "../utils";
+import LoadingBox from "../components/LoadingBox";
+import MessageBox from "../components/MessageBox";
+import Rating from "../components/Rating";
+import { Link } from "react-router-dom";
+import { Container } from "react-bootstrap";
+import { Helmet } from "react-helmet-async";
 
 
 
@@ -19,11 +20,11 @@ const reducer = (state, action) => {
       return { ...state, loadingCreateReview: false };
     case "CREATE_FAIL":
       return { ...state, loadingCreateReview: false };
-    case 'FETCH_REQUEST':
+    case "FETCH_REQUEST":
       return { ...state, loading: true };
-    case 'FETCH_SUCCESS':
+    case "FETCH_SUCCESS":
       return { ...state, sellers: action.payload, loading: false };
-    case 'FETCH_FAIL':
+    case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
     default:
       return state;
@@ -34,27 +35,28 @@ export default function SellersPage() {
   const [{ loading, error, sellers }, dispatch] = useReducer(reducer, {
     sellers: [],
     loading: true,
-    error: '',
+    error: "",
   });
 
   useEffect(() => {
     const fetchData = async () => {
-      dispatch({ type: 'FETCH_REQUEST' });
+      dispatch({ type: "FETCH_REQUEST" });
       try {
-        const { data } = await axios.get('/api/sellers');
-        dispatch({ type: 'FETCH_SUCCESS', payload: data });
+        const { data } = await axios.get("/api/sellers");
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
-        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
+        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
       }
     };
     fetchData();
   }, []);
 
-  
-
   return (
-    <div>
-      <h1>Sellers</h1>
+    <Container className="seller-container">
+            <Helmet>
+        <title>Sellers</title>
+      </Helmet>
+      <h1 className="sellers-title">Sellers</h1>
       {loading ? (
         <LoadingBox></LoadingBox>
       ) : error ? (
@@ -62,15 +64,20 @@ export default function SellersPage() {
       ) : (
         <div>
           {sellers.map((seller) => (
-            <div key={seller._id}>
-             <Link to={`/sellers/${seller._id}`} className="seller-name text-secondary"><h2 >{seller.name}</h2></Link>
+            <div key={seller._id} className="mt-4 mb-4">
+              <Link
+                to={`/sellers/${seller._id}`}
+                className="seller-name text-secondary"
+              >
+                <h2>{seller.name}</h2>
+              </Link>
               <p>Brand: {seller.brand}</p>
-              <p>Information: {seller.info}</p>
+              <p className="seller-paragraph">Information: {seller.info}</p>
               <div>
                 {seller.reviews?.length === 0 && (
                   <MessageBox>No Reviews</MessageBox>
-                )} 
-               <ul>
+                )}
+                <ul>
                   {seller.reviews?.map((review) => (
                     <li key={review._id}>
                       <strong>{review.name}</strong>
@@ -79,12 +86,12 @@ export default function SellersPage() {
                       <p>{review.createdAt.substring(0, 10)}</p>
                     </li>
                   ))}
-                </ul> 
-         </div>
-             </div> 
+                </ul>
+              </div>
+            </div>
           ))}
         </div>
       )}
-    </div>
+    </Container>
   );
 }

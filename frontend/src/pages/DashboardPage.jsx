@@ -1,28 +1,26 @@
-
-import React, { useContext, useEffect, useReducer} from 'react';
-import Chart from 'react-google-charts';
-import axios from 'axios';
-import { Store } from '../Store';
-import { getError } from '../utils';
-import LoadingBox from '../components/LoadingBox';
-import MessageBox from '../components/MessageBox ';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
+import React, { useContext, useEffect, useReducer } from "react";
+import Chart from "react-google-charts";
+import axios from "axios";
+import { Store } from "../Store";
+import { getError } from "../utils";
+import LoadingBox from "../components/LoadingBox";
+import MessageBox from "../components/MessageBox";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
 import { Helmet } from "react-helmet-async";
-
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'FETCH_REQUEST':
+    case "FETCH_REQUEST":
       return { ...state, loading: true };
-    case 'FETCH_SUCCESS':
+    case "FETCH_SUCCESS":
       return {
         ...state,
         summary: action.payload,
         loading: false,
       };
-    case 'FETCH_FAIL':
+    case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
     default:
       return state;
@@ -32,7 +30,7 @@ const reducer = (state, action) => {
 export default function DashboardPage() {
   const [{ loading, summary, error }, dispatch] = useReducer(reducer, {
     loading: true,
-    error: '',
+    error: "",
   });
   const { state } = useContext(Store);
   const { userInfo } = state;
@@ -40,14 +38,13 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get('/api/orders/summary', {
+        const { data } = await axios.get("/api/orders/summary", {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
-        dispatch({ type: 'FETCH_SUCCESS', payload: data });
-      }
-      catch (err) {
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
+      } catch (err) {
         dispatch({
-          type: 'FETCH_FAIL',
+          type: "FETCH_FAIL",
           payload: getError(err),
         });
       }
@@ -57,7 +54,7 @@ export default function DashboardPage() {
 
   return (
     <div>
-         <Helmet>
+      <Helmet>
         <title>Dashboard</title>
       </Helmet>
       <h1>Dashboard</h1>
@@ -79,7 +76,7 @@ export default function DashboardPage() {
                   <Card.Text> Users</Card.Text>
                 </Card.Body>
               </Card>
-                </Col>
+            </Col>
             <Col md={4}>
               <Card>
                 <Card.Body>
@@ -117,7 +114,7 @@ export default function DashboardPage() {
                 chartType="AreaChart"
                 loader={<div>Loading Chart...</div>}
                 data={[
-                  ['Date', 'Sales'],
+                  ["Date", "Sales"],
                   ...summary.dailyOrders.map((x) => [x._id, x.sales]),
                 ]}
               ></Chart>
@@ -134,7 +131,7 @@ export default function DashboardPage() {
                 chartType="PieChart"
                 loader={<div>Loading Chart...</div>}
                 data={[
-                  ['Category', 'Products'],
+                  ["Category", "Products"],
                   ...summary.productCategories.map((x) => [x._id, x.count]),
                 ]}
               ></Chart>

@@ -59,7 +59,7 @@ const Footer = () => {
               <NavLink className="text-white" href="/sellers">
                 Sellers
               </NavLink>
-              <NavLink className="text-white" href="/upload-pdf">
+              <NavLink className="text-white" href="/uploadfile">
                 Services
               </NavLink>
            
@@ -69,10 +69,12 @@ const Footer = () => {
             <Col className="col-md-6 col-lg-4 col-12 ft-3">
               <h5>Contact</h5>
               <p>
-                <i className="fa-solid fa-phone-volume"></i> Phone: (123) 456-7890
+                <i className="fa-solid fa-phone-volume"></i> Phone: (251) 546 9442,
+                (630) 446 8851
               </p>
               <p>
-                <i className="fa-solid fa-envelope"></i>Email: contact@example.com
+                <i className="fa-solid fa-envelope"></i>Email: info@example.com,
+                contact@example.com
               </p>
               <p>
                 <i className="fa-solid fa-paper-plane"></i> 1234 Street Name

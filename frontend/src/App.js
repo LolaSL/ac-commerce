@@ -45,7 +45,7 @@ import AirConditioningPage from './pages/AirConditioningPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import Footer from './components/Footer.jsx';
 import AboutUs from './pages/AboutUs.jsx';
-import ExtractPdf from './pages/ExtractPdf.jsx';
+import Measurement from './pages/Measurement.jsx';
 import ServiceProviderLogin from './pages/ServiceProviderLogin.jsx';
 import ServiceProviderRegister from './pages/ServiceProviderRegister.jsx';
 import ServiceProviderProfile from './pages/ServiceProviderProfile.jsx';
@@ -55,8 +55,9 @@ import ProjectsPage from './pages/ProjectsPage.jsx';
 import AcInstallation from './pages/AcInstallation.jsx'
 import BlogsList from './pages/BlogsList.jsx';
 import BlogDetails from './pages/BlogDetails.jsx';
-
-
+import BlogEditPage from './pages/BlogEditPage.jsx';
+import BlogsPage from './pages/Blogspage.jsx';
+import MessagesPage from './pages/MessagesPage.jsx';
 
 
 function App() {
@@ -166,6 +167,9 @@ function App() {
                       <LinkContainer to="/serviceprovider/earnings">
                         <NavDropdown.Item>Earnings</NavDropdown.Item>
                       </LinkContainer>
+                      <LinkContainer to="/serviceprovider/messages">
+                        <NavDropdown.Item>Messages</NavDropdown.Item>
+                      </LinkContainer>
                       <NavDropdown.Divider />
                       <Link
                         className="dropdown-item"
@@ -196,6 +200,9 @@ function App() {
                       </LinkContainer>
                       <LinkContainer to="/admin/sellers">
                         <NavDropdown.Item>Sellers</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/admin/blogs-list">
+                        <NavDropdown.Item>Blogs</NavDropdown.Item>
                       </LinkContainer>
                     </NavDropdown>
                   )}
@@ -289,6 +296,14 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+                <Route
+                path="/serviceprovider/messages"
+                element={
+                  <ProtectedRoute>
+                    <MessagesPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/profile"
                 element={
@@ -368,6 +383,14 @@ function App() {
                 }
               ></Route>
               <Route
+                path="/admin/blogs-list"
+                element={
+                  <AdminRoute>
+                    <BlogsPage />
+                  </AdminRoute>
+                }
+              ></Route>
+              <Route
                 path="/admin/product/:id"
                 element={
                   <AdminRoute>
@@ -391,19 +414,25 @@ function App() {
                   </AdminRoute>
                 }
               ></Route>
-              <Route path="/serviceprovider/profile/projects" element={<ProjectsPage />} />
-              <Route path="/serviceprovider/profile/earnings" element={<EarningsPage />} />
-              <Route path="/serviceprovider/profile/hours" element={<HoursPage />} />
+              <Route
+                path="/admin/blog/:id"
+                element={
+                  <AdminRoute>
+                    <BlogEditPage />
+                  </AdminRoute>
+                }
+              ></Route>
               <Route path="/sellers" element={<SellersPage />} />
               <Route path="/sellers/:id" element={<SellerPage />} />
               <Route path="/sellers/edit/:id" element={<SellerEditPage />} />
               <Route path="/about-us" element={<AboutUs />} />
               <Route path="/air-conditioning" element={<AirConditioningPage />} />
               <Route path="/ac-installation" element={<AcInstallation />} />
-              <Route path="/upload-pdf" element={<ExtractPdf />} />
+              <Route path="/uploadfile" element={<Measurement />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/blogs" element={<BlogsList />} />
               <Route path="/blogs/:id" element={<BlogDetails />} />
+              <Route path="/blogs-list" element={<BlogsPage />} />
               <Route path="/" element={<HomePage />} />
             </Routes>
           </Container>

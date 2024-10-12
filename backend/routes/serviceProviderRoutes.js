@@ -7,7 +7,7 @@ import Message from '../models/messageModel.js';
 import Earnings from '../models/earningModel.js';
 import ServiceProvider from '../models/serviceProviderModel.js';
 import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
+
 
 const generateToken = (serviceProvider) => {
   return jwt.sign(

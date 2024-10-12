@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col";
 import Product from "../components/Product.jsx";
 import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox.jsx";
-import MessageBox from "../components/MessageBox .jsx";
+import MessageBox from "../components/MessageBox.jsx";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -68,7 +68,7 @@ const HomePage = () => {
           <div>
             <Row>
               {products.map((product) => (
-                <Col key={product.slug} xs={12} md={4} lg={3} className="mb-3">
+                <Col key={product.slug} xs={12} md={4} lg={3} className="mb-3 product-item">
                   <Product product={product}></Product>
                 </Col>
               ))}

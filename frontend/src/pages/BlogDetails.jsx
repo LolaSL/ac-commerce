@@ -10,7 +10,7 @@ function BlogDetails() {
 
   useEffect(() => {
     const fetchBlog = async () => {
-      const res = await axios.get(`http://localhost:5030/api/blogs/${id}`);
+      const res = await axios.get(`/api/blogs/${id}`);
       setBlog(res.data);
     };
     fetchBlog();
@@ -24,17 +24,18 @@ function BlogDetails() {
     <Container>
       <h1 className="mt-4 mb-4">{blog.title}</h1>
       <div>
-        <Image
-          className="responsive"
-          src={blog.image}
-          alt={`Blog Image `}
-        />
+        <Image className="responsive" src={blog.image} alt={`Blog Image `} />
       </div>
 
-      <div dangerouslySetInnerHTML={{ __html: blog.content }} className="mt-4 mb-4"/>
+      <div
+        dangerouslySetInnerHTML={{ __html: blog.content }}
+        className="mt-4 mb-4 blog-paragraph"
+      />
       <div>
-        <Link to='/blogs'className="link-blogs">Back to Blogs</Link>
-   </div>
+        <Link to="/blogs" className="link-blogs">
+          Back to Blogs
+        </Link>
+      </div>
     </Container>
   );
 }

@@ -3,12 +3,11 @@ import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 
-
 export default function Banner() {
   const navigate = useNavigate();
 
   const checkoutHandler = () => {
-    navigate("/signin?redirect=/upload-pdf");
+    navigate("/signin?redirect=/uploadfile");
   };
   return (
     <div style={{ paddingLeft: 0 }} className="py-4">
@@ -28,7 +27,7 @@ export default function Banner() {
             </h3>
             <div className="d-flex justify-content-center">
               <Button
-                to="/upload-pdf"
+                to="/uploadfile"
                 className="btn btn-secondary btn-md"
                 role="button"
                 onClick={checkoutHandler}

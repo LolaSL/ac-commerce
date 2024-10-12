@@ -10,7 +10,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { getError } from "../utils";
 import LoadingBox from "../components/LoadingBox";
-import MessageBox from "../components/MessageBox ";
+import MessageBox from "../components/MessageBox";
 import Rating from "../components/Rating";
 import { Store } from "../Store";
 import ListGroup from "react-bootstrap/ListGroup";

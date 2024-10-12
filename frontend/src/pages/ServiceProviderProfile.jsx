@@ -8,6 +8,7 @@ import { getError } from "../utils";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
+import NavLink from "react-bootstrap/NavLink";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -106,8 +107,23 @@ export default function ServiceProviderProfile() {
           </div>
         )}
 
-        <div className="footer-icons d-flex mb-4">
-          {/* Social media links */}
+        <div className="profile-icons d-flex mb-4">
+          <NavLink href="#">
+            {" "}
+            <i className="fa-brands fa-facebook"></i>
+          </NavLink>
+          <NavLink href="#">
+            {" "}
+            <i className="fa-brands fa-twitter"></i>
+          </NavLink>
+          <NavLink href="#">
+            {" "}
+            <i className="fa-brands fa-instagram"></i>
+          </NavLink>
+          <NavLink href="#">
+            {" "}
+            <i className="fa-brands fa-linkedin-in"></i>
+          </NavLink>
         </div>
       </div>
 
@@ -132,7 +148,7 @@ export default function ServiceProviderProfile() {
           <Form.Label>Experience</Form.Label>
           <Form.Control
             value={experience}
-            onChange={(e) => setExperience(e.target.value)} // Corrected this line
+            onChange={(e) => setExperience(e.target.value)}
             required
           />
         </Form.Group>

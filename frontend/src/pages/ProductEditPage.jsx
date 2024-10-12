@@ -9,7 +9,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Form from "react-bootstrap/Form";
 import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox";
-import MessageBox from "../components/MessageBox ";
+import MessageBox from "../components/MessageBox";
 import Button from "react-bootstrap/Button";
 
 const reducer = (state, action) => {
@@ -103,7 +103,7 @@ const ProductEditPage = () => {
           slug,
           price,
           image,
-          images, // Ensure images are updated
+          images,
           category,
           brand,
           countInStock,
@@ -130,7 +130,7 @@ const ProductEditPage = () => {
     const file = e.target.files[0];
     const bodyFormData = new FormData();
     bodyFormData.append("file", file);
-    bodyFormData.append("productId", productId); // Pass the productId to associate the image with a product
+    bodyFormData.append("productId", productId);
 
     try {
       dispatch({ type: "UPLOAD_REQUEST" });
