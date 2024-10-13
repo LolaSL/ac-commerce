@@ -22,8 +22,8 @@ function UploadFile() {
 
   return (
     <div className="upload-file">
-      <Form>
-        <h1 className="mt-4 mb-4">Measurement service system</h1>
+      <Form className="btu-calculation-measure">
+        <h1 className="mt-4 mb-4">Measurement Service System</h1>
         <Form.Label className="mb-4">
           Upload file sample. <strong>*Supported: Images & PDFs</strong>
         </Form.Label>

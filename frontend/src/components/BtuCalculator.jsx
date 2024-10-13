@@ -1,12 +1,24 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Form, Button, Image } from "react-bootstrap";
+import {
+  Container,
+  Image,
+  Row,
+  Col,
+  Form,
+  Button,
+  Table,
+} from "react-bootstrap";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
 function BtuCalculator() {
+  const [height, setHeight] = useState(0);
+  const [width, setWidth] = useState(0);
+  const [areaFeet, setAreaFeet] = useState(0);
+  const [areaMeters, setAreaMeters] = useState(0);
   const [measurementSystem, setMeasurementSystem] = useState("meters");
   const [rooms, setRooms] = useState([{ name: "Bedroom 1", size: "", btu: 0 }]);
-  const [ceilingHeight, setCeilingHeight] = useState("");
+  const [ceilingHeight, setCeilingHeight] = useState("2.5");
   const [numPeople, setNumPeople] = useState(2);
   const [insulation, setInsulation] = useState({
     Average: false,
@@ -24,7 +36,20 @@ function BtuCalculator() {
     Cold: false,
   });
   const [btuResults, setBtuResults] = useState([]);
-  const [product, setProduct] = useState([]);
+  const [products, setProducts] = useState([]);
+
+  function calculateArea(e) {
+    e.preventDefault();
+
+    const heightValue = parseFloat(height);
+    const widthValue = parseFloat(width);
+
+    const areaInFeet = heightValue * widthValue;
+    setAreaFeet(areaInFeet);
+
+    const areaInMeters = areaInFeet * 0.092903;
+    setAreaMeters(areaInMeters);
+  }
 
   const handleRoomChange = (index, field, value) => {
     const updatedRooms = [...rooms];
@@ -81,8 +106,8 @@ function BtuCalculator() {
         baseBTU += 600 * (numPeople - 1);
       }
       if (
-        rooms.name === "Kitchen" ||
-        rooms.name === "Entire Second Floor And Above"
+        room.name === "Kitchen" ||
+        room.name === "Entire Second Floor And Above"
       ) {
         baseBTU += 4000;
       }
@@ -95,13 +120,13 @@ function BtuCalculator() {
       }
 
       if (sunExposure.FullSunlight) {
-        baseBTU *= 1.65;
+        baseBTU *= 1.3;
       } else if (sunExposure.HeavilyShaded) {
         baseBTU *= 1.0;
       }
 
       if (climate.Hot) {
-        baseBTU *= 1.65;
+        baseBTU *= 1.3;
       } else if (climate.Cold) {
         baseBTU *= 1.0;
       } else if (climate.Average) {
@@ -131,12 +156,12 @@ function BtuCalculator() {
     }
 
     setBtuResults(results);
-    setProduct(fetchedProducts);
+    setProducts(fetchedProducts);
   };
 
   const handleClear = () => {
-    setRooms([{ name: "Bedroom", size: "", btu: 0 }]);
-    setCeilingHeight("");
+    setRooms([{ name: "Bedroom 1", size: "", btu: 0 }]);
+    setCeilingHeight("2.5");
     setNumPeople(2);
     setInsulation({ Average: false, Good: false, Poor: false });
     setSunExposure({
@@ -146,225 +171,316 @@ function BtuCalculator() {
     });
     setClimate({ Average: false, Hot: false, Cold: false });
     setBtuResults([]);
-    setProduct([]);
+    setProducts([]);
   };
 
   return (
-    <Container className="btu-container mt-4 mb-4 rounded">
-      <h2>BTU Calculator</h2>
-      <Row className="my-4">
-        <Col xs={12} md={6} lg={4}>
-          <Form.Group controlId="measurementSystem">
-            <Form.Label>Measurement System:</Form.Label>
-            <Form.Control
-              as="select"
-              value={measurementSystem}
-              onChange={(e) => setMeasurementSystem(e.target.value)}
-            >
-              <option value="meters">Square Meters (m²)</option>
-              <option value="feet">Square Feet (ft²)</option>
-            </Form.Control>
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={12} md={6} lg={4}>
-          <Form.Group controlId="ceilingHeight">
-            <Form.Label>Ceiling Height (m):</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Enter ceiling height in meters"
-              value={ceilingHeight}
-              onChange={(e) => setCeilingHeight(e.target.value)}
-            />
-          </Form.Group>
-        </Col>
-        <Col xs={12} md={6} lg={4}>
-          <Form.Group controlId="numberOfPeople">
-            <Form.Label>Number of People:</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Enter number of people"
-              value={numPeople}
-              onChange={(e) => setNumPeople(e.target.value)}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      {rooms.map((room, index) => (
-        <Row key={index} className="my-4">
-          <Col xs={12} md={6} lg={4}>
-            <Form.Group controlId={`roomType-${index}`}>
-              <Form.Label>Room Type {index + 1}:</Form.Label>
-              <Form.Control
-                as="select"
-                value={room.name}
-                onChange={(e) =>
-                  handleRoomChange(index, "name", e.target.value)
-                }
-              >
-                <option>Bedroom 1</option>
-                <option>Bedroom 2</option>
-                <option>Bedroom 3</option>
-                <option>Bedroom 4</option>
-                <option>Bedroom 5</option>
-                <option>Living Room</option>
-                <option>Kitchen</option>
-                <option>Bathroom</option>
-                <option>Terracce</option>
-                <option>Entire House</option>
-                <option>Entire First Floor</option>
-                <option>Entire Second Floor And Above</option>
-                <option>Open Office Area</option>
-              </Form.Control>
-            </Form.Group>
-          </Col>
-          <Col xs={12} md={6} lg={4}>
-            <Form.Group controlId={`roomSize-${index}`}>
-              <Form.Label>Room Size ({measurementSystem}²):</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder={`Enter room size in ${
-                  measurementSystem === "meters" ? "m²" : "ft²"
-                }`}
-                value={room.size}
-                onChange={(e) =>
-                  handleRoomChange(index, "size", e.target.value)
-                }
-              />
-            </Form.Group>
-          </Col>
-          <Col xs={12} md={6} lg={4}>
-            <Button
-              variant="danger"
-              onClick={() => removeRoom(index)}
-              className="mt-4"
-            >
-              Delete
-            </Button>
-          </Col>
-        </Row>
-      ))}
-      <Button variant="primary" onClick={addRoom} className="mb-3 mt-4">
-        Add Desired Room
-      </Button>
-      <h4>Insulation Condition</h4>
-      <Form.Check
-        type="checkbox"
-        label="Average"
-        name="Average"
-        checked={insulation.Average}
-        onChange={handleInsulationChange}
-      />
-      <Form.Check
-        type="checkbox"
-        label="Good (few leakages or windows)"
-        name="Good"
-        checked={insulation.Good}
-        onChange={handleInsulationChange}
-      />
-      <Form.Check
-        type="checkbox"
-        label="Poor (many leakages or windows)"
-        name="Poor"
-        checked={insulation.Poor}
-        onChange={handleInsulationChange}
-      />
+    <div>
+      <h3 className="mt-4 mb-4 title">BTU Calculator</h3>
+      <Container className="btu-calculator-container mt-4 mb-4 rounded">
+        <Form className="btu-form">
+          <Row className="my-4">
+            <Col xs={12} md={6} lg={4}>
+              <Form.Group controlId="height">
+                <Form.Label>Height</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter height"
+                  value={height}
+                  onChange={(e) => setHeight(e.target.value)}
+                  required
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row className="my-4">
+            <Col xs={12} md={6} lg={4}>
+              <Form.Group controlId="width">
+                <Form.Label>Width</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter width"
+                  value={width}
+                  onChange={(e) => setWidth(e.target.value)}
+                  required
+                />
+              </Form.Group>
+            </Col>{" "}
+          </Row>
+          <Button
+            variant="primary"
+            onClick={calculateArea}
+            className="btn mt-2"
+          >
+            Calculate Area
+          </Button>
+          {areaFeet > 0 && (
+            <div className="result mt-4 mb-4">
+              <h4>Results:</h4>
+              <p>Area in Square Feet: {areaFeet.toFixed(2)} sq ft</p>
+              <p>Area in Square Meters: {areaMeters.toFixed(2)} sq m</p>
+            </div>
+          )}
+          <Row className="my-4">
+            <Col xs={12} md={6} lg={4}>
+              <Form.Group controlId="measurementSystem">
+                <Form.Label>Measurement System</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={measurementSystem}
+                  onChange={(e) => setMeasurementSystem(e.target.value)}
+                >
+                  <option value="meters">Square Meters (m²)</option>
+                  <option value="feet">Square Feet (ft²)</option>
+                </Form.Control>
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12} md={6} lg={4}>
+              <Form.Group controlId="ceilingHeight">
+                <Form.Label>Ceiling Height (m):</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter ceiling height in meters"
+                  value={ceilingHeight}
+                  onChange={(e) => setCeilingHeight(e.target.value)}
+                />
+              </Form.Group>
+            </Col>
+            <Col xs={12} md={6} lg={4}>
+              <Form.Group controlId="numberOfPeople">
+                <Form.Label>Number of People:</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter number of people"
+                  value={numPeople}
+                  onChange={(e) => setNumPeople(e.target.value)}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
 
-      <h4>Sun Exposure</h4>
-      <Form.Check
-        type="checkbox"
-        label="Average"
-        name="Average"
-        checked={sunExposure.Average}
-        onChange={handleSunExposureChange}
-      />
-      <Form.Check
-        type="checkbox"
-        label="Full sunlight"
-        name="FullSunlight"
-        checked={sunExposure.FullSunlight}
-        onChange={handleSunExposureChange}
-      />
-      <Form.Check
-        type="checkbox"
-        label="Heavily shaded"
-        name="HeavilyShaded"
-        checked={sunExposure.HeavilyShaded}
-        onChange={handleSunExposureChange}
-      />
+          {rooms.map((room, index) => (
+            <Row key={index} className="my-4">
+              <Col xs={12} md={6} lg={4}>
+                <Form.Group controlId={`roomType-${index}`}>
+                  <Form.Label>Room Type {index + 1}:</Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={room.name}
+                    onChange={(e) =>
+                      handleRoomChange(index, "name", e.target.value)
+                    }
+                  >
+                    <option>Bedroom 1</option>
+                    <option>Bedroom 2</option>
+                    <option>Bedroom 3</option>
+                    <option>Bedroom 4</option>
+                    <option>Bedroom 5</option>
+                    <option>Living Room</option>
+                    <option>Kitchen</option>
+                    <option>Bathroom</option>
+                    <option>Terrace</option>
+                    <option>Entire House</option>
+                    <option>Entire First Floor</option>
+                    <option>Entire Second Floor And Above</option>
+                    <option>Open Office Area</option>
+                  </Form.Control>
+                </Form.Group>
+              </Col>
+              <Col xs={12} md={6} lg={4}>
+                <Form.Group controlId={`roomSize-${index}`}>
+                  <Form.Label>Room Size ({measurementSystem}²):</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder={`Enter room size in ${
+                      measurementSystem === "meters" ? "m²" : "ft²"
+                    }`}
+                    value={room.size}
+                    onChange={(e) =>
+                      handleRoomChange(index, "size", e.target.value)
+                    }
+                  />
+                </Form.Group>{" "}
+              </Col>
+              <Col md={2}>
+                <Button
+                  variant="danger"
+                  onClick={() => removeRoom(index)}
+                  className="button-delete  floating"
+                  size="sm"
+                >
+                  <i className="fas fa-trash"></i>
+                </Button>
+              </Col>
+            </Row>
+          ))}
 
-      <h4>Climate</h4>
-      <Form.Check
-        type="checkbox"
-        label="Average"
-        name="Average"
-        checked={climate.Average}
-        onChange={handleClimateChange}
-      />
-      <Form.Check
-        type="checkbox"
-        label="Hot"
-        name="Hot"
-        checked={climate.Hot}
-        onChange={handleClimateChange}
-      />
-      <Form.Check
-        type="checkbox"
-        label="Cold"
-        name="Cold"
-        checked={climate.Cold}
-        onChange={handleClimateChange}
-      />
+          <Button variant="primary" onClick={addRoom} className="mb-3 mt-4">
+            Add Desired Room
+          </Button>
 
-      <Row className="my-4">
-        <Col xs={12} md={6} lg={4}>
-          <Button variant="success" onClick={handleCalculate}>
+          <h4>Insulation Condition</h4>
+          <Form.Check
+            type="checkbox"
+            label="Average"
+            name="Average"
+            checked={insulation.Average}
+            onChange={handleInsulationChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Good (very few leakage or window)"
+            name="Good"
+            checked={insulation.Good}
+            onChange={handleInsulationChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Poor (many leakage or window)"
+            name="Poor"
+            checked={insulation.Poor}
+            onChange={handleInsulationChange}
+          />
+
+          <h4>Sun Exposure</h4>
+          <Form.Check
+            type="checkbox"
+            label="Average"
+            name="Average"
+            checked={sunExposure.Average}
+            onChange={handleSunExposureChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Full Sunlight"
+            name="FullSunlight"
+            checked={sunExposure.FullSunlight}
+            onChange={handleSunExposureChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Heavily Shaded"
+            name="HeavilyShaded"
+            checked={sunExposure.HeavilyShaded}
+            onChange={handleSunExposureChange}
+          />
+
+          <h4>Climate</h4>
+          <Form.Check
+            type="checkbox"
+            label="Average  (Warsaw)"
+            name="Average"
+            checked={climate.Average}
+            onChange={handleClimateChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Hot (Tel-Aviv)"
+            name="Hot"
+            checked={climate.Hot}
+            onChange={handleClimateChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Cold (Stockholm)"
+            name="Cold"
+            checked={climate.Cold}
+            onChange={handleClimateChange}
+          />
+
+          <Button
+            variant="primary"
+            onClick={handleCalculate}
+            className="mt-4 me-3 mb-4"
+          >
             Calculate BTU
           </Button>
-        </Col>
-        <Col xs={12} md={6} lg={4}>
-          <Button variant="danger" onClick={handleClear}>
+
+          <Button
+            variant="secondary"
+            onClick={handleClear}
+            className="mt-4 mb-4"
+          >
             Clear
           </Button>
-        </Col>
-      </Row>
+        </Form>
+      </Container>
 
       {btuResults.length > 0 && (
-        <div>
-          <h3>Total BTU Required per Room:</h3>
-          {btuResults.map((btu, index) => (
-            <div key={index}>
-              <h4>
-                {rooms[index].name} BTU: {btu}
-              </h4>
-              {product[index] ? (
-                <div>
-                  <h4>Recommended Air Conditioner:</h4>
-                  <p>{product[index].name}</p>
-                  <p>BTU Rating: {product[index].btu}</p>
-                  <Image
-                    src={product[index].image}
-                    alt={product[index].name}
-                    style={{ width: "100px", height: "auto" }}
-                  />
-                  <Link
-                    to={`/product/${product[index].slug}`}
-                    className="link-product-details"
-                  >
-                    View Details
-                  </Link>
-                </div>
-              ) : (
-                <p>
-                  No suitable air conditioner found for {rooms[index].name}.
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
+        <Container className="btu-results mt-4">
+          <h3 className="text-center">BTU Results</h3>
+          <Table bordered hover className="table-responsive-md">
+            <thead>
+              <tr>
+                <th>Room</th>
+                <th>BTU</th>
+                <th>Optimal Product</th>
+                <th>Product Details</th>
+                <th>Product Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rooms.map((room, index) => (
+                <tr key={index}>
+                  <td>{room.name}</td>
+                  <td>{btuResults[index]}</td>
+                  <td>
+                    <Link
+                      to={`/product/${products[index].slug}`}
+                      className="link-product-details"
+                    >
+                      <Image
+                        src={products[index].image}
+                        alt={products[index].name}
+                        style={{
+                          width: "50px",
+                          height: "auto",
+                          backgroundColor: "grey",
+                        }}
+                        className="responsive rounded"
+                      />
+                    </Link>
+                  </td>
+                  <td>{products[index].name} </td>
+                  <td>
+                    {products[index] ? (
+                      products[index].price
+                    ) : (
+                      <span>No product available</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+              <tr > <td className="total-results  bg-warning">
+                  <strong>Total</strong>
+                </td>  <td  className="total-results  bg-warning">
+                  <strong>
+                    {btuResults.reduce((total, btu) => total + btu, 0)}
+                  </strong>
+                </td>
+                <td  className="total-results  bg-warning">
+                <strong>
+              {products.filter(product => product).length} 
+            </strong>
+                </td>
+                <td  className="total-results  bg-warning"></td>
+                <td  className="total-results  bg-warning">
+                <strong>
+              {products.reduce((total, product, index) => {
+                return product ? total + product.price : total; 
+              }, 0).toFixed(2)} 
+            </strong> 
+                </td>
+               
+              
+              </tr>
+            </tbody>
+          </Table>
+        </Container>
       )}
-    </Container>
+    </div>
   );
 }
 

@@ -4,7 +4,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import streamifier from 'streamifier';
 import { isAdmin, isAuth } from '../utils.js';
 import Product from '../models/productModel.js';
-import DesignModel from '../models/designModel.js';
+
 
 
 const upload = multer();
@@ -49,37 +49,6 @@ uploadRouter.post(
 );
 
 
-uploadRouter.post(
-  '/upload-design',
-  isAuth,
-  upload.single('file'),
-  async (req, res) => {
-    try {
-      const result = await streamUpload(req);
-
-      const newDesign = new DesignModel({
-        title: req.body.title,
-        country: req.body.country,
-        typeOfProperty: req.body.typeOfProperty,
-        floorNumber: req.body.floorNumber,
-        directionOfVentilation: req.body.directionOfVentilation,
-        numberOfRooms: req.body.numberOfRooms,
-        roomArea: req.body.roomArea,
-        file: result.secure_url, 
-      });
-
-      await newDesign.save(); 
-
-      return res.status(201).json({
-        message: 'Design uploaded successfully',
-        design: newDesign,
-      });
-    } catch (error) {
-      console.error('Error uploading design:', error);
-      res.status(500).json({ message: 'Design upload failed', error: error.message });
-    }
-  }
-);
 
 
 export default uploadRouter;
