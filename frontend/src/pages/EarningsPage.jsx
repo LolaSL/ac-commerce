@@ -61,7 +61,7 @@ const EarningsPage = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>#</th>
+            <th>ID</th>
             <th>Project Name</th>
             <th>Time On Project</th>
             <th>Amount Earned</th>

@@ -52,7 +52,6 @@ export default function ServiceProviderProfile() {
       return;
     }
 
-    // Ensure serviceProviderInfo and _id exist
     if (!serviceProviderInfo || !serviceProviderInfo._id) {
       toast.error(
         "Service Provider information is missing or you are not logged in."

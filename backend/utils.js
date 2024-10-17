@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import mg from 'mailgun.js';
 import dotenv from 'dotenv';
 
+
 dotenv.config();
 
 export const baseUrl = () =>
@@ -10,6 +11,10 @@ export const baseUrl = () =>
         : process.env.NODE_ENV !== 'production'
             ? 'http://localhost:3000'
             : 'https://yourdomain.com';
+
+
+
+
 
 export const generateToken = (user) => {
     return jwt.sign(
@@ -35,7 +40,7 @@ export const isAuth = (req, res, next) => {
             if (err) {
                 return res.status(401).send({ message: 'Invalid token' });
             }
-            req.user = decoded; // Storing decoded token information in req.user
+            req.user = decoded;
             next();
         });
     } else {
@@ -50,6 +55,8 @@ export const isAdmin = (req, res, next) => {
         res.status(401).send({ message: 'Not authorized as an admin' });
     }
 };
+
+
 
 export const mailgun = () =>
     mg({

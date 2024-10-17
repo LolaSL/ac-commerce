@@ -11,20 +11,20 @@ const AboutUs = () => {
         <div
           className="p-5 text-center responsive mb-3"
           style={{
-            backgroundImage: `url("/images/about-us.jpg")`,
+            backgroundImage: `url("/images/about-us1.jpg")`,
             height: 450,
             backgroundSize: "cover",
             objectFit: "cover",
-            backgroundRepeat: "no-repeat",
+            backgroundRepeat: "no-repeat"
           }}
         >
           {" "}
-          <h1 className="mb-4 text-center text-white p-4 about-title">
+          <h1 className="mb-4  text-white p-4 about-title">
             About Us
           </h1>
         </div>
         <p className="about-paragraph mt-4 pb-2">
-          AC Commerce is committed to complying with local laws and regulations
+          <strong>AC Commerce</strong> is committed to complying with local laws and regulations
           and to applying a strict ethical code of conduct to all employees
         </p>
         <p className="about-paragraph mt-4 pb-2">
@@ -55,7 +55,7 @@ const AboutUs = () => {
           </h2>
         </div>
         <p className="about-paragraph mt-4 pb-4">
-          Our Mission is to provide innovative and energy-efficient air
+         <strong>Our Mission</strong> is to provide innovative and energy-efficient air
           conditioning solutions that enhance comfort and well-being in every
           space we serve. We are committed to delivering exceptional quality,
           unmatched reliability, and superior customer service. By leveraging
@@ -77,8 +77,8 @@ const AboutUs = () => {
         >
           <h2 className=" text-center text-white goals-title">Our Goals</h2>
           <p className="goals-paragraph text-white mt-2 pb-4">
-            Our goal is to become the trusted partner for all your cooling
-            needs, ensuring comfort and satisfaction in every step of your
+          Our goals are to become the trusted partner for all your cooling
+            needs, to ensure comfort and satisfaction in every step of your
             journey with us.
           </p>{" "}
         </div>

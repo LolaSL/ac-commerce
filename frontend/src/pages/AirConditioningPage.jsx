@@ -9,33 +9,6 @@ const AirConditioningPage = () => {
         <title>Air Conditioning</title>
       </Helmet>
       <article>
-        <h4 className="mb-4">
-          How to Choose the Best Air Conditioner for Your Needs
-        </h4>
-        <p className="ac-conditioning">
-          When choosing an air conditioner, there are many factors you need to
-          consider making the best decision for your home. The first thing you
-          need to do is figure out the room's square footage or rooms you want
-          to cool. Once you know that, you can start looking at air conditioners
-          and their cooling capacity.
-        </p>
-        <p className="ac-conditioning">
-          The next thing you need to consider is the air conditioner's features.
-          Some air conditioners come with features like timers and remote
-          controls. These can be very helpful if you want to be able to cool
-          your home before you get home from work or turn off the air
-          conditioner when you leave for vacation. Finally, you need to think
-          about your budget. Air conditioners can range from a few hundred
-          dollars to several thousand dollars. Therefore, it's crucial to find
-          an air conditioner that fits your needs and budget. Installing an air
-          conditioner can be a great way to improve the comfort of your home.
-          But, it's essential to do your research and choose the right air
-          conditioner for your home. By considering the size of the room, the
-          features you want, and your budget, you can find an air conditioner
-          that will keep you cool all summer long.
-        </p>
-      </article>
-      <article>
         <h4 className="mb-3 pb-3">What is BTU?</h4>
         <p className="ac-calculation">
           What is a BTU? The British Thermal Unit, or BTU, is an energy unit. It

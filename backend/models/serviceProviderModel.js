@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-// Define the ServiceProvider schema
+
 const serviceProviderSchema = new mongoose.Schema(
     {
         name: { type: String, required: true },
@@ -12,19 +12,19 @@ const serviceProviderSchema = new mongoose.Schema(
         company: { type: String },
         experience: { type: Number },
         portfolio: { type: String },
-        isAdmin: { type: Boolean, default: false },
+        isAdmin: { type: Boolean, default: false, required: true },
     },
     {
         timestamps: true,
     }
 );
 
-// Password comparison method
+
 serviceProviderSchema.methods.matchPassword = async function (enteredPassword) {
     return bcrypt.compare(enteredPassword, this.password);
 };
 
-// Compile the schema into a model
+
 const ServiceProvider = mongoose.model('ServiceProvider', serviceProviderSchema);
 
 export default ServiceProvider;

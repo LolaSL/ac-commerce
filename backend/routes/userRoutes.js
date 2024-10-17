@@ -71,8 +71,6 @@ userRouter.post(
       });
       user.resetToken = token;
       await user.save();
-
-      //reset link
       console.log(`${baseUrl()}/reset-password/${token}`);
 
       mailgun()

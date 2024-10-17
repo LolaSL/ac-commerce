@@ -4,6 +4,12 @@ import Order from '../models/orderModel.js';
 import User from '../models/userModel.js';
 import Product from '../models/productModel.js';
 import { isAuth, isAdmin } from '../utils.js';
+import ServiceProvider from '../models/serviceProviderModel.js';
+import Earnings from '../models/earningModel.js';
+import Project from '../models/projectModel.js';
+import Message from '../models/messageModel.js';
+
+
 
 const orderRouter = express.Router();
 
@@ -77,7 +83,44 @@ orderRouter.get(
         },
       },
     ]);
-    res.send({ users, orders, dailyOrders, productCategories });
+    const serviceProviders = await ServiceProvider.aggregate([
+      {
+        $group: {
+          _id: null,
+          numServiceProviders: { $sum: 1 },
+        },
+      },
+    ]);
+    const totalProjects = await Project.aggregate([
+      {
+        $group: {
+          _id: null,
+          numProjects: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const totalMessages = await Message.aggregate([
+      {
+        $group: {
+          _id: null,
+          numMessages: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const totalEarnings = await Earnings.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalEarnings: { $sum: '$amount' },
+          numEarnings: { $sum: 1 },
+        },
+      },
+    ]);
+    console.log({ users, orders, dailyOrders, productCategories, serviceProviders, totalProjects, totalMessages, totalEarnings });
+    res.send({ users, orders, dailyOrders, productCategories, serviceProviders, totalProjects, totalMessages, totalEarnings });
+    
   })
 );
 

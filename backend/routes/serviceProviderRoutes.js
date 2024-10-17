@@ -1,13 +1,16 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import expressAsyncHandler from 'express-async-handler';
-import { isAdmin } from '../utils.js';
 import Project from '../models/projectModel.js';
 import Message from '../models/messageModel.js';
 import Earnings from '../models/earningModel.js';
 import ServiceProvider from '../models/serviceProviderModel.js';
 import jwt from 'jsonwebtoken';
 
+
+
+
+const serviceProviderRouter = express.Router();
 
 const generateToken = (serviceProvider) => {
   return jwt.sign(
@@ -39,12 +42,52 @@ export const isAuth = (req, res, next) => {
   }
 };
 
+export const isServiceProvider = (req, res, next) => {
+  if (req.serviceProvider) {
+    next();
+  } else {
+    res.status(403).send({ message: 'Service Provider access required' });
+  }
+};
 
-const serviceProviderRouter = express.Router();
+serviceProviderRouter.get('/', async (req, res) => {
+  try {
+    const serviceProviders = await ServiceProvider.aggregate([
+      {
+        $lookup: {
+          from: 'projects', 
+          localField: '_id',
+          foreignField: 'serviceProvider',
+          as: 'projects',
+        },
+      },
+      {
+        $lookup: {
+          from: 'earnings',
+          localField: '_id',
+          foreignField: 'serviceProvider',
+          as: 'earnings',
+        },
+      },
+      {
+        $addFields: {
+          completedProjects: { $size: { $filter: { input: '$projects', as: 'project', cond: { $eq: ['$$project.status', 'Completed'] } } } },
+          inProgressProjects: { $size: { $filter: { input: '$projects', as: 'project', cond: { $eq: ['$$project.status', 'In Progress'] } } } },
+          totalEarnings: { $sum: '$earnings.amount' },
+        },
+      },
+    ]);
+    res.send(serviceProviders);
+  } catch (err) {
+    res.status(500).send({ message: 'Error fetching service providers', error: err.message });
+  }
+});
+
 
 serviceProviderRouter.get(
   '/projects',
   isAuth,
+  isServiceProvider,
   expressAsyncHandler(async (req, res) => {
     try {
       const serviceProviderId = req.serviceProvider._id
@@ -68,6 +111,7 @@ serviceProviderRouter.get(
 serviceProviderRouter.get(
   '/messages',
   isAuth,
+  isServiceProvider,
   expressAsyncHandler(async (req, res) => {
     const serviceProviderId = req.serviceProvider._id
     const messages = await Message.find({ serviceProvider: serviceProviderId });
@@ -80,23 +124,24 @@ serviceProviderRouter.get(
 serviceProviderRouter.get(
   '/earnings',
   isAuth,
+  isServiceProvider,
   expressAsyncHandler(async (req, res) => {
     try {
       const serviceProviderId = req.serviceProvider._id
-      // Filter by the logged-in service provider's ID
-      const earnings = await Earnings.find({ serviceProvider: serviceProviderId })  // Filter earnings by logged-in service provider
+
+      const earnings = await Earnings.find({ serviceProvider: serviceProviderId })
         .populate({
-          path: 'projectName', // Populate project details
-          select: 'name hoursWorked', // Fetch project name and hoursWorked fields
+          path: 'projectName',
+          select: 'name hoursWorked',
         })
-        .populate('serviceProvider', 'name'); // Optionally populate service provider name (if needed)
+        .populate('serviceProvider', 'name');
 
       if (earnings.length === 0) {
         res.status(404).send({ message: 'No earnings found for this service provider' });
         return;
       }
 
-      res.status(200).send(earnings);  // Send back the filtered earnings data
+      res.status(200).send(earnings);
     } catch (error) {
       res.status(500).send({ message: error.message });
     }
@@ -107,12 +152,13 @@ serviceProviderRouter.get(
 serviceProviderRouter.get(
   '/hours',
   isAuth,
+  isServiceProvider,
   expressAsyncHandler(async (req, res) => {
     const serviceProviderId = req.serviceProvider._id
-    // Ensure req.serviceProvider._id contains the correct service provider ID
+
     const earnings = await Earnings.find({ serviceProvider: serviceProviderId }).populate('projectName');
 
-    console.log('Earnings:', earnings); // Check what you're getting from the database
+    console.log('Earnings:', earnings);
 
     if (!earnings || earnings.length === 0) {
       return res.send({ totalHours: 0, projects: [] });
@@ -120,12 +166,12 @@ serviceProviderRouter.get(
 
     const totalHours = earnings.reduce((sum, earning) => sum + earning.hoursWorked, 0);
 
-    // Format response
+
     res.send({
       totalHours,
       projects: earnings.map(e => ({
         _id: e._id,
-        projectName: e.projectName, // Adjust according to your data structure
+        projectName: e.projectName,
         hoursWorked: e.hoursWorked,
         date: e.date,
         amount: e.amount,
@@ -136,38 +182,23 @@ serviceProviderRouter.get(
 );
 
 
-
-serviceProviderRouter.get(
-  '/',
-  isAuth,
-  isAdmin,
-  expressAsyncHandler(async (req, res) => {
-    const serviceProviders = await ServiceProvider.find({});
-    res.send(serviceProviders);
-  })
-);
-
-// Service Provider Registration Route
 serviceProviderRouter.post(
   '/register',
   expressAsyncHandler(async (req, res) => {
     const { name, email, password, typeOfProvider, phone, company, experience, portfolio } = req.body;
 
-    // Check if the service provider already exists
     const existingProvider = await ServiceProvider.findOne({ email });
     if (existingProvider) {
       res.status(400).send({ message: 'Service Provider with this email already exists' });
       return;
     }
 
-    // Hash the password before saving
     const hashedPassword = bcrypt.hashSync(password, 8);
 
-    // Save the new service provider with the hashed password
     const serviceProvider = await new ServiceProvider({
       name,
       email,
-      password: hashedPassword,  // Save the hashed password
+      password: hashedPassword,
       typeOfProvider,
       phone,
       company,
@@ -175,7 +206,7 @@ serviceProviderRouter.post(
       portfolio,
     }).save();
 
-    // Return the service provider details with a token
+
     res.send({
       _id: serviceProvider._id,
       name: serviceProvider.name,
@@ -186,16 +217,14 @@ serviceProviderRouter.post(
   })
 );
 
-// Service Provider Login Route
+
 serviceProviderRouter.post(
   '/login',
   expressAsyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
-    // Find the service provider by email
     const serviceProvider = await ServiceProvider.findOne({ email });
 
-    // Check if the service provider exists and the password matches
     if (serviceProvider && (await serviceProvider.matchPassword(password))) {
       res.send({
         _id: serviceProvider._id,
@@ -213,7 +242,8 @@ serviceProviderRouter.post(
 
 serviceProviderRouter.put(
   '/profile/:id',
-  isAuth, // Ensure proper authentication middleware is in place
+  isAuth,
+  isServiceProvider,
   expressAsyncHandler(async (req, res) => {
     try {
       const serviceProvider = await ServiceProvider.findById(req.params.id);
@@ -226,7 +256,6 @@ serviceProviderRouter.put(
       serviceProvider.typeOfProvider = req.body.typeOfProvider || serviceProvider.typeOfProvider;
       serviceProvider.experience = req.body.experience || serviceProvider.experience;
 
-      // Handle password update only if provided
       if (req.body.password) {
         serviceProvider.password = bcrypt.hashSync(req.body.password, 8);
       }

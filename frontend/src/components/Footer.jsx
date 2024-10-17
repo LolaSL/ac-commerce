@@ -3,10 +3,17 @@ import NavLink from "react-bootstrap/NavLink";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-
+import { useNavigate } from "react-router-dom";
 
 
 const Footer = () => {
+
+  const navigate = useNavigate();
+  
+  const handleNavigation = (e) => {
+    e.preventDefault();  // Prevent default anchor behavior
+    navigate("/signin?redirect=/uploadfile");
+  };
   return (
     <>
       <Container fluid>
@@ -59,7 +66,7 @@ const Footer = () => {
               <NavLink className="text-white" href="/sellers">
                 Sellers
               </NavLink>
-              <NavLink className="text-white" href="/uploadfile">
+              <NavLink className="text-white" href="/uploadfile" onClick={handleNavigation}>
                 Services
               </NavLink>
            

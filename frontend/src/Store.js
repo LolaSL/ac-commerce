@@ -4,6 +4,7 @@ export const Store = createContext();
 
 const initialState = {
   fullBox: false,
+  
   // Retrieve userInfo and serviceProviderInfo from localStorage
   userInfo: localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo'))
@@ -13,13 +14,16 @@ const initialState = {
     ? JSON.parse(localStorage.getItem('serviceProviderInfo'))
     : null,
 
+  // Cart details
   cart: {
     shippingAddress: localStorage.getItem('shippingAddress')
       ? JSON.parse(localStorage.getItem('shippingAddress'))
       : { location: {} },
+      
     paymentMethod: localStorage.getItem('paymentMethod')
       ? localStorage.getItem('paymentMethod')
       : '',
+      
     cartItems: localStorage.getItem('cartItems')
       ? JSON.parse(localStorage.getItem('cartItems'))
       : [],

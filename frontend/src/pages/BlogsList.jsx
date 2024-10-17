@@ -44,7 +44,7 @@ function BlogList() {
       <Helmet>
         <title>Blogs</title>
       </Helmet>
-      <h1 className="blogs-title">Blog List</h1>
+      <h1 className="blogs-title">Blogs</h1>
       {loading ? (
         <LoadingBox />
       ) : error ? (

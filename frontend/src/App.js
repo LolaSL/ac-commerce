@@ -58,12 +58,18 @@ import BlogDetails from './pages/BlogDetails.jsx';
 import BlogEditPage from './pages/BlogEditPage.jsx';
 import BlogsPage from './pages/Blogspage.jsx';
 import MessagesPage from './pages/MessagesPage.jsx';
+import ServiceProvidersEdit from './pages/ServiceProvidersEdit.jsx';
+
 
 
 function App() {
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { fullBox, cart, userInfo, serviceProviderInfo } = state;
+  const checkoutHandler = (e) => {
+    e.preventDefault();
+    window.location.href = ("/signin?redirect=/uploadfile");
+  };
 
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });
@@ -153,7 +159,65 @@ function App() {
                       Sign In
                     </Link>
                   )}
-                  {serviceProviderInfo ? (
+                  {/* {serviceProviderInfo ? (
+                    <NavDropdown title={serviceProviderInfo.name} id="provider-nav-dropdown">
+                      { serviceProviderInfo.isAdmin ? (
+                        <>
+                          <LinkContainer to="/sp-dashboard">
+                            <NavDropdown.Item>Dashboard</NavDropdown.Item>
+                          </LinkContainer>
+                          <LinkContainer to="/admin/manage-service-providers">
+                            <NavDropdown.Item>Manage Service Providers</NavDropdown.Item>
+                          </LinkContainer>
+                          <LinkContainer to="/admin/manage-projects">
+                            <NavDropdown.Item>Manage Projects</NavDropdown.Item>
+                          </LinkContainer>
+                          <LinkContainer to="/admin/reports">
+                            <NavDropdown.Item>Reports</NavDropdown.Item>
+                          </LinkContainer>
+                          <NavDropdown.Divider />
+                          <Link
+                            className="dropdown-item"
+                            to="#signout"
+                            onClick={signoutHandler}
+                          >
+                            Log Out
+                          </Link>
+                        </>
+                      ) : (
+                        <>
+                          <LinkContainer to={`/serviceprovider/profile/${serviceProviderInfo._id}`}>
+                            <NavDropdown.Item>Service Provider Profile</NavDropdown.Item>
+                          </LinkContainer>
+                          <LinkContainer to="/serviceprovider/projects">
+                            <NavDropdown.Item>Projects</NavDropdown.Item>
+                          </LinkContainer>
+                          <LinkContainer to="/serviceprovider/hours">
+                            <NavDropdown.Item>Hours</NavDropdown.Item>
+                          </LinkContainer>
+                          <LinkContainer to="/serviceprovider/earnings">
+                            <NavDropdown.Item>Earnings</NavDropdown.Item>
+                          </LinkContainer>
+                          <LinkContainer to="/serviceprovider/messages">
+                            <NavDropdown.Item>Messages</NavDropdown.Item>
+                          </LinkContainer>
+                          <NavDropdown.Divider />
+                          <Link
+                            className="dropdown-item"
+                            to="#signout"
+                            onClick={signoutHandler}
+                          >
+                            Log Out
+                          </Link>
+                        </>
+                      )}
+                    </NavDropdown>
+                  ) : (
+                    <Link className="nav-link" to="/serviceprovider/login">
+                      Service Provider Login
+                    </Link>
+                  )} */}
+                    {serviceProviderInfo ? (
                     <NavDropdown title={serviceProviderInfo.name} id="provider-nav-dropdown">
                       <LinkContainer to="/serviceprovider/profile/:id">
                         <NavDropdown.Item>Service Provider Profile</NavDropdown.Item>
@@ -233,6 +297,9 @@ function App() {
               </Nav.Item>
             ))}
             <Nav.Item className='search-title'>
+              <Link to="/uploadfile" onClick={checkoutHandler} className="link-sellers fw-bold">Services</Link>
+            </Nav.Item>
+            <Nav.Item className='search-title'>
               <Link to="/sellers" className="link-sellers fw-bold">Sellers</Link>
             </Nav.Item>
             <Nav.Item className='search-title'>
@@ -296,7 +363,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-                <Route
+              <Route
                 path="/serviceprovider/messages"
                 element={
                   <ProtectedRoute>
@@ -320,6 +387,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+            
               <Route path="/placeorder" element={<PlaceOrderPage />} />
               <Route
                 path="/order/:id"
@@ -340,6 +408,14 @@ function App() {
               <Route
                 path="/shipping"
                 element={<ShippingAddressPage />}
+              ></Route>
+                <Route
+                path="/admin/manage-service-providers"
+                element={
+                  <AdminRoute>
+                    <ServiceProvidersEdit />
+                  </AdminRoute>
+                }
               ></Route>
               <Route path="/payment" element={<PaymentMethodPage />}></Route>
               <Route

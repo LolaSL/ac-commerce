@@ -6,7 +6,8 @@ import Image from "react-bootstrap/Image";
 export default function Banner() {
   const navigate = useNavigate();
 
-  const checkoutHandler = () => {
+  const checkoutHandler = (e) => {
+    e.preventDefault();
     navigate("/signin?redirect=/uploadfile");
   };
   return (

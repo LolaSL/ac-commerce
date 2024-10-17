@@ -62,6 +62,7 @@ const Projects = () => {
         <Table striped bordered hover>
           <thead>
             <tr>
+              <th>ID</th>
               <th>Name</th>
               <th>Status</th>
               <th>Time On Project</th>
@@ -70,6 +71,7 @@ const Projects = () => {
           <tbody>
             {projects.map((project, index) => (
               <tr key={index}>
+                <td>{index + 1}</td>
                 <td>{project.name}</td>
                 <td>{project.status}</td>
                 <td>{project.hoursWorked}</td>

@@ -31,7 +31,7 @@ const ServiceProviderLogin = () => {
       });
       ctxDispatch({ type: "SERVICE_PROVIDER_LOGIN", payload: data });
       localStorage.setItem("serviceProviderInfo", JSON.stringify(data));
-      navigate(redirect); // Redirect after login
+      navigate(redirect);
     } catch (err) {
       toast.error(getError(err));
     }
