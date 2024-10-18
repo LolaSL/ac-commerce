@@ -12,6 +12,13 @@ import { Helmet } from "react-helmet-async";
 import { Table } from "react-bootstrap";
 import ServiceProviders from "../components/ServiceProviders.jsx";
 
+const initialState = {
+  loading: true,
+  summary: {},
+  serviceProviders: [],
+  error: "",
+};
+
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -33,18 +40,14 @@ const reducer = (state, action) => {
 export default function DashboardPage() {
   const [{ loading, summary, serviceProviders, error }, dispatch] = useReducer(
     reducer,
-    {
-      loading: true,
-      summary: {},
-      serviceProviders: [],
-      error: "",
-    }
+    initialState
   );
   const { state } = useContext(Store);
-  const { userInfo, serviceProviderInfo } = state;
+  const { userInfo } = state;
 
   useEffect(() => {
     const fetchData = async () => {
+      dispatch({ type: "FETCH_REQUEST" });
       try {
         const { data } = await axios.get("/api/orders/summary", {
           headers: { Authorization: `Bearer ${userInfo.token}` },
@@ -58,7 +61,35 @@ export default function DashboardPage() {
       }
     };
     fetchData();
-  }, [userInfo, serviceProviderInfo]);
+  }, [userInfo]);
+
+  const renderCard = (title, value) => (
+    <Col md={4}>
+      <Card>
+        <Card.Body>
+          <Card.Title>{value || 0}</Card.Title>
+          <Card.Text>{title}</Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
+  );
+
+  const renderChart = (title, data, chartType) => (
+    <div className="my-3">
+      <h3>{title}</h3>
+      {data.length === 0 ? (
+        <MessageBox>No Data</MessageBox>
+      ) : (
+        <Chart
+          width="100%"
+          height="400px"
+          chartType={chartType}
+          loader={<div>Loading Chart...</div>}
+          data={data}
+        />
+      )}
+    </div>
+  );
 
   return (
     <div>
@@ -66,115 +97,65 @@ export default function DashboardPage() {
         <title>Dashboard</title>
       </Helmet>
       <h1 className="mb-4 mt-4 text-center fw-bold">Dashboard</h1>
-      <h3 className="mb-4 mt-4">Users</h3>
+
       {loading ? (
         <LoadingBox />
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <>
+          <h3 className="mb-4 mt-4">Users</h3>
           <Row>
-            <Col md={4}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>{summary?.users?.[0]?.numUsers || 0}</Card.Title>
-                  <Card.Text>Users</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={4}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>
-                    {summary?.orders?.[0]?.numOrders || 0}
-                  </Card.Title>
-                  <Card.Text>Orders</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={4}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>
-                    ${summary?.orders?.[0]?.totalSales?.toFixed(2) || 0}
-                  </Card.Title>
-                  <Card.Text>Sales</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
+            {renderCard("Users", summary?.users?.[0]?.numUsers)}
+            {renderCard("Orders", summary?.orders?.[0]?.numOrders)}
+            {renderCard("Sales", summary?.orders?.[0]?.totalSales?.toFixed(2))}
           </Row>
 
-          <div className="my-3">
-            <h3>Sales</h3>
-            {summary?.dailyOrders?.length === 0 ? (
-              <MessageBox>No Sale</MessageBox>
-            ) : (
-              <Chart
-                width="100%"
-                height="400px"
-                chartType="AreaChart"
-                loader={<div>Loading Chart...</div>}
-                data={[
-                  ["Date", "Sales"],
-                  ...summary.dailyOrders.map((x) => [x._id, x.sales]),
-                ]}
-              />
-            )}
-          </div>
+          {renderChart(
+            "Sales",
+            [["Date", "Sales"], ...summary.dailyOrders.map((x) => [x._id, x.sales])],
+            "AreaChart"
+          )}
 
-          <div className="my-3">
-            <h3>Categories</h3>
-            {summary?.productCategories?.length === 0 ? (
-              <MessageBox>No Category</MessageBox>
-            ) : (
-              <Chart
-                width="100%"
-                height="400px"
-                chartType="PieChart"
-                loader={<div>Loading Chart...</div>}
-                data={[
-                  ["Category", "Products"],
-                  ...summary.productCategories.map((x) => [x._id, x.count]),
-                ]}
-              />
-            )}
-          </div>
+          {renderChart(
+            "Categories",
+            [["Category", "Products"], ...summary.productCategories.map((x) => [x._id, x.count])],
+            "PieChart"
+          )}
+
+          <h2 className="mb-4 mt-4">Service Providers</h2>
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Service Provider</th>
+                <th>Projects</th>
+                <th>Earnings</th>
+                <th>Messages</th>
+              </tr>
+            </thead>
+            <tbody>
+              {serviceProviders.length > 0 ? (
+                serviceProviders.map((serviceProvider, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{serviceProvider.numServiceProviders}</td>
+                    <td>{summary.totalProjects?.[0]?.numProjects || 0}</td>
+                    <td>${summary.totalEarnings?.[0]?.totalEarnings?.toFixed(2) || 0}</td>
+                    <td>{summary.totalMessages?.[0]?.numMessages || 0}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5">No service providers found</td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+
+          <ServiceProviders />
         </>
       )}
-      <h2 className="mb-4 mt-4">Service Providers</h2>
-      <Table striped bordered hover responsive className="table-sm">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Service Providers</th>
-            <th>Projects</th>
-            <th>Earnings</th>
-            <th>Messages</th>
-          </tr>
-        </thead>
-        <tbody>
-          {serviceProviders?.length > 0 ? (
-            serviceProviders.map((serviceProvider, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td> {/* Assuming index-based ID */}
-                <td>{serviceProvider.numServiceProviders}</td>
-                <td>{summary.totalProjects?.[0]?.numProjects || 0}</td>
-                <td>
-                  ${summary.totalEarnings?.[0]?.totalEarnings?.toFixed(2) || 0}
-                </td>
-                <td>{summary.totalMessages?.[0]?.numMessages || 0}</td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="4">No service providers found</td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
-      <div>
-        <ServiceProviders />
-      </div>
     </div>
   );
 }
