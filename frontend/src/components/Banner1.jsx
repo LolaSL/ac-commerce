@@ -21,7 +21,7 @@ export default function Banner() {
           src="/images/banner1.jpg"
           alt="Header"
         />
-        <div className="d-flex justify-content-center align-items-center h-100">
+        <div className="d-flex justify-content-center align-items-center h-80">
           <div className="text">
             <h3 className="banner1-paragraph mb-2">
               Design and project your own air conditioning at your property

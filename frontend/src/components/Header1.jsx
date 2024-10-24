@@ -7,9 +7,9 @@ export default function Header1() {
              New products
             </h1>
       <iframe
-        className="responsive-iframe rounded"
+        className="responsive-iframe rounded "
         width="1300"
-        height="700"
+        height="500"
         src="https://www.youtube.com/embed/1dQ1MBSUHoQ?si=XgYwIiFsEHXc1Cl7&amp;clip=UgkxU-wNgQmBp0v_YmQiAkAlIHFzL6GTFAIK&amp;clipt=ENizARjwqAI"
         title="Samsung WindFree AC Technology"
         frameborder="0"

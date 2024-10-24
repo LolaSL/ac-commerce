@@ -44,11 +44,19 @@ function BtuCalculator() {
     const heightValue = parseFloat(height);
     const widthValue = parseFloat(width);
 
-    const areaInFeet = heightValue * widthValue;
-    setAreaFeet(areaInFeet);
+    if (measurementSystem === "feet") {
+      const areaInFeet = heightValue * widthValue;
+      setAreaFeet(areaInFeet);
 
-    const areaInMeters = areaInFeet * 0.092903;
-    setAreaMeters(areaInMeters);
+      const areaInMeters = areaInFeet * 0.092903;
+      setAreaMeters(areaInMeters);
+    } else {
+      const areaInMeters = heightValue * widthValue;
+      setAreaMeters(areaInMeters);
+
+      const areaInFeet = areaInMeters / 0.092903;
+      setAreaFeet(areaInFeet);
+    }
   }
 
   const handleRoomChange = (index, field, value) => {
@@ -173,58 +181,15 @@ function BtuCalculator() {
     setBtuResults([]);
     setProducts([]);
   };
-
   return (
     <div>
-      <h3 className="mt-4 mb-4 title">BTU Calculator</h3>
       <Container className="btu-calculator-container mt-4 mb-4 rounded">
         <Form className="btu-form">
-          <Row className="my-4">
-            <Col xs={12} md={6} lg={4}>
-              <Form.Group controlId="height">
-                <Form.Label>Height</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Enter height"
-                  value={height}
-                  onChange={(e) => setHeight(e.target.value)}
-                  required
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row className="my-4">
-            <Col xs={12} md={6} lg={4}>
-              <Form.Group controlId="width">
-                <Form.Label>Width</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Enter width"
-                  value={width}
-                  onChange={(e) => setWidth(e.target.value)}
-                  required
-                />
-              </Form.Group>
-            </Col>{" "}
-          </Row>
-          <Button
-            variant="primary"
-            onClick={calculateArea}
-            className="btn mt-2"
-          >
-            Calculate Area
-          </Button>
-          {areaFeet > 0 && (
-            <div className="result mt-4 mb-4">
-              <h4>Results:</h4>
-              <p>Area in Square Feet: {areaFeet.toFixed(2)} sq ft</p>
-              <p>Area in Square Meters: {areaMeters.toFixed(2)} sq m</p>
-            </div>
-          )}
-          <Row className="my-4">
+          <h3 className="mt-4 mb-4 text-center title">BTU Calculator</h3>
+        <Row className="my-4">
             <Col xs={12} md={6} lg={4}>
               <Form.Group controlId="measurementSystem">
-                <Form.Label>Measurement System</Form.Label>
+                <Form.Label className="fw-bold">Calculate Area </Form.Label>
                 <Form.Control
                   as="select"
                   value={measurementSystem}
@@ -236,6 +201,56 @@ function BtuCalculator() {
               </Form.Group>
             </Col>
           </Row>
+          <Row className="my-4">
+            <Col xs={12} md={6} lg={4}>
+              <Form.Group controlId="height">
+                <Form.Label>
+                  Height ({measurementSystem === "meters" ? "m" : "ft"}):
+                </Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder={`Enter height in ${
+                    measurementSystem === "meters" ? "meters" : "feet"
+                  }`}
+                  value={height}
+                  onChange={(e) => setHeight(e.target.value)}
+                  required
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row className="my-4">
+            <Col xs={12} md={6} lg={4}>
+              <Form.Group controlId="width">
+                <Form.Label>
+                  Width ({measurementSystem === "meters" ? "m" : "ft"}):
+                </Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder={`Enter width in ${
+                    measurementSystem === "meters" ? "meters" : "feet"
+                  }`}
+                  value={width}
+                  onChange={(e) => setWidth(e.target.value)}
+                  required
+                />
+              </Form.Group>
+            </Col>{" "}
+          </Row>
+          <Button
+            variant="primary"
+            onClick={calculateArea}
+            className="btn mt-2 mb-4"
+          >
+            Calculate Area
+          </Button>
+          {areaFeet > 0 && (
+            <div className="result mt-4 mb-4">
+              <h3  className="mb-3 mt-3">Results:</h3>
+              <p>Area in Square Feet: {areaFeet.toFixed(2)} sq ft</p>
+              <p>Area in Square Meters: {areaMeters.toFixed(2)} sq m</p>
+            </div>
+          )}   
           <Row>
             <Col xs={12} md={6} lg={4}>
               <Form.Group controlId="ceilingHeight">
@@ -306,10 +321,9 @@ function BtuCalculator() {
               </Col>
               <Col md={2}>
                 <Button
-                  variant="danger"
+                  variant="secondary"
                   onClick={() => removeRoom(index)}
-                  className="button-delete  floating"
-                  size="sm"
+                  className="btn btn-delete mb-4 btn-sm"
                 >
                   <i className="fas fa-trash"></i>
                 </Button>
@@ -320,8 +334,8 @@ function BtuCalculator() {
           <Button variant="primary" onClick={addRoom} className="mb-3 mt-4">
             Add Desired Room
           </Button>
-
-          <h4>Insulation Condition</h4>
+          <hr className="ms-2 mt-1 mb-5" style={{ "width": "100%"}}></hr>
+          <h3  className="mb-3 mt-3 text-center">Insulation Condition</h3>
           <Form.Check
             type="checkbox"
             label="Average"
@@ -343,8 +357,8 @@ function BtuCalculator() {
             checked={insulation.Poor}
             onChange={handleInsulationChange}
           />
-
-          <h4>Sun Exposure</h4>
+ <hr className="ms-2 mt-1 mb-5" style={{ "width": "100%"}}></hr>
+          <h3  className="mb-3 mt-3 text-center">Sun Exposure</h3>
           <Form.Check
             type="checkbox"
             label="Average"
@@ -366,8 +380,8 @@ function BtuCalculator() {
             checked={sunExposure.HeavilyShaded}
             onChange={handleSunExposureChange}
           />
-
-          <h4>Climate</h4>
+ <hr className="ms-2 mt-1 mb-5" style={{ "width": "100%"}}></hr>
+          <h3 className="mb-3 mt-3 text-center">Climate</h3>
           <Form.Check
             type="checkbox"
             label="Average  (Warsaw)"
@@ -453,28 +467,31 @@ function BtuCalculator() {
                   </td>
                 </tr>
               ))}
-              <tr > <td className="total-results  bg-warning">
+              <tr>
+                {" "}
+                <td className="total-results  bg-warning">
                   <strong>Total</strong>
-                </td>  <td  className="total-results  bg-warning">
+                </td>{" "}
+                <td className="total-results  bg-warning">
                   <strong>
                     {btuResults.reduce((total, btu) => total + btu, 0)}
                   </strong>
                 </td>
-                <td  className="total-results  bg-warning">
-                <strong>
-              {products.filter(product => product).length} 
-            </strong>
+                <td className="total-results  bg-warning">
+                  <strong>
+                    {products.filter((product) => product).length}
+                  </strong>
                 </td>
-                <td  className="total-results  bg-warning"></td>
-                <td  className="total-results  bg-warning">
-                <strong>
-              {products.reduce((total, product, index) => {
-                return product ? total + product.price : total; 
-              }, 0).toFixed(2)} 
-            </strong> 
+                <td className="total-results  bg-warning"></td>
+                <td className="total-results  bg-warning">
+                  <strong>
+                    {products
+                      .reduce((total, product, index) => {
+                        return product ? total + product.price : total;
+                      }, 0)
+                      .toFixed(2)}
+                  </strong>
                 </td>
-               
-              
               </tr>
             </tbody>
           </Table>

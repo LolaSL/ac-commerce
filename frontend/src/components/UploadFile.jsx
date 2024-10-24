@@ -1,236 +1,266 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Form } from "react-bootstrap";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { Button, Form } from "react-bootstrap";
 import { PDFDocument } from "pdf-lib";
+import * as pdfjsLib from "pdfjs-dist/webpack.mjs";
+import { Helmet } from "react-helmet-async";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js`;
 
 function UploadFile() {
   const [file, setFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
   const [error, setError] = useState(null);
-  const [drawing, setDrawing] = useState(false);
-  const [rectangles, setRectangles] = useState([]);
+  const [iconPositions, setIconPositions] = useState([]);
   const canvasRef = useRef(null);
   const [color, setColor] = useState("#9370DB");
-  const [startPosition, setStartPosition] = useState(null);
-  const [isDrawingSignature, setIsDrawingSignature] = useState(false);
-  const [signaturePath, setSignaturePath] = useState([]);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [isSaved, setIsSaved] = useState(false);
 
-  function handleChange(event) {
+  const handleChange = (event) => {
     const selectedFile = event.target.files[0];
-
     if (selectedFile) {
       setFile(selectedFile);
       setPreviewUrl(URL.createObjectURL(selectedFile));
       setError(null);
-      setRectangles([]); // Reset rectangles when a new file is uploaded
-      setSignaturePath([]); // Reset signature path when a new file is uploaded
+      setIconPositions([]);
     } else {
       setFile(null);
       setPreviewUrl(null);
       setError("No file selected.");
     }
-  }
+  };
 
-  function handleMouseDown(e) {
-    const { offsetX, offsetY } = e.nativeEvent;
-    setStartPosition({ x: offsetX, y: offsetY });
-    setDrawing(true);
-
-    if (isDrawingSignature) {
-      setSignaturePath([{ x: offsetX, y: offsetY }]); // Start new signature path
-    }
-  }
-
-  function handleMouseMove(e) {
-    if (!drawing) return;
-
+  const handleCanvasClick = (e) => {
     const { offsetX, offsetY } = e.nativeEvent;
 
-    if (isDrawingSignature) {
-      // If drawing a signature
-      const canvas = canvasRef.current;
-      if (canvas) {
-        const context = canvas.getContext("2d");
-        context.strokeStyle = color; // Use color for signature drawing
-        context.lineWidth = 2; // Set signature stroke width
-        context.lineJoin = "round";
-        context.lineCap = "round";
-        context.beginPath();
-        context.moveTo(startPosition.x, startPosition.y);
-        context.lineTo(offsetX, offsetY);
-        context.stroke();
-        setSignaturePath((prev) => [...prev, { x: offsetX, y: offsetY }]); // Add to signature path
-        setStartPosition({ x: offsetX, y: offsetY }); // Update start position
-      }
+    // Check if the click is close to an existing icon
+    const existingIconIndex = iconPositions.findIndex((icon) => {
+      return (
+        offsetX >= icon.x - 30 &&
+        offsetX <= icon.x + 30 &&
+        offsetY >= icon.y - 15 &&
+        offsetY <= icon.y + 15
+      );
+    });
+
+    if (existingIconIndex !== -1) {
+      // If clicked on an existing icon, toggle its rotation
+      const newIcons = [...iconPositions];
+      newIcons[existingIconIndex].angle =
+        (newIcons[existingIconIndex].angle + Math.PI / 2) % (2 * Math.PI); // Rotate 90 degrees
+      setIconPositions(newIcons);
     } else {
-      // Rectangle drawing logic
-      const currentRect = {
-        x: startPosition.x,
-        y: startPosition.y,
-        width: offsetX - startPosition.x,
-        height: offsetY - startPosition.y,
-        color: color,
-      };
-      setRectangles((prevRects) => [...prevRects.slice(0, -1), currentRect]);
-    }
-  }
-
-  function handleMouseUp() {
-    setDrawing(false);
-    if (!isDrawingSignature) {
-      // Commit the rectangle if not drawing a signature
-      setRectangles((prevRects) => [
-        ...prevRects,
-        {
-          x: startPosition.x,
-          y: startPosition.y,
-          width: prevRects[prevRects.length - 1]?.width || 0,
-          height: prevRects[prevRects.length - 1]?.height || 0,
-          color: color,
-        },
+      // Otherwise, create a new icon
+      setIconPositions((prevIcons) => [
+        ...prevIcons,
+        { x: offsetX, y: offsetY, angle: 0 }, // Start with 0 rotation
       ]);
     }
-  }
+  };
+
+  const drawRotatedRectangle = useCallback(
+    (context, x, y, width, height, angle) => {
+      context.save(); // Save the current context
+      context.translate(x, y); // Move the origin to the rectangle's position
+      context.rotate(angle); // Rotate the context by the specified angle (in radians)
+
+      context.fillStyle = color; // Set the fill color
+      context.fillRect(-width / 2, -height / 2, width, height); // Draw the rectangle centered at the new origin
+
+      context.restore(); // Restore the context to its original state
+    },
+    [color]
+  ); // Add color as a dependency
+
+  const renderSignature = useCallback(
+    (context) => {
+      if (isSaved) {
+        const text = "APPROVED BY AC-COMMERCE";
+        const textX = context.canvas.width - 520;
+        const textY = 60;
+        const padding = 10;
+        context.font = "bold 27px Arial";
+
+        const textMetrics = context.measureText(text);
+        const textWidth = textMetrics.width;
+        const textHeight = 27;
+
+        context.strokeStyle = "grey";
+        context.lineWidth = 2;
+        context.fillStyle = "white";
+
+        context.fillRect(
+          textX - padding,
+          textY - textHeight - padding / 2,
+          textWidth + 2 * padding,
+          textHeight + padding
+        );
+
+        context.strokeRect(
+          textX - padding,
+          textY - textHeight - padding / 2,
+          textWidth + 2 * padding,
+          textHeight + padding
+        );
+
+        context.fillStyle = "red";
+        context.fillText(text, textX, textY);
+
+        context.beginPath();
+        context.setLineDash([]);
+
+        context.stroke();
+      }
+    },
+    [isSaved]
+  );
+
+  const renderPDFOnCanvas = useCallback(
+    async (pdfData) => {
+      const canvas = canvasRef.current;
+      const context = canvas.getContext("2d");
+      const loadingTask = pdfjsLib.getDocument({ data: pdfData });
+      const pdf = await loadingTask.promise;
+      const page = await pdf.getPage(1);
+      const viewport = page.getViewport({ scale: 1.5 });
+
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport,
+      };
+      await page.render(renderContext).promise;
+
+      // Draw rectangles at icon positions
+      iconPositions.forEach((icon) => {
+        const rectWidth = 60; // Define the rectangle's width
+        const rectHeight = 30; // Define the rectangle's height
+        drawRotatedRectangle(
+          context,
+          icon.x,
+          icon.y,
+          rectWidth,
+          rectHeight,
+          icon.angle
+        );
+      });
+
+      renderSignature(context);
+    },
+    [iconPositions, renderSignature, drawRotatedRectangle]
+  );
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return; // Ensure the canvas exists before trying to get its context
-    const context = canvas.getContext("2d");
 
-    // Clear the canvas before redrawing
+    if (!canvas || !file) return;
+
+    const context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Redraw the background image
     if (previewUrl) {
       const img = new Image();
       img.src = previewUrl;
       img.onload = () => {
-        context.drawImage(img, 0, 0, canvas.width, canvas.height); // Draw the background
-
-        // Redraw all rectangles
-        rectangles.forEach((rect) => {
-          context.fillStyle = rect.color;
-          context.fillRect(rect.x, rect.y, rect.width, rect.height);
-          context.strokeStyle = "black";
-          context.lineWidth = 1;
-          context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+        context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        iconPositions.forEach((icon) => {
+          const rectWidth = 90;
+          const rectHeight = 30;
+          drawRotatedRectangle(
+            context,
+            icon.x,
+            icon.y,
+            rectWidth,
+            rectHeight,
+            icon.angle
+          );
         });
-
-        // Redraw the signature path
-        if (signaturePath.length > 0) {
-          context.strokeStyle = color; // Use the same color for the signature
-          context.lineWidth = 2; // Set signature stroke width
-          context.lineJoin = "round";
-          context.lineCap = "round";
-          context.beginPath();
-          context.moveTo(signaturePath[0].x, signaturePath[0].y);
-          signaturePath.forEach((point) => {
-            context.lineTo(point.x, point.y);
-          });
-          context.stroke();
-        }
+        renderSignature(context);
       };
     }
-  }, [rectangles, signaturePath, previewUrl, color]);
 
-  // Function to save the canvas as an image
-  function saveAsImage() {
+    if (file.type === "application/pdf") {
+      const fileReader = new FileReader();
+      fileReader.onload = async function (e) {
+        const pdfData = new Uint8Array(e.target.result);
+        await renderPDFOnCanvas(pdfData);
+      };
+      fileReader.readAsArrayBuffer(file);
+    }
+  }, [
+    iconPositions,
+    file,
+    previewUrl,
+    renderPDFOnCanvas,
+    renderSignature,
+    drawRotatedRectangle,
+  ]);
+
+  const saveAsImage = () => {
     const canvas = canvasRef.current;
     if (canvas) {
-      const context = canvas.getContext("2d");
-
-      // Redraw the background image
-      const img = new Image();
-      img.src = previewUrl; // Get the URL of the uploaded file
-      img.onload = () => {
-        context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-        context.drawImage(img, 0, 0, canvas.width, canvas.height); // Draw the background
-
-        // Redraw all rectangles
-        rectangles.forEach((rect) => {
-          context.fillStyle = rect.color;
-          context.fillRect(rect.x, rect.y, rect.width, rect.height);
-          context.strokeStyle = "black";
-          context.lineWidth = 1;
-          context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-        });
-
-        // Redraw the signature path
-        if (signaturePath.length > 0) {
-          context.strokeStyle = color; // Use the same color for the signature
-          context.lineWidth = 2; // Set signature stroke width
-          context.lineJoin = "round";
-          context.lineCap = "round";
-          context.beginPath();
-          context.moveTo(signaturePath[0].x, signaturePath[0].y);
-          signaturePath.forEach((point) => {
-            context.lineTo(point.x, point.y);
-          });
-          context.stroke();
-        }
-
-        // Create a download link
-        const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = "annotated-image.png";
-        link.click();
-      };
-    }
-  }
-
-  // Function to save annotated PDF
-  async function saveAsPDF() {
-    const pdfDoc = await PDFDocument.load(file);
-    const page = pdfDoc.getPages()[0]; // Assuming single page PDF for simplicity
-    const { width, height } = page.getSize();
-    const pdfCanvas = canvasRef.current;
-
-    if (pdfCanvas) {
-      const imageData = pdfCanvas.toDataURL();
-      const pngImage = await pdfDoc.embedPng(imageData);
-
-      // Adding image to PDF page
-      page.drawImage(pngImage, {
-        x: 0,
-        y: 0,
-        width: width,
-        height: height,
-      });
-
-      const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "annotated-pdf.pdf";
+      link.href = canvas.toDataURL("image/png");
+      link.download = "annotated-image.png";
       link.click();
+      setIsSaved(true);
     }
-  }
+  };
 
+  const saveAsPDF = async () => {
+    if (file && file.type === "application/pdf") {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(arrayBuffer);
+      const page = pdfDoc.getPages()[0];
+      const { width, height } = page.getSize();
+      const pdfCanvas = canvasRef.current;
+
+      if (pdfCanvas) {
+        const imageData = pdfCanvas.toDataURL();
+        const pngImage = await pdfDoc.embedPng(imageData);
+
+        page.drawImage(pngImage, { x: 0, y: 0, width, height });
+        const pdfBytes = await pdfDoc.save();
+        const blob = new Blob([pdfBytes], { type: "application/pdf" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "annotated-pdf.pdf";
+        link.click();
+        setIsSaved(true); // Mark file as saved for rendering signature
+      }
+    } else {
+      setError("The selected file is not a PDF.");
+    }
+  };
   return (
     <div className="upload-file">
+      <Helmet>
+        <title>Measurement System</title>
+      </Helmet>
       <Form className="btu-calculation-measure">
-        <h1 className="mt-4 mb-4">Measurement Service System</h1>
-        <Form.Label className="mb-4">
-          Upload file sample. <strong>*Supported: Hight Resolution Images & PDFs files. Recommended to place air conditioner above door in drawing.</strong>
+        <h1 className="mt-4 mb-4 title-measurement">Measurement Service System</h1>
+        <Form.Label className="mb-4 label-upload">
+          Upload file sample.{" "}
         </Form.Label>
+        <p className="warning"><strong>
+            *Supported: High Resolution Images & PDFs files. Recommended to
+            place air conditioner (rectangle) above door in drawing.
+          </strong></p>
+          <p className="warning"><strong>
+            *Click to rectangle (air conditioner) change its position on drawing (90').
+          </strong></p>
         <Form.Control
           type="file"
           onChange={handleChange}
           accept="image/*,application/pdf"
         />
         <Form.Group className="mt-3">
-          <Form.Label>Select Rectangle Color:</Form.Label>
+          <Form.Label>Select Icon Color:</Form.Label>
           <Form.Control
             type="color"
             value={color}
             onChange={(e) => setColor(e.target.value)}
-          />
-        </Form.Group>
-
-        <Form.Group className="mt-3">
-          <Form.Check
-            type="checkbox"
-            label="Enable Signature Drawing"
-            onChange={(e) => setIsDrawingSignature(e.target.checked)}
           />
         </Form.Group>
       </Form>
@@ -238,41 +268,30 @@ function UploadFile() {
       <h3 className="mt-4 mb-4">Preview of selected file:</h3>
       {previewUrl && (
         <div>
-          {file && file.type.startsWith("image/") && (
-            <div>
-              <canvas
-                ref={canvasRef}
-                width="1400"
-                height="1750"
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                style={{
-                  backgroundImage: `url(${previewUrl})`,
-                  backgroundSize: "cover",
-                }}
-              />
-              <button onClick={saveAsImage}>Save as Image</button>
-              <button onClick={saveAsPDF}>Save as PDF</button>
-            </div>
-          )}
-          {file && file.type === "application/pdf" && (
-            <canvas
-              ref={canvasRef}
-              width="1400"
-              height="1750"
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              style={{
-                backgroundImage: `url(${previewUrl})`,
-                backgroundSize: "cover",
-              }}
-            />
-          )}
+          <canvas
+            ref={canvasRef}
+            width="1400"
+            height="1750"
+            onClick={handleCanvasClick}
+            style={{
+              backgroundImage: `url(${previewUrl})`,
+              backgroundSize: "cover",
+            }}
+          />
         </div>
       )}
-           {error && <p style={{ color: "red" }}>Error: {error}</p>}{/* <i class="fal fa-air-conditioner"></i> */}
+      {file && file.type.startsWith("image/") && (
+        <Button variant="secondary" className="mt-2 mb-4" onClick={saveAsImage}>
+          Save as Image
+        </Button>
+      )}
+
+      {file && file.type === "application/pdf" && (
+        <Button variant="secondary" onClick={saveAsPDF} className="mt-2 mb-4">
+          Save as PDF
+        </Button>
+      )}
+      {error && <p className="text-danger">{error}</p>}
     </div>
   );
 }
