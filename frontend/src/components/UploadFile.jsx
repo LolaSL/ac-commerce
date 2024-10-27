@@ -43,11 +43,18 @@ function UploadFile() {
     });
 
     if (existingIconIndex !== -1) {
-      // If clicked on an existing icon, toggle its rotation
-      const newIcons = [...iconPositions];
-      newIcons[existingIconIndex].angle =
-        (newIcons[existingIconIndex].angle + Math.PI / 2) % (2 * Math.PI); // Rotate 90 degrees
-      setIconPositions(newIcons);
+      // If Shift key is held, remove the icon
+      if (e.shiftKey) {
+        setIconPositions((prevIcons) =>
+          prevIcons.filter((_, index) => index !== existingIconIndex)
+        );
+      } else {
+        // Otherwise, rotate the icon
+        const newIcons = [...iconPositions];
+        newIcons[existingIconIndex].angle =
+          (newIcons[existingIconIndex].angle + Math.PI / 2) % (2 * Math.PI); // Rotate 90 degrees
+        setIconPositions(newIcons);
+      }
     } else {
       // Otherwise, create a new icon
       setIconPositions((prevIcons) => [
@@ -56,6 +63,8 @@ function UploadFile() {
       ]);
     }
   };
+
+  //deletion by combination SHIFT+CLICK ON MOUSE
 
   const drawRotatedRectangle = useCallback(
     (context, x, y, width, height, angle) => {
@@ -75,10 +84,10 @@ function UploadFile() {
     (context) => {
       if (isSaved) {
         const text = "APPROVED BY AC-COMMERCE";
-        const textX = context.canvas.width - 520;
-        const textY = 60;
-        const padding = 10;
-        context.font = "bold 27px Arial";
+        const textX = context.canvas.width - 460;
+        const textY = 70;
+        const padding = 20;
+        context.font = "bold 25px Arial";
 
         const textMetrics = context.measureText(text);
         const textWidth = textMetrics.width;
@@ -87,6 +96,8 @@ function UploadFile() {
         context.strokeStyle = "grey";
         context.lineWidth = 2;
         context.fillStyle = "white";
+        context.shadowColor = "grey";
+        context.shadowBlur = 1;
 
         context.fillRect(
           textX - padding,
@@ -102,7 +113,7 @@ function UploadFile() {
           textHeight + padding
         );
 
-        context.fillStyle = "red";
+        context.fillStyle = "crimson";
         context.fillText(text, textX, textY);
 
         context.beginPath();
@@ -134,8 +145,8 @@ function UploadFile() {
 
       // Draw rectangles at icon positions
       iconPositions.forEach((icon) => {
-        const rectWidth = 60; // Define the rectangle's width
-        const rectHeight = 30; // Define the rectangle's height
+        const rectWidth = 80; // Define the rectangle's width
+        const rectHeight = 25; // Define the rectangle's height
         drawRotatedRectangle(
           context,
           icon.x,
@@ -239,18 +250,26 @@ function UploadFile() {
         <title>Measurement System</title>
       </Helmet>
       <Form className="btu-calculation-measure">
-        <h1 className="mt-4 mb-4 title-measurement">Measurement Service System</h1>
+        <h1 className="mt-4 mb-4 title-measurement">
+          Measurement Service System
+        </h1>
         <Form.Label className="mb-4 label-upload">
           Upload file sample.{" "}
         </Form.Label>
-        <p className="warning"><strong>
-            *Supported: High Resolution Images & PDFs files. Recommended to
-            place air conditioner (rectangle) above door in drawing.
-          </strong></p>
-          <p className="warning"><strong>
-            *Click to rectangle (air conditioner) change its position on drawing (90').
-          </strong></p>
+        <p className="warning fw-bold">
+          *Supported: High Resolution Images & PDFs files. Recommended to place
+          air conditioner (rectangle) above door in drawing.
+        </p>
+        <p className="warning fw-bold">
+          *Rotation Logic: When Shift is not held, the rectangle rotates by 90
+          degrees on each click.
+        </p>
+        <p className="warning fw-bold">
+          *Rectangle Removal: The Shift key is used as a modifier. When held,
+          clicking on an existing rectangle removes it.
+        </p>
         <Form.Control
+          className="mt-4"
           type="file"
           onChange={handleChange}
           accept="image/*,application/pdf"
