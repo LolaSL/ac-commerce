@@ -196,11 +196,11 @@ function BtuCalculator() {
 
   return (
     <div>
-      <Container className="btu-calculator-container mt-4 mb-4 rounded">
+      <Container className="btu-calculator-container mt-4 mb-4 rounded ">
         <Form className="btu-form">
           <h3 className="mt-4 mb-4 text-center title">BTU Calculator</h3>
           <Row className="my-4">
-            <Col xs={12} md={6} lg={4}>
+            <Col xs={12} md={6} lg={8}>
               <Form.Group controlId="measurementSystem">
                 <Form.Label className="fw-bold">Calculate Area </Form.Label>
                 <Form.Control
@@ -215,7 +215,7 @@ function BtuCalculator() {
             </Col>
           </Row>
           <Row className="my-4">
-            <Col xs={12} md={6} lg={4}>
+            <Col xs={12} md={6} lg={8}>
               <Form.Group controlId="height">
                 <Form.Label>
                   Height ({measurementSystem === "meters" ? "m" : "ft"}):
@@ -233,7 +233,7 @@ function BtuCalculator() {
             </Col>
           </Row>
           <Row className="my-4">
-            <Col xs={12} md={6} lg={4}>
+            <Col xs={12} md={6} lg={8}>
               <Form.Group controlId="width">
                 <Form.Label>
                   Width ({measurementSystem === "meters" ? "m" : "ft"}):
@@ -253,7 +253,7 @@ function BtuCalculator() {
           <Button
             variant="primary"
             onClick={calculateArea}
-            className="btn mt-2 mb-4"
+            className="btn-calculate mt-2 mb-4 w-70"
           >
             Calculate Area
           </Button>
@@ -265,7 +265,7 @@ function BtuCalculator() {
             </div>
           )}
           <Row>
-            <Col xs={12} md={6} lg={4}>
+            <Col xs={12} md={6} lg={4}  className="my-4">
               <Form.Group controlId="ceilingHeight">
                 <Form.Label>Ceiling Height (m):</Form.Label>
                 <Form.Control
@@ -276,7 +276,7 @@ function BtuCalculator() {
                 />
               </Form.Group>
             </Col>
-            <Col xs={12} md={6} lg={4}>
+            <Col xs={12} md={6} lg={4}  className="my-4">
               <Form.Group controlId="numberOfPeople">
                 <Form.Label>Number of People:</Form.Label>
                 <Form.Control
@@ -291,7 +291,7 @@ function BtuCalculator() {
 
           {rooms.map((room, index) => (
             <Row key={index} className="my-4">
-              <Col xs={12} md={6} lg={4}>
+              <Col xs={12} md={6} lg={4}  className="my-4">
                 <Form.Group controlId={`roomType-${index}`}>
                   <Form.Label>Room Type {index + 1}:</Form.Label>
                   <Form.Control
@@ -317,7 +317,7 @@ function BtuCalculator() {
                   </Form.Control>
                 </Form.Group>
               </Col>
-              <Col xs={12} md={6} lg={4}>
+              <Col xs={12} md={6} lg={4}  className="my-4">
                 <Form.Group controlId={`roomSize-${index}`}>
                   <Form.Label>Room Size ({measurementSystem}²):</Form.Label>
                   <Form.Control
@@ -332,23 +332,21 @@ function BtuCalculator() {
                   />
                 </Form.Group>
               </Col>
-              <Col md={2}>
                 <Button
                   variant="secondary"
                   onClick={() => removeRoom(index)}
-                  className="btn btn-delete mb-4 btn-sm"
+                  className="btn btn-sm mb-4  my-4"
                 >
                   <i className="fas fa-trash"></i>
                 </Button>
-              </Col>
             </Row>
           ))}
 
-          <Button variant="primary" onClick={addRoom} className="mb-3 mt-4">
+          <Button variant="primary" onClick={addRoom} className="btn-add mb-3 mt-4">
             Add Desired Room
           </Button>
-          <hr className="ms-2 mt-1 mb-5" style={{ width: "100%" }}></hr>
-          <h3 className="mb-3 mt-3 text-center">Insulation Condition</h3>
+          <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
+          <h3 className="mb-3 mt-3 ">Insulation Condition</h3>
           <Form.Check
             type="checkbox"
             label="Average"
@@ -370,8 +368,8 @@ function BtuCalculator() {
             checked={insulation.Poor}
             onChange={handleInsulationChange}
           />
-          <hr className="ms-2 mt-1 mb-5" style={{ width: "100%" }}></hr>
-          <h3 className="mb-3 mt-3 text-center">Sun Exposure</h3>
+          <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
+          <h3 className="mb-3 mt-3">Sun Exposure</h3>
           <Form.Check
             type="checkbox"
             label="Average"
@@ -393,8 +391,8 @@ function BtuCalculator() {
             checked={sunExposure.HeavilyShaded}
             onChange={handleSunExposureChange}
           />
-          <hr className="ms-2 mt-1 mb-5" style={{ width: "100%" }}></hr>
-          <h3 className="mb-3 mt-3 text-center">Climate</h3>
+          <hr className="line-hr ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
+          <h3 className="mb-3 mt-3">Climate</h3>
           <Form.Check
             type="checkbox"
             label="Average  (Warsaw)"
@@ -434,7 +432,7 @@ function BtuCalculator() {
           </Button>
 
           {error && (
-            <div className="error">
+            <div className="btu-error">
               {getError({ response: { data: { message: error } } })}
             </div>
           )}

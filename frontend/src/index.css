@@ -845,7 +845,7 @@ form.d-flex {
 
 .btu-calculator-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 2fr);
   grid-template-rows: auto;
   grid-gap: 20px;
   padding: 20px;
@@ -860,7 +860,7 @@ form.d-flex {
 }
 
 .btu-form {
-  display: contents;
+  display: block;
 }
 
 .btu-form h3 {
@@ -876,7 +876,6 @@ form.d-flex {
 .btu-form input,
 .btu-form button,
 .btu-form select {
-  width: 100%;
   padding: 9px;
   margin-top: 8px;
   border: 1px solid #ced4da;
@@ -897,19 +896,25 @@ form.d-flex {
 }
 
 .btn-sm {
-  height: 48%;
   background-color:#666699 ;
   align-items: center;
   color: white;
   border: none;
   cursor: pointer;
-  margin: 30px 0;
+  margin-bottom: 30px;
 }
 
 .btn-sm:hover {
   background-color: #c82333;
 }
-
+.btn-calculate, .btn-sm, .btn-add{
+  padding: 5px;
+  width: calc(67% - 10px);
+}
+.btu-error{
+  color: red;
+  font-weight: bold;
+}
 .btu-results .table {
   background-color: #ffffff;
   border-radius: 5px;
@@ -1036,3 +1041,14 @@ canvas {
     width: 500px;
   }
 }
+
+@media only screen and (max-width: 780px) {
+  .btn-calculate, .btn-sm, .btn-add{
+    padding: 6px;
+    width: calc(100% - 10px);
+  }
+  .line-hr{
+    width: 100%;
+  }
+  }
+

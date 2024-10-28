@@ -14,6 +14,7 @@ function UploadFile() {
   const [color, setColor] = useState("#9370DB");
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
+  const [comments, setComments] = useState([]); 
 
   const handleChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -22,6 +23,7 @@ function UploadFile() {
       setPreviewUrl(URL.createObjectURL(selectedFile));
       setError(null);
       setIconPositions([]);
+      setComments([]); // Reset comments when a new file is uploaded
     } else {
       setFile(null);
       setPreviewUrl(null);
@@ -31,8 +33,12 @@ function UploadFile() {
 
   const handleCanvasClick = (e) => {
     const { offsetX, offsetY } = e.nativeEvent;
+    const commentText = prompt("Enter your comment:");
 
-    // Check if the click is close to an existing icon
+    if (commentText) {
+      setComments([...comments, { text: commentText, x: offsetX + 50, y: offsetY - 30 }]);
+    }
+
     const existingIconIndex = iconPositions.findIndex((icon) => {
       return (
         offsetX >= icon.x - 30 &&
@@ -43,42 +49,54 @@ function UploadFile() {
     });
 
     if (existingIconIndex !== -1) {
-      // If Shift key is held, remove the icon
       if (e.shiftKey) {
         setIconPositions((prevIcons) =>
           prevIcons.filter((_, index) => index !== existingIconIndex)
         );
+        setComments((prevComments) =>
+          prevComments.filter((_, index) => index !== existingIconIndex)
+        );
       } else {
-        // Otherwise, rotate the icon
         const newIcons = [...iconPositions];
         newIcons[existingIconIndex].angle =
           (newIcons[existingIconIndex].angle + Math.PI / 2) % (2 * Math.PI); // Rotate 90 degrees
         setIconPositions(newIcons);
       }
     } else {
-      // Otherwise, create a new icon
       setIconPositions((prevIcons) => [
         ...prevIcons,
-        { x: offsetX, y: offsetY, angle: 0 }, // Start with 0 rotation
+        { x: offsetX, y: offsetY, angle: 0 },
       ]);
     }
   };
 
-  //deletion by combination SHIFT+CLICK ON MOUSE
+  const renderComments = useCallback(
+    (context) => {
+      context.font = "bold 16px Arial";
+      context.strokeStyle = "grey";
+        context.lineWidth = 2;
+        context.fillStyle = "deeppink";
+        context.shadowColor = "grey";
+        context.shadowBlur = 1;
+      comments.forEach((comment) => {
+        // Render comment text outside and near the rectangle
+        context.fillText(comment.text.toUpperCase(), comment.x, comment.y);
+      });
+    },
+    [comments]
+  );
 
   const drawRotatedRectangle = useCallback(
     (context, x, y, width, height, angle) => {
-      context.save(); // Save the current context
-      context.translate(x, y); // Move the origin to the rectangle's position
-      context.rotate(angle); // Rotate the context by the specified angle (in radians)
-
-      context.fillStyle = color; // Set the fill color
-      context.fillRect(-width / 2, -height / 2, width, height); // Draw the rectangle centered at the new origin
-
-      context.restore(); // Restore the context to its original state
+      context.save();
+      context.translate(x, y);
+      context.rotate(angle);
+      context.fillStyle = color;
+      context.fillRect(-width / 2, -height / 2, width, height);
+      context.restore();
     },
     [color]
-  ); // Add color as a dependency
+  );
 
   const renderSignature = useCallback(
     (context) => {
@@ -118,7 +136,6 @@ function UploadFile() {
 
         context.beginPath();
         context.setLineDash([]);
-
         context.stroke();
       }
     },
@@ -143,10 +160,9 @@ function UploadFile() {
       };
       await page.render(renderContext).promise;
 
-      // Draw rectangles at icon positions
       iconPositions.forEach((icon) => {
-        const rectWidth = 80; // Define the rectangle's width
-        const rectHeight = 25; // Define the rectangle's height
+        const rectWidth = 80;
+        const rectHeight = 25;
         drawRotatedRectangle(
           context,
           icon.x,
@@ -157,14 +173,14 @@ function UploadFile() {
         );
       });
 
+      renderComments(context);
       renderSignature(context);
     },
-    [iconPositions, renderSignature, drawRotatedRectangle]
+    [iconPositions, renderSignature, drawRotatedRectangle, renderComments]
   );
 
   useEffect(() => {
     const canvas = canvasRef.current;
-
     if (!canvas || !file) return;
 
     const context = canvas.getContext("2d");
@@ -187,6 +203,7 @@ function UploadFile() {
             icon.angle
           );
         });
+        renderComments(context);
         renderSignature(context);
       };
     }
@@ -204,6 +221,7 @@ function UploadFile() {
     file,
     previewUrl,
     renderPDFOnCanvas,
+    renderComments,
     renderSignature,
     drawRotatedRectangle,
   ]);
@@ -238,12 +256,13 @@ function UploadFile() {
         link.href = URL.createObjectURL(blob);
         link.download = "annotated-pdf.pdf";
         link.click();
-        setIsSaved(true); // Mark file as saved for rendering signature
+        setIsSaved(true); 
       }
     } else {
       setError("The selected file is not a PDF.");
     }
   };
+
   return (
     <div className="upload-file">
       <Helmet>
@@ -261,12 +280,10 @@ function UploadFile() {
           air conditioner (rectangle) above door in drawing.
         </p>
         <p className="warning fw-bold">
-          *Rotation Logic: When Shift is not held, the rectangle rotates by 90
-          degrees on each click.
+          *Rotate: <kbd>Click + Ok</kbd>
         </p>
         <p className="warning fw-bold">
-          *Rectangle Removal: The Shift key is used as a modifier. When held,
-          clicking on an existing rectangle removes it.
+          *Delete: <kbd>Shift + Click + Ok</kbd>
         </p>
         <Form.Control
           className="mt-4"
