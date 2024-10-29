@@ -14,7 +14,7 @@ function UploadFile() {
   const [color, setColor] = useState("#9370DB");
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
-  const [comments, setComments] = useState([]); 
+  const [comments, setComments] = useState([]);
 
   const handleChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -36,7 +36,10 @@ function UploadFile() {
     const commentText = prompt("Enter your comment:");
 
     if (commentText) {
-      setComments([...comments, { text: commentText, x: offsetX + 50, y: offsetY - 30 }]);
+      setComments([
+        ...comments,
+        { text: commentText, x: offsetX + 50, y: offsetY - 30 },
+      ]);
     }
 
     const existingIconIndex = iconPositions.findIndex((icon) => {
@@ -69,18 +72,75 @@ function UploadFile() {
       ]);
     }
   };
-
   const renderComments = useCallback(
     (context) => {
       context.font = "bold 16px Arial";
-      context.strokeStyle = "grey";
-        context.lineWidth = 2;
-        context.fillStyle = "deeppink";
-        context.shadowColor = "grey";
-        context.shadowBlur = 1;
+      context.lineWidth = 2;
+      context.shadowColor = "grey";
+      context.shadowBlur = 1;
+
+      const canvasWidth = context.canvas.width;
+      const canvasHeight = context.canvas.height;
+
       comments.forEach((comment) => {
-        // Render comment text outside and near the rectangle
-        context.fillText(comment.text.toUpperCase(), comment.x, comment.y);
+        const padding = 10;
+        const lineHeight = 20;
+        const maxWidth = 200;
+        const words = comment.text.split(" ");
+        let line = "";
+        let lines = [];
+        let yOffset = comment.y;
+
+        // Split comment text into lines based on maxWidth
+        words.forEach((word) => {
+          const testLine = line + word + " ";
+          const testWidth = context.measureText(testLine).width;
+          if (testWidth > maxWidth) {
+            lines.push(line);
+            line = word + " ";
+          } else {
+            line = testLine;
+          }
+        });
+        lines.push(line); // Add the last line
+
+        // Calculate dynamic frame width based on longest line width
+        const longestLineWidth = Math.max(
+          ...lines.map((line) => context.measureText(line).width)
+        );
+        const frameWidth = Math.min(longestLineWidth + padding * 2, maxWidth);
+        const textBlockHeight = lines.length * lineHeight;
+        const frameHeight = textBlockHeight + padding;
+
+        // Adjust the x and y positions to ensure the frame stays within canvas bounds
+        let adjustedX = comment.x;
+        let adjustedY = yOffset - textBlockHeight;
+
+        if (adjustedX + frameWidth > canvasWidth) {
+          adjustedX = canvasWidth - frameWidth - padding;
+        }
+
+        if (adjustedY + frameHeight > canvasHeight) {
+          adjustedY = canvasHeight - frameHeight - padding;
+        }
+
+        // Set a semi-transparent background color using RGBA with 50% opacity
+        context.fillStyle = "rgba(255, 255, 224, 0.5)";
+        context.fillRect(adjustedX, adjustedY, frameWidth, frameHeight);
+
+        // Draw the border around the rectangle
+        context.strokeStyle = "grey";
+        context.strokeRect(adjustedX, adjustedY, frameWidth, frameHeight);
+
+        // Set text color and render each line within the box
+        context.fillStyle = "deeppink";
+        lines.forEach((line, index) => {
+          context.fillText(
+            line,
+            adjustedX + padding,
+            adjustedY + (index + 1) * lineHeight
+          );
+        });
       });
     },
     [comments]
@@ -256,7 +316,7 @@ function UploadFile() {
         link.href = URL.createObjectURL(blob);
         link.download = "annotated-pdf.pdf";
         link.click();
-        setIsSaved(true); 
+        setIsSaved(true);
       }
     } else {
       setError("The selected file is not a PDF.");
@@ -280,10 +340,10 @@ function UploadFile() {
           air conditioner (rectangle) above door in drawing.
         </p>
         <p className="warning fw-bold">
-          *Rotate: <kbd>Click + Ok</kbd>
+          *Rotate rectangle: <kbd>Click + Ok</kbd>
         </p>
         <p className="warning fw-bold">
-          *Delete: <kbd>Shift + Click + Ok</kbd>
+          *Delete rectangle: <kbd>Shift + Click + Ok</kbd>
         </p>
         <Form.Control
           className="mt-4"
