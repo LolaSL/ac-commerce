@@ -247,7 +247,11 @@ button:hover {
   color: white;
   text-shadow: 1px 1px 1px black;
 }
-.navbar-brand p {
+.handwritten {
+  font-family: 'Cedarville Cursive', cursive;
+  font-size: 15px;
+  color:white;
+} {
   color: white;
   padding-top: 10px;
   text-shadow: 1px 1px 1px black;

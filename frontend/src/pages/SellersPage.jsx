@@ -32,6 +32,7 @@ const reducer = (state, action) => {
 };
 
 export default function SellersPage() {
+  
   const [{ loading, error, sellers }, dispatch] = useReducer(reducer, {
     sellers: [],
     loading: true,

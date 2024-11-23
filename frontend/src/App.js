@@ -121,7 +121,7 @@ function App() {
                 <Navbar.Brand><h3>
                   <span>AC</span> Commerce
                 </h3>
-                  <p>
+                  <p className="handwritten">
                     Cooling Solutions For Every Space
                   </p></Navbar.Brand>
               </LinkContainer>
@@ -159,64 +159,6 @@ function App() {
                       Sign In
                     </Link>
                   )}
-                  {/* {serviceProviderInfo ? (
-                    <NavDropdown title={serviceProviderInfo.name} id="provider-nav-dropdown">
-                      { serviceProviderInfo.isAdmin ? (
-                        <>
-                          <LinkContainer to="/sp-dashboard">
-                            <NavDropdown.Item>Dashboard</NavDropdown.Item>
-                          </LinkContainer>
-                          <LinkContainer to="/admin/manage-service-providers">
-                            <NavDropdown.Item>Manage Service Providers</NavDropdown.Item>
-                          </LinkContainer>
-                          <LinkContainer to="/admin/manage-projects">
-                            <NavDropdown.Item>Manage Projects</NavDropdown.Item>
-                          </LinkContainer>
-                          <LinkContainer to="/admin/reports">
-                            <NavDropdown.Item>Reports</NavDropdown.Item>
-                          </LinkContainer>
-                          <NavDropdown.Divider />
-                          <Link
-                            className="dropdown-item"
-                            to="#signout"
-                            onClick={signoutHandler}
-                          >
-                            Log Out
-                          </Link>
-                        </>
-                      ) : (
-                        <>
-                          <LinkContainer to={`/serviceprovider/profile/${serviceProviderInfo._id}`}>
-                            <NavDropdown.Item>Service Provider Profile</NavDropdown.Item>
-                          </LinkContainer>
-                          <LinkContainer to="/serviceprovider/projects">
-                            <NavDropdown.Item>Projects</NavDropdown.Item>
-                          </LinkContainer>
-                          <LinkContainer to="/serviceprovider/hours">
-                            <NavDropdown.Item>Hours</NavDropdown.Item>
-                          </LinkContainer>
-                          <LinkContainer to="/serviceprovider/earnings">
-                            <NavDropdown.Item>Earnings</NavDropdown.Item>
-                          </LinkContainer>
-                          <LinkContainer to="/serviceprovider/messages">
-                            <NavDropdown.Item>Messages</NavDropdown.Item>
-                          </LinkContainer>
-                          <NavDropdown.Divider />
-                          <Link
-                            className="dropdown-item"
-                            to="#signout"
-                            onClick={signoutHandler}
-                          >
-                            Log Out
-                          </Link>
-                        </>
-                      )}
-                    </NavDropdown>
-                  ) : (
-                    <Link className="nav-link" to="/serviceprovider/login">
-                      Service Provider Login
-                    </Link>
-                  )} */}
                     {serviceProviderInfo ? (
                     <NavDropdown title={serviceProviderInfo.name} id="provider-nav-dropdown">
                       <LinkContainer to="/serviceprovider/profile/:id">
@@ -297,7 +239,7 @@ function App() {
               </Nav.Item>
             ))}
             <Nav.Item className='search-title'>
-              <Link to="/uploadfile" onClick={checkoutHandler} className="link-sellers fw-bold">Services</Link>
+              <Link to="/uploadfile" onClick={checkoutHandler} className="link-sellers fw-bold">Get A Quote</Link>
             </Nav.Item>
             <Nav.Item className='search-title'>
               <Link to="/sellers" className="link-sellers fw-bold">Sellers</Link>

@@ -19,6 +19,7 @@
     "axios": "^1.7.3",
     "bootstrap": "^5.3.3",
     "fs-extra": "^11.2.0",
+    "jspdf": "^2.5.2",
     "opencv.js": "^1.2.1",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^4.4.168",

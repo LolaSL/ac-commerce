@@ -35,11 +35,11 @@ const AirConditioningPage = () => {
           on the technical label refer to how much heat the air conditioner can
           remove from their respective surrounding air..
         </p>{" "}
-        <div className="mb-4 text-center pb-4 ac-image h-50">
+        <div className="mb-4 text-center pb-4">
           <Image
             src="/images/btu3.jpg"
             alt="Air Conditioners BTU"
-            className="img"
+         className="responsive rounded"
           />{" "}
         </div>
         <p className="ac-calculation">
@@ -60,7 +60,7 @@ const AirConditioningPage = () => {
           <Image
             src="/images/ac2.jpg"
             alt="Air Conditioners work"
-            className="responsive"
+            className="responsive rounded"
           />
         </div>
         <p className="ac-conditioning">
@@ -128,11 +128,11 @@ const AirConditioningPage = () => {
         <h4 className="mb-4 ">
           Common problems with air conditioners and how to solve them?
         </h4>
-        <div className="mb-4 text-center ">
+        <div className="mb-4 text-center">
           <Image
-            src="/images/ac4.jpeg"
+            src="/images/ac4.jpg"
             alt="Air Conditioners problems"
-            className="responsive"
+            className="responsive rounded"
           />
         </div>
         <p className="ac-conditioning">

@@ -154,70 +154,76 @@ productRouter.get(
     const btu = query.btu || '';
     const rating = query.rating || '';
     const order = query.order || '';
+    const brand = query.brand || '';
     const searchQuery = query.query || '';
+
 
     const queryFilter =
       searchQuery && searchQuery !== 'all'
         ? {
-          name: {
-            $regex: searchQuery,
-            $options: 'i',
-          },
-        }
+            name: {
+              $regex: searchQuery,
+              $options: 'i', 
+            },
+          }
         : {};
-    const btuFilter = btu && btu !== 'all'
-      ? { btu: { $gte: Number(btu) } }
-      : {};
+
+
+    const btuFilter = btu && btu !== 'all' ? { btu: { $gte: Number(btu) } } : {};
     const categoryFilter = category && category !== 'all' ? { category } : {};
+    const brandFilter = brand && brand !== 'all' ? { brand } : {};
     const ratingFilter =
       rating && rating !== 'all'
         ? {
-          rating: {
-            $gte: Number(rating),
-          },
-        }
+            rating: {
+              $gte: Number(rating),
+            },
+          }
         : {};
     const priceFilter =
       price && price !== 'all'
         ? {
-          // 1-50
-          price: {
-            $gte: Number(price.split('-')[0]),
-            $lte: Number(price.split('-')[1]),
-          },
-        }
+            price: {
+              $gte: Number(price.split('-')[0]),
+              $lte: Number(price.split('-')[1]),
+            },
+          }
         : {};
-    const sortOrder =
-      order === 'featured'
-        ? { featured: -1 }
+    const sortOrder = order === 'brand' ? { brand: 1 } 
         : order === 'lowest'
-          ? { price: 1 }
-          : order === 'highest'
-            ? { price: -1 }
-            : order === 'toprated'
-              ? { rating: -1 }
-              : order === 'newest'
-                ? { createdAt: -1 }
-                : { _id: -1 };
+        ? { price: 1 }
+        : order === 'highest'
+        ? { price: -1 }
+        : order === 'toprated'
+        ? { rating: -1 }
+        : order === 'newest'
+        ? { createdAt: -1 }
+        : { _id: -1 };
+
 
     const products = await Product.find({
       ...queryFilter,
       ...categoryFilter,
       ...priceFilter,
       ...ratingFilter,
-      ...btuFilter
+      ...btuFilter,
+      ...brandFilter, 
     })
       .sort(sortOrder)
       .skip(pageSize * (page - 1))
       .limit(pageSize);
+
 
     const countProducts = await Product.countDocuments({
       ...queryFilter,
       ...categoryFilter,
       ...priceFilter,
       ...ratingFilter,
-      ...btuFilter
+      ...btuFilter,
+      ...brandFilter, 
     });
+
+ 
     res.send({
       products,
       countProducts,
@@ -234,6 +240,16 @@ productRouter.get(
     res.send(categories);
   })
 );
+productRouter.get('/brands', async (req, res) => {
+  try {
+  
+    const brands = await Product.distinct('brand');
+    res.json(brands); 
+  } catch (err) {
+
+    res.status(500).json({ message: 'Error fetching brands', error: err.message });
+  }
+});
 
 productRouter.get('/slug/:slug', async (req, res) => {
   const product = await Product.findOne({ slug: req.params.slug });
@@ -252,22 +268,22 @@ productRouter.get('/:id', async (req, res) => {
   }
 });
 
-// Update the '/btu/:btu' route to find the nearest product
+
 productRouter.get('/btu/:btu', async (req, res) => {
   try {
     const targetBTU = parseInt(req.params.btu);
 
-    // Find the closest matching product
+
     const product = await Product.findOne({
       btu: {
-        $gte: targetBTU,  // First, try to find a product with a BTU >= targetBTU
+        $gte: targetBTU,  
       }
     }).sort({ btu: 1 });
 
-    // If no product found with BTU >= targetBTU, find the closest lower BTU product
+ 
     if (!product) {
       const closestProduct = await Product.findOne({
-        btu: { $lte: targetBTU }  // Find the closest lower BTU product if none is found above
+        btu: { $lte: targetBTU }  
       }).sort({ btu: -1 });
 
       if (closestProduct) {

@@ -12,6 +12,7 @@ import MessageBox from "../components/MessageBox.jsx";
 import Button from "react-bootstrap/Button";
 import Product from "../components/Product.jsx";
 import { LinkContainer } from "react-router-bootstrap";
+import { useParams } from "react-router-dom";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -35,47 +36,23 @@ const reducer = (state, action) => {
 };
 
 const prices = [
-  {
-    name: "$1 to $50",
-    value: "1-50",
-  },
-  {
-    name: "$51 to $200",
-    value: "51-200",
-  },
-  {
-    name: "$201 to $1000",
-    value: "201-1000",
-  },
-  {
-    name: "$1001 to $10000",
-    value: "1001-10000",
-  },
+  { name: "$1 to $50", value: "1-50" },
+  { name: "$51 to $200", value: "51-200" },
+  { name: "$201 to $1000", value: "201-1000" },
+  { name: "$1001 to $10000", value: "1001-10000" },
 ];
 
 export const ratings = [
-  {
-    name: "4stars & up",
-    rating: 4,
-  },
-
-  {
-    name: "3stars & up",
-    rating: 3,
-  },
-
-  {
-    name: "2stars & up",
-    rating: 2,
-  },
-
-  {
-    name: "1stars & up",
-    rating: 1,
-  },
+  { name: "4stars & up", rating: 4 },
+  { name: "3stars & up", rating: 3 },
+  { name: "2stars & up", rating: 2 },
+  { name: "1stars & up", rating: 1 },
 ];
 
 export default function SearchPage() {
+
+  const { id } = useParams();
+  console.log(id)
   const navigate = useNavigate();
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
@@ -84,10 +61,11 @@ export default function SearchPage() {
   const price = sp.get("price") || "all";
   const rating = sp.get("rating") || "all";
   const btu = sp.get("btu") || "all";
+  const brand = sp.get("brand") || "all";
   const order = sp.get("order") || "newest";
   const page = sp.get("page") || 1;
 
-  const [{ loading, error, products, pages, countProducts }, dispatch] =
+  const [{ loading, error, products, pages, countProducts}, dispatch] =
     useReducer(reducer, {
       loading: true,
       error: "",
@@ -97,31 +75,37 @@ export default function SearchPage() {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(
-          `/api/products/search?page=${page}&query=${query}&category=${category}&price=${price}&rating=${rating}&btu=${btu}&order=${order}`
+          `/api/products/search?page=${page}&query=${query}&category=${category}&price=${price}&rating=${rating}&btu=${btu}&brand=${brand}&order=${order}`
         );
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({
           type: "FETCH_FAIL",
-          payload: getError(error),
+          payload: getError(err),  
         });
       }
     };
     fetchData();
-  }, [category, error, order, page, price, query, rating, btu]);
+  }, [category, order, page, price, query, rating, btu, brand]);
 
   const [categories, setCategories] = useState([]);
+  const [brandsList, setBrandsList] = useState([]); 
+
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchCategoriesAndBrands = async () => {
       try {
-        const { data } = await axios.get(`/api/products/categories`);
-        setCategories(data);
+        const [categoriesData, brandsData] = await Promise.all([
+          axios.get(`/api/products/categories`),
+          axios.get(`/api/products/brands`), 
+        ]);
+        setCategories(categoriesData.data);
+        setBrandsList(brandsData.data);  // Use the renamed state
       } catch (err) {
         toast.error(getError(err));
       }
     };
-    fetchCategories();
-  }, [dispatch]);
+    fetchCategoriesAndBrands();
+  }, []);  // Updated dependency to only run once when component mounts
 
   const getFilterUrl = (filter, skipPathname) => {
     const filterPage = filter.page || page;
@@ -130,11 +114,13 @@ export default function SearchPage() {
     const filterRating = filter.rating || rating;
     const filterPrice = filter.price || price;
     const filterBtu = filter.btu || btu;
+    const filterBrand = filter.brand || brand;
     const sortOrder = filter.order || order;
     return `${
       skipPathname ? "" : "/search?"
-    }category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&rating=${filterRating}&btu=${filterBtu}&order=${sortOrder}&page=${filterPage}`;
+    }category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&rating=${filterRating}&btu=${filterBtu}&brand=${filterBrand}&order=${sortOrder}&page=${filterPage}`;
   };
+
   return (
     <div>
       <Helmet>
@@ -189,6 +175,41 @@ export default function SearchPage() {
                 ))}
               </ul>
             </div>
+            {/* <div>
+  <h3>Brands</h3>
+  <ul>
+  {brandsList.map((brand, index) => (
+    <Link key={index} to={`/sellers`} className="text-secondary">
+      <li>{brand}</li> 
+    </Link>
+  ))}
+</ul>
+</div> */}
+            
+            <div>
+  <h3>Brands</h3>
+  <ul>
+    <li>
+      <Link
+        to={getFilterUrl({ brand: "all" })}
+        className={brand === "all" ? "text-bold" : ""}
+      >
+        Any
+      </Link>
+    </li>
+    {brandsList.map((b) => (
+      <li key={b}>
+        <Link
+          to={getFilterUrl({ brand: b })}
+          className={brand === b ? "text-bold" : ""}
+        >
+          {b}
+        </Link>
+      </li>
+    ))}
+  </ul>
+</div>
+
             <div>
               <h3>Customer Review</h3>
               <ul>
@@ -196,9 +217,7 @@ export default function SearchPage() {
                   <li key={r.name}>
                     <Link
                       to={getFilterUrl({ rating: r.rating })}
-                      className={
-                        `${r.rating}` === `${rating}` ? "text-bold" : ""
-                      }
+                      className={r.rating === rating ? "text-bold" : ""}
                     >
                       <Rating caption={" & up"} rating={r.rating}></Rating>
                     </Link>
@@ -234,6 +253,7 @@ export default function SearchPage() {
                       category !== "all" ||
                       rating !== "all" ||
                       btu !== "all" ||
+                      brand !== "all" ||
                       price !== "all" ? (
                         <Button
                           variant="light"
@@ -255,7 +275,8 @@ export default function SearchPage() {
                       <option value="newest">Newest Arrivals</option>
                       <option value="lowest">Price: Low to High</option>
                       <option value="highest">Price: High to Low</option>
-                      <option value="toprated">Customer Reviews</option>
+                          <option value="toprated">Customer Reviews</option>
+                          <option value="brand">Brand Name</option>
                     </select>
                   </Col>
                 </Row>
@@ -265,30 +286,23 @@ export default function SearchPage() {
 
                 <Row>
                   {products.map((product) => (
-                    <Col sm={6} lg={4} className="mb-3" key={product._id}>
+                    <Col sm={6} md={4} lg={3} key={product._id}>
                       <Product product={product}></Product>
                     </Col>
                   ))}
                 </Row>
-
                 <div>
                   {[...Array(pages).keys()].map((x) => (
-                    <LinkContainer
-                      key={x + 1}
-                      className="mx-1"
-                      to={{
-                        pathname: "/search",
-                        seacrh: getFilterUrl({ page: x + 1 }, true),
-                      }}
-                    >
-                      <Button
-                        className={Number(page) === x + 1 ? "text-bold" : ""}
-                        variant="light"
-                        id="button-search"
-                      >
-                        {x + 1}
-                      </Button>
-                    </LinkContainer>
+                <LinkContainer
+                key={x + 1}
+                className="d-inline-block m-1"
+                to={{
+                  pathname: '/search',
+                  search: getFilterUrl({ page: x + 1 }).split('?')[1],  // Split to get the query parameters
+                }}
+              >
+                <Button variant="light">{x + 1}</Button>
+              </LinkContainer>
                   ))}
                 </div>
               </>

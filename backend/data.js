@@ -19,7 +19,7 @@ const data = {
     ],
     products: [
         {
-            name: "10.000 BTU Window Air Conditioner",
+            name: "10000 BTU Window AC",
             slug: "btu-dual-inverter-air-conditioner",
             category: "Window Air Conditioner",
             image: "/images/p1.jpg",
@@ -28,14 +28,14 @@ const data = {
             brand: "LG",
             rating: 4.5,
             numReviews: 5,
-            description: "10.000 BTU, Estimated Cooling Area 450 sq. ft. Automatically restarts minutes after power is restored when a power failure occurs. LoDecibel™ Quiet Operation, LG ThinQ® Technology. The Clean Filter Alert lets you know when it’s time to clean. Simply remove the filter to wash. Make temperature adjustments and fan speed selection on the easy to use control panel or remote. This Dual Inverter ENERGY STAR® unit meets the EPA's standards for energy efficiency and savings.",
+            description: "10000 BTU, Estimated Cooling Area 450 sq. ft. Automatically restarts minutes after power is restored when a power failure occurs. LoDecibel™ Quiet Operation, LG ThinQ® Technology. The Clean Filter Alert lets you know when it’s time to clean. Simply remove the filter to wash. Make temperature adjustments and fan speed selection on the easy to use control panel or remote. This Dual Inverter ENERGY STAR® unit meets the EPA's standards for energy efficiency and savings.",
             features: "Energy Saving",
             btu: 10000,
-            areaCoverage: 450,
-            energyEfficiency: 12
+            areaCoverage: 16,
+            energyEfficiency: 9
         },
         {
-            name: "8.000 BTU Window Air Conditioner",
+            name: "8000 BTU Window AC",
             slug: "btu-window-air-conditioner",
             category: "Window Air Conditioner",
             image: "/images/p2.jpg",
@@ -44,15 +44,15 @@ const data = {
             brand: "LG",
             rating: 3.5,
             numReviews: 4,
-            description: "8.000 BTU, Estimated Cooling Area 350 Sq. Ft, 115 Volt, Window Installation Kit, Slide Out Washable Filter & Filter Alert, 2 Fan Speed Cooling, Energy Saver Function.",
+            description: "8000 BTU, Estimated Cooling Area 350 Sq. Ft, 115 Volt, Window Installation Kit, Slide Out Washable Filter & Filter Alert, 2 Fan Speed Cooling, Energy Saver Function.",
             features: "Remote Control",
             btu: 8000,
-            areaCoverage: 350,
-            energyEfficiency: 9
+            areaCoverage: 13,
+            energyEfficiency: 8
 
         },
         {
-            name: "12.000 BTU Window Air Conditioner",
+            name: "12000 BTU Window AC",
             slug: "btu-dual-inverter-smart-air-conditioner",
             category: "Window Air Conditioner",
             image: "/images/p3.jpg",
@@ -61,16 +61,15 @@ const data = {
             brand: "LG",
             rating: 0,
             numReviews: 1,
-            description: "12.000 BTU, Estimated Cooling Area 550 sq. ft., 115 Volt, ENERGY STAR Certified, Window Installation Kit, Slide-Out Washable Filter & Filter Alert, 3 Fan Speed Cooling.",
+            description: "12000 BTU, Estimated Cooling Area 550 sq. ft., 115 Volt, ENERGY STAR Certified, Window Installation Kit, Slide-Out Washable Filter & Filter Alert, 3 Fan Speed Cooling.",
             features: "Wi-Fi",
             btu: 12000,
-            areaCoverage: 550,
+            areaCoverage: 20,
             energyEfficiency: 10
 
         },
         {
-
-            name: "6.000 BTU Portable Air Conditioner",
+            name: "6000 BTU Portable AC",
             slug: "btu-portable-air-conditioner",
             category: "Portable Air Conditioner",
             image: "/images/p4.jpg",
@@ -79,16 +78,81 @@ const data = {
             brand: "LG",
             rating: 2.5,
             numReviews: 3,
-            description: "6.000 BTU (US DOE)/ 10,000 BTU (ASHRAE)*, 3-in-1 Operation (Cool/Dehumidify/Fan), Auto Swing Air Vent, Installation Kit Included, Estimated Cooling Area 250 Sq. Ft.",
+            description: "6000 BTU (US DOE)/ 10,000 BTU (ASHRAE)*, 3-in-1 Operation (Cool/Dehumidify/Fan), Auto Swing Air Vent, Installation Kit Included, Estimated Cooling Area 250 Sq. Ft.",
             features: "Remote Control",
             btu: 6000,
-            areaCoverage: 250,
+            areaCoverage: 10,
             energyEfficiency: 8
-        }
+        },
+        {
+            name: "18000 BTU Mini Split AC Heat Pump",
+            slug: "18000-btu-Mini-Split-air-conditioner",
+            category: "Mini Split AC",
+            image: "/images/p5.jpg",
+            price: 899.99,
+            countInStock: 4,
+            brand: "Senville",
+            rating: 4.5,
+            numReviews: 139,
+            description: "18000 BTU Mini Split Air Conditioner and Heat Pump System, LETO Series by Senville offers you an efficient way to heat and cool any room. 19 SEER (HE) High Efficiency Air Conditioner & Heater. With Built-In Heat Pump (Up to -15C / 5F) Suitable for Most Climates. DC Inverter Technology for Minimal Energy Consumption (Up to 48% Savings per Year). Built-In De-humidification Function, Fan and Turbo Function for Complete Climate Control. Recommended for rooms sized 700-1000 sq. ft. Requires professional installation.",
+            features: "Remote Control",
+            btu: 18000,
+            areaCoverage: 100,
+            energyEfficiency: 12
+        },
+        {
+            name: "24000 BTU Mini Split AC Heat Pump",
+            slug: "24000-btu-Mini-Split-air-conditioner",
+            category: "Mini Split AC",
+            image: "/images/p6.jpg",
+            price: 872.19,
+            countInStock: 4,
+            brand: "Towallmark",
+            rating: 3.5,
+            numReviews: 39,
+            description: "24000 Efficient Mini Split AC Cooling & Heating System: With 24,000 BTUs and a 23 SEER2 rating, 208/230V, our split air conditioner provides cooling and heating capabilities, ensuring optimal temperature control in any season. This pre-charged air conditioner unit features a ductless mini split inverter plus system with a heat pump and DC Inverter technology providing up to 30% power savings.",
+            features: "Remote Control",
+            btu: 24000,
+            areaCoverage: 139,
+            energyEfficiency: 13
+        },
+        {
+            name: "30000 BTU Mini Split AC Heat Pump",
+            slug: "30000-btu-Mini-Split-air-conditioner",
+            category: "Mini Split AC",
+            image: "/images/p7.jpg",
+            price: 6914,
+            countInStock: 1,
+            brand: "Daikin",
+            rating: 3,
+            numReviews: 30,
+            description: "Daikin 30000 Btu 20.2 Seer 4-Zone Mini Split Heat Pump System - 7K-7K-7K-9K - 5MXS48TVJU - (3) CTXS07LVJU - FTXS09LVJU",
+            features: "Remote Control",
+            btu: 30000,
+            areaCoverage: 180,
+            energyEfficiency: 14
+        },
+        {
+            name: "16000 BTU Mini Split AC Heat Pump ",
+            slug: "16000-btu-Mini-Split-air-conditioner",
+            category: "Mini Split AC",
+            image: "/images/p8.jpg",
+            price: 699.99,
+            countInStock: 2,
+            brand: "Costway",
+            rating: 2,
+            numReviews: 20,
+            description: " This 16000 BTU split-system AC unit has 5 working modes for you to choose from: auto, cool, dry, heat and fan mode. In addition, this split air conditioner also comes with 4 available fan speeds (low/medium/high/auto), sleep mode, ECO mode, iFEEL & turbo function to meet various needs.",
+            features: "Remote Control",
+            btu: 16000,
+            areaCoverage: 110,
+            energyEfficiency: 11
+        },
+
+
     ],
     sellers: [
         {
-
             name: 'LG',
             brand: "LG",
             rating: 4.5,
@@ -97,33 +161,61 @@ const data = {
             isAdmin: false,
         },
         {
-
-            name: 'Siemens',
-            brand: "Siemens",
-            info: "Siemens develops products that are specifically tailored to the needs and requirements of our OEM partners. Seimens offer customized concepts, products and system solutions for air conditioning, refrigeration, boilers, burners, district heating and alternative forms of energy. ",
+            name: 'Towalmark',
+            brand: "Towalmark",
+            info: "Experience superior comfort with our energy-efficient Split Air Conditioner, designed to deliver powerful cooling while minimizing electricity usage. Its quiet operation and sleek, modern design blend seamlessly into your living space, enhancing your home's ambiance. Offering flexible and customizable cooling options, advanced air filters for healthier air, and smart features like remote Wi-Fi control, our Split Air Conditioner is the perfect solution for maintaining an ideal indoor climate while reducing your environmental footprint.",
             rating: 4.0,
             numReviews: 13,
+            isAdmin: false,
+        },
+        {
+            name: 'Senville',
+            brand: "Senville",
+            info: "Senville.com is a leading retailer of mini split air conditioners and efficient heating and cooling products. Established in 2005, we've been helping to reduce energy consumption in home and businesses for over 10 years.",
+            rating: 3.0,
+            numReviews: 8,
+            isAdmin: false,
+        },
+        {
+            name: 'Daikin',
+            brand: "Daikin",
+            info: "The world's leading air conditioning manufacturer—Daikin. The source of the company's steady growth is its world-class air-conditioning technology developed in Japan. made possible high-quality air conditioners that responds to various user needs.",
+            rating: 3.0,
+            numReviews: 8,
+            isAdmin: false,
+        },
+        {
+            name: 'Costway',
+            brand: "Costway",
+            info: "Costway believes every home is versatile ── with multi-style possibilities. We embrace reinvention with the philosophy of going beyond the furniture itself. To delight our home lovers with not only space refreshing but life blooming. Marketplace.",
+            rating: 3.0,
+            numReviews: 8,
             isAdmin: false,
         },
     ],
     contacts: [
         {
-
-            fullName: 'Test One',
-            email: "test_one@example.com",
-            subject: "test one",
-            message: "Test ONE",
-
+            fullName: "Jane Smith",
+            mobilePhone: 9876543210,
+            email: "jane_smith@example.com",
+            country: "Canada",
+            serviceType: "Air Conditioning Installation",
+            equipmentAge: "1 year", // Corrected here
+            subject: "Inquiry about installation",
+            message: "I need a new air conditioner installed."
         },
         {
-
-            fullName: 'Test Two',
-            email: "test_two@example.com",
-            subject: "test Two",
-            message: "Test TWO",
-
-        },
+            fullName: "Jane Dow",
+            mobilePhone: 9876544435,
+            email: "jane-dow@example.com",
+            country: "USA",
+            serviceType: "Air Conditioning Service",
+            equipmentAge: "3 years", // Corrected here
+            subject: "Inquiry about service",
+            message: "I need a new air conditioner serviced."
+        }
     ],
+    
     serviceProviders: [
         {
             name: 'Test One Company',

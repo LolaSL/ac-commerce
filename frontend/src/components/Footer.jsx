@@ -11,7 +11,7 @@ const Footer = () => {
   const navigate = useNavigate();
   
   const handleNavigation = (e) => {
-    e.preventDefault();  // Prevent default anchor behavior
+    e.preventDefault();  
     navigate("/signin?redirect=/uploadfile");
   };
   return (
@@ -25,9 +25,9 @@ const Footer = () => {
              <h3>
                 <span>AC</span> Commerce
                 </h3>
-                <h5>
+                <p className="handwritten">
                 Cooling Solutions For Every Space
-                </h5>
+                </p>
               </div>
                  <p>  We believe in power of innovation to revolutionize the way we
                   control and manage our indoor.
@@ -67,7 +67,7 @@ const Footer = () => {
                 Sellers
               </NavLink>
               <NavLink className="text-white" href="/uploadfile" onClick={handleNavigation}>
-                Services
+              Get A Quote
               </NavLink>
            
               <NavLink className="text-white" href="/blogs">Blogs
