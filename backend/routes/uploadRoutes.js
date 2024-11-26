@@ -4,8 +4,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import streamifier from 'streamifier';
 import { isAdmin, isAuth } from '../utils.js';
 import Product from '../models/productModel.js';
-
-
+import { extractTextFromPDF  } from '../utils/pdfUtils.js'; 
 
 const upload = multer();
 
@@ -25,30 +24,44 @@ uploadRouter.post(
 
     const streamUpload = (req) => {
       return new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream((error, result) => {
-          if (result) {
-            resolve(result);
-          } else {
-            reject(error);
+        const stream = cloudinary.uploader.upload_stream(
+          { resource_type: 'auto' },
+          (error, result) => {
+            if (result) {
+              resolve(result);
+            } else {
+              reject(error);
+            }
           }
-        });
+        );
         streamifier.createReadStream(req.file.buffer).pipe(stream);
       });
     };
 
     const result = await streamUpload(req);
-
+  
+    if (req.file.mimetype === 'application/pdf') {
+      const text = await extractTextFromPDF(req.file.buffer); 
+  
+    }
+    
     const product = await Product.findById(req.body.productId);
     if (product) {
-      product.images.push(result.secure_url); 
-      await product.save(); 
+      product.documents.push({
+        url: result.secure_url,
+
+      });
+      await product.save();
     }
 
-    res.send(result);
+    res.send({
+      message: 'File uploaded successfully',
+      url: result.secure_url,
+     
+    });
   }
 );
 
-
-
-
 export default uploadRouter;
+
+

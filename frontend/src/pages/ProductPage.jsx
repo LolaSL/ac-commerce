@@ -268,7 +268,7 @@ function ProductPage() {
                 />
               </FloatingLabel>
 
-              <div className="mb-3">
+              <div className="mb-2">
                 <Button disabled={loadingCreateReview} type="submit">
                   Submit
                 </Button>
@@ -286,6 +286,50 @@ function ProductPage() {
           )}
         </div>
       </div>
+      {product.documents && product.documents.length > 0 && (
+        <div className="product-documents my-4">
+          <h2>Product Documents</h2>
+          <ul>
+            {product.documents.map((doc, index) => (
+              <li key={index} className="document my-4">
+                {doc.type === "HTML" ? (
+                  <a
+                    href={doc.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className=" btn-link"
+                  >
+                    {doc.description}
+                  </a>
+                ) : doc.type === "Image" ? (
+              
+                  <a
+                    href={doc.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-link"
+                  >
+                      <img
+                        className="mb-3"
+                      src={doc.url}
+                      alt={doc.description}
+                      style={{
+                        maxWidth: "200px",
+                        height: "auto",
+                        display: "block",
+                        marginTop: "10px",
+                      }}
+                    />
+                    {doc.description}
+                  </a>
+                ) : (
+                  <span>{doc.description}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

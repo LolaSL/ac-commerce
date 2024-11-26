@@ -150,13 +150,15 @@ userRouter.delete(
         res.status(400).send({ message: 'Can Not Delete Admin User' });
         return;
       }
-      await user.remove();
+      await user.deleteOne(); // Use deleteOne() instead of remove()
       res.send({ message: 'User Deleted' });
     } else {
       res.status(404).send({ message: 'User Not Found' });
     }
   })
 );
+
+
 userRouter.post(
   '/signin',
   expressAsyncHandler(async (req, res) => {

@@ -7,6 +7,7 @@ import { useContext } from "react";
 import { Store } from "../Store";
 import Image from "react-bootstrap/Image";
 
+
 function Product(props) {
   const { product } = props;
 
@@ -29,15 +30,20 @@ function Product(props) {
     });
   };
 
+
   return (
     <Card>
       <Link to={`/product/${product.slug}`}>
         <Image src={product.image} className="responsive" alt={product.name} />
       </Link>
       <Card.Body>
-        <Link to={`/product/${product.slug}`}className="card-title text-secondary" >
-          <Card.Title >{product.name}</Card.Title>
+        <Link
+          to={`/product/${product.slug}`}
+          className="card-title text-secondary"
+        >
+          <Card.Title>{product.name}</Card.Title>
         </Link>
+       
         <Rating rating={product.rating} numReviews={product.numReviews} />
         <Card.Text>${product.price}</Card.Text>
         {product.countInStock === 0 ? (
@@ -47,6 +53,7 @@ function Product(props) {
         ) : (
           <Button onClick={() => addToCartHandler(product)}>Add to cart</Button>
         )}
+        
       </Card.Body>
     </Card>
   );

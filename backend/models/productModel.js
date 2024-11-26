@@ -11,6 +11,14 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
+const documentSchema = new mongoose.Schema({
+  url: { type: String, required: true }, 
+  type: { type: String, enum: ['PDF', 'Image', 'Text', 'HTML'], default: 'PDF' }, 
+ description: String
+});
+
+
+
 const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, unique: true },
@@ -29,6 +37,7 @@ const productSchema = new mongoose.Schema(
     btu: { type: Number },
     areaCoverage: { type: Number },
     energyEfficiency: { type: Number },
+    documents: [documentSchema], 
   },
   {
     timestamps: true,

@@ -23,7 +23,7 @@ function UploadFile() {
       setPreviewUrl(URL.createObjectURL(selectedFile));
       setError(null);
       setIconPositions([]);
-      setComments([]); // Reset comments when a new file is uploaded
+      setComments([]); 
     } else {
       setFile(null);
       setPreviewUrl(null);
@@ -62,7 +62,7 @@ function UploadFile() {
       } else {
         const newIcons = [...iconPositions];
         newIcons[existingIconIndex].angle =
-          (newIcons[existingIconIndex].angle + Math.PI / 2) % (2 * Math.PI); // Rotate 90 degrees
+          (newIcons[existingIconIndex].angle + Math.PI / 2) % (2 * Math.PI); 
         setIconPositions(newIcons);
       }
     } else {
@@ -91,7 +91,6 @@ function UploadFile() {
         let lines = [];
         let yOffset = comment.y;
 
-        // Split comment text into lines based on maxWidth
         words.forEach((word) => {
           const testLine = line + word + " ";
           const testWidth = context.measureText(testLine).width;
@@ -102,9 +101,9 @@ function UploadFile() {
             line = testLine;
           }
         });
-        lines.push(line); // Add the last line
+        lines.push(line); 
 
-        // Calculate dynamic frame width based on longest line width
+
         const longestLineWidth = Math.max(
           ...lines.map((line) => context.measureText(line).width)
         );
@@ -112,7 +111,7 @@ function UploadFile() {
         const textBlockHeight = lines.length * lineHeight;
         const frameHeight = textBlockHeight + padding;
 
-        // Adjust the x and y positions to ensure the frame stays within canvas bounds
+
         let adjustedX = comment.x;
         let adjustedY = yOffset - textBlockHeight;
 
@@ -124,15 +123,15 @@ function UploadFile() {
           adjustedY = canvasHeight - frameHeight - padding;
         }
 
-        // Set a semi-transparent background color using RGBA with 50% opacity
+
         context.fillStyle = "rgba(255, 255, 224, 0.5)";
         context.fillRect(adjustedX, adjustedY, frameWidth, frameHeight);
 
-        // Draw the border around the rectangle
+
         context.strokeStyle = "grey";
         context.strokeRect(adjustedX, adjustedY, frameWidth, frameHeight);
 
-        // Set text color and render each line within the box
+
         context.fillStyle = "deeppink";
         lines.forEach((line, index) => {
           context.fillText(
@@ -393,3 +392,5 @@ function UploadFile() {
 }
 
 export default UploadFile;
+
+

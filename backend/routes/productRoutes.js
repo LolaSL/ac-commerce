@@ -29,21 +29,29 @@ productRouter.post(
       features: ['Heating', 'Cooling', 'Wi-Fi', 'Energy Saving', 'Remote Control', 'Led'],
       btu: 0,
       areaCoverage: 0,
-      energyEfficiency: 0
+      energyEfficiency: 0,
+      documents: [], // Initialize with an empty array
     });
     const product = await newProduct.save();
     res.send({ message: 'Product Created', product });
   })
 );
 
-
+// Update Product
 productRouter.put(
   '/:id',
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
     const productId = req.params.id;
-    const features = Array.isArray(req.body.features) ? req.body.features : req.body.features.split(',').map(feature => feature.trim());
+    const features = Array.isArray(req.body.features)
+      ? req.body.features
+      : req.body.features.split(',').map((feature) => feature.trim());
+    
+    const documents = Array.isArray(req.body.documents)
+      ? req.body.documents
+      : JSON.parse(req.body.documents || '[]'); // Handle JSON strings or empty defaults
+
     const product = await Product.findById(productId);
     if (product) {
       product.name = req.body.name;
@@ -59,8 +67,9 @@ productRouter.put(
       product.btu = req.body.btu;
       product.areaCoverage = req.body.areaCoverage;
       product.energyEfficiency = req.body.energyEfficiency;
+      product.documents = documents; // Update the documents array
       await product.save();
-      res.send({ message: 'Product Updated' });
+      res.send({ message: 'Product Updated', product });
     } else {
       res.status(404).send({ message: 'Product Not Found' });
     }
