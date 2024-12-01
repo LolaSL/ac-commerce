@@ -1,13 +1,13 @@
 import React, { useReducer } from "react";
 import { useEffect } from "react";
 import axios from "axios";
-// import logger from "use-reducer-logger";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Product from "../components/Product.jsx";
 import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox.jsx";
 import MessageBox from "../components/MessageBox.jsx";
+import { Link } from "react-router-dom";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -24,7 +24,6 @@ const reducer = (state, action) => {
 
 const HomePage = () => {
   const [{ loading, error, products }, dispatch] = useReducer(
-    // logger
     reducer,
     {
       products: [],
@@ -66,15 +65,22 @@ const HomePage = () => {
           <MessageBox variant="danger">{error}</MessageBox>
         ) : (
           <div>
-            <Row>
-              {products.map((product) => (
-                <Col key={product.slug} xs={12} md={4} lg={3} className="mb-3 product-item">
+          <Row className="gy-4"> 
+            {products.map((product) => (
+              <Col key={product.slug} xs={12} md={4} lg={3} className="product-item">
+                <div className="product-card">
                   <Product product={product}></Product>
-                </Col>
-              ))}
-            </Row>
-          </div>
+                </div>
+              </Col>
+            ))}
+          </Row>
+        </div>              
         )}
+      </div>
+      <div>
+        <Link to="/" className="link-blogs">
+          Back to Home
+        </Link>
       </div>
     </div>
   );

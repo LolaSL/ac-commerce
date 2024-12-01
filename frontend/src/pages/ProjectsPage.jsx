@@ -39,7 +39,7 @@ const Projects = () => {
 
         const { data } = await axios.get("/api/service-providers/projects", {
           headers: {
-            Authorization: `Bearer ${token}`, // Send the token with the request
+            Authorization: `Bearer ${token}`, 
           },
         });
 

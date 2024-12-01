@@ -1,6 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import Image from "react-bootstrap/Image";
+import { Link } from 'react-router-dom';
 
 const AirConditioningPage = () => {
   return (
@@ -33,11 +34,11 @@ const AirConditioningPage = () => {
           of an appliance, the greater the heating capacity. As for air
           conditioning in homes, even though ACs are meant to cool homes, BTUs
           on the technical label refer to how much heat the air conditioner can
-          remove from their respective surrounding air..
+          remove from their respective surrounding air.
         </p>{" "}
         <div className="mb-4 text-center pb-4">
           <Image
-            src="/images/btu3.jpg"
+            src="/images/btu3.png"
             alt="Air Conditioners BTU"
          className="responsive rounded"
           />{" "}
@@ -168,6 +169,11 @@ const AirConditioningPage = () => {
           tips should help.
         </p>
       </article>
+      <div>
+        <Link to="/" className="link-blogs">
+          Back to Home
+        </Link>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 
 export default function Banner2() {

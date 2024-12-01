@@ -1,5 +1,5 @@
 import express from 'express';
-import Contact from '../models/contactModel.js'; // Adjust the path as necessary
+import Contact from '../models/contactModel.js'; 
 
 const contactRouter = express.Router();
 
@@ -7,7 +7,6 @@ contactRouter.post('/', async (req, res) => {
   try {
     const { fullName, mobilePhone, email, country, serviceType, equipmentAge, subject, message } = req.body;
 
-    // Ensure all fields are present
     if (
       !fullName || 
       !mobilePhone || 
@@ -21,7 +20,6 @@ contactRouter.post('/', async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Create a new contact object
     const newContact = new Contact({
       fullName,
       mobilePhone,
@@ -33,10 +31,10 @@ contactRouter.post('/', async (req, res) => {
       message,
     });
 
-    // Save the contact data to MongoDB
+    
     const savedContact = await newContact.save();
 
-    // Respond with the saved contact data
+   
     res.status(201).json({
       message: 'Contact message sent successfully',
       contact: savedContact,

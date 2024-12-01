@@ -15,13 +15,13 @@ export default function Header() {
               src="/images/hero.jpg"
               alt="Hero"
             />
-            <p className="mb-2 featured-products">
+            <h3 className="mb-2 featured-products">
               {" "}
               engineered to provide unparalleled cooling perfomance, energy
               efficiency. Designed for your comfort. Maximize the comfort of
               your dwelling, office, condominium, or villa with our advanced air
               systems.
-            </p>
+            </h3>
             <div className="d-flex justify-content-center">
               <Link
                 to="/products"

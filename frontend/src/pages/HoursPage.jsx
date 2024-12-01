@@ -9,7 +9,7 @@ const reducer = (state, action) => {
     case "FETCH_REQUEST":
       return { ...state, loading: true };
     case "FETCH_SUCCESS":
-      return { ...state, earnings: action.payload, loading: false }; // Store earnings data
+      return { ...state, earnings: action.payload, loading: false }; 
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
     default:
@@ -22,7 +22,7 @@ const HoursPage = () => {
   const { serviceProviderInfo } = state;
 
   const [{ loading, error, earnings }, dispatch] = useReducer(reducer, {
-    earnings: [], // Initialize with an empty array for earnings
+    earnings: [],
     loading: true,
     error: "",
   });
@@ -42,8 +42,6 @@ const HoursPage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
-        // Log the API response
         console.log("API Response:", data);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (error) {

@@ -8,9 +8,8 @@ import ServiceProvider from '../models/serviceProviderModel.js';
 import jwt from 'jsonwebtoken';
 
 
-
-
 const serviceProviderRouter = express.Router();
+
 
 const generateToken = (serviceProvider) => {
   return jwt.sign(
@@ -27,6 +26,16 @@ const generateToken = (serviceProvider) => {
   );
 };
 
+
+export const isAdmin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(401).send({ message: 'Not authorized as an admin' });
+  }
+};
+
+
 export const isAuth = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (token) {
@@ -34,7 +43,7 @@ export const isAuth = (req, res, next) => {
       if (err) {
         return res.status(401).send({ message: 'Invalid Token' });
       }
-      req.serviceProvider = decoded;
+      req.user = decoded;
       next();
     });
   } else {
@@ -42,46 +51,95 @@ export const isAuth = (req, res, next) => {
   }
 };
 
+
 export const isServiceProvider = (req, res, next) => {
-  if (req.serviceProvider) {
+  if (req.user) {
     next();
   } else {
     res.status(403).send({ message: 'Service Provider access required' });
   }
 };
 
-serviceProviderRouter.get('/', async (req, res) => {
-  try {
-    const serviceProviders = await ServiceProvider.aggregate([
-      {
-        $lookup: {
-          from: 'projects', 
-          localField: '_id',
-          foreignField: 'serviceProvider',
-          as: 'projects',
+
+serviceProviderRouter.get('/', isAuth, isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const { query } = req;
+      const page = parseInt(query.page) || 1;
+      const pageSize = parseInt(query.pageSize) || 10;
+
+
+      const skip = (page - 1) * pageSize;
+      const limit = pageSize;
+
+
+      const serviceProviders = await ServiceProvider.aggregate([
+        {
+          $lookup: {
+            from: 'projects',
+            localField: '_id',
+            foreignField: 'serviceProvider',
+            as: 'projects',
+          },
         },
-      },
-      {
-        $lookup: {
-          from: 'earnings',
-          localField: '_id',
-          foreignField: 'serviceProvider',
-          as: 'earnings',
+        {
+          $lookup: {
+            from: 'earnings',
+            localField: '_id',
+            foreignField: 'serviceProvider',
+            as: 'earnings',
+          },
         },
-      },
-      {
-        $addFields: {
-          completedProjects: { $size: { $filter: { input: '$projects', as: 'project', cond: { $eq: ['$$project.status', 'Completed'] } } } },
-          inProgressProjects: { $size: { $filter: { input: '$projects', as: 'project', cond: { $eq: ['$$project.status', 'In Progress'] } } } },
-          totalEarnings: { $sum: '$earnings.amount' },
+        {
+          $addFields: {
+            completedProjects: {
+              $size: {
+                $filter: {
+                  input: '$projects',
+                  as: 'project',
+                  cond: { $eq: ['$$project.status', 'Completed'] },
+                },
+              },
+            },
+            inProgressProjects: {
+              $size: {
+                $filter: {
+                  input: '$projects',
+                  as: 'project',
+                  cond: { $eq: ['$$project.status', 'In Progress'] },
+                },
+              },
+            },
+            totalEarnings: { $sum: '$earnings.amount' },
+          },
         },
-      },
-    ]);
-    res.send(serviceProviders);
-  } catch (err) {
-    res.status(500).send({ message: 'Error fetching service providers', error: err.message });
-  }
-});
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
+        },
+      ]);
+
+
+      const totalServiceProviders = await ServiceProvider.countDocuments();
+
+
+      const totalPages = Math.ceil(totalServiceProviders / pageSize);
+
+      res.send({
+        serviceProviders,
+        currentPage: page,
+        totalPages,
+        totalServiceProviders,
+      });
+    } catch (err) {
+      res.status(500).send({ message: 'Error fetching service providers', error: err.message });
+    }
+  })
+);
+
+
 
 
 serviceProviderRouter.get(
@@ -107,6 +165,17 @@ serviceProviderRouter.get(
 
 
 
+
+
+serviceProviderRouter.get('/projects/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const projects = await ProjectModel.find({ serviceProviderId: id });
+    res.json(projects);
+  } catch (err) {
+    res.status(500).send({ message: 'Error fetching projects' });
+  }
+});
 
 serviceProviderRouter.get(
   '/messages',
@@ -182,6 +251,22 @@ serviceProviderRouter.get(
 );
 
 
+
+
+serviceProviderRouter.get('/hours/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const totalHours = await HoursModel.aggregate([
+      { $match: { serviceProviderId: id } },
+      { $group: { _id: null, totalHours: { $sum: "$hours" } } },
+    ]);
+    res.json(totalHours[0] || { totalHours: 0 });
+  } catch (err) {
+    res.status(500).send({ message: 'Error fetching hours' });
+  }
+});
+
+
 serviceProviderRouter.post(
   '/register',
   expressAsyncHandler(async (req, res) => {
@@ -238,6 +323,90 @@ serviceProviderRouter.post(
     }
   })
 );
+
+
+serviceProviderRouter.get("/:id", isAuth, expressAsyncHandler(async (req, res) => {
+  try {
+    const serviceProvider = await ServiceProvider.findById(req.params.id);
+    if (serviceProvider) {
+      res.json(serviceProvider);
+    } else {
+      res.status(404).send({ message: "Service Provider not found" });
+    }
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+})
+);
+
+
+// PUT route to update service provider details
+serviceProviderRouter.put("/:id", isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+  try {
+    const serviceProvider = await ServiceProvider.findById(req.params.id);
+    if (serviceProvider) {
+      serviceProvider.name = req.body.name || serviceProvider.name;
+      serviceProvider.typeOfProvider =
+        req.body.typeOfProvider || serviceProvider.typeOfProvider;
+      serviceProvider.experience = req.body.experience || serviceProvider.experience;
+      serviceProvider.email = req.body.email || serviceProvider.email;
+
+      if (req.body.password) {
+        serviceProvider.password = bcrypt.hashSync(req.body.password, 10);
+      }
+
+      const updatedServiceProvider = await serviceProvider.save();
+      res.json({
+        _id: updatedServiceProvider._id,
+        name: updatedServiceProvider.name,
+        typeOfProvider: updatedServiceProvider.typeOfProvider,
+        experience: updatedServiceProvider.experience,
+        email: updatedServiceProvider.email,
+        token: generateToken(updatedServiceProvider),
+      });
+    } else {
+      res.status(404).send({ message: "Service Provider not found" });
+    }
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+})
+);
+
+serviceProviderRouter.put('/edit/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+  const serviceProviderId = req.params.id;
+  const { earnings, workingHours, project } = req.body;
+
+  try {
+    // Find the service provider by ID
+    const serviceProvider = await ServiceProvider.findById(serviceProviderId);
+    if (!serviceProvider) {
+      return res.status(404).send({ message: 'Service Provider not found' });
+    }
+
+    // Allow admins to update any service provider's data
+    // Allow users to update only their own data (if their _id matches)
+    if (serviceProvider._id.toString() !== req.user._id.toString() && !req.user.isAdmin) {
+      return res.status(403).send({ message: 'You are not authorized to update this profile' });
+    }
+
+    // Update the service provider's information
+    serviceProvider.earnings = earnings || serviceProvider.earnings;
+    serviceProvider.workingHours = workingHours || serviceProvider.workingHours;
+    serviceProvider.project = project || serviceProvider.project;
+
+    // Save the updated service provider
+    const updatedServiceProvider = await serviceProvider.save();
+
+    res.status(200).send({
+      message: 'Service Provider updated successfully',
+      serviceProvider: updatedServiceProvider,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Error updating Service Provider' });
+  }
+}));
 
 
 serviceProviderRouter.put(

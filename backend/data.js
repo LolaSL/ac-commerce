@@ -35,13 +35,13 @@ const data = {
       energyEfficiency: 9,
       documents: [
         {
-          url: "https://www.lg.com/us/support/product/lg-LW1016ER.AC1AUSB",
-          type: "HTML",
+          url: "https://www.lg.com/us/support/products/documents/LWHD6500.pdf",
+          type: "PDF",
           description: "User Manual for LG 10000 BTU Window AC",
         },
         {
-          url: "https://www.lg.com/us/air-conditioners/lg-lw1022ivsm-window-air-conditioner",
-          type: "HTML",
+          url: "https://www.lg.com/us/support/products/documents/LW1016ER%20Spec%20Sheet.pdf",
+          type: "PDF",
           description: "Technical Specifications for LG 10000 BTU Window AC",
         },
         {
@@ -68,13 +68,13 @@ const data = {
       energyEfficiency: 8,
       documents: [
         {
-          url: "https://www.lg.com/us/support/product/lg-LW8016ER.AC1AUSB",
-          type: "HTML",
+          url: "https://www.lg.com/us/support/products/documents/LWHD6500.pdf",
+          type: "PDF",
           description: "User Manual for LG 8000 BTU Window AC",
         },
         {
-          url: "https://www.lg.com/us/air-conditioners/lg-lw8024r-window-air-conditioner",
-          type: "HTML",
+          url: "https://www.lg.com/us/support/products/documents/LW8016ER%20Spec%20Sheet.pdf",
+          type: "PDF",
           description: "Technical Specifications for LG 8000 BTU Window AC",
         },
         {
@@ -102,13 +102,13 @@ const data = {
       energyEfficiency: 10,
       documents: [
         {
-          url: "https://www.lg.com/us/support/product/lg-LW1216ER.AC1AUSB",
-          type: "HTML",
+          url: "https://www.lg.com/us/support/products/documents/LWHD6500.pdf",
+          type: "PDF",
           description: "User Manual for LG 12000 BTU Window AC",
         },
         {
-          url: "https://www.lg.com/us/air-conditioners/lg-lw1216er-window-air-conditioner",
-          type: "HTML",
+          url: "https://www.lg.com/us/support/products/documents/LW1216ER%20Spec%20Sheet.pdf",
+          type: "PDF",
           description: "Technical Specifications for LG 12000 BTU Window AC",
         },
         {
@@ -136,13 +136,13 @@ const data = {
       energyEfficiency: 8,
       documents: [
         {
-          url: "https://www.lg.com/us/support/product/lg-LP0621WSR.AWYAOSH",
-          type: "HTML",
+          url: "https://dzrf1tezfwb3j.cloudfront.net/uploads/ADocuments/90281/2020-03-04-16-43-52.pdf",
+          type: "PDF",
           description: "User Manual for LG 6000 BTU Portable AC",
         },
         {
-          url: "https://www.lg.com/us/air-conditioners/lg-lw6024rsmx-window-air-conditioner",
-          type: "HTML",
+          url: "https://www.lg.com/us/support/products/documents/LP0621WSR%20Spec%20Sheet.pdf",
+          type: "PDF",
           description: "Technical Specifications for LG 6000 BTU Portable AC",
         },
         {
@@ -153,7 +153,7 @@ const data = {
       ],
     },
     {
-      name: "18000 BTU Mini Split AC Heat Pump",
+      name: "18000 BTU Mini Split AC",
       slug: "18000-btu-Mini-Split-air-conditioner",
       category: "Mini Split AC",
       image: "/images/p5.jpg",
@@ -169,14 +169,14 @@ const data = {
       energyEfficiency: 12,
       documents: [
         {
-          url: "https://manuals.plus/senville/18000-btu-floor-mounted-mini-split-heat-pump-manual",
-          type: "HTML",
+          url: "https://senville.com/content/manuals/downloads/leto-series-installation-manual.pdf",
+          type: "PDF",
           description: "User Manual for Senville 18000 BTU Mini Split AC",
         },
         {
           url: "https://senville.com/18000-btu-mini-split-air-conditioner-sena-18hf/",
-          type: "HTML",
-          description: "Technical Specifications for Senville 18000 BTU Mini Split AC",
+          type: "PDF",
+          description: "https://senville.com/content/manuals/senville-catalog.pdf",
         },
         {
           url: "https://manuals.plus/wp-content/uploads/2023/08/Senville-18000-BTU-Floor-Mounted-Mini-Split-Heat-Pump-Instruction-Manual_2.png",
@@ -186,7 +186,7 @@ const data = {
       ],
     },
     {
-      name: "24000 BTU Mini Split AC Heat Pump",
+      name: "24000 BTU Mini Split AC",
       slug: "24000-btu-Mini-Split-air-conditioner",
       category: "Mini Split AC",
       image: "/images/p6.jpg",
@@ -202,13 +202,13 @@ const data = {
       energyEfficiency: 13,
       documents: [
         {
-          url: "https://www.walmart.com/ip/Towallmark-24000-BTU-Mini-Split-AC-19-SEER2-Wall-Mounted-AC-Heat-Pump-Installation-Kits-Ductless-Inverter-Split-System-Air-Conditioners-Cools-450-Sq/5120904200",
-          type: "HTML",
+          url: "https://www.tcl.com/content/dam/brandsite/region/australia/AU_Mediacenter/download/Multi-Split-User-Manual.pdf",
+          type: "PDF",
           description: "User Manual for Towallmark 24000 BTU  Mini Split AC",
         },
         {
-          url: "https://www.thermospace.com/ductless_split/24000_btu_mini_inverter_split_air_conditioner.php",
-          type: "HTML",
+          url: "https://www.tcl.com/content/dam/brandsite/region/australia/AU_Mediacenter/download/Multi-Split-User-Manual.pdf",
+          type: "PDF",
           description: "Technical Specifications for Towallmark 24000 BTU  Mini Split AC",
         },
         {
@@ -219,7 +219,7 @@ const data = {
       ],
     },
     {
-      name: "30000 BTU Mini Split AC Heat Pump",
+      name: "30000 BTU Mini Split AC",
       slug: "30000-btu-Mini-Split-air-conditioner",
       category: "Mini Split AC",
       image: "/images/p7.jpg",
@@ -235,13 +235,13 @@ const data = {
       energyEfficiency: 14,
       documents: [
         {
-          url: "https://daikincomfort.com/operationmanuals",
-          type: "HTML",
+          url: "https://www.daikinac.com/content/assets/DOC/OperationManuals/FTXS15_18_24LVJU%20Operation%20Manual.pdf",
+          type: "PDF",
           description: "User Manual for Daikin 30000 BTU  Mini Split AC",
         },
         {
-          url: "https://theductco.com/products/daikin-30000-btu-16-seer-mini-split-concealed-duct-and-heat-pump-fbq30pvju-single-zone-p-series",
-          type: "HTML",
+          url: "https://www.daikinac.com/content/assets/Uploads/PM-DCRG.pdf",
+          type: "PDF",
           description: "Technical Specifications for Daikin 30000 BTU  Mini Split AC",
         },
         {
@@ -252,30 +252,30 @@ const data = {
       ],
     },
     {
-      name: "16000 BTU Mini Split AC Heat Pump ",
-      slug: "16000-btu-Mini-Split-air-conditioner",
-      category: "Mini Split AC",
+      name: "16000 BTU Mini Split AC",
+      slug: "16000-btu-Wind-Free-air-conditioner",
+      category: "Wind-Free TM Cooling",
       image: "/images/p8.jpg",
-      price: 699.99,
+      price: 812.99,
       countInStock: 2,
-      brand: "Costway",
+      brand: "Samsung",
       rating: 2,
       numReviews: 20,
-      description: " This 16000 BTU split-system AC unit has 5 working modes for you to choose from: auto, cool, dry, heat and fan mode. In addition, this split air conditioner also comes with 4 available fan speeds (low/medium/high/auto), sleep mode, ECO mode, iFEEL & turbo function to meet various needs.",
-      features: "Remote Control",
+      description: " This 16000 BTU  Mini Split AC Wind-Free TM Cooling 5460-22860 BTU. Heating 4435-27300 BTU. Sound Levels insite 58 db outside 65 db. Inverter, Wi-Fi, Wind-Free™ Cooling, AI Comfort, Motion Sensor",
+      features: "Smart Things",
       btu: 16000,
-      areaCoverage: 110,
-      energyEfficiency: 11,
+      areaCoverage: 225,
+      energyEfficiency: 15.45,
       documents: [
         {
-          url: "https://manuals.plus/costway/16000btu-4-portable-hot-and-cold-air-conditioner-manual",
-          type: "HTML",
-          description: "User Manual for Costway 16000 BTU  Mini Split AC",
+          url: "https://refripartes.com/uploads/User%20Manual%20-%20Excellence%20Wind%20Free.pdf",
+          type: "PDF",
+          description: "User Manual for Samsung 16000 BTU  Mini Split AC",
         },
         {
-          url: "https://www.walmart.com/tp/16000-btu-air-conditioners",
-          type: "HTML",
-          description: "Technical Specifications for Costway 16000 BTU  Mini Split AC",
+          url: "https://images.samsung.com/is/content/samsung/assets/ph/home-appliances/ebrochures/Room_and_System_Air_Conditioner_Digital_Brochure.pdf",
+          type: "PDF",
+          description: "Technical Specifications for Samsung 16000 BTU  Mini Split AC",
         },
         {
           url: "https://blog.costway.com/zb_users/upload/2024/07/202407221721717298238921.png",
@@ -320,9 +320,9 @@ const data = {
       isAdmin: false,
     },
     {
-      name: 'Costway',
-      brand: "Costway",
-      info: "Costway believes every home is versatile ── with multi-style possibilities. We embrace reinvention with the philosophy of going beyond the furniture itself. To delight our home lovers with not only space refreshing but life blooming. Marketplace.",
+      name: 'Samsung',
+      brand: "Samsung",
+      info: "Samsung provides the best air conditioner systems to fit your needs, whether you are seeking solutions for your home or for a business. WindFree™ technology creates a much gentler and milder air flow, evenly distributed through tens of thousands of micro holes, so people in the room feel almost no wind - just comfortable cool air",
       rating: 3.0,
       numReviews: 8,
       isAdmin: false,
@@ -345,7 +345,7 @@ const data = {
       email: "jane-dow@example.com",
       country: "USA",
       serviceType: "Air Conditioning Service",
-      equipmentAge: "3 years", // Corrected here
+      equipmentAge: "3 years", 
       subject: "Inquiry about service",
       message: "I need a new air conditioner serviced."
     }
@@ -565,11 +565,12 @@ const data = {
       image: "https://accessglobal.media.clients.ellingtoncms.com/uploads/froala_editor/images/1728398396923.png",
     },
     {
-      title: "How to Choose the Best Air Conditioner for Your Needs.",
+      title: "How to Choose The Best Air Conditioner For Your Needs.",
       slug: "how-to-choose-the-best-ac",
       content: "<article><h2>Factors to Consider Before Buying an Air Conditioner </h2>  <p >When choosing an air conditioner, there are many factors you need to  consider making the best decision for your home. The first thing you  need to do is figure out the room's square footage or rooms you want to cool. Once you know that, you can start looking at air conditioners and their cooling capacity.  </p>  <p > The next thing you need to consider is the air conditioner's features.  Some air conditioners come with features like timers and remote  controls. These can be very helpful if you want to be able to cool  your home before you get home from work or turn off the air  conditioner when you leave for vacation. Finally, you need to think  about your budget. Air conditioners can range from a few hundred  dollars to several thousand dollars. Therefore, it's crucial to find  an air conditioner that fits your needs and budget. Installing an air  conditioner can be a great way to improve the comfort of your home. But, it's essential to do your research and choose the right air  conditioner for your home. By considering the size of the room, the  features you want, and your budget, you can find an air conditioner  that will keep you cool all summer long.   </p></article>", "shortDescription": "Factors you need to consider making the best decision.",
       image: "https://www.sandersandjohnson.com/wp-content/uploads/house_cut.png",
-    },
+    }
+
 
 
   ]

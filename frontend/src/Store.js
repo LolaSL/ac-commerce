@@ -5,7 +5,6 @@ export const Store = createContext();
 const initialState = {
   fullBox: false,
   
-  // Retrieve userInfo and serviceProviderInfo from localStorage
   userInfo: localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo'))
     : null,
@@ -14,7 +13,7 @@ const initialState = {
     ? JSON.parse(localStorage.getItem('serviceProviderInfo'))
     : null,
 
-  // Cart details
+ 
   cart: {
     shippingAddress: localStorage.getItem('shippingAddress')
       ? JSON.parse(localStorage.getItem('shippingAddress'))
@@ -60,7 +59,6 @@ function reducer(state, action) {
     case 'CART_CLEAR':
       return { ...state, cart: { ...state.cart, cartItems: [] } };
 
-    // Handle service provider registration and login
     case 'SERVICE_PROVIDER_REGISTER':
       localStorage.setItem('serviceProviderInfo', JSON.stringify(action.payload));
       return { ...state, serviceProviderInfo: action.payload };
@@ -74,7 +72,6 @@ function reducer(state, action) {
       return { ...state, userInfo: action.payload };
 
     case 'USER_SIGNOUT':
-      // Clear both user and service provider info upon signout
       localStorage.removeItem('userInfo');
       localStorage.removeItem('serviceProviderInfo');
       localStorage.removeItem('cartItems');

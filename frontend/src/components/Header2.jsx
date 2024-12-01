@@ -19,7 +19,7 @@ export default function Header2() {
               Stay cool and comfortable all year and revolutionize climate with
               our advanced air conditioning.
             </h3>
-            <h3 className="header1-info  mb-3 ">
+            <h3 className="header1-info1  mb-3 ">
               Designed for Optimal Perfomance: Our Air conditioning units
               combine cutting-edge technology, energy efficiency and
               unparalleled cooling carabilities to transform your living or

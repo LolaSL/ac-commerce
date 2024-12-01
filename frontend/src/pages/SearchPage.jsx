@@ -50,9 +50,8 @@ export const ratings = [
 ];
 
 export default function SearchPage() {
-
   const { id } = useParams();
-  console.log(id)
+  console.log(id);
   const navigate = useNavigate();
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
@@ -65,7 +64,7 @@ export default function SearchPage() {
   const order = sp.get("order") || "newest";
   const page = sp.get("page") || 1;
 
-  const [{ loading, error, products, pages, countProducts}, dispatch] =
+  const [{ loading, error, products, pages, countProducts }, dispatch] =
     useReducer(reducer, {
       loading: true,
       error: "",
@@ -81,7 +80,7 @@ export default function SearchPage() {
       } catch (err) {
         dispatch({
           type: "FETCH_FAIL",
-          payload: getError(err),  
+          payload: getError(err),
         });
       }
     };
@@ -89,23 +88,23 @@ export default function SearchPage() {
   }, [category, order, page, price, query, rating, btu, brand]);
 
   const [categories, setCategories] = useState([]);
-  const [brandsList, setBrandsList] = useState([]); 
+  const [brandsList, setBrandsList] = useState([]);
 
   useEffect(() => {
     const fetchCategoriesAndBrands = async () => {
       try {
         const [categoriesData, brandsData] = await Promise.all([
           axios.get(`/api/products/categories`),
-          axios.get(`/api/products/brands`), 
+          axios.get(`/api/products/brands`),
         ]);
         setCategories(categoriesData.data);
-        setBrandsList(brandsData.data);  // Use the renamed state
+        setBrandsList(brandsData.data); // Use the renamed state
       } catch (err) {
         toast.error(getError(err));
       }
     };
     fetchCategoriesAndBrands();
-  }, []);  // Updated dependency to only run once when component mounts
+  }, []); 
 
   const getFilterUrl = (filter, skipPathname) => {
     const filterPage = filter.page || page;
@@ -175,41 +174,29 @@ export default function SearchPage() {
                 ))}
               </ul>
             </div>
-            {/* <div>
-  <h3>Brands</h3>
-  <ul>
-  {brandsList.map((brand, index) => (
-    <Link key={index} to={`/sellers`} className="text-secondary">
-      <li>{brand}</li> 
-    </Link>
-  ))}
-</ul>
-</div> */}
-            
             <div>
-  <h3>Brands</h3>
-  <ul>
-    <li>
-      <Link
-        to={getFilterUrl({ brand: "all" })}
-        className={brand === "all" ? "text-bold" : ""}
-      >
-        Any
-      </Link>
-    </li>
-    {brandsList.map((b) => (
-      <li key={b}>
-        <Link
-          to={getFilterUrl({ brand: b })}
-          className={brand === b ? "text-bold" : ""}
-        >
-          {b}
-        </Link>
-      </li>
-    ))}
-  </ul>
-</div>
-
+              <h3>Brands</h3>
+              <ul>
+                <li>
+                  <Link
+                    to={getFilterUrl({ brand: "all" })}
+                    className={brand === "all" ? "text-bold" : ""}
+                  >
+                    Any
+                  </Link>
+                </li>
+                {brandsList.map((b) => (
+                  <li key={b}>
+                    <Link
+                      to={getFilterUrl({ brand: b })}
+                      className={brand === b ? "text-bold" : ""}
+                    >
+                      {b}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
             <div>
               <h3>Customer Review</h3>
               <ul>
@@ -275,34 +262,35 @@ export default function SearchPage() {
                       <option value="newest">Newest Arrivals</option>
                       <option value="lowest">Price: Low to High</option>
                       <option value="highest">Price: High to Low</option>
-                          <option value="toprated">Customer Reviews</option>
-                          <option value="brand">Brand Name</option>
+                      <option value="toprated">Customer Reviews</option>
+                      <option value="brand">Brand Name</option>
                     </select>
                   </Col>
                 </Row>
                 {products.length === 0 && (
                   <MessageBox>No Product Found</MessageBox>
                 )}
-
-                <Row>
+                <Row className="gy-4">
                   {products.map((product) => (
-                    <Col sm={6} md={4} lg={3} key={product._id}>
-                      <Product product={product}></Product>
+                    <Col xs={12} md={4} lg={3} key={product._id}  className="product-item">
+                      <div className="product-card">
+                        <Product product={product}></Product>
+                      </div>
                     </Col>
                   ))}
                 </Row>
                 <div>
                   {[...Array(pages).keys()].map((x) => (
-                <LinkContainer
-                key={x + 1}
-                className="d-inline-block m-1"
-                to={{
-                  pathname: '/search',
-                  search: getFilterUrl({ page: x + 1 }).split('?')[1],  // Split to get the query parameters
-                }}
-              >
-                <Button variant="light">{x + 1}</Button>
-              </LinkContainer>
+                    <LinkContainer
+                      key={x + 1}
+                      className="d-inline-block m-1"
+                      to={{
+                        pathname: "/search",
+                        search: getFilterUrl({ page: x + 1 }).split("?")[1], 
+                      }}
+                    >
+                      <Button variant="light">{x + 1}</Button>
+                    </LinkContainer>
                   ))}
                 </div>
               </>

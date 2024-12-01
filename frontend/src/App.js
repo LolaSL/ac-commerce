@@ -58,8 +58,9 @@ import BlogDetails from './pages/BlogDetails.jsx';
 import BlogEditPage from './pages/BlogEditPage.jsx';
 import BlogsPage from './pages/Blogspage.jsx';
 import MessagesPage from './pages/MessagesPage.jsx';
-import ServiceProvidersEdit from './pages/ServiceProvidersEdit.jsx';
-
+import ServiceProvidersList from './pages/ServiceProvidersList.jsx';
+import Users from './components/Users';
+import ServiceProviders from './components/ServiceProviders';
 
 
 function App() {
@@ -159,7 +160,7 @@ function App() {
                       Sign In
                     </Link>
                   )}
-                    {serviceProviderInfo ? (
+                  {serviceProviderInfo ? (
                     <NavDropdown title={serviceProviderInfo.name} id="provider-nav-dropdown">
                       <LinkContainer to="/serviceprovider/profile/:id">
                         <NavDropdown.Item>Service Provider Profile</NavDropdown.Item>
@@ -206,6 +207,9 @@ function App() {
                       </LinkContainer>
                       <LinkContainer to="/admin/sellers">
                         <NavDropdown.Item>Sellers</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer  to="/admin/manage-service-providers">
+                        <NavDropdown.Item>Service Providers</NavDropdown.Item>
                       </LinkContainer>
                       <LinkContainer to="/admin/blogs-list">
                         <NavDropdown.Item>Blogs</NavDropdown.Item>
@@ -255,7 +259,7 @@ function App() {
           </Nav>
         </div>
         <main>
-          <Container className="mt-3">
+          <Container fluid className="no-padding">
             <Routes>
               <Route path="/product/:slug" element={<ProductPage />} />
               <Route path="/products" element={<FeaturedPage />} />
@@ -329,7 +333,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-            
+
               <Route path="/placeorder" element={<PlaceOrderPage />} />
               <Route
                 path="/order/:id"
@@ -351,20 +355,28 @@ function App() {
                 path="/shipping"
                 element={<ShippingAddressPage />}
               ></Route>
-                <Route
-                path="/admin/manage-service-providers"
-                element={
-                  <AdminRoute>
-                    <ServiceProvidersEdit />
-                  </AdminRoute>
-                }
-              ></Route>
               <Route path="/payment" element={<PaymentMethodPage />}></Route>
               <Route
                 path="/admin/dashboard"
                 element={
                   <AdminRoute>
                     <DashboardPage />
+                  </AdminRoute>
+                }
+              ></Route>
+              <Route
+                path="/admin/dashboard/users"
+                element={
+                  <AdminRoute>
+                    <Users />
+                  </AdminRoute>
+                }
+              ></Route>
+              <Route
+                path="/admin/dashboard/service-providers"
+                element={
+                  <AdminRoute>
+                    <ServiceProviders />
                   </AdminRoute>
                 }
               ></Route>
@@ -397,6 +409,14 @@ function App() {
                 element={
                   <AdminRoute>
                     <SellersListPage />
+                  </AdminRoute>
+                }
+              ></Route>
+                   <Route
+                path="/admin/manage-service-providers"
+                element={
+                  <AdminRoute>
+                    <ServiceProvidersList />
                   </AdminRoute>
                 }
               ></Route>

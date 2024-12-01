@@ -8,7 +8,6 @@ const blogRouter = express.Router();
 
 const PAGE_SIZE = 10;
 
-// Middleware to validate ObjectId
 const validateObjectId = (req, res, next) => {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -17,7 +16,7 @@ const validateObjectId = (req, res, next) => {
     next();
 };
 
-// Get all blogs
+
 blogRouter.get(
     '/',
     expressAsyncHandler(async (req, res) => {
@@ -30,7 +29,7 @@ blogRouter.get(
     })
 );
 
-// Get single blog by ID
+
 blogRouter.get(
     '/:id',
     validateObjectId,
@@ -47,7 +46,7 @@ blogRouter.get(
     })
 );
 
-// Create new blog
+
 blogRouter.post(
     '/',
     isAuth,
@@ -65,7 +64,7 @@ blogRouter.post(
     })
 );
 
-// Update a blog
+
 blogRouter.put(
     '/:id',
     isAuth,
@@ -87,7 +86,7 @@ blogRouter.put(
     })
 );
 
-// Delete a blog
+
 blogRouter.delete(
     '/:id',
     isAuth,
@@ -104,7 +103,7 @@ blogRouter.delete(
     })
 );
 
-// Get blogs for admin with pagination
+
 blogRouter.get('/admin/blogs-list', async (req, res) => {
     const page = parseInt(req.query.page) || 1; 
     const limit = 10;

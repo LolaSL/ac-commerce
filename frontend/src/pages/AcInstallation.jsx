@@ -1,6 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import Image from "react-bootstrap/Image";
+import { Link } from "react-router-dom";
 
 const AcInstallation = () => {
   return (
@@ -121,6 +122,11 @@ const AcInstallation = () => {
           reduce operational costs.
         </p>
       </article>
+      <div>
+        <Link to="/" className="link-blogs">
+          Back to Home
+        </Link>
+      </div>
     </div>
   );
 };

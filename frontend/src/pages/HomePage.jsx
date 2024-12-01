@@ -5,6 +5,7 @@ import Banner1 from "../components/Banner1.jsx";
 import Hero from "../components/Hero.jsx";
 import Header1 from "../components/Header1.jsx";
 import Header2 from "../components/Header2.jsx";
+import Banner2 from "../components/Banner2.jsx";
 
 
 const HomePage = () => {
@@ -17,6 +18,7 @@ const HomePage = () => {
       <Header1 />
       <Banner />
       <Banner1 />
+      <Banner2/>
       <Hero />
     </div>
   );

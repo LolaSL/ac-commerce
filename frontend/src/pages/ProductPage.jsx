@@ -292,7 +292,7 @@ function ProductPage() {
           <ul>
             {product.documents.map((doc, index) => (
               <li key={index} className="document my-4">
-                {doc.type === "HTML" ? (
+                {doc.type === "PDF" ? (
                   <a
                     href={doc.url}
                     target="_blank"

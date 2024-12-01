@@ -42,7 +42,7 @@ const ServiceProviderRegister = () => {
       });
       ctxDispatch({ type: "SERVICE_PROVIDER_REGISTER", payload: data });
       localStorage.setItem("serviceProviderInfo", JSON.stringify(data));
-      navigate(redirect || "/"); // Redirect after registration
+      navigate(redirect || "/"); 
     } catch (err) {
       toast.error(getError(err));
     }

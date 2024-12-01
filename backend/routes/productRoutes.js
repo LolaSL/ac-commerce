@@ -26,18 +26,17 @@ productRouter.post(
       rating: 0,
       numReviews: 0,
       description: 'sample description',
-      features: ['Heating', 'Cooling', 'Wi-Fi', 'Energy Saving', 'Remote Control', 'Led'],
+      features: ['Heating', 'Cooling', 'Wi-Fi', 'Energy Saving', 'Remote Control', 'Led', 'Smart Things'],
       btu: 0,
       areaCoverage: 0,
       energyEfficiency: 0,
-      documents: [], // Initialize with an empty array
+      documents: [], 
     });
     const product = await newProduct.save();
     res.send({ message: 'Product Created', product });
   })
 );
 
-// Update Product
 productRouter.put(
   '/:id',
   isAuth,
@@ -50,7 +49,7 @@ productRouter.put(
     
     const documents = Array.isArray(req.body.documents)
       ? req.body.documents
-      : JSON.parse(req.body.documents || '[]'); // Handle JSON strings or empty defaults
+      : JSON.parse(req.body.documents || '[]'); 
 
     const product = await Product.findById(productId);
     if (product) {
@@ -67,7 +66,7 @@ productRouter.put(
       product.btu = req.body.btu;
       product.areaCoverage = req.body.areaCoverage;
       product.energyEfficiency = req.body.energyEfficiency;
-      product.documents = documents; // Update the documents array
+      product.documents = documents; 
       await product.save();
       res.send({ message: 'Product Updated', product });
     } else {

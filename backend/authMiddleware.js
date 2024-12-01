@@ -6,20 +6,18 @@ const protectServiceProvider = async (req, res, next) => {
 
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
-      // Extract token from Authorization header
+  
       token = req.headers.authorization.split(' ')[1];
 
-      // Verify the token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // Find the service provider by ID and exclude the password field
       req.serviceProvider = await ServiceProvider.findById(decoded.id).select('-password');
 
       if (!req.serviceProvider) {
         return res.status(404).json({ message: 'Service provider not found' });
       }
 
-      next(); // Proceed to the next middleware or route handler
+      next(); 
     } catch (error) {
       res.status(401).json({ message: 'Not authorized, token failed' });
     }
