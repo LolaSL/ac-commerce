@@ -126,7 +126,7 @@ function ProductPage() {
   ) : error ? (
     <MessageBox variant="danger">{error}</MessageBox>
   ) : (
-    <div>
+    <div className="p-4">
       <Row>
         <Col md={6}>
           <Image

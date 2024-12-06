@@ -12,6 +12,7 @@ import serviceProviderRouter from './routes/serviceProviderRoutes.js'
 import blogRouter from './routes/blogRoutes.js'
 import cors from 'cors';
 
+
 dotenv.config();
 
 mongoose.connect(process.env.MONGODB_URI).then(() => {

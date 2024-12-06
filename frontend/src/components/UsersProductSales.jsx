@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useReducer, useCallback } from "react";
 import Chart from "react-google-charts";
 import axios from "axios";
-import { Store } from "../Store";
-import { getError } from "../utils";
-import LoadingBox from "../components/LoadingBox.jsx";
-import MessageBox from "../components/MessageBox.jsx";
+import { Store } from "../Store.js";
+import { getError } from "../utils.js";
+import LoadingBox from "./LoadingBox.jsx";
+import MessageBox from "./MessageBox.jsx";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
@@ -37,11 +37,9 @@ const reducer = (state, action) => {
   }
 };
 
-export default function Users() {
-  const [{ loading, summary, currentPage, totalPages, error }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+export default function UsersProductSales() {
+  const [{ loading, summary, currentPage, totalPages, error }, dispatch] =
+    useReducer(reducer, initialState);
 
   const { state } = useContext(Store);
   const { userInfo } = state;
@@ -122,7 +120,7 @@ export default function Users() {
       <Helmet>
         <title>Users Dashboard</title>
       </Helmet>
-      <h1  className="mb-4 mt-4">Users Dashboard</h1>
+      <h1 className="mb-4 mt-4">Users Product Sales Dashboard</h1>
 
       {loading ? (
         <LoadingBox />
@@ -139,13 +137,19 @@ export default function Users() {
 
           {renderChart(
             "Sales",
-            [["Date", "Sales"], ...summary.dailyOrders.map((x) => [x._id, x.sales])],
+            [
+              ["Date", "Sales"],
+              ...summary.dailyOrders.map((x) => [x._id, x.sales]),
+            ],
             "AreaChart"
           )}
 
           {renderChart(
             "Categories",
-            [["Category", "Products"], ...summary.productCategories.map((x) => [x._id, x.count])],
+            [
+              ["Category", "Products"],
+              ...summary.productCategories.map((x) => [x._id, x.count]),
+            ],
             "PieChart"
           )}
 

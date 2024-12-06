@@ -138,7 +138,7 @@ export default function BlogsPage() {
   };
 
   return (
-    <div>
+    <div className="p-4">
       <Row>
         <Col>
           <h1>Blogs</h1>

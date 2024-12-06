@@ -7,6 +7,8 @@ import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import { Store } from "../Store";
 import { getError } from "../utils";
+// import { useNavigate } from 'react-router-dom';
+
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -45,7 +47,7 @@ export default function ServiceProvidersList() {
     loading: true,
     error: "",
   });
-
+  // const navigate = useNavigate();
   const { state } = useContext(Store);
   const { serviceProviderInfo } = state;
   console.log("serviceProviderInfo:", serviceProviderInfo);
@@ -53,9 +55,9 @@ export default function ServiceProvidersList() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/service-providers`, {
+        const { data } = await axios.get(`/api/service-providers/`, {
           headers: {
-            Authorization: `Bearer ${serviceProviderInfo?.token || ""}`,
+            headers: { Authorization: `Bearer ${serviceProviderInfo?.token || ''}` },
           },
         });
         dispatch({ type: "FETCH_SUCCESS", payload: data });
@@ -72,6 +74,28 @@ export default function ServiceProvidersList() {
       fetchData();
     }
   }, [serviceProviderInfo, successDelete]);
+  useEffect(() => {
+    if (!serviceProviderInfo) {
+      // navigate('/login'); // Adjust the path based on your app's routing
+    } else {
+      const fetchData = async () => {
+        try {
+          dispatch({ type: "FETCH_REQUEST" });
+          const { data } = await axios.get(`/api/service-providers`, {
+            headers: { Authorization: `Bearer ${serviceProviderInfo.token}` },
+          });
+          dispatch({ type: "FETCH_SUCCESS", payload: data });
+        } catch (err) {
+          dispatch({
+            type: "FETCH_FAIL",
+            payload: getError(err),
+          });
+        }
+      };
+      fetchData();
+    }
+  }, [ serviceProviderInfo]);
+  
 
   const deleteHandler = async (user) => {
     if (window.confirm("Are you sure to delete?")) {

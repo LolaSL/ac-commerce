@@ -43,7 +43,7 @@ export default function SignInPage() {
   }, [navigate, redirect, userInfo]);
 
   return (
-    <Container className="small-container">
+    <Container className="small-container p-4">
       <Helmet>
         <title>Sign In</title>
       </Helmet>

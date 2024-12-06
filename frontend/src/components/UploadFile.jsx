@@ -3,11 +3,13 @@ import { Button, Form } from "react-bootstrap";
 import { PDFDocument } from "pdf-lib";
 import * as pdfjsLib from "pdfjs-dist/webpack.mjs";
 import { Helmet } from "react-helmet-async";
+import axios from "axios";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js`;
 
 function UploadFile() {
   const [file, setFile] = useState(null);
+  const [result, setResult] = useState("");
   const [error, setError] = useState(null);
   const [iconPositions, setIconPositions] = useState([]);
   const canvasRef = useRef(null);
@@ -23,7 +25,7 @@ function UploadFile() {
       setPreviewUrl(URL.createObjectURL(selectedFile));
       setError(null);
       setIconPositions([]);
-      setComments([]); 
+      setComments([]);
     } else {
       setFile(null);
       setPreviewUrl(null);
@@ -62,7 +64,7 @@ function UploadFile() {
       } else {
         const newIcons = [...iconPositions];
         newIcons[existingIconIndex].angle =
-          (newIcons[existingIconIndex].angle + Math.PI / 2) % (2 * Math.PI); 
+          (newIcons[existingIconIndex].angle + Math.PI / 2) % (2 * Math.PI);
         setIconPositions(newIcons);
       }
     } else {
@@ -101,8 +103,7 @@ function UploadFile() {
             line = testLine;
           }
         });
-        lines.push(line); 
-
+        lines.push(line);
 
         const longestLineWidth = Math.max(
           ...lines.map((line) => context.measureText(line).width)
@@ -110,7 +111,6 @@ function UploadFile() {
         const frameWidth = Math.min(longestLineWidth + padding * 2, maxWidth);
         const textBlockHeight = lines.length * lineHeight;
         const frameHeight = textBlockHeight + padding;
-
 
         let adjustedX = comment.x;
         let adjustedY = yOffset - textBlockHeight;
@@ -123,14 +123,11 @@ function UploadFile() {
           adjustedY = canvasHeight - frameHeight - padding;
         }
 
-
         context.fillStyle = "rgba(255, 255, 224, 0.5)";
         context.fillRect(adjustedX, adjustedY, frameWidth, frameHeight);
 
-
         context.strokeStyle = "grey";
         context.strokeRect(adjustedX, adjustedY, frameWidth, frameHeight);
-
 
         context.fillStyle = "deeppink";
         lines.forEach((line, index) => {
@@ -322,12 +319,36 @@ function UploadFile() {
     }
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+  
+    const formData = new FormData();
+    formData.append("image", file);
+  
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setResult(response.data.extracted_text); // Set the extracted text to the state
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      alert("Failed to process file.");
+    }
+  };
+  
+
   return (
     <div className="upload-file">
       <Helmet>
         <title>Measurement System</title>
       </Helmet>
-      <Form className="btu-calculation-measure">
+      <Form className="btu-calculation-measure" onSubmit={handleSubmit}>
         <h1 className="mt-4 mb-4 title-measurement">
           Measurement Service System
         </h1>
@@ -387,6 +408,12 @@ function UploadFile() {
         </Button>
       )}
       {error && <p className="text-danger">{error}</p>}
+      {result && (
+        <div>
+          <h3>Extracted Text:</h3>
+          <p>{result}</p>
+        </div>
+      )}
     </div>
   );
 }

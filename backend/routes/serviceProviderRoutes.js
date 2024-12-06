@@ -53,7 +53,7 @@ export const isAuth = (req, res, next) => {
 
 
 export const isServiceProvider = (req, res, next) => {
-  if (req.user) {
+  if (req.serviceProvider) {
     next();
   } else {
     res.status(403).send({ message: 'Service Provider access required' });
@@ -443,5 +443,20 @@ serviceProviderRouter.put(
     }
   })
 );
+
+serviceProviderRouter.delete('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+  try {
+    const serviceProvider = await ServiceProvider.findById(req.params.id);
+    if (!serviceProvider) {
+      return res.status(404).send({ message: 'Service Provider Not Found' });
+    }
+    await serviceProvider.deleteOne(); // Deletes the service provider
+    res.status(200).send({ message: 'Service Provider Deleted Successfully' });
+  } catch (err) {
+    res.status(500).send({ message: 'Error in Deleting Service Provider' });
+  }
+})
+);
+
 
 export default serviceProviderRouter;

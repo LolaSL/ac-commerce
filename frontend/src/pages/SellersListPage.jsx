@@ -136,7 +136,7 @@ export default function SellersListPage() {
   };
 
   return (
-    <div>
+    <div className="p-4">
       <Row>
         <Col>
           <h1>Sellers</h1>

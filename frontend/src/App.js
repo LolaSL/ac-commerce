@@ -59,7 +59,7 @@ import BlogEditPage from './pages/BlogEditPage.jsx';
 import BlogsPage from './pages/Blogspage.jsx';
 import MessagesPage from './pages/MessagesPage.jsx';
 import ServiceProvidersList from './pages/ServiceProvidersList.jsx';
-import Users from './components/Users';
+import Users from './components/UsersProductSales.jsx';
 import ServiceProviders from './components/ServiceProviders';
 
 
@@ -208,9 +208,9 @@ function App() {
                       <LinkContainer to="/admin/sellers">
                         <NavDropdown.Item>Sellers</NavDropdown.Item>
                       </LinkContainer>
-                      <LinkContainer  to="/admin/manage-service-providers">
+                      {/* <LinkContainer  to="/admin/manage-service-providers">
                         <NavDropdown.Item>Service Providers</NavDropdown.Item>
-                      </LinkContainer>
+                      </LinkContainer> */}
                       <LinkContainer to="/admin/blogs-list">
                         <NavDropdown.Item>Blogs</NavDropdown.Item>
                       </LinkContainer>
@@ -412,7 +412,7 @@ function App() {
                   </AdminRoute>
                 }
               ></Route>
-                   <Route
+              <Route
                 path="/admin/manage-service-providers"
                 element={
                   <AdminRoute>

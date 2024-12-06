@@ -1117,11 +1117,12 @@ canvas {
     cursor: pointer;
     padding: 0.5rem 0;
     text-align: left;
-    width: 100%;
+    width: 90%;
+    color:blue;
   }
   
   .sidebar button.active {
-    color: red;
+    color: green;
     font-weight: bold;
   }
   

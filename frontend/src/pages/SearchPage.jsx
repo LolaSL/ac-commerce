@@ -126,7 +126,7 @@ export default function SearchPage() {
         <title>Search Products</title>
       </Helmet>
       <div className="search">
-        <Row>
+        <Row className="mt-4 p-4">
           <Col md={3}>
             <h3>AC Unit</h3>
             <div>

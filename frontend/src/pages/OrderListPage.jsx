@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useReducer } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import { Helmet } from "react-helmet-async";
@@ -8,6 +8,7 @@ import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import { Store } from "../Store";
 import { getError } from "../utils";
+import { Link, useLocation } from "react-router-dom";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -17,6 +18,8 @@ const reducer = (state, action) => {
       return {
         ...state,
         orders: action.payload,
+        page: action.payload.page,
+        pages: action.payload.pages,
         loading: false,
       };
     case "FETCH_FAIL":
@@ -39,13 +42,35 @@ const reducer = (state, action) => {
 };
 export default function OrderListPage() {
   const navigate = useNavigate();
+  const { search } = useLocation();
   const { state } = useContext(Store);
   const { userInfo } = state;
-  const [{ loading, error, orders, loadingDelete, successDelete }, dispatch] =
-    useReducer(reducer, {
-      loading: true,
-      error: "",
-    });
+  const [
+    { loading, error, orders, loadingDelete, successDelete, pages },
+    dispatch,
+  ] = useReducer(reducer, {
+    loading: true,
+    error: "",
+  });
+  const sp = new URLSearchParams(search);
+  const page = sp.get("page") || 1;
+
+  const [sortedOrders, setSortedOrders] = useState([]);
+  const [sortColumn, setSortColumn] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
+
+  useEffect(() => {
+    if (orders) {
+      const sorted = [...orders].sort((a, b) => {
+        if (sortOrder === "asc") {
+          return a[sortColumn]?.localeCompare(b[sortColumn]);
+        } else {
+          return b[sortColumn]?.localeCompare(a[sortColumn]);
+        }
+      });
+      setSortedOrders(sorted);
+    }
+  }, [orders, sortColumn, sortOrder]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,8 +112,17 @@ export default function OrderListPage() {
     }
   };
 
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    } else {
+      setSortColumn(column);
+      setSortOrder("asc");
+    }
+  };
+
   return (
-    <div>
+    <div className="p-4">
       <Helmet>
         <title>Orders</title>
       </Helmet>
@@ -99,55 +133,100 @@ export default function OrderListPage() {
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
-        <table className="table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>USER</th>
-              <th>DATE</th>
-              <th>TOTAL</th>
-              <th>PAID</th>
-              <th>DELIVERED</th>
-              <th>ACTIONS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order._id}>
-                <td>{order._id}</td>
-                <td>{order.user ? order.user.name : "DELETED USER"}</td>
-                <td>{order.createdAt.substring(0, 10)}</td>
-                <td>{order.totalPrice.toFixed(2)}</td>
-                <td>{order.isPaid ? order.paidAt.substring(0, 10) : "No"}</td>
-
-                <td>
-                  {order.isDelivered
-                    ? order.deliveredAt.substring(0, 10)
-                    : "No"}
-                </td>
-                <td>
-                  <Button
-                    type="button"
-                    variant="light"
-                    onClick={() => {
-                      navigate(`/order/${order._id}`);
-                    }}
-                  >
-                    Details
-                  </Button>
-                  &nbsp;
-                  <Button
-                    type="button"
-                    variant="light"
-                    onClick={() => deleteHandler(order)}
-                  >
-                    Delete
-                  </Button>
-                </td>
+        <>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>
+                  <button type="button" onClick={() => handleSort("_id")}>
+                    ID{" "}
+                    {sortColumn === "_id" && (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>
+                </th>
+                <th>
+                  <button type="button" onClick={() => handleSort("user")}>
+                    User{" "}
+                    {sortColumn === "user" && (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>
+                </th>
+                <th>
+                  <button type="button" onClick={() => handleSort("date")}>
+                    Date{" "}
+                    {sortColumn === "date" && (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>{" "}
+                </th>
+                <th>
+                  <button type="button" onClick={() => handleSort("total")}>
+                    Total{" "}
+                    {sortColumn === "total" &&
+                      (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>{" "}
+                </th>
+                <th>
+                  <button type="button" onClick={() => handleSort("paid")}>
+                    Paid{" "}
+                    {sortColumn === "paid" && (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>{" "}
+                </th>
+                <th>
+                  <button type="button" onClick={() => handleSort("delivered")}>
+                    Deliverd{" "}
+                    {sortColumn === "delivered" &&
+                      (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>{" "}
+                </th>
+                <th>ACTIONS</th>
               </tr>
+            </thead>
+            <tbody>
+              {sortedOrders.map((order) => (
+                <tr key={order._id}>
+                  <td>{order._id}</td>
+                  <td>{order.user ? order.user.name : "DELETED USER"}</td>
+                  <td>{order.createdAt.substring(0, 10)}</td>
+                  <td>{order.totalPrice.toFixed(2)}</td>
+                  <td>{order.isPaid ? order.paidAt.substring(0, 10) : "No"}</td>
+
+                  <td>
+                    {order.isDelivered
+                      ? order.deliveredAt.substring(0, 10)
+                      : "No"}
+                  </td>
+                  <td>
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => {
+                        navigate(`/order/${order._id}`);
+                      }}
+                    >
+                      Details
+                    </Button>
+                    &nbsp;
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => deleteHandler(order)}
+                    >
+                      Delete
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div>
+            {[...Array(pages).keys()].map((x) => (
+              <Link
+                className={x + 1 === Number(page) ? "btn text-bold" : "btn"}
+                key={x + 1}
+                to={`/admin/orders?page=${x + 1}`}
+              >
+                {x + 1}
+              </Link>
             ))}
-          </tbody>
-        </table>
+          </div>{" "}
+        </>
       )}
     </div>
   );

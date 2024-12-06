@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import Users from "../components/Users";
+import UsersProductSales from "../components/UsersProductSales";
 import ServiceProviders from "../components/ServiceProviders";
 
 export default function DashboardPage() {
@@ -9,11 +9,11 @@ export default function DashboardPage() {
   const renderComponent = () => {
     switch (activeComponent) {
       case "Users":
-        return <Users />;
+        return <UsersProductSales />;
       case "ServiceProviders":
         return <ServiceProviders />;
       default:
-        return <Users />;
+        return <UsersProductSales/>;
     }
   };
 
@@ -27,10 +27,10 @@ export default function DashboardPage() {
         <ul>
           <li>
             <button
-              className={activeComponent === "Users" ? "active" : ""}
-              onClick={() => setActiveComponent("Users")}
+              className={ activeComponent === "Users Product Sales" ? "active" : "btn-outline"}
+              onClick={() => setActiveComponent("Users Product Sales")}
             >
-              Users
+              Users Product Sales
             </button>
           </li>
           <li>

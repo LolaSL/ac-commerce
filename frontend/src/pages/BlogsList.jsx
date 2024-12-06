@@ -40,7 +40,7 @@ function BlogList() {
   }, []);
 
   return (
-    <Container className="blog-container">
+    <Container className="blog-container p-4">
       <Helmet>
         <title>Blogs</title>
       </Helmet>

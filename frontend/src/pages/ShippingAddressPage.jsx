@@ -58,7 +58,7 @@ export default function ShippingAddressPage() {
   }, [ctxDispatch, fullBox]);
 
   return (
-    <div>
+    <div className="p-4">
       <Helmet>
         <title>Shipping Address</title>
       </Helmet>

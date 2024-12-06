@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Row from "react-bootstrap/Row";
@@ -9,9 +9,10 @@ import { Store } from "../Store";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import { getError } from "../utils";
+import { Helmet } from "react-helmet-async";
 
 const reducer = (state, action) => {
-  switch (action.type) {
+  switch (action.type) { 
     case "FETCH_REQUEST":
       return { ...state, loading: true };
     case "FETCH_SUCCESS":
@@ -77,6 +78,39 @@ export default function ProductListPage() {
   const { state } = useContext(Store);
   const { userInfo } = state;
 
+  const [sortedProducts, setSortedProducts] = useState([]);
+  const [sortColumn, setSortColumn] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc"); // 'asc' or 'desc'
+  
+  
+  
+  useEffect(() => {
+    if (products) {
+      const sorted = [...products].sort((a, b) => {
+        const valueA = a[sortColumn];
+        const valueB = b[sortColumn];
+  
+        if (valueA === undefined || valueB === undefined) {
+          return 0;
+        }
+        if (typeof valueA === "number" && typeof valueB === "number") {
+          return sortOrder === "asc" ? valueA - valueB : valueB - valueA;
+        }
+
+        if (typeof valueA === "string" && typeof valueB === "string") {
+          return sortOrder === "asc"
+            ? valueA.localeCompare(valueB)
+            : valueB.localeCompare(valueA);
+        }
+  
+        return 0;
+      });
+  
+      setSortedProducts(sorted);
+    }
+  }, [products, sortColumn, sortOrder]);
+  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -134,8 +168,20 @@ export default function ProductListPage() {
     }
   };
 
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    } else {
+      setSortColumn(column);
+      setSortOrder("asc");
+    }
+  };
+
   return (
-    <div>
+    <div className="p-4">
+      <Helmet>
+        <title>Users</title>
+      </Helmet>
       <Row>
         <Col>
           <h1>Products</h1>
@@ -161,16 +207,45 @@ export default function ProductListPage() {
           <table className="table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>NAME</th>
-                <th>PRICE</th>
-                <th>CATEGORY</th>
-                <th>BRAND</th>
+                <th>
+                  <button type="button" onClick={() => handleSort("_id")}>
+                    ID{" "}
+                    {sortColumn === "_id" && (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>
+                </th>
+                <th>
+                  <button type="button" onClick={() => handleSort("name")}>
+                    Name{" "}
+                    {sortColumn === "name" && (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>
+                </th>
+                <th>
+                  <button type="button" onClick={() => handleSort("price")}>
+                    Price{" "}
+                    {sortColumn === "price" &&
+                      (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>{" "}
+                </th>
+                <th>
+                  <button type="button" onClick={() => handleSort("category")}>
+                    Category{" "}
+                    {sortColumn === "category" &&
+                      (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>{" "}
+                </th>
+                <th>
+                  <button type="button" onClick={() => handleSort("brand")}>
+                    Brand{" "}
+                    {sortColumn === "brand" &&
+                      (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>{" "}
+                </th>
+
                 <th>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
+              {sortedProducts.map((product) => (
                 <tr key={product._id}>
                   <td>{product._id}</td>
                   <td>{product.name}</td>

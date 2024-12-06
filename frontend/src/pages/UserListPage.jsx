@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useReducer } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
@@ -37,6 +37,7 @@ const reducer = (state, action) => {
       return state;
   }
 };
+
 export default function UserListPage() {
   const navigate = useNavigate();
   const [{ loading, error, users, loadingDelete, successDelete }, dispatch] =
@@ -48,6 +49,10 @@ export default function UserListPage() {
   const { state } = useContext(Store);
   const { userInfo } = state;
 
+  const [sortedUsers, setSortedUsers] = useState([]);
+  const [sortColumn, setSortColumn] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc"); 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -56,6 +61,7 @@ export default function UserListPage() {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: "FETCH_SUCCESS", payload: data });
+        setSortedUsers(data); 
       } catch (err) {
         dispatch({
           type: "FETCH_FAIL",
@@ -70,6 +76,20 @@ export default function UserListPage() {
     }
   }, [userInfo, successDelete]);
 
+  useEffect(() => {
+
+    if (users) {
+      const sorted = [...users].sort((a, b) => {
+        if (sortOrder === "asc") {
+          return a[sortColumn]?.localeCompare(b[sortColumn]);
+        } else {
+          return b[sortColumn]?.localeCompare(a[sortColumn]);
+        }
+      });
+      setSortedUsers(sorted);
+    }
+  }, [users, sortColumn, sortOrder]);
+
   const deleteHandler = async (user) => {
     if (window.confirm("Are you sure to delete?")) {
       try {
@@ -77,7 +97,7 @@ export default function UserListPage() {
         await axios.delete(`/api/users/${user._id}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
-        toast.success("user deleted successfully");
+        toast.success("User deleted successfully");
         dispatch({ type: "DELETE_SUCCESS" });
       } catch (error) {
         toast.error(getError(error));
@@ -87,8 +107,18 @@ export default function UserListPage() {
       }
     }
   };
+
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    } else {
+      setSortColumn(column);
+      setSortOrder("asc");
+    }
+  };
+
   return (
-    <div>
+    <div className="p-4">
       <Helmet>
         <title>Users</title>
       </Helmet>
@@ -103,15 +133,29 @@ export default function UserListPage() {
         <table className="table">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>NAME</th>
-              <th>EMAIL</th>
+              <th>
+                <button type="button" onClick={() => handleSort("_id")}>
+                  ID {sortColumn === "_id" && (sortOrder === "asc" ? "↑" : "↓")}
+                </button>
+              </th>
+              <th>
+                <button type="button" onClick={() => handleSort("name")}>
+                  Name{" "}
+                  {sortColumn === "name" && (sortOrder === "asc" ? "↑" : "↓")}
+                </button>
+              </th>
+              <th>
+                <button type="button" onClick={() => handleSort("email")}>
+                  Email{" "}
+                  {sortColumn === "email" && (sortOrder === "asc" ? "↑" : "↓")}
+                </button>
+              </th>
               <th>IS ADMIN</th>
               <th>ACTIONS</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {sortedUsers.map((user) => (
               <tr key={user._id}>
                 <td>{user._id}</td>
                 <td>{user.name}</td>
