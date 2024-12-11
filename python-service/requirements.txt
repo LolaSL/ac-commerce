@@ -1,6 +1,0 @@
-Flask==2.2.3
-Flask-Cors==3.0.10
-PyMuPDF==1.21.1  # For PDF processing
-OpenCV-Python==4.8.0  # For image processing
-numpy==1.23.5     # For numerical computations
-

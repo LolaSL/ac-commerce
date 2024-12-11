@@ -3,13 +3,12 @@ import { Button, Form } from "react-bootstrap";
 import { PDFDocument } from "pdf-lib";
 import * as pdfjsLib from "pdfjs-dist/webpack.mjs";
 import { Helmet } from "react-helmet-async";
-import axios from "axios";
+import { handleImageForOCR } from "./canvasUtils.js";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js`;
 
 function UploadFile() {
   const [file, setFile] = useState(null);
-  const [result, setResult] = useState("");
   const [error, setError] = useState(null);
   const [iconPositions, setIconPositions] = useState([]);
   const canvasRef = useRef(null);
@@ -74,6 +73,7 @@ function UploadFile() {
       ]);
     }
   };
+
   const renderComments = useCallback(
     (context) => {
       context.font = "bold 16px Arial";
@@ -202,20 +202,28 @@ function UploadFile() {
     async (pdfData) => {
       const canvas = canvasRef.current;
       const context = canvas.getContext("2d");
+      
       const loadingTask = pdfjsLib.getDocument({ data: pdfData });
       const pdf = await loadingTask.promise;
-      const page = await pdf.getPage(1);
+      const page = await pdf.getPage(1); // Render the first page
       const viewport = page.getViewport({ scale: 1.5 });
-
+  
       canvas.width = viewport.width;
       canvas.height = viewport.height;
-
+  
       const renderContext = {
         canvasContext: context,
         viewport: viewport,
       };
+      
+      // Render the PDF page on the canvas
       await page.render(renderContext).promise;
-
+  
+      // Extract OCR text from the rendered page (if it's an image)
+      const imageDataUrl = await canvas.toDataURL(); // Convert canvas content to image URL
+      await handleImageForOCR(imageDataUrl, canvasRef); // Handle the OCR processing (paint rooms with colors)
+  
+      // Your existing icon rendering
       iconPositions.forEach((icon) => {
         const rectWidth = 80;
         const rectHeight = 25;
@@ -228,7 +236,8 @@ function UploadFile() {
           icon.angle
         );
       });
-
+  
+      // Your existing functions for rendering comments and signature
       renderComments(context);
       renderSignature(context);
     },
@@ -265,12 +274,14 @@ function UploadFile() {
     }
 
     if (file.type === "application/pdf") {
-      const fileReader = new FileReader();
-      fileReader.onload = async function (e) {
+      const reader = new FileReader();
+      reader.onload = async function (e) {
         const pdfData = new Uint8Array(e.target.result);
+
         await renderPDFOnCanvas(pdfData);
+
       };
-      fileReader.readAsArrayBuffer(file);
+      reader.readAsArrayBuffer(file);
     }
   }, [
     iconPositions,
@@ -280,6 +291,7 @@ function UploadFile() {
     renderComments,
     renderSignature,
     drawRotatedRectangle,
+    
   ]);
 
   const saveAsImage = () => {
@@ -319,36 +331,12 @@ function UploadFile() {
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-  
-    const formData = new FormData();
-    formData.append("image", file);
-  
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setResult(response.data.extracted_text); // Set the extracted text to the state
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      alert("Failed to process file.");
-    }
-  };
-  
-
   return (
     <div className="upload-file">
       <Helmet>
         <title>Measurement System</title>
       </Helmet>
-      <Form className="btu-calculation-measure" onSubmit={handleSubmit}>
+      <Form className="btu-calculation-measure">
         <h1 className="mt-4 mb-4 title-measurement">
           Measurement Service System
         </h1>
@@ -408,12 +396,7 @@ function UploadFile() {
         </Button>
       )}
       {error && <p className="text-danger">{error}</p>}
-      {result && (
-        <div>
-          <h3>Extracted Text:</h3>
-          <p>{result}</p>
-        </div>
-      )}
+
     </div>
   );
 }
