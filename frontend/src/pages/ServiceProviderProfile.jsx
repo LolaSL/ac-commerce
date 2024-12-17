@@ -61,7 +61,7 @@ export default function ServiceProviderProfile() {
 
     try {
       const { data } = await axios.put(
-        `/api/service-providers/profile/${serviceProviderInfo._id}`, // Directly using _id
+        `/api/service-providers/profile/${serviceProviderInfo._id}`,
         {
           name,
           typeOfProvider,

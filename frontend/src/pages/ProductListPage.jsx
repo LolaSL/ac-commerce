@@ -80,7 +80,7 @@ export default function ProductListPage() {
 
   const [sortedProducts, setSortedProducts] = useState([]);
   const [sortColumn, setSortColumn] = useState("");
-  const [sortOrder, setSortOrder] = useState("asc"); // 'asc' or 'desc'
+  const [sortOrder, setSortOrder] = useState("asc");
   
   
   
@@ -180,7 +180,7 @@ export default function ProductListPage() {
   return (
     <div className="p-4">
       <Helmet>
-        <title>Users</title>
+        <title>Products</title>
       </Helmet>
       <Row>
         <Col>

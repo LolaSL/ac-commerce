@@ -10,7 +10,8 @@ import Banner2 from "../components/Banner2.jsx";
 
 const HomePage = () => {
   return (
-    <div>
+    
+    <div className="container">
       <Helmet>
         <title>AC Commerce</title>
       </Helmet>

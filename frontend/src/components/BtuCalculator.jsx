@@ -45,11 +45,11 @@ function BtuCalculator() {
 
   const CONVERT_FEET_TO_METERS = 0.092903;
   const CONVERT_METERS_TO_FEET = 1 / CONVERT_FEET_TO_METERS;
-  const BASE_BTU_PER_SQ_METER = 450;
+  const BASE_BTU_PER_SQ_METER = 600;
   const HEIGHT_ADDITIONAL_BTU = 1000;
   const BTU_PER_ADDITIONAL_PERSON = 600;
   const KITCHEN_BTU_ADDITION = 4000;
-  const ABOVE_GROUND_BTU_ADDITION = 500; 
+  const ABOVE_GROUND_BTU_ADDITION = 500;
 
   function calculateArea(e) {
     e.preventDefault();
@@ -271,7 +271,7 @@ function BtuCalculator() {
             </div>
           )}
           <Row>
-            <Col xs={12} md={6} lg={4}  className="my-4">
+            <Col xs={12} md={6} lg={4} className="my-4">
               <Form.Group controlId="ceilingHeight">
                 <Form.Label>Ceiling Height (m):</Form.Label>
                 <Form.Control
@@ -282,7 +282,7 @@ function BtuCalculator() {
                 />
               </Form.Group>
             </Col>
-            <Col xs={12} md={6} lg={4}  className="my-4">
+            <Col xs={12} md={6} lg={4} className="my-4">
               <Form.Group controlId="numberOfPeople">
                 <Form.Label>Number of People:</Form.Label>
                 <Form.Control
@@ -297,7 +297,7 @@ function BtuCalculator() {
 
           {rooms.map((room, index) => (
             <Row key={index} className="my-4">
-              <Col xs={12} md={6} lg={4}  className="my-4">
+              <Col xs={12} md={6} lg={4} className="my-4">
                 <Form.Group controlId={`roomType-${index}`}>
                   <Form.Label>Room Type {index + 1}:</Form.Label>
                   <Form.Control
@@ -324,7 +324,7 @@ function BtuCalculator() {
                   </Form.Control>
                 </Form.Group>
               </Col>
-              <Col xs={12} md={6} lg={4}  className="my-4">
+              <Col xs={12} md={6} lg={4} className="my-4">
                 <Form.Group controlId={`roomSize-${index}`}>
                   <Form.Label>Room Size ({measurementSystem}²):</Form.Label>
                   <Form.Control
@@ -339,60 +339,67 @@ function BtuCalculator() {
                   />
                 </Form.Group>
               </Col>
-                <Button
-                  variant="secondary"
-                  onClick={() => removeRoom(index)}
-                  className="btn btn-sm mb-4  my-4"
-                >
-                  <i className="fas fa-trash"></i>
-                </Button>
+              <Button
+                variant="secondary"
+                onClick={() => removeRoom(index)}
+                className="btn btn-sm mb-4  my-4"
+              >
+                <i className="fas fa-trash"></i>
+              </Button>
             </Row>
           ))}
 
-          <Button variant="primary" onClick={addRoom} className="btn-add mb-3 mt-4">
+          <Button
+            variant="primary"
+            onClick={addRoom}
+            className="btn-add mb-3 mt-4"
+          >
             Add Desired Room
           </Button>
           <Form.Group controlId="aboveGroundFloor" className="my-4">
-        <Form.Label>Are Any Of The Chosen Room(s) Above The Ground Floor?</Form.Label>
-        <Form.Check
-          type="radio"
-          name="aboveGroundFloor"
-          label="No"
-          value="No"
-          checked={aboveGroundFloor === "No"}
-          onChange={(e) => setAboveGroundFloor(e.target.value)}
-        />
-        <Form.Check
-          type="radio"
-          name="aboveGroundFloor"
-          label="Yes"
-          value="Yes"
-          checked={aboveGroundFloor === "Yes"}
-          onChange={(e) => setAboveGroundFloor(e.target.value)}
-        />
-        <p className="text-muted mt-2">We may require a scaffold tower for working heights over 1.5m.</p>
-      </Form.Group>
-
-      <Form.Group controlId="outdoorSpace" className="my-4">
-        <Form.Label>Do You Have Outdoor Space?</Form.Label>
-        <Form.Check
-          type="radio"
-          name="outdoorSpace"
-          label="Yes"
-          value="Yes"
-          checked={outdoorSpace === "Yes"}
-          onChange={(e) => setOutdoorSpace(e.target.value)}
-        />
-        <Form.Check
-          type="radio"
-          name="outdoorSpace"
-          label="No"
-          value="No"
-          checked={outdoorSpace === "No"}
-          onChange={(e) => setOutdoorSpace(e.target.value)}
-        />
+            <Form.Label>
+              Are Any Of The Chosen Room(s) Above The Ground Floor?
+            </Form.Label>
+            <Form.Check
+              type="radio"
+              name="aboveGroundFloor"
+              label="No"
+              value="No"
+              checked={aboveGroundFloor === "No"}
+              onChange={(e) => setAboveGroundFloor(e.target.value)}
+            />
+            <Form.Check
+              type="radio"
+              name="aboveGroundFloor"
+              label="Yes"
+              value="Yes"
+              checked={aboveGroundFloor === "Yes"}
+              onChange={(e) => setAboveGroundFloor(e.target.value)}
+            />
+            <p className="text-muted mt-2">
+              We may require a scaffold tower for working heights over 1.5m.
+            </p>
           </Form.Group>
-          
+
+          <Form.Group controlId="outdoorSpace" className="my-4">
+            <Form.Label>Do You Have Outdoor Space?</Form.Label>
+            <Form.Check
+              type="radio"
+              name="outdoorSpace"
+              label="Yes"
+              value="Yes"
+              checked={outdoorSpace === "Yes"}
+              onChange={(e) => setOutdoorSpace(e.target.value)}
+            />
+            <Form.Check
+              type="radio"
+              name="outdoorSpace"
+              label="No"
+              value="No"
+              checked={outdoorSpace === "No"}
+              onChange={(e) => setOutdoorSpace(e.target.value)}
+            />
+          </Form.Group>
 
           <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
           <h3 className="mb-3 mt-3 ">Insulation Condition</h3>

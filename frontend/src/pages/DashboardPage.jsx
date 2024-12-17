@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import UsersProductSales from "../components/UsersProductSales";
 import ServiceProviders from "../components/ServiceProviders";
+import Notifications from "../components/Notifications";
 
 export default function DashboardPage() {
   const [activeComponent, setActiveComponent] = useState("Users");
@@ -12,6 +13,8 @@ export default function DashboardPage() {
         return <UsersProductSales />;
       case "ServiceProviders":
         return <ServiceProviders />;
+        case "Notification":
+          return <Notifications />;
       default:
         return <UsersProductSales/>;
     }
@@ -41,6 +44,15 @@ export default function DashboardPage() {
               Service Providers
             </button>
           </li>
+          <li>
+            <button
+              className={activeComponent === "Notification" ? "active" : ""}
+              onClick={() => setActiveComponent("Notification")}
+            >
+              Notifications
+            </button>
+          </li>
+
         </ul>
       </div>
       <div className="main-content">{renderComponent()}</div>

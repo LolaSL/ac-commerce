@@ -61,7 +61,7 @@ import MessagesPage from './pages/MessagesPage.jsx';
 import ServiceProvidersList from './pages/ServiceProvidersList.jsx';
 import Users from './components/UsersProductSales.jsx';
 import ServiceProviders from './components/ServiceProviders';
-
+import Notifications from './components/Notifications.jsx';
 
 function App() {
 
@@ -208,9 +208,6 @@ function App() {
                       <LinkContainer to="/admin/sellers">
                         <NavDropdown.Item>Sellers</NavDropdown.Item>
                       </LinkContainer>
-                      {/* <LinkContainer  to="/admin/manage-service-providers">
-                        <NavDropdown.Item>Service Providers</NavDropdown.Item>
-                      </LinkContainer> */}
                       <LinkContainer to="/admin/blogs-list">
                         <NavDropdown.Item>Blogs</NavDropdown.Item>
                       </LinkContainer>
@@ -377,6 +374,14 @@ function App() {
                 element={
                   <AdminRoute>
                     <ServiceProviders />
+                  </AdminRoute>
+                }
+              ></Route>
+                <Route
+                path="/admin/dashboard/notification"
+                element={
+                  <AdminRoute>
+                    <Notifications />
                   </AdminRoute>
                 }
               ></Route>

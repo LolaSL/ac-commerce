@@ -10,7 +10,7 @@ export default function Banner2() {
     navigate("/signin?redirect=/ac-installation");
   };
   return (
-    <div style={{ paddingLeft: 0 }} className="py-4">
+    <div style={{ paddingLeft: 0 }} className="middle-container">
       <div className="banner">
         <h1 className="mb-3 banner1-title text-center">
           Proper Installation for Your Air Conditioner

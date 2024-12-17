@@ -5,6 +5,7 @@ import Image from "react-bootstrap/Image";
 
 export default function Header() {
   return (
+    <div className="middle-container">
     <header style={{ paddingLeft: 0 }}>
       <div className="mask">
         <div className="d-flex justify-content-center align-items-center h-100">
@@ -35,6 +36,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-    </header>
+    </header></div>
   );
 }

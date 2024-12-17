@@ -3,7 +3,6 @@ import { Button, Form } from "react-bootstrap";
 import { PDFDocument } from "pdf-lib";
 import * as pdfjsLib from "pdfjs-dist/webpack.mjs";
 import { Helmet } from "react-helmet-async";
-import { handleImageForOCR } from "./canvasUtils.js";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js`;
 
@@ -34,15 +33,23 @@ function UploadFile() {
 
   const handleCanvasClick = (e) => {
     const { offsetX, offsetY } = e.nativeEvent;
-    const commentText = prompt("Enter your comment:");
-
-    if (commentText) {
-      setComments([
-        ...comments,
-        { text: commentText, x: offsetX + 50, y: offsetY - 30 },
-      ]);
+    if (e.detail === 2) {
+      handleIconDoubleClick(offsetX, offsetY);
+    } else {
+      const isNewIcon = handleIconClick(offsetX, offsetY);
+      if (isNewIcon) {
+        const commentText = prompt("Enter your comment:");
+        if (commentText) {
+          setComments((prevComments) => [
+            ...prevComments,
+            { text: commentText, x: offsetX + 50, y: offsetY - 30 },
+          ]);
+        }
+      }
     }
+  };
 
+  const handleIconDoubleClick = (offsetX, offsetY) => {
     const existingIconIndex = iconPositions.findIndex((icon) => {
       return (
         offsetX >= icon.x - 30 &&
@@ -53,24 +60,36 @@ function UploadFile() {
     });
 
     if (existingIconIndex !== -1) {
-      if (e.shiftKey) {
-        setIconPositions((prevIcons) =>
-          prevIcons.filter((_, index) => index !== existingIconIndex)
-        );
-        setComments((prevComments) =>
-          prevComments.filter((_, index) => index !== existingIconIndex)
-        );
-      } else {
-        const newIcons = [...iconPositions];
-        newIcons[existingIconIndex].angle =
-          (newIcons[existingIconIndex].angle + Math.PI / 2) % (2 * Math.PI);
-        setIconPositions(newIcons);
-      }
+      setIconPositions((prevIcons) =>
+        prevIcons.filter((_, index) => index !== existingIconIndex)
+      );
+      setComments((prevComments) =>
+        prevComments.filter((_, index) => index !== existingIconIndex)
+      );
+    }
+  };
+  const handleIconClick = (offsetX, offsetY) => {
+    const existingIconIndex = iconPositions.findIndex((icon) => {
+      return (
+        offsetX >= icon.x - 30 &&
+        offsetX <= icon.x + 30 &&
+        offsetY >= icon.y - 15 &&
+        offsetY <= icon.y + 15
+      );
+    });
+
+    if (existingIconIndex !== -1) {
+      const newIcons = [...iconPositions];
+      newIcons[existingIconIndex].angle =
+        (newIcons[existingIconIndex].angle + Math.PI / 2) % (2 * Math.PI);
+      setIconPositions(newIcons);
+      return false;
     } else {
       setIconPositions((prevIcons) => [
         ...prevIcons,
         { x: offsetX, y: offsetY, angle: 0 },
       ]);
+      return true;
     }
   };
 
@@ -80,10 +99,8 @@ function UploadFile() {
       context.lineWidth = 2;
       context.shadowColor = "grey";
       context.shadowBlur = 1;
-
       const canvasWidth = context.canvas.width;
       const canvasHeight = context.canvas.height;
-
       comments.forEach((comment) => {
         const padding = 10;
         const lineHeight = 20;
@@ -92,7 +109,6 @@ function UploadFile() {
         let line = "";
         let lines = [];
         let yOffset = comment.y;
-
         words.forEach((word) => {
           const testLine = line + word + " ";
           const testWidth = context.measureText(testLine).width;
@@ -202,28 +218,21 @@ function UploadFile() {
     async (pdfData) => {
       const canvas = canvasRef.current;
       const context = canvas.getContext("2d");
-      
+
       const loadingTask = pdfjsLib.getDocument({ data: pdfData });
       const pdf = await loadingTask.promise;
-      const page = await pdf.getPage(1); // Render the first page
+      const page = await pdf.getPage(1);
       const viewport = page.getViewport({ scale: 1.5 });
-  
+
       canvas.width = viewport.width;
       canvas.height = viewport.height;
-  
+
       const renderContext = {
         canvasContext: context,
         viewport: viewport,
       };
-      
-      // Render the PDF page on the canvas
+
       await page.render(renderContext).promise;
-  
-      // Extract OCR text from the rendered page (if it's an image)
-      const imageDataUrl = await canvas.toDataURL(); // Convert canvas content to image URL
-      await handleImageForOCR(imageDataUrl, canvasRef); // Handle the OCR processing (paint rooms with colors)
-  
-      // Your existing icon rendering
       iconPositions.forEach((icon) => {
         const rectWidth = 80;
         const rectHeight = 25;
@@ -236,8 +245,6 @@ function UploadFile() {
           icon.angle
         );
       });
-  
-      // Your existing functions for rendering comments and signature
       renderComments(context);
       renderSignature(context);
     },
@@ -279,7 +286,6 @@ function UploadFile() {
         const pdfData = new Uint8Array(e.target.result);
 
         await renderPDFOnCanvas(pdfData);
-
       };
       reader.readAsArrayBuffer(file);
     }
@@ -291,7 +297,6 @@ function UploadFile() {
     renderComments,
     renderSignature,
     drawRotatedRectangle,
-    
   ]);
 
   const saveAsImage = () => {
@@ -348,10 +353,13 @@ function UploadFile() {
           air conditioner (rectangle) above door in drawing.
         </p>
         <p className="warning fw-bold">
-          *Rotate rectangle: <kbd>Click + Ok</kbd>
+          *Add rectangle: <kbd>Click on empty area</kbd>
         </p>
         <p className="warning fw-bold">
-          *Delete rectangle: <kbd>Shift + Click + Ok</kbd>
+          *Rotate rectangle: <kbd>Click</kbd>
+        </p>
+        <p className="warning fw-bold">
+          *Delete rectangle: <kbd>Double Click</kbd>
         </p>
         <Form.Control
           className="mt-4"
@@ -380,6 +388,7 @@ function UploadFile() {
             style={{
               backgroundImage: `url(${previewUrl})`,
               backgroundSize: "cover",
+              cursor: "pointer",
             }}
           />
         </div>
@@ -396,7 +405,6 @@ function UploadFile() {
         </Button>
       )}
       {error && <p className="text-danger">{error}</p>}
-
     </div>
   );
 }

@@ -6,7 +6,7 @@ import Image from "react-bootstrap/Image";
 
 export default function Banner() {
   return (
-    <div style={{ paddingLeft: 0 }} className="py-4">
+    <div style={{ paddingLeft: 0 }} className="middle-container">
         <div className="banner">
         <h1 className="mb-3 banner-title text-center">Elevate your comfort wherever you are:</h1>
         <Image className="p-2 text-center responsive  mb-4" src="/images/banner.jpg" alt="Banner" />
