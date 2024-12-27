@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 
-export default function Banner({ title, imageSrc, paragraph, linkTo, linkText }) {
+export default function Banner({ title, imageSrc, paragraph, linkTo, linkText}) {
   return (
     <div className="banner-container position-relative mb-4 my-4">
       <div className="text-center text-white position-absolute top-50 start-50 translate-middle">

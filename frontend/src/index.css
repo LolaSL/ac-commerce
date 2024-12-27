@@ -611,6 +611,7 @@ button.thumbnail {
 }
 .ac-conditioning {
   text-align: justify;
+  padding: 20px;
 }
 .upload-pdf {
   width: 100%;
@@ -1165,6 +1166,31 @@ canvas {
   height: auto;
   border: 1px solid #ddd;
 }
+
+.responsive-iframe {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: none;
+}
+
+.seller {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.seller h2 {
+  margin-bottom: 10px;
+}
+
+.video-preview {
+  margin-top: 10px;
+}
+
 
 @media (min-width: 1025px) and (max-width: 1668px) {
   canvas {

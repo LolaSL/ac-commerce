@@ -31,9 +31,9 @@ function BlogDetails() {
         dangerouslySetInnerHTML={{ __html: blog.content }}
         className="mt-4 mb-4 blog-paragraph"
       />
-      <div>
+    <div className=" mt-4 mb-4">
         <Link to="/blogs" className="link-blogs">
-          Back to Blogs
+          Back to Home
         </Link>
       </div>
     </Container>

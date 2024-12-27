@@ -14,7 +14,7 @@ const Measurement = () => {
       <Container>
         <UploadFile />
         <BtuCalculator />
-        <div>
+        <div className=" mt-4 mb-4">
         <Link to="/" className="link-blogs">
           Back to Home
         </Link>

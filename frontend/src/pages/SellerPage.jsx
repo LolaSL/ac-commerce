@@ -113,7 +113,20 @@ export default function SellerPage() {
           <div className="seller">
             <h2>{seller.name}</h2>
             <p>Brand: {seller.brand}</p>
-            <p>Information: {seller.info}</p>
+                <p>Information: {seller.info}</p>
+              </div>
+              <div className="video-preview">
+            <p><strong>Video:</strong></p>
+            <iframe
+              className="responsive-iframe rounded"
+              width="600"
+              height="400"
+              src={seller.link}
+              title={`${seller.name} Product Video`}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            ></iframe>
           </div>
           <div className="my-3">
             <h2 ref={reviewsRef}>Reviews</h2>

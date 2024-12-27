@@ -61,12 +61,15 @@ import Users from './components/UsersProductSales.jsx';
 import ServiceProviders from './components/ServiceProviders';
 import Notifications from './components/Notifications.jsx';
 import Offers from './pages/Offers.jsx';
+import AdvancedAC from './pages/AdvancedAC.jsx';
+
+
 
 function App() {
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { fullBox, cart, userInfo, serviceProviderInfo } = state;
-  
+
   const checkoutHandler = (e) => {
     e.preventDefault();
     window.location.href = ("/signin?redirect=/uploadfile");
@@ -479,6 +482,7 @@ function App() {
               <Route path="/uploadfile" element={<Measurement />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/blogs" element={<BlogsList />} />
+              <Route path="/advanced-ac" element={<AdvancedAC />} />
               <Route path="/blogs/:id" element={<BlogDetails />} />
               <Route path="/blogs-list" element={<BlogsPage />} />
               <Route path="/" element={<HomeBannerPage />} />
