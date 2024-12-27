@@ -10,6 +10,9 @@ import uploadRouter from "./routes/uploadRoutes.js";
 import contactRouter from './routes/contactRoutes.js'
 import serviceProviderRouter from './routes/serviceProviderRoutes.js'
 import blogRouter from './routes/blogRoutes.js'
+import notificationRouter from './routes/notificationRoutes.js';
+
+
 import cors from 'cors';
 
 
@@ -49,6 +52,7 @@ app.use('/api/sellers', sellerRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/service-providers', serviceProviderRouter)
 app.use('/api/blogs', blogRouter)
+app.use('/api/notifications', notificationRouter)
 app.get('/', (req, res) => {
     res.send('Server is ready')
 })

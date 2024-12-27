@@ -43,7 +43,8 @@ export const isAuth = (req, res, next) => {
       if (err) {
         return res.status(401).send({ message: 'Invalid Token' });
       }
-      req.user = decoded;
+      // req.serviceProvider = decoded; //for serviceProvider._id dashboard
+      req.user = decoded; //for admin dashboard
       next();
     });
   } else {
@@ -190,13 +191,15 @@ serviceProviderRouter.get(
 
 
 
+import Notification from '../models/notificationModel.js'; // Import notification model
+
 serviceProviderRouter.get(
   '/earnings',
   isAuth,
   isServiceProvider,
   expressAsyncHandler(async (req, res) => {
     try {
-      const serviceProviderId = req.serviceProvider._id
+      const serviceProviderId = req.serviceProvider._id;
 
       const earnings = await Earnings.find({ serviceProvider: serviceProviderId })
         .populate({
@@ -208,6 +211,22 @@ serviceProviderRouter.get(
       if (earnings.length === 0) {
         res.status(404).send({ message: 'No earnings found for this service provider' });
         return;
+      }
+
+      // Calculate total earnings
+      const totalEarnings = earnings.reduce(
+        (sum, earning) => sum + earning.amount,
+        0
+      );
+
+      // Send notification to admin if total earnings exceed a threshold
+      const earningThreshold = 10000; 
+      if (totalEarnings > earningThreshold) {
+        await Notification.create({
+          message: `Service Provider ${req.serviceProvider.name} has exceeded the earning threshold of $${earningThreshold}. Total Earnings: $${totalEarnings}`,
+          type: 'Earnings Alert',
+          priority: 'high',
+        });
       }
 
       res.status(200).send(earnings);
@@ -325,7 +344,7 @@ serviceProviderRouter.post(
 );
 
 
-serviceProviderRouter.get("/:id", isAuth, expressAsyncHandler(async (req, res) => {
+serviceProviderRouter.get("/:id", isAuth,  isServiceProvider, expressAsyncHandler(async (req, res) => {
   try {
     const serviceProvider = await ServiceProvider.findById(req.params.id);
     if (serviceProvider) {
@@ -339,74 +358,6 @@ serviceProviderRouter.get("/:id", isAuth, expressAsyncHandler(async (req, res) =
 })
 );
 
-
-// PUT route to update service provider details
-serviceProviderRouter.put("/:id", isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
-  try {
-    const serviceProvider = await ServiceProvider.findById(req.params.id);
-    if (serviceProvider) {
-      serviceProvider.name = req.body.name || serviceProvider.name;
-      serviceProvider.typeOfProvider =
-        req.body.typeOfProvider || serviceProvider.typeOfProvider;
-      serviceProvider.experience = req.body.experience || serviceProvider.experience;
-      serviceProvider.email = req.body.email || serviceProvider.email;
-
-      if (req.body.password) {
-        serviceProvider.password = bcrypt.hashSync(req.body.password, 10);
-      }
-
-      const updatedServiceProvider = await serviceProvider.save();
-      res.json({
-        _id: updatedServiceProvider._id,
-        name: updatedServiceProvider.name,
-        typeOfProvider: updatedServiceProvider.typeOfProvider,
-        experience: updatedServiceProvider.experience,
-        email: updatedServiceProvider.email,
-        token: generateToken(updatedServiceProvider),
-      });
-    } else {
-      res.status(404).send({ message: "Service Provider not found" });
-    }
-  } catch (error) {
-    res.status(500).send({ message: error.message });
-  }
-})
-);
-
-serviceProviderRouter.put('/edit/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
-  const serviceProviderId = req.params.id;
-  const { earnings, workingHours, project } = req.body;
-
-  try {
-    // Find the service provider by ID
-    const serviceProvider = await ServiceProvider.findById(serviceProviderId);
-    if (!serviceProvider) {
-      return res.status(404).send({ message: 'Service Provider not found' });
-    }
-
-    // Allow admins to update any service provider's data
-    // Allow users to update only their own data (if their _id matches)
-    if (serviceProvider._id.toString() !== req.user._id.toString() && !req.user.isAdmin) {
-      return res.status(403).send({ message: 'You are not authorized to update this profile' });
-    }
-
-    // Update the service provider's information
-    serviceProvider.earnings = earnings || serviceProvider.earnings;
-    serviceProvider.workingHours = workingHours || serviceProvider.workingHours;
-    serviceProvider.project = project || serviceProvider.project;
-
-    // Save the updated service provider
-    const updatedServiceProvider = await serviceProvider.save();
-
-    res.status(200).send({
-      message: 'Service Provider updated successfully',
-      serviceProvider: updatedServiceProvider,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'Error updating Service Provider' });
-  }
-}));
 
 
 serviceProviderRouter.put(

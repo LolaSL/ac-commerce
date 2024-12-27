@@ -8,7 +8,7 @@ import ServiceProvider from '../models/serviceProviderModel.js';
 import Earnings from '../models/earningModel.js';
 import Project from '../models/projectModel.js';
 import Message from '../models/messageModel.js';
-
+import Notification from '../models/notificationModel.js';
 
 
 const orderRouter = express.Router();
@@ -126,6 +126,14 @@ orderRouter.get(
         },
       },
     ]);
+    const totalNotifications = await Notification.aggregate([
+      {
+        $group: {
+          _id: null,
+          numNotifications: { $sum: 1 },
+        },
+      },
+    ]);
 
     res.send({
       users,
@@ -139,6 +147,7 @@ orderRouter.get(
       totalServiceProviders,
       currentPage: page,
       totalPages: Math.ceil(totalServiceProviders / limit),
+      totalNotifications
     });
   })
 );

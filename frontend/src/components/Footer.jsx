@@ -1,6 +1,6 @@
 import React from "react";
 import NavLink from "react-bootstrap/NavLink";
-import Container from "react-bootstrap/Container";
+// import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useNavigate } from "react-router-dom";
@@ -14,10 +14,15 @@ const Footer = () => {
     e.preventDefault();  
     navigate("/signin?redirect=/uploadfile");
   };
+
+  const checkoutOffersHandler = (e) => {
+    e.preventDefault();
+    window.location.href = ("/signin?redirect=/offers");
+  };
   return (
     <>
-      <Container fluid>
-        <footer className="footer ">
+      {/* <Container> */}
+        <footer className="container-fluid ">
           <Row className="bg-secondary text-white p-4">
             <Col className="col-md-6 col-lg-5 col-12 ft-1">
                  <div> <i className="fa-solid fa-air-conditioner"> 
@@ -62,6 +67,9 @@ const Footer = () => {
               </NavLink>
               <NavLink className="text-white" href="/products">
                 Products
+            </NavLink>
+            <NavLink className="text-white" href="/offers" onClick={checkoutOffersHandler}>
+               Offers
               </NavLink>
               <NavLink className="text-white" href="/sellers">
                 Sellers
@@ -98,7 +106,7 @@ const Footer = () => {
             </div>
           </Row>
         </footer>
-      </Container>
+      {/* </Container> */}
     </>
   );
 };

@@ -7,6 +7,9 @@ import {
   isAuth, isAdmin, generateToken, baseUrl,
   mailgun
 } from '../utils.js';
+import Notification from '../models/notificationModel.js';
+import Counter from '../models/counterModel.js';
+
 
 const userRouter = express.Router();
 
@@ -150,7 +153,7 @@ userRouter.delete(
         res.status(400).send({ message: 'Can Not Delete Admin User' });
         return;
       }
-      await user.deleteOne(); 
+      await user.deleteOne();
       res.send({ message: 'User Deleted' });
     } else {
       res.status(404).send({ message: 'User Not Found' });
@@ -164,6 +167,13 @@ userRouter.post(
   expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
+      const notification = {
+        title: 'Discount Offer',
+        message: 'Check out the latest discount offers!',
+        type: 'discount',
+        recipientType: 'user',
+        isRead: false,
+      };
       if (bcrypt.compareSync(req.body.password, user.password)) {
         res.send({
           _id: user._id,
@@ -171,6 +181,7 @@ userRouter.post(
           email: user.email,
           isAdmin: user.isAdmin,
           token: generateToken(user),
+          notification,
         });
         return;
       }
@@ -178,6 +189,8 @@ userRouter.post(
     res.status(401).send({ message: 'Invalid email or password' });
   })
 );
+
+
 
 userRouter.post(
   '/signup',
@@ -187,7 +200,42 @@ userRouter.post(
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password),
     });
+
     const user = await newUser.save();
+
+ 
+    let counter = await Counter.findOne({ name: 'userSignup' });
+  
+    if (!counter) {
+      // If the counter document doesn't exist, create it
+      counter = new Counter({ name: 'userSignup', count: 1 });
+      await counter.save();
+    } else {
+      // Increment the counter value
+      counter.count++;
+  
+      // Check if 1 user have signed up
+      if (counter.count === 1) {
+        const notification = new Notification({
+          title: 'New User Signups',
+          message: 'New 1 user were signed up!',
+          type: 'info',
+          isRead: false,
+          createdAt: new Date(),
+        });
+  
+        // Save notification to database
+        await notification.save();
+        console.log('Notification created:', notification);
+  
+        // Reset the counter to 0 after notification
+        counter.count = 0;
+      }
+  
+      // Save the updated counter
+      await counter.save();
+    }
+  
     res.send({
       _id: user._id,
       name: user.name,
@@ -195,7 +243,6 @@ userRouter.post(
       isAdmin: user.isAdmin,
       token: generateToken(user),
     });
-  })
-);
+  }));
 
 export default userRouter;

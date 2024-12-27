@@ -1,7 +1,7 @@
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import HomePage from './pages/HomePage';
+import HomeBannerPage from './pages/HomeBannerPage';
 import ProductPage from './pages/ProductPage.jsx';
 import Navbar from 'react-bootstrap/Navbar';
 import Badge from 'react-bootstrap/Badge';
@@ -41,7 +41,6 @@ import SellersPage from './pages/SellersPage.jsx';
 import FeaturedPage from './pages/FeaturedPage.jsx';
 import SellerEditPage from './pages/SellerEditPage.jsx';
 import SellersListPage from './pages/SellersListPage.jsx';
-import AirConditioningPage from './pages/AirConditioningPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import Footer from './components/Footer.jsx';
 import AboutUs from './pages/AboutUs.jsx';
@@ -52,7 +51,6 @@ import ServiceProviderProfile from './pages/ServiceProviderProfile.jsx';
 import HoursPage from './pages/HoursPage.jsx';
 import EarningsPage from './pages/EarningsPage.jsx';
 import ProjectsPage from './pages/ProjectsPage.jsx';
-import AcInstallation from './pages/AcInstallation.jsx'
 import BlogsList from './pages/BlogsList.jsx';
 import BlogDetails from './pages/BlogDetails.jsx';
 import BlogEditPage from './pages/BlogEditPage.jsx';
@@ -62,16 +60,21 @@ import ServiceProvidersList from './pages/ServiceProvidersList.jsx';
 import Users from './components/UsersProductSales.jsx';
 import ServiceProviders from './components/ServiceProviders';
 import Notifications from './components/Notifications.jsx';
+import Offers from './pages/Offers.jsx';
 
 function App() {
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { fullBox, cart, userInfo, serviceProviderInfo } = state;
+  
   const checkoutHandler = (e) => {
     e.preventDefault();
     window.location.href = ("/signin?redirect=/uploadfile");
   };
-
+  const checkoutOffersHandler = (e) => {
+    e.preventDefault();
+    window.location.href = ("/signin?redirect=/offers");
+  };
   const signoutHandler = () => {
     ctxDispatch({ type: 'USER_SIGNOUT' });
     localStorage.removeItem('userInfo');
@@ -110,7 +113,7 @@ function App() {
       >
         <ToastContainer position="bottom-center" limit={1} />
         <header >
-          <Navbar bg="secondary" variant="secondary" expand="lg">
+          <Navbar className="navbar" bg="secondary" variant="secondary" expand="lg">
             <Container>
               <Button
                 variant="secondary"
@@ -240,18 +243,21 @@ function App() {
               </Nav.Item>
             ))}
             <Nav.Item className='search-title'>
-              <Link to="/uploadfile" onClick={checkoutHandler} className="link-sellers fw-bold">Get A Quote</Link>
+              <Link to="/uploadfile" onClick={checkoutHandler} className="links fw-bold">Get A Quote</Link>
             </Nav.Item>
             <Nav.Item className='search-title'>
-              <Link to="/sellers" className="link-sellers fw-bold">Sellers</Link>
+              <Link to="/offers" onClick={checkoutOffersHandler} className="links fw-bold">Offers</Link>
             </Nav.Item>
             <Nav.Item className='search-title'>
-              <Link to="/blogs" className="link-blog fw-bold">Blogs</Link>
+              <Link to="/sellers" className="links fw-bold">Sellers</Link>
             </Nav.Item>
             <Nav.Item className='search-title'>
-              <Link to="/contact" className="link-contact fw-bold">Contact</Link>
+              <Link to="/blogs" className="links fw-bold">Blogs</Link>
+            </Nav.Item>
+            <Nav.Item className='search-title'>
+              <Link to="/contact" className="links fw-bold">Contact</Link>
             </Nav.Item>    <Nav.Item className='search-title'>
-              <Link to="/about-us" className="link-contact fw-bold">About Us</Link>
+              <Link to="/about-us" className="links fw-bold">About Us</Link>
             </Nav.Item>
           </Nav>
         </div>
@@ -260,6 +266,7 @@ function App() {
             <Routes>
               <Route path="/product/:slug" element={<ProductPage />} />
               <Route path="/products" element={<FeaturedPage />} />
+              <Route path="/offers" element={<Offers />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/signin" element={<SignInPage />} />
@@ -377,7 +384,7 @@ function App() {
                   </AdminRoute>
                 }
               ></Route>
-                <Route
+              <Route
                 path="/admin/dashboard/notification"
                 element={
                   <AdminRoute>
@@ -469,14 +476,12 @@ function App() {
               <Route path="/sellers/:id" element={<SellerPage />} />
               <Route path="/sellers/edit/:id" element={<SellerEditPage />} />
               <Route path="/about-us" element={<AboutUs />} />
-              <Route path="/air-conditioning" element={<AirConditioningPage />} />
-              <Route path="/ac-installation" element={<AcInstallation />} />
               <Route path="/uploadfile" element={<Measurement />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/blogs" element={<BlogsList />} />
               <Route path="/blogs/:id" element={<BlogDetails />} />
               <Route path="/blogs-list" element={<BlogsPage />} />
-              <Route path="/" element={<HomePage />} />
+              <Route path="/" element={<HomeBannerPage />} />
             </Routes>
           </Container>
         </main>

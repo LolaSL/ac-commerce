@@ -1,28 +1,23 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-
+import { Container} from "react-bootstrap";
 const AboutUs = () => {
   return (
-    <div className="site-container mt-4 p-4">
+    <Container className="site-container mt-4 p-4">
       <Helmet>
         <title>About Us</title>
       </Helmet>
       <article className="about mt-4 mb-4">
-        <div
-          className="p-5 text-center responsive mb-3"
-          style={{
-            backgroundImage: `url("/images/about-us1.jpg")`,
-            height: 450,
-            backgroundSize: "cover",
-            objectFit: "cover",
-            backgroundRepeat: "no-repeat"
-          }}
-        >
-          {" "}
-          <h1 className="mb-4  text-white p-4 about-title">
-            About Us
-          </h1>
-        </div>
+      <div
+  className="p-5 text-center responsive-image rounded mb-3"
+  style={{
+    backgroundImage: `url("/images/about-us1.jpg")`,
+    MaxHeight: "100%", /* Max height removed to use 100vh in CSS */
+  }}
+>
+  <h1 className="mb-4 text-white p-4 about-title">About Us</h1>
+</div>
+
         <p className="about-paragraph mt-4 pb-2">
           <strong>AC Commerce</strong> is committed to complying with local laws and regulations
           and to applying a strict ethical code of conduct to all employees
@@ -40,13 +35,10 @@ const AboutUs = () => {
       </article>
       <article className="about mt-4 mb-4">
         <div
-          className="p-5 text-center responsive"
+          className="p-5 text-center responsive-image rounded "
           style={{
             backgroundImage: `url("/images/about-us2.jpg")`,
-            height: 450,
-            backgroundSize: "cover",
-            objectFit: "cover",
-            backgroundRepeat: "no-repeat",
+            MaxHeight: "100%", /* Max height removed to use 100vh in CSS */
           }}
         >
           {" "}
@@ -66,24 +58,22 @@ const AboutUs = () => {
       </article>
       <article className="about mt-4 mb-4">
         <div
-          className="p-5 text-center responsive"
+          className="p-5 text-center responsive-image rounded "
           style={{
             backgroundImage: `url("/images/about-us3.jpg")`,
-            height: 450,
-            backgroundSize: "cover",
-            objectFit: "cover",
-            backgroundRepeat: "no-repeat",
+            MaxHeight: "100%", /* Max height removed to use 100vh in CSS */
           }}
         >
           <h2 className=" text-center text-white goals-title">Our Goals</h2>
-          <p className="goals-paragraph text-white mt-2 pb-4">
-          Our goals are to become the trusted partner for all your cooling
-            needs, to ensure comfort and satisfaction in every step of your
-            journey with us.
-          </p>{" "}
+          
         </div>
+        <p className="goals-paragraph  mt-2 pb-4">
+          <strong>Our Goals</strong>  is to make every home and business environment more comfortable, with the perfect air conditioning solution that suits your specific requirements—whether you're cooling a small room or an entire building. We are committed to helping our customers find the right product, providing expert recommendations, and ensuring energy efficiency to reduce both environmental impact and energy bills.</p>
+
+<p className="goals-paragraph  mt-2 pb-4">We believe in sustainability, quality, and customer satisfaction, and we strive to offer the best in cooling technology to keep you cool all year round.
+          </p>{" "}
       </article>
-    </div>
+    </   Container>
   );
 };
 

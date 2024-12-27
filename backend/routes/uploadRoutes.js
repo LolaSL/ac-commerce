@@ -22,7 +22,6 @@ uploadRouter.post(
       api_secret: process.env.CLOUDINARY_API_SECRET,
     });
 
-    // Function to handle file upload to Cloudinary
     const streamUpload = (req) => {
       return new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
@@ -40,21 +39,21 @@ uploadRouter.post(
     };
 
     try {
-      // Upload the file to Cloudinary
+
       const result = await streamUpload(req);
 
-      // Check if the uploaded file is a PDF and extract text if so
+    
       let extractedText = '';
       if (req.file.mimetype === 'application/pdf') {
         extractedText = await extractTextFromPDF(req.file.buffer);
       }
 
-      // Find the product by ID
+    
       const product = await Product.findById(req.body.productId);
       if (product) {
         product.documents.push({
           url: result.secure_url,
-          extractedText: extractedText, // Add extracted text to the document data
+          extractedText: extractedText,
         });
         await product.save();
       } else {
@@ -64,7 +63,7 @@ uploadRouter.post(
       res.send({
         message: 'File uploaded successfully',
         url: result.secure_url,
-        extractedText: extractedText, // Return extracted text if it's a PDF
+        extractedText: extractedText, 
       });
     } catch (error) {
       console.error('Error during file upload:', error);

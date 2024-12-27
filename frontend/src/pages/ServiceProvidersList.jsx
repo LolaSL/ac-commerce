@@ -7,7 +7,6 @@ import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import { Store } from "../Store";
 import { getError } from "../utils";
-// import { useNavigate } from 'react-router-dom';
 
 
 const reducer = (state, action) => {
@@ -39,7 +38,6 @@ const reducer = (state, action) => {
   }
 };
 export default function ServiceProvidersList() {
-
   const [
     { loading, error, serviceProviders, loadingDelete, successDelete },
     dispatch,
@@ -57,7 +55,9 @@ export default function ServiceProvidersList() {
         dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axios.get(`/api/service-providers/`, {
           headers: {
-            headers: { Authorization: `Bearer ${serviceProviderInfo?.token || ''}` },
+            headers: {
+              Authorization: `Bearer ${serviceProviderInfo?.token || ""}`,
+            },
           },
         });
         dispatch({ type: "FETCH_SUCCESS", payload: data });
@@ -94,8 +94,7 @@ export default function ServiceProvidersList() {
       };
       fetchData();
     }
-  }, [ serviceProviderInfo]);
-  
+  }, [serviceProviderInfo]);
 
   const deleteHandler = async (user) => {
     if (window.confirm("Are you sure to delete?")) {

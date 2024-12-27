@@ -78,7 +78,7 @@ const HomePage = () => {
         )}
       </div>
       <div>
-        <Link to="/" className="link-blogs">
+        <Link to="/" className="link-blogs mt-4 mb-4">
           Back to Home
         </Link>
       </div>

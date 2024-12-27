@@ -9,6 +9,9 @@ import Message from '../models/messageModel.js';
 import Earnings from '../models/earningModel.js';
 import Blog from '../models/blogModel.js';
 import data from '../data.js';
+import Notification from '../models/notificationModel.js';
+
+
 
 const seedRouter = express.Router();
 
@@ -24,6 +27,7 @@ seedRouter.get('/', async (req, res) => {
     await Message.deleteMany({});
     await Earnings.deleteMany({});
     await Blog.deleteMany({});
+    await Notification.deleteMany({});
 
 
     const createdServiceProviders = await ServiceProvider.insertMany(data.serviceProviders);
@@ -48,23 +52,25 @@ seedRouter.get('/', async (req, res) => {
       serviceProvider: serviceProviderIds[index % serviceProviderIds.length],
     }));
 
-   
+
     const earningsWithIds = data.earnings.map((earning, index) => ({
       ...earning,
       serviceProvider: serviceProviderIds[index % serviceProviderIds.length],
-      projectName: projectIds[index % projectIds.length], 
+      projectName: projectIds[index % projectIds.length],
     }));
     console.log('Earnings Seed Data:', earningsWithIds);
-   
+
     const createdMessages = await Message.insertMany(messagesWithIds);
     const createdEarnings = await Earnings.insertMany(earningsWithIds);
 
-  
+
     const createdProducts = await Product.insertMany(data.products);
     const createdUsers = await User.insertMany(data.users);
     const createdSellers = await Seller.insertMany(data.sellers);
     const createdContacts = await Contact.insertMany(data.contacts);
     const createdBlogs = await Blog.insertMany(data.blogs);
+    const createdNotifications = await Notification.insertMany(data.notifications);
+
     res.send({
       createdProducts,
       createdUsers,
@@ -74,7 +80,8 @@ seedRouter.get('/', async (req, res) => {
       createdProjects,
       createdMessages,
       createdEarnings,
-      createdBlogs
+      createdBlogs,
+      createdNotifications
     });
   } catch (error) {
     res.status(500).send({ message: 'Error seeding data', error: error.message });

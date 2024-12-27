@@ -14,8 +14,74 @@ const data = {
       password: bcrypt.hashSync('123'),
       isAdmin: false,
     },
-    { name: "User1", email: "user1@example.com", password: "password123" },
-    { name: "User2", email: "user2@example.com", password: "password234" },
+    {
+      name: 'Janny',
+      email: 'user_jen@example.com',
+      password: bcrypt.hashSync('1234'),
+      isAdmin: false,
+    },
+    {
+      name: 'Manny',
+      email: 'user_manny@example.com',
+      password: bcrypt.hashSync('1235'),
+      isAdmin: false,
+    },
+    {
+      name: 'Barny',
+      email: 'user_ban@example.com',
+      password: bcrypt.hashSync('1236'),
+      isAdmin: false,
+    },
+    {
+      name: 'Mikky',
+      email: 'user_mik@example.com',
+      password: bcrypt.hashSync('1237'),
+      isAdmin: false,
+    },
+    {
+      name: 'Polly',
+      email: 'user_pol@example.com',
+      password: bcrypt.hashSync('1238'),
+      isAdmin: false,
+    },
+    {
+      name: 'Billy',
+      email: 'user_bil@example.com',
+      password: bcrypt.hashSync('1239'),
+      isAdmin: false,
+    },
+    {
+      name: 'Milly',
+      email: 'user_mil@example.com',
+      password: bcrypt.hashSync('1231'),
+      isAdmin: false,
+    },
+    {
+      name: 'Molly',
+      email: 'user_mol@example.com',
+      password: bcrypt.hashSync('12312'),
+      isAdmin: false,
+    },
+    {
+      name: 'Coll',
+      email: 'user_col@example.com',
+      password: bcrypt.hashSync('12314'),
+      isAdmin: false,
+    },
+    {
+      name: 'Fanny',
+      email: 'user_fan@example.com',
+      password: bcrypt.hashSync('12315'),
+      isAdmin: false,
+    },
+    {
+      name: 'Danny',
+      email: 'user_dan@example.com',
+      password: bcrypt.hashSync('12316'),
+      isAdmin: false,
+    },
+
+
   ],
   products: [
     {
@@ -345,7 +411,7 @@ const data = {
       email: "jane-dow@example.com",
       country: "USA",
       serviceType: "Air Conditioning Service",
-      equipmentAge: "3 years", 
+      equipmentAge: "3 years",
       subject: "Inquiry about service",
       message: "I need a new air conditioner serviced."
     }
@@ -485,46 +551,99 @@ const data = {
     {
 
       amount: 500,
-      date: '2024-09-20',
+      date: '2024-12-20',
       hoursWorked: 20,
       status: 'Pending',
     },
     {
 
       amount: 1500,
-      date: '2024-09-29',
+      date: '2024-11-29',
       hoursWorked: 40,
       status: 'Paid',
     },
     {
 
       amount: 850,
-      date: '2024-09-24',
+      date: '2024-12-24',
       hoursWorked: 30,
       status: 'Pending',
     },
     {
 
       amount: 2345,
-      date: '2024-09-04',
+      date: '2024-12-04',
       hoursWorked: 123,
       status: 'Paid',
     },
     {
 
       amount: 699,
-      date: '2024-09-20',
+      date: '2024-12-20',
       hoursWorked: 53,
       status: 'Pending',
     },
     {
 
       amount: 2500,
-      date: '2024-09-27',
+      date: '2024-12-13',
       hoursWorked: 78,
       status: 'Paid',
     },
   ],
+  notifications: [
+    {
+      title: 'High-Earning Service Provider',
+      message: 'Test Three Company has exceeded $2500 earnings!',
+      type: 'info',
+      recipientType: 'admin',
+      isRead: false,
+      createdAt: new Date(),
+    },
+    {
+      title: 'To implement marketing company for new users.',
+      message: 'The marketing company is devoted for new users. To make an asquantence with new service and new products.',
+      type: 'urgent',
+      recipientType: 'admin',
+      isRead: false,
+      createdAt: new Date(),
+    },
+    {
+      title: 'Pending Orders Alert',
+      message: 'There are more than 2 pending orders. Immediate action is required.',
+      type: 'info',
+      recipientType: 'admin',
+      isRead: false,
+      createdAt: new Date(),
+    },
+    {
+      title: 'Pending Orders Alert',
+      message: 'There are more than 2 pending orders. Immediate action is required.',
+      type: 'info',
+      recipientType: 'admin',
+      isRead: false,
+      createdAt: new Date(),
+    },
+    {
+      title: 'Discount Offer',
+      message: 'Check out the latest discount offers!',
+      type: 'discount',
+      recipientType: 'user',
+      isRead: false,
+      createdAt: new Date(),
+    },
+    {
+      title: 'Service Request Assigned',
+      message: 'You have been assigned a new service request for an air conditioner installation. Please review the details and respond promptly.',
+      type: 'urgent',
+      recipientType: 'serviceProvider',
+      isRead: false,
+      createdAt: new Date(),
+    }
+
+  ],
+
+
   blogs: [
     {
       title: "Elevate your comfort wherever you are:",
@@ -560,19 +679,40 @@ const data = {
     {
       title: " Everything You Should Know About Air Conditioning.",
       slug: "everything-you-should-know-about-air-conditioning",
-      content: " <h2>Types of Air Conditioners.</h2><article><p>Central Air Conditioner: A central air conditioner is usually the   best choice if you have a large home or want to cool in more than one room. A central air conditioner circulates air throughout your home using a system of air ducts. </p><p> Room Air Conditioners: Room air conditioners are perfect for cooling   small spaces, like a single room or an apartment. Room air  conditioners usually sit in a window or can be mounted on a wall.</p><p> Ductless Mini-Split Air Conditioner: A ductless mini-split air conditioner is similar to a room air conditioner, but it doesn't need an air duct. Instead, a small air conditioner unit sits inside your home, and a small compressor sits outside.           </p>   <p>            Portable Air Conditioner: A portable air conditioner is an excellent  option if you need to cool a small space and you don't want to  install a window air conditioner. Portable air conditioners can be             moved from room to room, and they usually sit on the floor.</p><p>   A window air conditioner is a single unit with all of its components             enclosed inside. It ejects heat out of its outdoor side and blows             cool air into the room on the indoor side. As the name suggests, it             is installed in a window or by making a hole in the wall. Such air  conditioners have a filter that slides out so that it can be cleaned  regularly for full AC efficiency. These air conditioners have             controls on the unit & may also come with a remote.  </p>   <p>     Floor-mounted air conditioners are designed for convenience if you  prefer a mini-split but lack the required space for a wall mounted             unit. The indoor unit of floor-mounted AC rests on the floor, and             the outer unit can be installed without major site preparation or             any ductwork. This arrangement is also ideal for spaces with tilted   walls, such as attics, or building constructed with fragile             materials such as glass.           </p>   <p>            Smart air conditioners are a type of mini-split, window, or portable             air conditioner that are IoT enabled. These ACs are connected to             Wi-Fi and come with a native app providing global control through a             smartphone. Depending on the manufacturer, these air conditioners             come with numerous functionalities. Some of these include weekly             scheduling, geofencing, comfy mode, temperature range control, and             numerous other features. Utilizing these, you can achieve great             comfort coupled with energy savings.           </p>   <p>            Geothermal heating & cooling is considered a relatively new method,             it works by utilizing the insulating properties of the earth. Since             the temperatures under 4 to 6 feet of land remain consistent all             year regardless of the weather, geothermal technology takes             advantage of this to heat & cool your home more efficiently. This             system has piping that consists of a loop that circulates water             between your home, a heat pump & the ground. They require intensive             work to set up underground.           </p>   <p>            Hybrid / Dual Fuel Air Conditioner system is one that combines a gas             furnace with an electric air-source heat pump to deliver a             cost-effective & efficient performance in terms of heating &             cooling. Depending on the temperature outdoors, the system             automatically switches between burning fossil fuels and the usage of             electricity. You program the temperature at which the system             switches from heat pump to furnace, or you can make the manual             switch too.           </p>   <p>                       Evaporative coolers are sometimes categorized as air conditioning             alternatives, even though technically, they are not air conditioners             and differ in both mechanism and structure. This inclusion in the             list stems from their ability to effectively cool indoor spaces.             Unlike conventional AC systems with ducts and refrigeration cycles,             evaporative coolers operate by drawing in warm air through             water-saturated pads or media.</p></article>",
+      content: " <h2>Types of Air Conditioners.</h2><article><p>Central Air Conditioner: A central air conditioner is usually the   best choice if you have a large home or want to cool in more than one room. A central air conditioner circulates air throughout your home using a system of air ducts. </p><p> Room Air Conditioners: Room air conditioners are perfect for cooling   small spaces, like a single room or an apartment. Room air  conditioners usually sit in a window or can be mounted on a wall.</p><p> Ductless Mini-Split Air Conditioner: A ductless mini-split air conditioner is similar to a room air conditioner, but it doesn't need an air duct. Instead, a small air conditioner unit sits inside your home, and a small compressor sits outside.           </p>   <p>            Portable Air Conditioner: A portable air conditioner is an excellent  option if you need to cool a small space and you don't want to  install a window air conditioner. Portable air conditioners can be             moved from room to room, and they usually sit on the floor.</p><p>   A window air conditioner is a single unit with all of its components             enclosed inside. It ejects heat out of its outdoor side and blows             cool air into the room on the indoor side. As the name suggests, it             is installed in a window or by making a hole in the wall. Such air  conditioners have a filter that slides out so that it can be cleaned  regularly for full AC efficiency. These air conditioners have             controls on the unit & may also come with a remote.  </p>   <p>     Floor-mounted air conditioners are designed for convenience if you  prefer a mini-split but lack the required space for a wall mounted             unit. The indoor unit of floor-mounted AC rests on the floor, and             the outer unit can be installed without major site preparation or             any ductwork. This arrangement is also ideal for spaces with tilted   walls, such as attics, or building constructed with fragile             materials such as glass.           </p>   <p>            Smart air conditioners are a type of mini-split, window, or portable             air conditioner that are IoT enabled. These ACs are connected to             Wi-Fi and come with a native app providing global control through a             smartphone. Depending on the manufacturer, these air conditioners             come with numerous functionalities. Some of these include weekly             scheduling, geofencing, comfy mode, temperature range control, and             numerous other features. Utilizing these, you can achieve great             comfort coupled with energy savings.           </p>   <p>            Geothermal heating & cooling is considered a relatively new method,             it works by utilizing the insulating properties of the earth. Since             the temperatures under 4 to 6 feet of land remain consistent all             year regardless of the weather, geothermal technology takes             advantage of this to heat & cool your home more efficiently. This   system has piping that consists of a loop that circulates water  between your home, a heat pump & the ground. They require intensive             work to set up underground. </p>   <p>  Hybrid / Dual Fuel Air Conditioner system is one that combines a gas  furnace with an electric air-source heat pump to deliver a             cost-effective & efficient performance in terms of heating &  cooling. Depending on the temperature outdoors, the system   automatically switches between burning fossil fuels and the usage of             electricity. You program the temperature at which the system             switches from heat pump to furnace, or you can make the manual             switch too.           </p>   <p>  Evaporative coolers are sometimes categorized as air conditioning  alternatives, even though technically, they are not air conditioners             and differ in both mechanism and structure. This inclusion in the             list stems from their ability to effectively cool indoor spaces.  Unlike conventional AC systems with ducts and refrigeration cycles, evaporative coolers operate by drawing in warm air through water-saturated pads or media.</p></article>",
       shortDescription: "Types of Air Conditioners.",
       image: "https://accessglobal.media.clients.ellingtoncms.com/uploads/froala_editor/images/1728398396923.png",
     },
     {
       title: "How to Choose The Best Air Conditioner For Your Needs.",
       slug: "how-to-choose-the-best-ac",
-      content: "<article><h2>Factors to Consider Before Buying an Air Conditioner </h2>  <p >When choosing an air conditioner, there are many factors you need to  consider making the best decision for your home. The first thing you  need to do is figure out the room's square footage or rooms you want to cool. Once you know that, you can start looking at air conditioners and their cooling capacity.  </p>  <p > The next thing you need to consider is the air conditioner's features.  Some air conditioners come with features like timers and remote  controls. These can be very helpful if you want to be able to cool  your home before you get home from work or turn off the air  conditioner when you leave for vacation. Finally, you need to think  about your budget. Air conditioners can range from a few hundred  dollars to several thousand dollars. Therefore, it's crucial to find  an air conditioner that fits your needs and budget. Installing an air  conditioner can be a great way to improve the comfort of your home. But, it's essential to do your research and choose the right air  conditioner for your home. By considering the size of the room, the  features you want, and your budget, you can find an air conditioner  that will keep you cool all summer long.   </p></article>", "shortDescription": "Factors you need to consider making the best decision.",
+      content: "<article><h2>Factors to Consider Before Buying an Air Conditioner </h2>  <p >When choosing an air conditioner, there are many factors you need to  consider making the best decision for your home. The first thing you  need to do is figure out the room's square footage or rooms you want to cool. Once you know that, you can start looking at air conditioners and their cooling capacity.  </p>  <p > The next thing you need to consider is the air conditioner's features.  Some air conditioners come with features like timers and remote  controls. These can be very helpful if you want to be able to cool  your home before you get home from work or turn off the air  conditioner when you leave for vacation. Finally, you need to think  about your budget. Air conditioners can range from a few hundred  dollars to several thousand dollars. Therefore, it's crucial to find  an air conditioner that fits your needs and budget. Installing an air  conditioner can be a great way to improve the comfort of your home. But, it's essential to do your research and choose the right air  conditioner for your home. By considering the size of the room, the  features you want, and your budget, you can find an air conditioner  that will keep you cool all summer long.   </p></article>",
+      shortDescription: "Factors you need to consider making the best decision.",
       image: "https://www.sandersandjohnson.com/wp-content/uploads/house_cut.png",
-    }
+    },
+    {
+      title: "Where is the best location for your split system air conditioner installation.",
+      slug: "ac-installation",
+      content: "<article><h2>The Importance of Proper Installation for Your Split System Air Conditioner</h2> <p >The placement and installation of your split system air conditioner can significantly influence its efficiency and performance. If installed in an unsuitable location, it may struggle to adequately heat or cool your space. </p> <p >To ensure you remain comfortable during the summer and warm in the winter, we’ve addressed the crucial question: where is the best location for your split system air conditioner? </p> <p>Optimal Installation Locations for Your Split System Air Conditioner. When selecting a site for your split system air conditioner, keep these straightforward guidelines in mind: Install Where It’s Most Needed Consider where you spend the most time at home. For many, this is the lounge area, making a central position in this room an excellent choice for installation. If you work from home or have trouble sleeping on warm nights, your home office or bedroom might also be a suitable option. </p> <p >Choose a Central Spot in the Room It’s generally beneficial to install your split system air conditioner centrally within the room for effective heating and cooling of the entire space. Positioning it above where you typically sit, like your couch in the lounge or your office chair, can enhance its efficiency. </p> <p > Install High on the Wall (2+ Meters) Since hot air rises and cool air sinks, installing your air conditioner at a height of over 2 meters can significantly improve air distribution throughout the room. </p> <p > Ensure Adequate Clearance of 15 cm Around the Unit Proper airflow around the air conditioner is essential, so make sure there’s at least 15 cm of clearance on each side. </p></article> <article><h3>Whole House vs. Room Heating & Cooling</h3> <p >Consider whether you intend to heat just one room or your entire home when deciding where to install your split system air conditioner. If heating a single room, follow the guidelines to install it where it’s most needed. However, opt for a central location within the property for whole-home heating. </p> <p> Ensure that you select a split system air conditioner with sufficient power to heat and cool your entire home effectively. Refer to our guide on choosing the right size air conditioner for more information. </p> <p> Installing a Split System Air Conditioner in Your Bedroom If you're placing a split air conditioner in your bedroom, avoid positioning it too close to your bed, as this could disrupt your sleep by directing cold or hot air at you. Alternatively, if it's not centrally located its efficiency may be compromised. </p> <p> To resolve this issue, consider purchasing a unit with adjustable louvers, such as those from Carrier’s range of split system air conditioners. This allows you to install it centrally—above, to the side, or at the foot of your bed—and adjust the airflow direction so that it doesn’t blow directly onto you. </p> </article><article><h3> Positioning the Outdoor Unit of Your Split System Air Conditioner. </h3> <h3> When selecting a location for your split AC’s outdoor unit, consider the following: </h3> <p > Position it away from direct sunlight whenever possible; the southeast or south side of your home, shielded from the afternoon sun, is often ideal. Ensure it is located in an open area for proper airflow around the unit. The outdoor unit should be easily accessible for maintenance and repairs. If feasible, install it on a flat, sturdy surface to minimize vibration. Place it as close to the indoor unit as possible to maximize efficiency. Deciding where to install your split AC unit should be your first consideration when purchasing a new system. Taking the time to evaluate the best location and seeking professional installation help will enhance your air conditioner's performance and reduce operational costs. </p> </article>",
+      shortDescription: "Air conditioner installation.",
+      image: "https://grovehvac.com/wp-content/uploads/2021/07/Grove_Tune-Up-scaled.jpeg",
+    },
+    {
+      title: "What Is a BTU and Why Does It Make Sence?",
+      slug: "ac-btu",
+      content: "<article><h2>Air Conditioning and BTU.</h2><p > The British Thermal Unit, or BTU, is an energy unit. It is approximately the energy needed to heat one pound of water at 1 degree Fahrenheit. 1 BTU = 1,055 joules, 252 calories, 0.293 watt-hours, or the energy released by burning one match. 1 watt is approximately 3.412 BTU per hour. </p> <p > BTU is often used as a point of reference for comparing different fuels. Even though they're physical commodities and are quantified accordingly, such as by volume or barrels, they can be converted to BTUs depending on the energy or heat content inherent in each quantity. BTU as a unit of measurement is more useful than physical quantity because of fuel's intrinsic value as an energy source. This allows many different commodities with intrinsic energy properties, such as natural gas and oil, to be compared. </p> <p> BTU can also be used pragmatically as a point of reference for heat that an appliance generates. The higher the BTU rating of an appliance, the greater the heating capacity. As for air conditioning in homes, even though ACs are meant to cool homes, BTUs on the technical label refer to how much heat the air conditioner can remove from their respective surrounding air. </p> <p > Air conditioners come in a range of sizes, designed to cool different volumes of air. The rating of an air conditioner is measured in BTUs, and you need to know how many BTUs will be required to cool your room. Above is a chart that will tell you the BTUs required for different sizes of rooms. Simply work out how big your room is (measure the length of your room and multiply it by the width) and then you will know roughly how many BTUs your air conditioner requires. Air conditioners come in a range of sizes, designed to cool different volumes of air. The rating of an air conditioner is measured in BTUs, and you need to know how many BTUs will be required to cool your room. Above is a chart that will tell you the BTUs required for different sizes of rooms. Simply work out how big your room is (measure the length of your room and multiply it by the width) and then you will know roughly how many BTUs your air conditioner requires. </p> </article>",
+      shortDescription: "Air conditioning and BTU",
+      image: "https://www.keroclima.pt/WebRoot/ce_pt/Shops/960844166/MediaGallery/Logo_Marcas/BTU_3.png",
 
+    },
+    {
+      title: "What is Air Conditioning, and How Does it Work?",
+      slug: "ac-how-it-works",
+      content: "<article><h2>Air Conditioning.</h2><p > Air conditioning is a system that helps to regulate the temperature and humidity in a space. Air conditioners work by circulating air in a room and removing warm air and moisture. This exchange process also helps filter out pollutants, dust, and other allergens from the air.</p><p>   Air conditioners come in many different shapes and sizes, but the most common type is the central air conditioner. Central air conditioners are usually located in a home's basement or crawl space and use ductwork to distribute cool air. There are many benefits to air conditioning, but some of the most notable include improved air quality. </p> <h3>Air conditioning good and bad sides </h3> <p>   Installing air conditioning in your property has both good and bad sides. The good side is that air conditioning can improve air quality by circulating and filtering air. This can be beneficial for people with allergies or respiratory problems.  </p> <p>   Air condition can also help keep your home cool during hot weather, which can be a relief from the heat. The bad side of air condition is that it can increase your energy bills. Air condition also produces noise, which can be annoying for some people. If you're considering air conditioning for your home, weigh the pros and cons to decide if it's right for you </p> </article>",
+      shortDescription: "Air conditioning and how it works.",
+      image: "https://holtzople.com/wp-content/uploads/2015/04/how-air-conditioning-systems-work.jpg",
 
-
+    },
   ]
 }
 
