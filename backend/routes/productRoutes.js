@@ -5,6 +5,9 @@ import { isAuth, isAdmin } from '../utils.js';
 
 const productRouter = express.Router();
 
+
+
+
 productRouter.get('/', async (req, res) => {
   const products = await Product.find();
   res.send(products);
@@ -30,7 +33,7 @@ productRouter.post(
       btu: 0,
       areaCoverage: 0,
       energyEfficiency: 0,
-      documents: [], 
+      documents: [],
     });
     const product = await newProduct.save();
     res.send({ message: 'Product Created', product });
@@ -46,10 +49,10 @@ productRouter.put(
     const features = Array.isArray(req.body.features)
       ? req.body.features
       : req.body.features.split(',').map((feature) => feature.trim());
-    
+
     const documents = Array.isArray(req.body.documents)
       ? req.body.documents
-      : JSON.parse(req.body.documents || '[]'); 
+      : JSON.parse(req.body.documents || '[]');
 
     const product = await Product.findById(productId);
     if (product) {
@@ -66,7 +69,7 @@ productRouter.put(
       product.btu = req.body.btu;
       product.areaCoverage = req.body.areaCoverage;
       product.energyEfficiency = req.body.energyEfficiency;
-      product.documents = documents; 
+      product.documents = documents;
       await product.save();
       res.send({ message: 'Product Updated', product });
     } else {
@@ -159,23 +162,22 @@ productRouter.get(
     const page = query.page || 1;
     const category = query.category || '';
     const price = query.price || '';
+    const discount = query.discount || '';
     const btu = query.btu || '';
     const rating = query.rating || '';
     const order = query.order || '';
     const brand = query.brand || '';
     const searchQuery = query.query || '';
 
-
     const queryFilter =
       searchQuery && searchQuery !== 'all'
         ? {
-            name: {
-              $regex: searchQuery,
-              $options: 'i', 
-            },
-          }
+          name: {
+            $regex: searchQuery,
+            $options: 'i',
+          },
+        }
         : {};
-
 
     const btuFilter = btu && btu !== 'all' ? { btu: { $gte: Number(btu) } } : {};
     const categoryFilter = category && category !== 'all' ? { category } : {};
@@ -183,31 +185,46 @@ productRouter.get(
     const ratingFilter =
       rating && rating !== 'all'
         ? {
-            rating: {
-              $gte: Number(rating),
-            },
-          }
+          rating: {
+            $gte: Number(rating),
+          },
+        }
         : {};
     const priceFilter =
       price && price !== 'all'
         ? {
-            price: {
-              $gte: Number(price.split('-')[0]),
-              $lte: Number(price.split('-')[1]),
-            },
-          }
+          price: {
+            $gte: Number(price.split('-')[0]),
+            $lte: Number(price.split('-')[1]),
+          },
+        }
         : {};
-    const sortOrder = order === 'brand' ? { brand: 1 } 
-        : order === 'lowest'
-        ? { price: 1 }
-        : order === 'highest'
-        ? { price: -1 }
-        : order === 'toprated'
-        ? { rating: -1 }
-        : order === 'newest'
-        ? { createdAt: -1 }
-        : { _id: -1 };
+    const discountFilter =
+      discount && discount !== 'any'
+        ? discount === '0' // Check for "No Discount"
+          ? { discount: { $eq: 0 } } // Match products with exactly 0 discount
+          : discount.includes('-') // Check if it's a range like "10-20"
+            ? {
+              discount: {
+                $gte: Number(discount.split('-')[0]), // Min value
+                $lte: Number(discount.split('-')[1]), // Max value
+              },
+            }
+            : { discount: { $gte: Number(discount) } } // Single value discount
+        : {};
 
+    const sortOrder =
+      order === 'brand'
+        ? { brand: 1 }
+        : order === 'lowest'
+          ? { price: 1 }
+          : order === 'highest'
+            ? { price: -1 }
+            : order === 'toprated'
+              ? { rating: -1 }
+              : order === 'newest'
+                ? { createdAt: -1 }
+                : { _id: -1 };
 
     const products = await Product.find({
       ...queryFilter,
@@ -215,12 +232,12 @@ productRouter.get(
       ...priceFilter,
       ...ratingFilter,
       ...btuFilter,
-      ...brandFilter, 
+      ...brandFilter,
+      ...discountFilter,
     })
       .sort(sortOrder)
       .skip(pageSize * (page - 1))
       .limit(pageSize);
-
 
     const countProducts = await Product.countDocuments({
       ...queryFilter,
@@ -228,10 +245,10 @@ productRouter.get(
       ...priceFilter,
       ...ratingFilter,
       ...btuFilter,
-      ...brandFilter, 
+      ...brandFilter,
+      ...discountFilter,
     });
 
- 
     res.send({
       products,
       countProducts,
@@ -240,6 +257,7 @@ productRouter.get(
     });
   })
 );
+
 
 productRouter.get(
   '/categories',
@@ -250,9 +268,9 @@ productRouter.get(
 );
 productRouter.get('/brands', async (req, res) => {
   try {
-  
+
     const brands = await Product.distinct('brand');
-    res.json(brands); 
+    res.json(brands);
   } catch (err) {
 
     res.status(500).json({ message: 'Error fetching brands', error: err.message });
@@ -284,14 +302,14 @@ productRouter.get('/btu/:btu', async (req, res) => {
 
     const product = await Product.findOne({
       btu: {
-        $gte: targetBTU,  
+        $gte: targetBTU,
       }
     }).sort({ btu: 1 });
 
- 
+
     if (!product) {
       const closestProduct = await Product.findOne({
-        btu: { $lte: targetBTU }  
+        btu: { $lte: targetBTU }
       }).sort({ btu: -1 });
 
       if (closestProduct) {
@@ -304,6 +322,22 @@ productRouter.get('/btu/:btu', async (req, res) => {
     }
   } catch (error) {
     res.status(500).send({ message: error.message });
+  }
+});
+
+productRouter.get("/offers", async (req, res) => {
+  try {
+    // Fetch products with a discount greater than 0
+    const productsOnSale = await Product.find({ discount: { $gt: 0 } });
+
+    if (!productsOnSale || productsOnSale.length === 0) {
+      return res.status(404).json({ message: "No products on sale at the moment." });
+    }
+
+    res.status(200).json(productsOnSale);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error while fetching products on sale." });
   }
 });
 

@@ -1,5 +1,4 @@
-import React, { useReducer } from "react";
-import { useEffect } from "react";
+import React, { useReducer, useEffect } from "react";
 import axios from "axios";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -7,8 +6,9 @@ import Product from "../components/Product.jsx";
 import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox.jsx";
 import MessageBox from "../components/MessageBox.jsx";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
+// Reducer function to handle state transitions
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -23,32 +23,39 @@ const reducer = (state, action) => {
 };
 
 const HomePage = () => {
-  const [{ loading, error, products }, dispatch] = useReducer(
-    reducer,
-    {
-      products: [],
-      loading: true,
-      error: "",
-    }
-  );
+  const [{ loading, error, products }, dispatch] = useReducer(reducer, {
+    products: [],
+    loading: true,
+    error: "",
+  });
+
+  const location = useLocation();
+  const offerCriteria = location.state?.criteria || null;
 
   useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
-        const result = await axios.get("/api/products");
-        dispatch({ type: "FETCH_SUCCESS", payload: result.data });
+        const { data } = await axios.get("/api/products");
+        console.log("Fetched Data:", data); 
+        const filteredProducts = offerCriteria
+          ? data.filter((product) => offerCriteria(product))
+          : data;
+        console.log("Filtered Products:", filteredProducts);
+        dispatch({ type: "FETCH_SUCCESS", payload: filteredProducts });
       } catch (err) {
+        console.error("Error fetching products:", err.message);
         dispatch({ type: "FETCH_FAIL", payload: err.message });
       }
     };
+
     fetchData();
-  }, []);
+  }, [offerCriteria]);
 
   return (
     <div>
       <Helmet>
-        <title> Cool Commerce</title>
+        <title>Cool Commerce</title>
       </Helmet>
       <article className="py-4 mb-4">
         <h1 className="featured-title text-center pt-4 mb-4 fw-bold">
@@ -63,22 +70,23 @@ const HomePage = () => {
           <LoadingBox />
         ) : error ? (
           <MessageBox variant="danger">{error}</MessageBox>
-        ) : (
-          <div>
-          <Row className="gy-4"> 
+        ) : products.length > 0 ? (
+          <Row className="gy-4">
             {products.map((product) => (
               <Col key={product.slug} xs={12} md={4} lg={3} className="product-item">
                 <div className="product-card">
-                  <Product product={product}></Product>
+                <Product product={product} offers={offerCriteria ? [offerCriteria] : []} />
+
                 </div>
               </Col>
             ))}
           </Row>
-        </div>              
+        ) : (
+          <MessageBox variant="info">No products match the selected offer.</MessageBox>
         )}
       </div>
-      <div className=" mt-4 mb-4">
-        <Link to="/" className="link-blogs">
+      <div className="mt-4 mb-4 text-center">
+        <Link to="/" className="btn btn-secondary">
           Back to Home
         </Link>
       </div>

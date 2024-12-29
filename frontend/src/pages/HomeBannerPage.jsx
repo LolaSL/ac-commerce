@@ -57,7 +57,7 @@ export default function HomeBannerPage() {
       setNotification(receivedNotification);
       const timer = setTimeout(() => {
         setNotification(null);
-      }, 20000);
+      }, 8000);
 
       return () => clearTimeout(timer);
     }

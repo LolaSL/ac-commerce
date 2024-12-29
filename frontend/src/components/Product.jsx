@@ -7,7 +7,6 @@ import { useContext } from "react";
 import { Store } from "../Store";
 import Image from "react-bootstrap/Image";
 
-
 function Product(props) {
   const { product } = props;
 
@@ -30,22 +29,33 @@ function Product(props) {
     });
   };
 
-
   return (
     <Card>
       <Link to={`/product/${product.slug}`}>
+       
         <Image src={product.image} className="responsive" alt={product.name} />
       </Link>
+     
       <Card.Body>
-        <Link
-          to={`/product/${product.slug}`}
-          className="card-title text-secondary"
-        >
+        <Link to={`/product/${product.slug}`} className="card-link text-secondary">
           <Card.Title>{product.name}</Card.Title>
         </Link>
-       
         <Rating rating={product.rating} numReviews={product.numReviews} />
-        <Card.Text>${product.price}</Card.Text>
+        <Card.Text>
+          <span className={product.discount > 0 ? "original-price" : ""}>
+            ${product.price.toFixed(2)}
+          </span>
+          {product.discount > 0 && (
+          <span className="sale-badge">
+            On Sale! Save {product.discount}%
+          </span>
+        )}
+          {product.discount > 0 && (
+            <span className="discounted-price">
+              ${((product.price * (100 - product.discount)) / 100).toFixed(2)}
+            </span>
+          )}
+        </Card.Text>
         {product.countInStock === 0 ? (
           <Button className="btn-out-of-stock" variant="secondary" disabled>
             Out of stock
@@ -53,9 +63,9 @@ function Product(props) {
         ) : (
           <Button onClick={() => addToCartHandler(product)}>Add to cart</Button>
         )}
-        
       </Card.Body>
     </Card>
   );
 }
+
 export default Product;

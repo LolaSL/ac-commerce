@@ -70,7 +70,7 @@ export default function SellersPage() {
                 to={`/sellers/${seller._id}`}
                 className="seller-name text-secondary"
               >
-                <h2>{seller.name}</h2>
+                <h2 className="seller-name">{seller.name}</h2>
               </Link>
               <p>Brand: {seller.brand}</p>
               <p className="seller-paragraph">Information: {seller.info}</p>

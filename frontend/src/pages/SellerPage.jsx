@@ -103,7 +103,7 @@ export default function SellerPage() {
 
   return (
     <div>
-      <h1>Seller Details</h1>
+      <h1 className="mt-4 mb-4 p-4">Seller Details</h1>
       {loading ? (
         <LoadingBox />
       ) : error ? (
@@ -111,12 +111,12 @@ export default function SellerPage() {
       ) : (
         <>
           <div className="seller">
-            <h2>{seller.name}</h2>
+            <h2 className="p-4">{seller.name}</h2>
             <p>Brand: {seller.brand}</p>
                 <p>Information: {seller.info}</p>
               </div>
               <div className="video-preview">
-            <p><strong>Video:</strong></p>
+            <p><strong>VIDEO:</strong></p>
             <iframe
               className="responsive-iframe rounded"
               width="600"
@@ -128,8 +128,8 @@ export default function SellerPage() {
               allowFullScreen
             ></iframe>
           </div>
-          <div className="my-3">
-            <h2 ref={reviewsRef}>Reviews</h2>
+          <div >
+            <h2 className="mt-2 mb-2 p-2" ref={reviewsRef}>Reviews</h2>
             <ListGroup>
               {seller.reviews.map((review) => (
                 <ListGroup.Item key={review._id}>
@@ -140,10 +140,10 @@ export default function SellerPage() {
                 </ListGroup.Item>
               ))}
             </ListGroup>
-            <div className="my-3">
+            <div >
               {userInfo ? (
                 <form onSubmit={submitHandler}>
-                  <h2>Write a customer review</h2>
+                  <h2 className="mt-2 mb-2 p-2">Write a customer review</h2>
                   <Form.Group className="mb-3" controlId="rating">
                     <Form.Label>Rating</Form.Label>
                     <Form.Control

@@ -4,7 +4,6 @@ import { PDFDocument } from "pdf-lib";
 import * as pdfjsLib from "pdfjs-dist/webpack.mjs";
 import { Helmet } from "react-helmet-async";
 
-
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js`;
 
 function UploadFile() {
@@ -12,12 +11,10 @@ function UploadFile() {
   const [error, setError] = useState(null);
   const [iconPositions, setIconPositions] = useState([]);
   const canvasRef = useRef(null);
-  // const containerRef = useRef(null);
   const [color, setColor] = useState("#ee1169");
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [comments, setComments] = useState([]);
-
 
   const RECT_WIDTH = window.innerWidth < 768 ? 20 : 30; // Smaller on mobile
   const RECT_HEIGHT = window.innerWidth < 768 ? 10 : 15;
@@ -38,29 +35,25 @@ function UploadFile() {
   };
 
   const handleCanvasClick = (e) => {
-  const { offsetX, offsetY } = e.nativeEvent;
-console.log(offsetX, offsetY)
+    const { offsetX, offsetY } = e.nativeEvent;
+    console.log(offsetX, offsetY);
 
-  if (e.detail === 2) {
+    if (e.detail === 2) {
+      handleIconDoubleClick(offsetX, offsetY);
+    } else {
+      const isNewIcon = handleIconClick(offsetX, offsetY);
 
-    handleIconDoubleClick(offsetX, offsetY);
-  } else {
-
-    const isNewIcon = handleIconClick(offsetX, offsetY);
-
-    if (isNewIcon) {
-      const commentText = prompt("Enter your comment:");
-      if (commentText) {
-        setComments((prevComments) => [
-          ...prevComments,
-          { text: commentText, x: offsetX + 50, y: offsetY - 30 },
-        ]);
+      if (isNewIcon) {
+        const commentText = prompt("Enter your comment:");
+        if (commentText) {
+          setComments((prevComments) => [
+            ...prevComments,
+            { text: commentText, x: offsetX + 50, y: offsetY - 30 },
+          ]);
+        }
       }
     }
-  }
-};
-  
-
+  };
 
   const handleIconDoubleClick = (offsetX, offsetY) => {
     const existingIconIndex = iconPositions.findIndex((icon) => {
@@ -93,7 +86,6 @@ console.log(offsetX, offsetY)
     });
 
     if (existingIconIndex !== -1) {
-
       const newIcons = [...iconPositions];
       newIcons[existingIconIndex].angle =
         (newIcons[existingIconIndex].angle + Math.PI / 2) % (2 * Math.PI);
@@ -109,15 +101,15 @@ console.log(offsetX, offsetY)
   };
 
   const handleCanvasTouch = (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     const touch = e.touches[0];
     const offsetX = touch.clientX - e.target.offsetLeft;
     const offsetY = touch.clientY - e.target.offsetTop;
 
     if (e.detail === 2) {
-      handleIconDoubleClick(offsetX, offsetY); 
+      handleIconDoubleClick(offsetX, offsetY);
     } else {
-      handleIconClick(offsetX, offsetY); 
+      handleIconClick(offsetX, offsetY);
     }
   };
 
@@ -209,17 +201,17 @@ console.log(offsetX, offsetY)
   const renderSignature = useCallback(
     (context) => {
       if (isSaved) {
-        const text = "APPROVED BY AC-COMMERCE";
-        const textX = context.canvas.width - 460;
-        const textY = 70;
-        const padding = 20;
-        context.font = "bold 25px Arial";
+        const text = "APPROVED";
+        const textX = context.canvas.width - 200;
+        const textY = 45;
+        const padding = 15;
+        context.font = "bold 25px Arial itallic";
 
         const textMetrics = context.measureText(text);
         const textWidth = textMetrics.width;
-        const textHeight = 27;
+        const textHeight = 20;
 
-        context.strokeStyle = "grey";
+        context.strokeStyle = "black";
         context.lineWidth = 2;
         context.fillStyle = "white";
         context.shadowColor = "grey";
@@ -239,7 +231,7 @@ console.log(offsetX, offsetY)
           textHeight + padding
         );
 
-        context.fillStyle = "crimson";
+        context.fillStyle = "#FF0000";
         context.fillText(text, textX, textY);
 
         context.beginPath();
@@ -334,7 +326,6 @@ console.log(offsetX, offsetY)
     renderComments,
     renderSignature,
     drawRotatedRectangle,
-
   ]);
 
   const saveAsImage = () => {
@@ -418,12 +409,11 @@ console.log(offsetX, offsetY)
       <h3 className="mt-4 mb-4">Preview of selected file:</h3>
       {previewUrl && (
         <div>
-          
           <canvas
             ref={canvasRef}
-            width={window.innerWidth * 0.9} 
-            height={window.innerHeight * 0.6} 
-            onTouchStart={handleCanvasTouch} 
+            width={window.innerWidth * 0.9}
+            height={window.innerHeight * 0.6}
+            onTouchStart={handleCanvasTouch}
             onClick={handleCanvasEvent}
             style={{
               backgroundImage: `url(${previewUrl})`,
@@ -433,8 +423,8 @@ console.log(offsetX, offsetY)
               margin: "0 auto",
             }}
           />
-      </div>
-    )}
+        </div>
+      )}
       {file && file.type.startsWith("image/") && (
         <Button variant="secondary" className="mt-2 mb-4" onClick={saveAsImage}>
           Save as Image
@@ -447,8 +437,7 @@ console.log(offsetX, offsetY)
         </Button>
       )}
       {error && <p className="text-danger">{error}</p>}
-        </div>
-      
+    </div>
   );
 }
 

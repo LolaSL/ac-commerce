@@ -49,6 +49,14 @@ export const ratings = [
   { name: "1stars & up", rating: 1 },
 ];
 
+const discounts = [
+  { name: "Any", value: "any" },
+  { name: "No Discount", value: "0" },
+  { name: "10% to 20%", value: "10-20" },
+  { name: "21% to 40%", value: "21-40" },
+  { name: "50%", value: "50" },
+];
+
 export default function SearchPage() {
   const { id } = useParams();
   console.log(id);
@@ -58,6 +66,7 @@ export default function SearchPage() {
   const category = sp.get("category") || "all";
   const query = sp.get("query") || "all";
   const price = sp.get("price") || "all";
+  const discount = sp.get("discount") || "0";
   const rating = sp.get("rating") || "all";
   const btu = sp.get("btu") || "all";
   const brand = sp.get("brand") || "all";
@@ -74,7 +83,7 @@ export default function SearchPage() {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(
-          `/api/products/search?page=${page}&query=${query}&category=${category}&price=${price}&rating=${rating}&btu=${btu}&brand=${brand}&order=${order}`
+          `/api/products/search?page=${page}&query=${query}&category=${category}&price=${price}&discount=${discount}&rating=${rating}&btu=${btu}&brand=${brand}&order=${order}`
         );
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
@@ -85,7 +94,7 @@ export default function SearchPage() {
       }
     };
     fetchData();
-  }, [category, order, page, price, query, rating, btu, brand]);
+  }, [category, order, page, price, query, rating, btu, brand, discount]);
 
   const [categories, setCategories] = useState([]);
   const [brandsList, setBrandsList] = useState([]);
@@ -98,13 +107,13 @@ export default function SearchPage() {
           axios.get(`/api/products/brands`),
         ]);
         setCategories(categoriesData.data);
-        setBrandsList(brandsData.data); // Use the renamed state
+        setBrandsList(brandsData.data);
       } catch (err) {
         toast.error(getError(err));
       }
     };
     fetchCategoriesAndBrands();
-  }, []); 
+  }, []);
 
   const getFilterUrl = (filter, skipPathname) => {
     const filterPage = filter.page || page;
@@ -112,12 +121,13 @@ export default function SearchPage() {
     const filterQuery = filter.query || query;
     const filterRating = filter.rating || rating;
     const filterPrice = filter.price || price;
+    const filterDiscount = filter.discount || discount;
     const filterBtu = filter.btu || btu;
     const filterBrand = filter.brand || brand;
     const sortOrder = filter.order || order;
     return `${
       skipPathname ? "" : "/search?"
-    }category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&rating=${filterRating}&btu=${filterBtu}&brand=${filterBrand}&order=${sortOrder}&page=${filterPage}`;
+    }category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&discount=${filterDiscount}&rating=${filterRating}&btu=${filterBtu}&brand=${filterBrand}&order=${sortOrder}&page=${filterPage}`;
   };
 
   return (
@@ -130,10 +140,12 @@ export default function SearchPage() {
           <Col md={3}>
             <h3>AC Unit</h3>
             <div>
-              <ul>
+              <ul className="all">
                 <li>
                   <Link
-                    className={"all" === category ? "text-bold" : ""}
+                    className={`text-decoration-none ${
+                      "all" === category ? "text-bold" : ""
+                    }`}
                     to={getFilterUrl({ category: "all" })}
                   >
                     Any
@@ -142,7 +154,9 @@ export default function SearchPage() {
                 {categories.map((c) => (
                   <li key={c}>
                     <Link
-                      className={c === category ? "text-bold" : ""}
+                      className={`text-decoration-none ${
+                        c === category ? "text-bold" : ""
+                      }`}
                       to={getFilterUrl({ category: c })}
                     >
                       {c}
@@ -156,7 +170,9 @@ export default function SearchPage() {
               <ul>
                 <li>
                   <Link
-                    className={"all" === price ? "text-bold" : ""}
+                    className={`text-decoration-none ${
+                      "all" === price ? "text-bold" : ""
+                    }`}
                     to={getFilterUrl({ price: "all" })}
                   >
                     Any
@@ -166,9 +182,28 @@ export default function SearchPage() {
                   <li key={p.value}>
                     <Link
                       to={getFilterUrl({ price: p.value })}
-                      className={p.value === price ? "text-bold" : ""}
+                      className={`text-decoration-none ${
+                        p.value === price ? "text-bold" : ""
+                      }`}
                     >
                       {p.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3>Discount</h3>
+              <ul>
+                {discounts.map((d) => (
+                  <li key={d.value}>
+                    <Link
+                      to={getFilterUrl({ discount: d.value })}
+                      className={`text-decoration-none ${
+                        d.value === discount ? "text-bold" : ""
+                      }`}
+                    >
+                      {d.name}
                     </Link>
                   </li>
                 ))}
@@ -180,7 +215,9 @@ export default function SearchPage() {
                 <li>
                   <Link
                     to={getFilterUrl({ brand: "all" })}
-                    className={brand === "all" ? "text-bold" : ""}
+                    className={`text-decoration-none ${
+                      brand === "all" ? "text-bold" : ""
+                    }`}
                   >
                     Any
                   </Link>
@@ -189,7 +226,9 @@ export default function SearchPage() {
                   <li key={b}>
                     <Link
                       to={getFilterUrl({ brand: b })}
-                      className={brand === b ? "text-bold" : ""}
+                      className={`text-decoration-none ${
+                        brand === b ? "text-bold" : ""
+                      }`}
                     >
                       {b}
                     </Link>
@@ -203,8 +242,10 @@ export default function SearchPage() {
                 {ratings.map((r) => (
                   <li key={r.name}>
                     <Link
-                      to={getFilterUrl({ rating: r.rating })}
-                      className={r.rating === rating ? "text-bold" : ""}
+                      to={getFilterUrl({ rating: "all" })}
+                      className={`text-decoration-none ${
+                        rating === "all" ? "text-bold" : ""
+                      }`}
                     >
                       <Rating caption={" & up"} rating={r.rating}></Rating>
                     </Link>
@@ -272,7 +313,13 @@ export default function SearchPage() {
                 )}
                 <Row className="gy-4">
                   {products.map((product) => (
-                    <Col xs={12} md={4} lg={3} key={product._id}  className="product-item">
+                    <Col
+                      xs={12}
+                      md={4}
+                      lg={3}
+                      key={product._id}
+                      className="product-item"
+                    >
                       <div className="product-card">
                         <Product product={product}></Product>
                       </div>
@@ -286,7 +333,7 @@ export default function SearchPage() {
                       className="d-inline-block m-1"
                       to={{
                         pathname: "/search",
-                        search: getFilterUrl({ page: x + 1 }).split("?")[1], 
+                        search: getFilterUrl({ page: x + 1 }).split("?")[1],
                       }}
                     >
                       <Button variant="light">{x + 1}</Button>
