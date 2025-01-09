@@ -14,14 +14,14 @@ notificationRouter.get(
     let notifications;
 
     if (req.user.isAdmin) {
-      // Admin gets all notifications
+  
       notifications = await Notification.find().sort({ createdAt: -1 });
     } else {
-      // Non-admin users get notifications specific to their type
+ 
       notifications = await Notification.find({
         $or: [
           { recipientType: 'admin' },
-          { recipientType: req.user.type }, // For users and service providers
+          { recipientType: req.user.type }, 
         ],
       }).sort({ createdAt: -1 });
     }
@@ -31,7 +31,7 @@ notificationRouter.get(
 );
 
 
-// Mark notification as read
+
 notificationRouter.put(
   '/:id/read',
   isAuth,
@@ -47,7 +47,7 @@ notificationRouter.put(
   })
 );
 
-// Create a new notification (admin access only)
+
 notificationRouter.post(
   '/',
   isAuth,

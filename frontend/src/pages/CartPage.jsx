@@ -30,6 +30,7 @@ export default function CartPage() {
       payload: { ...item, quantity },
     });
   };
+
   const removeItemHandler = (item) => {
     ctxDispatch({ type: "CART_REMOVE_ITEM", payload: item });
   };
@@ -55,50 +56,77 @@ export default function CartPage() {
             </MessageBox>
           ) : (
             <ListGroup>
-              {cartItems.map((item) => (
-                <ListGroup.Item key={item._id}>
-                  <Row className="align-items-center">
-                    <Col md={4}>
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        className="img-fluid rounded img-thumbnail"
-                      ></Image>{" "}
-                      <Link to={`/product/${item.slug}`}>{item.name}</Link>
-                    </Col>
-                    <Col md={3}>
-                      <Button
-                        onClick={() =>
-                          updateCartHandler(item, item.quantity - 1)
-                        }
-                        variant="light"
-                        disabled={item.quantity === 1}
-                      >
-                        <i className="fas fa-minus-circle"></i>
-                      </Button>{" "}
-                      <span>{item.quantity}</span>{" "}
-                      <Button
-                        variant="light"
-                        onClick={() =>
-                          updateCartHandler(item, item.quantity + 1)
-                        }
-                        disabled={item.quantity === item.countInStock}
-                      >
-                        <i className="fas fa-plus-circle"></i>
-                      </Button>
-                    </Col>
-                    <Col md={3}>${item.price}</Col>
-                    <Col md={2}>
-                      <Button
-                        onClick={() => removeItemHandler(item)}
-                        variant="light"
-                      >
-                        <i className="fas fa-trash"></i>
-                      </Button>
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-              ))}
+              {cartItems.map((item) => {
+                const discountedPrice =
+                  item.discount > 0
+                    ? item.price * (1 - item.discount / 100)
+                    : item.price;
+                return (
+                  <ListGroup.Item key={item._id}>
+                    <Row className="align-items-center">
+                      <Col md={4}>
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          className="img-fluid rounded img-thumbnail"
+                        ></Image>{" "}
+                        <Link
+                          className="nav-link-product"
+                          to={`/product/${item.slug}`}
+                        >
+                          {item.name}
+                        </Link>
+                      </Col>
+                      <Col md={3}>
+                        <Button
+                          onClick={() =>
+                            updateCartHandler(item, item.quantity - 1)
+                          }
+                          variant="light"
+                          disabled={item.quantity === 1}
+                        >
+                          <i className="fas fa-minus-circle"></i>
+                        </Button>{" "}
+                        <span>{item.quantity}</span>{" "}
+                        <Button
+                          variant="light"
+                          onClick={() =>
+                            updateCartHandler(item, item.quantity + 1)
+                          }
+                          disabled={item.quantity === item.countInStock}
+                        >
+                          <i className="fas fa-plus-circle"></i>
+                        </Button>
+                      </Col>
+                      <Col md={3}>
+                        {item.discount > 0 ? (
+                          <>
+                            <span
+                              className="text-muted"
+                              style={{ textDecoration: "line-through" }}
+                            >
+                              ${item.price.toFixed(2)}
+                            </span>{" "}
+                            <span className="ms-2">
+                              ${discountedPrice.toFixed(2)}
+                            </span>
+                          </>
+                        ) : (
+                          <span>${item.price.toFixed(2)}</span>
+                        )}
+                      </Col>
+                      <Col md={2}>
+                        <Button
+                          onClick={() => removeItemHandler(item)}
+                          variant="light"
+                        >
+                          <i className="fas fa-trash"></i>
+                        </Button>
+                      </Col>
+                    </Row>
+                  </ListGroup.Item>
+                );
+              })}
             </ListGroup>
           )}
         </Col>
@@ -109,15 +137,24 @@ export default function CartPage() {
                 <ListGroup.Item>
                   <h3>
                     Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}{" "}
-                    items) : $
-                    {cartItems.reduce((a, c) => a + c.price * c.quantity, 0)}
+                    items): $
+                    {cartItems
+                      .reduce(
+                        (a, c) =>
+                          a +
+                          (c.discount > 0
+                            ? c.quantity * c.price * (1 - c.discount / 100)
+                            : c.quantity * c.price),
+                        0
+                      )
+                      .toFixed(2)}
                   </h3>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <div className="d-grid">
                     <Button
                       type="button"
-                      variant="primary"
+                      variant="secondary"
                       onClick={checkoutHandler}
                       disabled={cartItems.length === 0}
                     >

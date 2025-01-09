@@ -211,8 +211,8 @@ export default function SellersListPage() {
       )}
 
       <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create Seller</Modal.Title>
+        <Modal.Header closeButton >
+          <Modal.Title >Create Seller</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={createHandler}>
@@ -243,7 +243,11 @@ export default function SellersListPage() {
                 onChange={(e) => setInfo(e.target.value)}
               />
             </Form.Group>
-            <Button variant="secondary" type="submit">
+            <Button
+              className="btn btn-secondary"
+              variant="secondary"
+              type="submit"
+            >
               Create
             </Button>
           </Form>

@@ -126,7 +126,7 @@ export default function ShippingAddressPage() {
           </div>
 
           <div className="mb-3">
-            <Button variant="primary" type="submit">
+            <Button variant="secondary" type="submit" className="btn btn-secondary">
               Continue
             </Button>
           </div>

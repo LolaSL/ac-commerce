@@ -50,11 +50,13 @@ export const isAuth = (req, res, next) => {
 
 export const isAdmin = (req, res, next) => {
     if (req.user && req.user.isAdmin) {
-        next();
+      console.log('Admin Access Granted:', req.user);
+      next();
     } else {
-        res.status(401).send({ message: 'Not authorized as an admin' });
+      console.log('Admin Access Denied:', req.user);
+      res.status(401).send({ message: 'Not authorized as an admin' });
     }
-};
+  };
 
 
 

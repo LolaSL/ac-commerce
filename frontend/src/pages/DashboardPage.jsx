@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import UsersProductSales from "../components/UsersProductSales";
-import ServiceProviders from "../components/ServiceProviders";
-import Notifications from "../components/Notifications";
+import UsersProductSales from "../components/UsersProductSales.jsx";
+import ServiceProviders from "../components/ServiceProviders.jsx";
+import Notifications from "../components/Notifications.jsx";
+import MessagesServiceProviders from "../components/MessagesServiceProviders.jsx";
 
 export default function DashboardPage() {
   const [activeComponent, setActiveComponent] = useState("Users");
@@ -13,10 +14,12 @@ export default function DashboardPage() {
         return <UsersProductSales />;
       case "ServiceProviders":
         return <ServiceProviders />;
-        case "Notification":
-          return <Notifications />;
+      case "MessagesServiceProviders":
+        return <MessagesServiceProviders />;
+      case "Notification":
+        return <Notifications />;
       default:
-        return <UsersProductSales/>;
+        return <UsersProductSales />;
     }
   };
 
@@ -30,7 +33,11 @@ export default function DashboardPage() {
         <ul>
           <li>
             <button
-              className={ activeComponent === "Users Product Sales" ? "active" : "btn-outline"}
+              className={
+                activeComponent === "Users Product Sales"
+                  ? "active"
+                  : "btn-outline"
+              }
               onClick={() => setActiveComponent("Users Product Sales")}
             >
               Users Product Sales
@@ -46,13 +53,22 @@ export default function DashboardPage() {
           </li>
           <li>
             <button
+              className={
+                activeComponent === "MessagesServiceProviders" ? "active" : ""
+              }
+              onClick={() => setActiveComponent("MessagesServiceProviders")}
+            >
+              Messages of Service Providers
+            </button>
+          </li>
+          <li>
+            <button
               className={activeComponent === "Notification" ? "active" : ""}
               onClick={() => setActiveComponent("Notification")}
             >
               Notifications
             </button>
           </li>
-
         </ul>
       </div>
       <div className="main-content">{renderComponent()}</div>

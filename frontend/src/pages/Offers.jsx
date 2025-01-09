@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Spinner } from "react-bootstrap"; // Using React-Bootstrap for styling
+import { Card, Button, Spinner } from "react-bootstrap"; 
 import { Link } from "react-router-dom";
 
 export default function Offers() {
@@ -87,12 +87,9 @@ export default function Offers() {
                   <Card.Text>{offer.description}</Card.Text>
 
                   <Button
-                    variant="primary"
+                    variant="secondary"
                     as={Link}
-                    to={{
-                      pathname: offer.linkTo, 
-                      state: { criteria: offer.criteria }, 
-                    }}
+                    to="/products"
                   >
                     {offer.linkText}
                   </Button>

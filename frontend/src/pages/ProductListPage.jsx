@@ -188,7 +188,7 @@ export default function ProductListPage() {
         </Col>
         <Col className="col text-end">
           <div>
-            <Button type="button" onClick={createHandler}>
+            <Button className="btn btn-secondary" type="button" onClick={createHandler}>
               Create Product
             </Button>
           </div>

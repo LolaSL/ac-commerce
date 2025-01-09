@@ -4,10 +4,30 @@ import NotificationPopUp from "../components/NotificationPopUp";
 import { Store } from "../Store";
 import { useNavigate } from "react-router-dom";
 
+const notifications = [
+  {
+    title: "Service Request Assigned",
+    message:
+      "You have been assigned a new service request for an air conditioner installation. Please review the details and respond promptly.",
+    type: "urgent",
+    recipientType: "serviceProvider",
+    isRead: false,
+    createdAt: new Date(),
+  },
+  {
+    title: "Get A Quote",
+    message: "Your Dream Deal Starts Here – Get a Quote Now!",
+    type: "quote",
+    recipientType: "user",
+    isRead: false,
+    createdAt: new Date(),
+  },
+];
 export default function HomeBannerPage() {
+  const [currentNotificationIndex] = useState(0);
   const [notification, setNotification] = useState(null);
   const { state } = useContext(Store);
-  const { userInfo } = state;
+  const { userInfo, serviceProviderInfo } = state;
   const navigate = useNavigate();
 
   const banners = [
@@ -45,26 +65,44 @@ export default function HomeBannerPage() {
   ];
 
   useEffect(() => {
-    if (userInfo) {
-      const receivedNotification = {
-        title: "Discount Offer",
-        message: "Check out the latest discount offers!",
-        type: "discount",
-        recipientType: "user",
-        isRead: false,
-      };
+    console.log("User Info:", userInfo);
+    console.log("Service Provider Info:", serviceProviderInfo);
+    console.log("Notifications:", notifications);
 
-      setNotification(receivedNotification);
-      const timer = setTimeout(() => {
-        setNotification(null);
-      }, 8000);
+    if ((userInfo || serviceProviderInfo) && notifications.length > 0) {
+      let notificationToShow = null;
+      if (userInfo) {
+        notificationToShow = notifications.find(
+          (notification) =>
+            notification.recipientType === "user" && !notification.isRead
+        );
+      } else if (serviceProviderInfo) {
+        notificationToShow = notifications.find(
+          (notification) =>
+            notification.recipientType === "serviceProvider" &&
+            !notification.isRead
+        );
+      }
 
-      return () => clearTimeout(timer);
+      if (notificationToShow) {
+        setNotification(notificationToShow);
+
+        const timer = setTimeout(() => {
+          setNotification(null);
+        }, 5000);
+
+        return () => clearTimeout(timer);
+      }
     }
-  }, [userInfo]);
+  }, [userInfo, serviceProviderInfo, currentNotificationIndex]);
 
-  const handleNotificationClick = () => {
-    navigate("/offers");
+  const handleNotificationClick = (buttonText) => {
+    if (buttonText === "Get Quote") {
+      navigate("/uploadfile");
+    }
+    else if (buttonText === "Review Details") {
+      navigate("/serviceprovider/messages");
+    }
     setNotification(null);
   };
 
@@ -74,10 +112,17 @@ export default function HomeBannerPage() {
         <NotificationPopUp
           notification={notification}
           onClose={() => setNotification(null)}
-          buttonText="Claim Offer"
-          onButtonClick={handleNotificationClick}
+          buttonText={
+            notification.title === "Get A Quote" ? "Get Quote" : "Review Details"
+          }
+          onButtonClick={() =>
+            handleNotificationClick(
+              notification.title === "Get A Quote" ? "Get Quote" : "Review Details"
+            )
+          }
         />
       )}
+
       {banners.map((banner, index) => (
         <Banner
           key={index}
@@ -86,8 +131,7 @@ export default function HomeBannerPage() {
           paragraph={banner.paragraph}
           linkTo={banner.linkTo}
           linkText={banner.linkText}
-        >
-        </Banner>
+        ></Banner>
       ))}
     </div>
   );

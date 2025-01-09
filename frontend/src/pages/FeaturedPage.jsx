@@ -6,9 +6,9 @@ import Product from "../components/Product.jsx";
 import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox.jsx";
 import MessageBox from "../components/MessageBox.jsx";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-// Reducer function to handle state transitions
+
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -29,8 +29,6 @@ const HomePage = () => {
     error: "",
   });
 
-  const location = useLocation();
-  const offerCriteria = location.state?.criteria || null;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,11 +36,8 @@ const HomePage = () => {
       try {
         const { data } = await axios.get("/api/products");
         console.log("Fetched Data:", data); 
-        const filteredProducts = offerCriteria
-          ? data.filter((product) => offerCriteria(product))
-          : data;
-        console.log("Filtered Products:", filteredProducts);
-        dispatch({ type: "FETCH_SUCCESS", payload: filteredProducts });
+        
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         console.error("Error fetching products:", err.message);
         dispatch({ type: "FETCH_FAIL", payload: err.message });
@@ -50,12 +45,12 @@ const HomePage = () => {
     };
 
     fetchData();
-  }, [offerCriteria]);
+  }, []);
 
   return (
     <div>
       <Helmet>
-        <title>Cool Commerce</title>
+        <title>Featured Products</title>
       </Helmet>
       <article className="py-4 mb-4">
         <h1 className="featured-title text-center pt-4 mb-4 fw-bold">
@@ -70,13 +65,12 @@ const HomePage = () => {
           <LoadingBox />
         ) : error ? (
           <MessageBox variant="danger">{error}</MessageBox>
-        ) : products.length > 0 ? (
+        ) : products.length  ? (
           <Row className="gy-4">
             {products.map((product) => (
               <Col key={product.slug} xs={12} md={4} lg={3} className="product-item">
                 <div className="product-card">
-                <Product product={product} offers={offerCriteria ? [offerCriteria] : []} />
-
+                <Product product={product}  />
                 </div>
               </Col>
             ))}

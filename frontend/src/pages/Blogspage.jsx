@@ -145,7 +145,7 @@ export default function BlogsPage() {
         </Col>
         <Col className="col text-end">
           <div>
-            <Button type="button" onClick={createHandler}>
+            <Button type="button" className="btn btn-secondary" onClick={createHandler}>
               Create Blog
             </Button>
           </div>

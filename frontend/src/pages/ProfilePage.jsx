@@ -106,7 +106,7 @@ export default function ProfilePage() {
           />
         </Form.Group>
         <div className="mb-3">
-                  <Button type="submit" >
+                  <Button  className="btn btn-secondary" type="submit" >
                   {loadingUpdate ? 'Updating...' : 'Update'}
           </Button>
           

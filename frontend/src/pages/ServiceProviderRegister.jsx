@@ -143,7 +143,7 @@ const ServiceProviderRegister = () => {
         <div className="mb-3">
           <Button
             type="submit"
-            variant="primary"
+            variant="secondary"
             className="btn btn-secondary btn-md me-2"
           >
             Register

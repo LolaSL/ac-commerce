@@ -7,8 +7,7 @@ import {
   isAuth, isAdmin, generateToken, baseUrl,
   mailgun
 } from '../utils.js';
-import Notification from '../models/notificationModel.js';
-import Counter from '../models/counterModel.js';
+
 
 
 const userRouter = express.Router();
@@ -149,7 +148,7 @@ userRouter.delete(
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
-      if (user.email === 'admin@example.com') {
+      if (user.email === 'admin_uniqueA@example.com') {
         res.status(400).send({ message: 'Can Not Delete Admin User' });
         return;
       }
@@ -203,39 +202,6 @@ userRouter.post(
 
     const user = await newUser.save();
 
- 
-    let counter = await Counter.findOne({ name: 'userSignup' });
-  
-    if (!counter) {
-      // If the counter document doesn't exist, create it
-      counter = new Counter({ name: 'userSignup', count: 1 });
-      await counter.save();
-    } else {
-      // Increment the counter value
-      counter.count++;
-  
-      // Check if 1 user have signed up
-      if (counter.count === 1) {
-        const notification = new Notification({
-          title: 'New User Signups',
-          message: 'New 1 user were signed up!',
-          type: 'info',
-          isRead: false,
-          createdAt: new Date(),
-        });
-  
-        // Save notification to database
-        await notification.save();
-        console.log('Notification created:', notification);
-  
-        // Reset the counter to 0 after notification
-        counter.count = 0;
-      }
-  
-      // Save the updated counter
-      await counter.save();
-    }
-  
     res.send({
       _id: user._id,
       name: user.name,

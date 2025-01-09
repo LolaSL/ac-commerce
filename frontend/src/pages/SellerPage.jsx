@@ -172,7 +172,7 @@ export default function SellerPage() {
                     />
                   </FloatingLabel>
                   <div className="mb-3">
-                    <Button disabled={loadingCreateReview} type="submit">
+                    <Button disabled={loadingCreateReview} className="btn btn-secondary" type="submit">
                       Submit
                     </Button>
                     {loadingCreateReview && <LoadingBox />}

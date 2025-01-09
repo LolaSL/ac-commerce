@@ -81,7 +81,6 @@ const BlogEditPage = () => {
       await axios.put(
         `/api/blogs/${blogId}`,
         {
-          //   _id: blogId,
           title,
           slug,
           content,

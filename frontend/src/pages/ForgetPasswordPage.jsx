@@ -52,7 +52,7 @@ export default function ForgetPasswordPage() {
         </Form.Group>
 
         <div className="mb-3">
-          <Button type="submit">submit</Button>
+          <Button className="btn btn-secondary" type="submit">submit</Button>
         </div>
       </Form>
     </Container>

@@ -113,7 +113,7 @@ export default function MapPage() {
           >
             <div className="map-input-box">
               <input type="text" placeholder="Enter your address"></input>
-              <Button type="button" onClick={onConfirm}>
+              <Button className="btn btn-secondary" type="button" onClick={onConfirm}>
                 Confirm
               </Button>
             </div>

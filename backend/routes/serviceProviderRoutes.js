@@ -6,6 +6,8 @@ import Message from '../models/messageModel.js';
 import Earnings from '../models/earningModel.js';
 import ServiceProvider from '../models/serviceProviderModel.js';
 import jwt from 'jsonwebtoken';
+import { isAdmin } from '../utils.js';
+import mongoose from 'mongoose';
 
 
 const serviceProviderRouter = express.Router();
@@ -17,7 +19,7 @@ const generateToken = (serviceProvider) => {
       _id: serviceProvider._id,
       name: serviceProvider.name,
       email: serviceProvider.email,
-      isAdmin: serviceProvider.isAdmin,
+      isServiceProvider: true
     },
     process.env.JWT_SECRET,
     {
@@ -26,16 +28,6 @@ const generateToken = (serviceProvider) => {
   );
 };
 
-
-export const isAdmin = (req, res, next) => {
-  if (req.user && req.user.isAdmin) {
-    next();
-  } else {
-    res.status(401).send({ message: 'Not authorized as an admin' });
-  }
-};
-
-
 export const isAuth = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (token) {
@@ -43,7 +35,7 @@ export const isAuth = (req, res, next) => {
       if (err) {
         return res.status(401).send({ message: 'Invalid Token' });
       }
-      // req.serviceProvider = decoded; //for serviceProvider._id dashboard
+      req.serviceProvider = decoded //for serviceProvider._id dashboard
       req.user = decoded; //for admin dashboard
       next();
     });
@@ -51,6 +43,7 @@ export const isAuth = (req, res, next) => {
     res.status(401).send({ message: 'Token Not Found' });
   }
 };
+
 
 
 export const isServiceProvider = (req, res, next) => {
@@ -62,17 +55,13 @@ export const isServiceProvider = (req, res, next) => {
 };
 
 
-serviceProviderRouter.get('/', isAuth, isAdmin,
+serviceProviderRouter.get(
+  '/',
+  isAuth,
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
     try {
-      const { query } = req;
-      const page = parseInt(query.page) || 1;
-      const pageSize = parseInt(query.pageSize) || 10;
-
-
-      const skip = (page - 1) * pageSize;
-      const limit = pageSize;
-
+      const { page = 1, pageSize = 10 } = req.query;
 
       const serviceProviders = await ServiceProvider.aggregate([
         {
@@ -81,6 +70,14 @@ serviceProviderRouter.get('/', isAuth, isAdmin,
             localField: '_id',
             foreignField: 'serviceProvider',
             as: 'projects',
+          },
+        },
+        {
+          $lookup: {
+            from: 'messages',
+            localField: '_id',
+            foreignField: 'serviceProvider',
+            as: 'messages',
           },
         },
         {
@@ -114,28 +111,22 @@ serviceProviderRouter.get('/', isAuth, isAdmin,
             totalEarnings: { $sum: '$earnings.amount' },
           },
         },
-        {
-          $skip: skip,
-        },
-        {
-          $limit: limit,
-        },
+        { $skip: (page - 1) * parseInt(pageSize) },
+        { $limit: parseInt(pageSize) },
       ]);
-
 
       const totalServiceProviders = await ServiceProvider.countDocuments();
 
-
-      const totalPages = Math.ceil(totalServiceProviders / pageSize);
-
       res.send({
         serviceProviders,
-        currentPage: page,
-        totalPages,
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(totalServiceProviders / parseInt(pageSize)),
         totalServiceProviders,
       });
     } catch (err) {
-      res.status(500).send({ message: 'Error fetching service providers', error: err.message });
+      res
+        .status(500)
+        .send({ message: 'Error fetching service providers', error: err.message });
     }
   })
 );
@@ -165,9 +156,6 @@ serviceProviderRouter.get(
 );
 
 
-
-
-
 serviceProviderRouter.get('/projects/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -179,19 +167,111 @@ serviceProviderRouter.get('/projects/:id', async (req, res) => {
 });
 
 serviceProviderRouter.get(
+  '/messages/all',
+  isAuth,
+  isAdmin, 
+  expressAsyncHandler(async (req, res) => {
+    const page = Number(req.query.page) || 1;
+    const pageSize = Number(req.query.pageSize) || 10;
+
+    try {
+      console.log("Fetching messages - Page:", page, "Page Size:", pageSize);
+
+      const count = await Message.countDocuments(); 
+      console.log("Total Messages Count:", count);
+
+      const messages = await Message.find({})
+        .populate('serviceProvider', 'name')
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+        .sort({ createdAt: -1 });
+      console.log("Fetched Messages:", messages);
+
+      res.json({
+        messages,
+        currentPage: page,
+        totalPages: Math.ceil(count / pageSize),
+        totalMessages: count,
+      });
+    } catch (error) {
+      console.error("Error fetching messages:", error); 
+      res.status(500).json({ message: "Error fetching messages", error: error.message });
+    }
+  }));
+
+
+serviceProviderRouter.get(
   '/messages',
   isAuth,
   isServiceProvider,
   expressAsyncHandler(async (req, res) => {
-    const serviceProviderId = req.serviceProvider._id
-    const messages = await Message.find({ serviceProvider: serviceProviderId });
-    res.send(messages);
+    try {
+      const serviceProviderId = req.serviceProvider._id;
+
+      const messages = await Message.find({ serviceProvider: serviceProviderId })
+        .populate('serviceProvider', 'name')
+        .sort({ date: -1 });
+
+      res.send(messages);
+    } catch (err) {
+      res
+        .status(500)
+        .send({ message: 'Error fetching messages', error: err.message });
+    }
   })
 );
 
+// Update a specific message
+serviceProviderRouter.put(
+  '/messages/:id',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const messageId = req.params.id;
 
+      const message = await Message.findById(messageId);
+      if (message) {
+        Object.assign(message, req.body);
+        await message.save();
+        res.send({ message: 'Message Updated', message });
+      } else {
+        res.status(404).send({ message: 'Message Not Found' });
+      }
+    } catch (err) {
+      res
+        .status(500)
+        .send({ message: 'Error updating message', error: err.message });
+    }
+  })
+);
 
-import Notification from '../models/notificationModel.js'; // Import notification model
+// Delete a specific message
+serviceProviderRouter.delete(
+  '/message/:id',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).send({ message: "Invalid message ID" });
+    }
+
+    try {
+      const deletedMessage = await Message.findByIdAndDelete(id);
+
+      if (deletedMessage) {
+        res.send({ message: "Message deleted successfully" });
+      } else {
+        res.status(404).send({ message: "Message not found" });
+      }
+    } catch (err) {
+      res.status(500).send({ message: "Error deleting message", error: err.message });
+    }
+  })
+);
+
 
 serviceProviderRouter.get(
   '/earnings',
@@ -220,7 +300,7 @@ serviceProviderRouter.get(
       );
 
       // Send notification to admin if total earnings exceed a threshold
-      const earningThreshold = 10000; 
+      const earningThreshold = 10000;
       if (totalEarnings > earningThreshold) {
         await Notification.create({
           message: `Service Provider ${req.serviceProvider.name} has exceeded the earning threshold of $${earningThreshold}. Total Earnings: $${totalEarnings}`,
@@ -344,7 +424,7 @@ serviceProviderRouter.post(
 );
 
 
-serviceProviderRouter.get("/:id", isAuth,  isServiceProvider, expressAsyncHandler(async (req, res) => {
+serviceProviderRouter.get("/:id", isAuth, isServiceProvider, expressAsyncHandler(async (req, res) => {
   try {
     const serviceProvider = await ServiceProvider.findById(req.params.id);
     if (serviceProvider) {

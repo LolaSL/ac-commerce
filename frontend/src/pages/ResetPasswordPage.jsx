@@ -68,7 +68,7 @@ export default function ResetPasswordPage() {
         </Form.Group>
 
         <div className="mb-3">
-          <Button type="submit">Reset Password</Button>
+          <Button className="btn btn-secondary" type="submit">Reset Password</Button>
         </div>
       </Form>
     </Container>

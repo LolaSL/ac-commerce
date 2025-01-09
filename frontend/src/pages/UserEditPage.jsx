@@ -130,7 +130,7 @@ export default function UserEditPage() {
           />
 
           <div className="mb-3">
-            <Button disabled={loadingUpdate} type="submit">
+            <Button disabled={loadingUpdate} type="submit" className="btn btn-secondary">
               Update
             </Button>
             {loadingUpdate && <LoadingBox></LoadingBox>}

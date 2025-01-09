@@ -32,7 +32,7 @@ function BlogDetails() {
         className="mt-4 mb-4 blog-paragraph"
       />
     <div className=" mt-4 mb-4">
-        <Link to="/blogs" className="link-blogs">
+    <Link to="/" className="btn btn-secondary">
           Back to Home
         </Link>
       </div>

@@ -48,109 +48,131 @@ orderRouter.get(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
+    try {
+      const page = Number(req.query.page) || 1;
+      const limit = Number(req.query.limit) || 10;
+      const skip = (page - 1) * limit;
 
-    const orders = await Order.aggregate([
-      {
-        $group: {
-          _id: null,
-          numOrders: { $sum: 1 },
-          totalSales: { $sum: '$totalPrice' },
+      const orders = await Order.aggregate([
+        {
+          $group: {
+            _id: null,
+            numOrders: { $sum: 1 },
+            totalSales: { $sum: '$totalPrice' },
+          },
         },
-      },
-    ]);
-    const users = await User.aggregate([
-      {
-        $group: {
-          _id: null,
-          numUsers: { $sum: 1 },
+      ]);
+      const users = await User.aggregate([
+        {
+          $group: {
+            _id: null,
+            numUsers: { $sum: 1 },
+          },
         },
-      },
-    ]);
-    const dailyOrders = await Order.aggregate([
-      {
-        $group: {
-          _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
-          orders: { $sum: 1 },
-          sales: { $sum: '$totalPrice' },
+      ]);
+      const dailyOrders = await Order.aggregate([
+        {
+          $group: {
+            _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+            orders: { $sum: 1 },
+            sales: { $sum: '$totalPrice' },
+            paidOrders: {
+              $sum: { $cond: [{ $eq: ['$isPaid', true] }, 1, 0] }
+            },
+            deliveredOrders: {
+              $sum: { $cond: [{ $eq: ['$isDelivered', true] }, 1, 0] }
+            }
+          },
         },
-      },
-      { $sort: { _id: 1 } },
-    ]);
-    const productCategories = await Product.aggregate([
-      {
-        $group: {
-          _id: '$category',
-          count: { $sum: 1 },
-        },
-      },
-    ]);
-    const serviceProviders = await ServiceProvider.aggregate([
-      { $skip: skip },
-      { $limit: limit },
-      {
-        $group: {
-          _id: null,
-          numServiceProviders: { $sum: 1 },
-        },
-      },
-    ]);
-    const totalServiceProviders = await ServiceProvider.countDocuments();
+        { $sort: { _id: 1 } },
+      ]);
 
-    const totalProjects = await Project.aggregate([
-      {
-        $group: {
-          _id: null,
-          numProjects: { $sum: 1 },
+      const productCategories = await Product.aggregate([
+        {
+          $group: {
+            _id: '$category',
+            count: { $sum: 1 },
+          },
         },
-      },
-    ]);
+      ]);
 
-    const totalMessages = await Message.aggregate([
-      {
-        $group: {
-          _id: null,
-          numMessages: { $sum: 1 },
+      const productDiscount = await Product.aggregate([
+        {
+          $group: {
+            _id: '$category',
+            discount: { $sum: '$discount' },
+          },
         },
-      },
-    ]);
+      ]);
+      const serviceProviders = await ServiceProvider.aggregate([
+        { $skip: skip },
+        { $limit: limit },
+        {
+          $group: {
+            _id: null,
+            numServiceProviders: { $sum: 1 },
+          },
+        },
+      ]);
+      const totalServiceProviders = await ServiceProvider.countDocuments();
 
-    const totalEarnings = await Earnings.aggregate([
-      {
-        $group: {
-          _id: null,
-          totalEarnings: { $sum: '$amount' },
-          numEarnings: { $sum: 1 },
+      const totalProjects = await Project.aggregate([
+        {
+          $group: {
+            _id: null,
+            numProjects: { $sum: 1 },
+          },
         },
-      },
-    ]);
-    const totalNotifications = await Notification.aggregate([
-      {
-        $group: {
-          _id: null,
-          numNotifications: { $sum: 1 },
-        },
-      },
-    ]);
+      ]);
 
-    res.send({
-      users,
-      orders,
-      dailyOrders,
-      productCategories,
-      serviceProviders,
-      totalProjects,
-      totalMessages,
-      totalEarnings,
-      totalServiceProviders,
-      currentPage: page,
-      totalPages: Math.ceil(totalServiceProviders / limit),
-      totalNotifications
-    });
+      const totalMessages = await Message.aggregate([
+        { $project: { _id: 1 } },
+      ]);
+      console.log('Total messages found:', totalMessages.length);
+
+      const totalMessagesCount = totalMessages.length > 0 ? totalMessages.length : 0;
+
+      const totalEarnings = await Earnings.aggregate([
+        {
+          $group: {
+            _id: null,
+            totalEarnings: { $sum: '$amount' },
+            numEarnings: { $sum: 1 },
+          },
+        },
+      ]);
+      const totalNotifications = await Notification.aggregate([
+        {
+          $group: {
+            _id: null,
+            numNotifications: { $sum: 1 },
+          },
+        },
+      ]);
+
+      res.send({
+        users,
+        orders,
+        dailyOrders,
+        productCategories,
+        serviceProviders,
+        totalProjects,
+        totalMessages: totalMessagesCount,
+        totalEarnings,
+        totalServiceProviders,
+        currentPage: page,
+        totalPages: Math.ceil(totalServiceProviders / limit),
+        totalNotifications,
+        productDiscount
+      });
+
+    } catch (error) {
+      console.error('Error fetching summary:', error);
+      res.status(500).send({ message: 'Error fetching summary data' });
+    }
   })
 );
+
 
 
 orderRouter.get(

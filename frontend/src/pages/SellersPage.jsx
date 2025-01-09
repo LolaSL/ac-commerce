@@ -8,8 +8,6 @@ import { Link } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
 
-
-
 const reducer = (state, action) => {
   switch (action.type) {
     case "REFRESH_PRODUCT":
@@ -32,7 +30,6 @@ const reducer = (state, action) => {
 };
 
 export default function SellersPage() {
-  
   const [{ loading, error, sellers }, dispatch] = useReducer(reducer, {
     sellers: [],
     loading: true,
@@ -54,7 +51,7 @@ export default function SellersPage() {
 
   return (
     <Container className="seller-container">
-            <Helmet>
+      <Helmet>
         <title>Sellers</title>
       </Helmet>
       <h1 className="sellers-title">Sellers</h1>

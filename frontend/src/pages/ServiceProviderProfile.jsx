@@ -177,7 +177,7 @@ export default function ServiceProviderProfile() {
           />
         </Form.Group>
         <div className="mb-3">
-          <Button type="submit" disabled={loadingUpdate} className="mt-3">
+          <Button type="submit" disabled={loadingUpdate} className="btn btn-secondary mt-3">
             {loadingUpdate ? "Updating..." : "Update"}
           </Button>
         </div>

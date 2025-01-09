@@ -62,32 +62,52 @@ const ServiceProviders = () => {
     fetchData();
   }, [currentPage, userInfo]);
 
-  const chartData = [
-    [
-      "Provider",
-      "Completed Projects",
-      "In Progress Projects",
-      "Total Earnings",
-    ],
+  const barChartData = [
+    ["Provider", "Earnings"],
     ...serviceProviders.map((provider) => [
       provider.name,
-      provider.completedProjects || 0,
-      provider.inProgressProjects || 0,
       provider.totalEarnings || 0,
     ]),
   ];
 
-  const chartOptions = {
-    title: "Service Providers Metrics",
+  const barChartOptions = {
+    title: "Provider vs Earnings",
     chartArea: { width: "70%" },
-    hAxis: { title: "Metrics", minValue: 0 },
-    vAxis: { title: "Providers" },
-    isStacked: true,
+    hAxis: { title: "Earnings (USD)", minValue: 0 },
+    vAxis: { title: "Provider" },
+    legend: "none",
+    colors: ["#10b2ad"], // Customize bar color
+  };
+
+  const pieChartData = [
+    ["Status", "Number of Projects"],
+    [
+      "Completed Projects",
+      serviceProviders.reduce(
+        (sum, provider) => sum + (provider.completedProjects || 0),
+        0
+      ),
+    ],
+    [
+      "In Progress Projects",
+      serviceProviders.reduce(
+        (sum, provider) => sum + (provider.inProgressProjects || 0),
+        0
+      ),
+    ],
+  ];
+
+  const pieChartOptions = {
+    title: "Project Distribution",
+    pieHole: 0.4, // Donut chart
+    is3D: false,
+    legend: { position: "bottom" },
+    colors: ["#0ac22f", "#cd17ee" ], 
   };
 
   const handlePageChange = (newPage) => {
-    if (newPage < 1 || newPage > totalPages) return; 
-    dispatch({ type: "FETCH_REQUEST" }); 
+    if (newPage < 1 || newPage > totalPages) return;
+    dispatch({ type: "FETCH_REQUEST" });
 
     axios
       .get("/api/service-providers", {
@@ -155,13 +175,23 @@ const ServiceProviders = () => {
             </tbody>
           </Table>
           <div className="mt-5">
-            <h3>Metrics Visualization</h3>
+            <h3>Project Distribution</h3>
             <Chart
-              chartType="ColumnChart"
+              chartType="PieChart"
               width="100%"
               height="400px"
-              data={chartData}
-              options={chartOptions}
+              data={pieChartData}
+              options={pieChartOptions}
+            />
+          </div>
+          <div className="mt-5">
+            <h3>Provider vs Earnings</h3>
+            <Chart
+              chartType="BarChart"
+              width="100%"
+              height="400px"
+              data={barChartData}
+              options={barChartOptions}
             />
           </div>
           <div>

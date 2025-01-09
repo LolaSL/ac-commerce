@@ -12,7 +12,7 @@ const AboutUs = () => {
   className="p-5 text-center responsive-image rounded mb-3"
   style={{
     backgroundImage: `url("/images/about-us1.jpg")`,
-    MaxHeight: "100%", /* Max height removed to use 100vh in CSS */
+    MaxHeight: "100%", 
   }}
 >
   <h1 className="mb-4 text-white p-4 about-title">About Us</h1>
@@ -38,7 +38,7 @@ const AboutUs = () => {
           className="p-5 text-center responsive-image rounded "
           style={{
             backgroundImage: `url("/images/about-us2.jpg")`,
-            MaxHeight: "100%", /* Max height removed to use 100vh in CSS */
+            MaxHeight: "100%", 
           }}
         >
           {" "}
@@ -61,7 +61,7 @@ const AboutUs = () => {
           className="p-5 text-center responsive-image rounded "
           style={{
             backgroundImage: `url("/images/about-us3.jpg")`,
-            MaxHeight: "100%", /* Max height removed to use 100vh in CSS */
+            MaxHeight: "100%", 
           }}
         >
           <h2 className=" text-center text-white goals-title">Our Goals</h2>

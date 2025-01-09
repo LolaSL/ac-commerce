@@ -29,16 +29,26 @@ productRouter.post(
       rating: 0,
       numReviews: 0,
       description: 'sample description',
-      features: ['Heating', 'Cooling', 'Wi-Fi', 'Energy Saving', 'Remote Control', 'Led', 'Smart Things'],
+      features: [
+        'Heating',
+        'Cooling',
+        'Wi-Fi',
+        'Energy Saving',
+        'Remote Control',
+        'Led',
+        'Smart Things',
+      ],
       btu: 0,
       areaCoverage: 0,
       energyEfficiency: 0,
       documents: [],
+      discount: 0, 
     });
     const product = await newProduct.save();
     res.send({ message: 'Product Created', product });
   })
 );
+
 
 productRouter.put(
   '/:id',
@@ -325,20 +335,6 @@ productRouter.get('/btu/:btu', async (req, res) => {
   }
 });
 
-productRouter.get("/offers", async (req, res) => {
-  try {
-    // Fetch products with a discount greater than 0
-    const productsOnSale = await Product.find({ discount: { $gt: 0 } });
 
-    if (!productsOnSale || productsOnSale.length === 0) {
-      return res.status(404).json({ message: "No products on sale at the moment." });
-    }
-
-    res.status(200).json(productsOnSale);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error while fetching products on sale." });
-  }
-});
 
 export default productRouter;

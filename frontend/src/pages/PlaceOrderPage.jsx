@@ -14,7 +14,6 @@ import CheckoutSteps from '../components/CheckoutSteps';
 import LoadingBox from '../components/LoadingBox';
 import Image from "react-bootstrap/Image";
 
-
 const reducer = (state, action) => {
   switch (action.type) {
     case 'CREATE_REQUEST':
@@ -38,9 +37,9 @@ export default function PlaceOrderPage() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
 
-  const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100; 
+  const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
   cart.itemsPrice = round2(
-    cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
+    cart.cartItems.reduce((a, c) => a + c.quantity * (c.price * (1 - c.discount / 100)), 0)
   );
   cart.shippingPrice = cart.itemsPrice > 100 ? round2(0) : round2(10);
   cart.taxPrice = round2(0.15 * cart.itemsPrice);
@@ -101,7 +100,7 @@ export default function PlaceOrderPage() {
                 {cart.shippingAddress.city}, {cart.shippingAddress.postalCode},
                 {cart.shippingAddress.country}
               </Card.Text>
-              <Link to="/shipping">Edit</Link>
+              <Link to="/shipping" className="order-link">Edit</Link>
             </Card.Body>
           </Card>
 
@@ -111,7 +110,7 @@ export default function PlaceOrderPage() {
               <Card.Text>
                 <strong>Method:</strong> {cart.paymentMethod}
               </Card.Text>
-              <Link to="/payment">Edit</Link>
+              <Link to="/payment" className="order-link">Edit</Link>
             </Card.Body>
           </Card>
 
@@ -122,23 +121,33 @@ export default function PlaceOrderPage() {
                 {cart.cartItems.map((item) => (
                   <ListGroup.Item key={item._id}>
                     <Row className="align-items-center">
+                    <Link to={`/product/${item.slug}`} className="order-link mb-2">{item.name}</Link>
                       <Col md={6}>
                         <Image
                           src={item.image}
                           alt={item.name}
                           className="img-fluid rounded img-thumbnail"
                         ></Image>{' '}
-                        <Link to={`/product/${item.slug}`}>{item.name}</Link>
+                      
                       </Col>
                       <Col md={3}>
                         <span>{item.quantity}</span>
                       </Col>
-                      <Col md={3}>${item.price}</Col>
+                      <Col md={3}>
+                        <div>
+                          ${item.price.toFixed(2)}
+                          {item.discount > 0 && (
+                            <div style={{ color: 'green' }}>
+                              (${(item.price * (1 - item.discount / 100)).toFixed(2)} after {item.discount}% off)
+                            </div>
+                          )}
+                        </div>
+                      </Col>
                     </Row>
                   </ListGroup.Item>
                 ))}
               </ListGroup>
-              <Link to="/cart">Edit</Link>
+              <Link to="/cart"  className="order-link mb-2">Edit</Link>
             </Card.Body>
           </Card>
         </Col>
@@ -178,6 +187,7 @@ export default function PlaceOrderPage() {
                 <ListGroup.Item>
                   <div className="d-grid">
                     <Button
+                      className="btn btn-secondary"
                       type="button"
                       onClick={placeOrderHandler}
                       disabled={cart.cartItems.length === 0}

@@ -5,6 +5,7 @@ const NotificationPopUp = ({ notification, buttonText, onButtonClick }) => {
     <div className="notification-popup">
       <h3>{notification.title}</h3>
       <p>{notification.message}</p>
+      <p>{new Date(notification.createdAt).toISOString().split('T')[0]}</p>
       <button onClick={onButtonClick}>{buttonText || "Close"}</button>
     </div>
   );

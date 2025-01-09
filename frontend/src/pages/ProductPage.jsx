@@ -121,6 +121,8 @@ function ProductPage() {
     }
   };
 
+ 
+
   return loading ? (
     <LoadingBox />
   ) : error ? (
@@ -149,7 +151,27 @@ function ProductPage() {
                 numReviews={product.numReviews}
               ></Rating>
             </ListGroup.Item>
-            <ListGroup.Item>Pirce : ${product.price}</ListGroup.Item>
+            <ListGroup.Item>
+  <Row>
+    <Col>Price:</Col>
+    <Col>
+      {product.discount > 0 ? (
+        <>
+          <span className="text-muted" style={{ textDecoration: "line-through" }}>
+            ${product.price.toFixed(2)}
+          </span>
+          <span className="ms-2">
+            ${((product.price * (1 - product.discount / 100)).toFixed(2))}
+          </span>
+          <span className="ms-2 text-success">On Sale! Save {product.discount}%</span>
+        </>
+      ) : (
+        <span>${product.price.toFixed(2)}</span>
+      )}
+    </Col>
+  </Row>
+</ListGroup.Item>
+
             <ListGroup.Item>
               <Row xs={1} md={2} className="g-2">
                 {[product.image, ...(product.images || [])].map((x) => (
@@ -183,13 +205,7 @@ function ProductPage() {
                     <Col>Brand:</Col>
                     <Col>
                       <p>{product.brand}</p>
-                    </Col>{" "}
-                  </Row>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Price:</Col>
-                    <Col>${product.price}</Col>
+                    </Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -208,7 +224,7 @@ function ProductPage() {
                 {product.countInStock > 0 && (
                   <ListGroup.Item>
                     <div className="d-grid">
-                      <Button onClick={addToCartHandler} variant="primary">
+                      <Button onClick={addToCartHandler} variant="secondary">
                         Add to Cart
                       </Button>
                     </div>
@@ -252,7 +268,7 @@ function ProductPage() {
                   <option value="2">2- Fair</option>
                   <option value="3">3- Good</option>
                   <option value="4">4- Very good</option>
-                  <option value="5">5- Excelent</option>
+                  <option value="5">5- Excellent</option>
                 </Form.Control>
               </Form.Group>
               <FloatingLabel
@@ -269,7 +285,7 @@ function ProductPage() {
               </FloatingLabel>
 
               <div className="mb-2">
-                <Button disabled={loadingCreateReview} type="submit">
+                <Button className="btn btn-secondary" disabled={loadingCreateReview} type="submit">
                   Submit
                 </Button>
                 {loadingCreateReview && <LoadingBox />}
@@ -286,50 +302,6 @@ function ProductPage() {
           )}
         </div>
       </div>
-      {product.documents && product.documents.length > 0 && (
-        <div className="product-documents my-4">
-          <h2>Product Documents</h2>
-          <ul>
-            {product.documents.map((doc, index) => (
-              <li key={index} className="document my-4">
-                {doc.type === "PDF" ? (
-                  <a
-                    href={doc.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className=" btn-link"
-                  >
-                    {doc.description}
-                  </a>
-                ) : doc.type === "Image" ? (
-              
-                  <a
-                    href={doc.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-link"
-                  >
-                      <img
-                        className="mb-3"
-                      src={doc.url}
-                      alt={doc.description}
-                      style={{
-                        maxWidth: "200px",
-                        height: "auto",
-                        display: "block",
-                        marginTop: "10px",
-                      }}
-                    />
-                    {doc.description}
-                  </a>
-                ) : (
-                  <span>{doc.description}</span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 }

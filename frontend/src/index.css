@@ -125,26 +125,138 @@ main {
 }
 
 .btn {
-  background-color:rgb(236, 150, 45);
+  background-color: rgb(236, 150, 45);
   color: white;
   text-shadow: 1px 1px 1px grey;
 }
 
+/* General Styles */
 .featured-title {
-  font-size: 3.2rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
 }
+
 .featured-products {
-  margin-top: 1rem;
   font-size: 1.2rem;
-  font-family: "Josefin Sans", cursive;
+  color: #666;
 }
 
 .products {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
+  justify-content: space-between;
+  margin-top: 2rem;
 }
+
+.product-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.product-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.product-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.btn-secondary {
+  background-color: rgb(236, 150, 45);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+@media (max-width: 1200px) {
+  .featured-title {
+    font-size: 2rem;
+  }
+
+  .featured-products {
+    font-size: 1rem;
+  }
+
+  .products {
+    margin-top: 1.5rem;
+  }
+
+  .product-card {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 992px) {
+  .featured-title {
+    font-size: 1.8rem;
+  }
+
+  .products {
+    justify-content: center;
+  }
+
+  .product-card {
+    padding: 10px;
+  }
+
+  .product-item {
+    flex: 1 1 45%;
+  }
+}
+
+@media (max-width: 768px) {
+  .featured-title {
+    font-size: 1.5rem;
+  }
+
+  .featured-products {
+    font-size: 0.9rem;
+  }
+
+  .products {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .product-card {
+    width: 90%;
+    padding: 10px;
+  }
+
+  .product-item {
+    flex: 1 1 100%;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .featured-title {
+    font-size: 1.3rem;
+  }
+
+  .featured-products {
+    font-size: 0.8rem;
+  }
+
+  .btn-secondary {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+}
+
 .original-price {
   text-decoration: line-through;
   color: grey;
@@ -172,29 +284,10 @@ main {
   flex-direction: column;
   justify-content: space-between;
 }
-.product-item {
-  border-radius: 8px;
-  transition: transform 0.3s;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.product-card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.product-item:hover {
-  transform: scale(1.02);
-}
 
 .responsive {
   width: 100%;
-  height: auto;
+  height: 100%;
   border: none;
   box-shadow: 1px 1px 1px solid grey;
   background-repeat: no-repeat;
@@ -284,7 +377,7 @@ main {
 }
 button {
   padding: 0.5rem 1rem;
-  background-color:rgb(236, 150, 45);
+  background-color: rgb(236, 150, 45);
   color: white;
   text-shadow: 1px 1px 1px grey;
   border: none;
@@ -338,7 +431,7 @@ button:hover {
 }
 
 .navbar-toggler {
-  background-color:rgb(236, 150, 45);
+  background-color: rgb(236, 150, 45);
 }
 .navbar-toggler:hover {
   background-color: grey;
@@ -387,11 +480,37 @@ h3 {
   text-decoration: none;
   transition: color 0.3s;
 }
-
+.nav-link:hover {
+  color: rgb(236, 150, 45);
+  text-decoration: none;
+  transition: color 0.3s;
+}
 .links:hover {
   color: rgb(236, 150, 45);
 }
 
+.nav-link-product {
+  color: grey;
+  text-decoration: none;
+  transition: color 0.3s;
+  font-weight: bold;
+}
+.nav-link-product:hover {
+  color: rgb(236, 150, 45);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.order-link {
+  color:grey;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.order-link:hover {
+  color:green;
+  text-decoration: none;
+  font-weight: bold;
+}
 .navbar {
   width: 100%;
 }
@@ -542,7 +661,7 @@ button.thumbnail {
   display: block;
   width: 100%;
   padding: 10px;
-  background-color:rgb(236, 150, 45);
+  background-color: rgb(236, 150, 45);
   color: white;
   border: none;
   border-radius: 5px;
@@ -880,7 +999,7 @@ form.d-flex {
 .responsive-image {
   position: relative;
   width: 100%;
-  height: 100vh; 
+  height: 100vh;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -988,7 +1107,7 @@ form.d-flex {
 .blog-link {
   text-decoration: none;
   color: #fff;
-  background-color:rgb(236, 150, 45);
+  background-color: rgb(236, 150, 45);
   padding: 8px 12px;
   border-radius: 4px;
   display: inline-block;
@@ -997,7 +1116,7 @@ form.d-flex {
 }
 .link-blogs {
   text-decoration: none;
-  color:rgb(236, 150, 45);
+  color: rgb(236, 150, 45);
   font-weight: bold;
   font-style: italic;
   font-size: 18px;
@@ -1344,7 +1463,6 @@ canvas {
   .btn-banner {
     font-size: 0.9rem;
     padding: 8px 12px;
-    /* margin-bottom:10px; */
   }
 }
 @media (max-width: 450px) {
@@ -1355,7 +1473,7 @@ canvas {
   .btn-banner {
     font-size: 0.7rem;
     padding: 6px 12px;
-    width: 80%; /* Full-width button for very small screens */
+    width: 80%;
   }
 }
 .notification-popup {
@@ -1371,4 +1489,147 @@ canvas {
   opacity: 1;
   transition: opacity 0.5s ease-in-out;
   display: block;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 1rem;
+  text-align: center;
+}
+
+th {
+  background-color: #f8f9fa;
+}
+
+.no-messages {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #6c757d;
+}
+
+button {
+  margin-right: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+}
+
+button:last-child {
+  margin-right: 0;
+}
+
+button.btn-sm {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 1200px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  th,
+  td {
+    padding: 0.8rem;
+  }
+
+  button {
+    font-size: 0.9rem;
+    padding: 0.35rem 0.7rem;
+  }
+
+  button.btn-sm {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  table {
+    font-size: 0.9rem;
+  }
+
+  th,
+  td {
+    padding: 0.6rem;
+  }
+
+  button {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  button.btn-sm {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  table {
+    font-size: 0.8rem;
+  }
+
+  th,
+  td {
+    padding: 0.5rem;
+  }
+
+  button {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  button.btn-sm {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  h1 {
+    font-size: 1.2rem;
+  }
+
+  table {
+    font-size: 0.75rem;
+  }
+
+  th,
+  td {
+    padding: 0.4rem;
+  }
+
+  button {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  button.btn-sm {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .no-messages {
+    font-size: 1rem;
+  }
 }

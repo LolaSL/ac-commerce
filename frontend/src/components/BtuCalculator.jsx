@@ -11,8 +11,14 @@ import {
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { getError } from "../utils";
+import { useContext } from "react";
+import { Store } from "../Store";
+import { useNavigate } from "react-router-dom";
 
 function BtuCalculator() {
+  const { dispatch: ctxDispatch } = useContext(Store);
+  const navigate = useNavigate();
+
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const [areaFeet, setAreaFeet] = useState(0);
@@ -21,21 +27,48 @@ function BtuCalculator() {
   const [rooms, setRooms] = useState([{ name: "Bedroom 1", size: "", btu: 0 }]);
   const [ceilingHeight, setCeilingHeight] = useState("2.5");
   const [numPeople, setNumPeople] = useState(2);
+
   const [insulation, setInsulation] = useState({
     Average: false,
     Good: false,
     Poor: false,
   });
+
   const [sunExposure, setSunExposure] = useState({
     Average: false,
     FullSunlight: false,
     HeavilyShaded: false,
   });
+
   const [climate, setClimate] = useState({
     Average: false,
     Hot: false,
     Cold: false,
   });
+
+  const [typeOfWall, setTypeOfWall] = useState({
+    BrickVeneer: false,
+    CementBricks: false,
+    CementSheet: false,
+    CementSlab: false,
+    DoubleBrick: false,
+    FoarmCladding: false,
+  });
+
+  const [typeOfRoof, setTypeOfRoof] = useState({
+    MetalFlatRoof: false,
+    MetalPitchRoof: false,
+    TileRoof: false,
+  });
+
+  const [OutdoorUnitLocation, setOutdoorUnitLocation] = useState({
+    FlatRoof: false,
+    PitchedRoof: false,
+    WallBrackets: false,
+    HardGround: false,
+    SoftGround: false,
+  });
+
   const [btuResults, setBtuResults] = useState([]);
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
@@ -50,6 +83,14 @@ function BtuCalculator() {
   const BTU_PER_ADDITIONAL_PERSON = 600;
   const KITCHEN_BTU_ADDITION = 4000;
   const ABOVE_GROUND_BTU_ADDITION = 500;
+
+  const OUTDOOR_LOCATION_BTU_ADJUSTMENTS = {
+    FlatRoof: 1.15,
+    PitchedRoof: 1.1,
+    WallBrackets: 1.05,
+    HardGround: 1.0,
+    SoftGround: 1.1,
+  };
 
   function calculateArea(e) {
     e.preventDefault();
@@ -93,6 +134,29 @@ function BtuCalculator() {
   const handleClimateChange = (e) => {
     setClimate({ ...climate, [e.target.name]: e.target.checked });
   };
+  const handleWallChange = (e) => {
+    const { name, checked } = e.target;
+    setTypeOfWall((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
+  };
+
+  const handleRoofChange = (e) => {
+    const { name, checked } = e.target;
+    setTypeOfRoof((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
+  };
+
+  const handleOutdoorUnitLocationChange = (e) => {
+    const { name, checked } = e.target;
+    setOutdoorUnitLocation((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
+  };
 
   const calculateBTUForRoom = (room) => {
     let area = parseFloat(room.size);
@@ -121,30 +185,55 @@ function BtuCalculator() {
       baseBTU += KITCHEN_BTU_ADDITION;
     }
 
-    if (insulation.Poor) {
-      baseBTU *= 1.2;
-    } else if (insulation.Average) {
-      baseBTU *= 1.1;
-    } else if (insulation.Good) {
-      baseBTU *= 0.9;
-    }
+    if (insulation.Poor) baseBTU *= 1.2;
+    if (insulation.Average) baseBTU *= 1.1;
+    if (insulation.Good) baseBTU *= 0.9;
 
-    if (sunExposure.FullSunlight) {
-      baseBTU *= 1.2;
-    } else if (sunExposure.HeavilyShaded) {
-      baseBTU *= 0.9;
-    }
+    if (sunExposure.FullSunlight) baseBTU *= 1.2;
+    if (sunExposure.HeavilyShaded) baseBTU *= 0.9;
 
-    if (climate.Hot) {
-      baseBTU *= 1.2;
-    } else if (climate.Cold) {
-      baseBTU *= 0.8;
-    } else if (climate.Average) {
-      baseBTU *= 1.0;
-    }
+    if (climate.Hot) baseBTU *= 1.2;
+    if (climate.Cold) baseBTU *= 0.8;
+    if (climate.Average) baseBTU *= 1.0;
+
     if (aboveGroundFloor === "Yes") {
       baseBTU += ABOVE_GROUND_BTU_ADDITION;
     }
+    if (typeOfWall.BrickVeneer) {
+      baseBTU *= 1.1;
+    }
+    if (typeOfWall.CementBricks) {
+      baseBTU *= 1.2;
+    }
+    if (typeOfWall.DoubleBrick) {
+      baseBTU *= 0.9;
+    }
+    if (typeOfWall.CementSheet) {
+      baseBTU *= 1.15;
+    }
+    if (typeOfWall.CementSlab) {
+      baseBTU *= 1.25;
+    }
+    if (typeOfWall.FoarmCladding) {
+      baseBTU *= 0.8;
+    }
+
+    if (typeOfRoof.MetalFlatRoof) {
+      baseBTU *= 1.3;
+    }
+    if (typeOfRoof.MetalPitchRoof) {
+      baseBTU *= 1.2;
+    }
+    if (typeOfRoof.TileRoof) {
+      baseBTU *= 0.9;
+    }
+
+    Object.keys(OutdoorUnitLocation).forEach((location) => {
+      if (OutdoorUnitLocation[location]) {
+        baseBTU *= OUTDOOR_LOCATION_BTU_ADJUSTMENTS[location];
+      }
+    });
+
     return { btu: Math.round(baseBTU), error: null };
   };
 
@@ -182,6 +271,22 @@ function BtuCalculator() {
     setBtuResults(results);
     setProducts(fetchedProducts);
     setError("");
+  };
+
+  const saveResultsToCart = () => {
+    rooms.forEach((room, index) => {
+      if (products[index]) {
+        const product = products[index];
+        ctxDispatch({
+          type: "CART_ADD_ITEM",
+          payload: {
+            ...product,
+            quantity: 1,
+          },
+        });
+      }
+    });
+    navigate("/cart");
   };
 
   const handleClear = () => {
@@ -317,7 +422,9 @@ function BtuCalculator() {
                     <option>Bathroom</option>
                     <option>Terrace</option>
                     <option>Loft</option>
-                    <option>Entire House</option>
+                    <option>Single Storey</option>
+                    <option>Double Storey</option>
+                    <option>Split Level House</option>
                     <option>Entire First Floor</option>
                     <option>Entire Second Floor And Above</option>
                     <option>Open Office Area</option>
@@ -402,6 +509,110 @@ function BtuCalculator() {
           </Form.Group>
 
           <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
+          <h3 className="mb-3 mt-3 "> Outdoor Unit (Condenser) Location</h3>
+          <Form.Check
+            type="checkbox"
+            label="Flat Roof"
+            name="FlatRoof"
+            checked={OutdoorUnitLocation.FlatRoof}
+            onChange={handleOutdoorUnitLocationChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Pitched Roof"
+            name="PitchedRoof"
+            checked={OutdoorUnitLocation.PitchedRoof}
+            onChange={handleOutdoorUnitLocationChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Wall Brackets"
+            name="WallBrackets"
+            checked={OutdoorUnitLocation.WallBrackets}
+            onChange={handleOutdoorUnitLocationChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Hard Ground"
+            name="HardGround"
+            checked={OutdoorUnitLocation.HardGround}
+            onChange={handleOutdoorUnitLocationChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Soft Ground"
+            name="SoftGround"
+            checked={OutdoorUnitLocation.SoftGround}
+            onChange={handleOutdoorUnitLocationChange}
+          />
+          <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
+          <h3 className="mb-3 mt-3">Type of Wall</h3>
+          <Form.Check
+            type="checkbox"
+            label="Brick Veneer"
+            name="BrickVeneer"
+            checked={typeOfWall.BrickVeneer}
+            onChange={handleWallChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Cement Bricks"
+            name="CementBricks"
+            checked={typeOfWall.CementBricks}
+            onChange={handleWallChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Cement Sheet"
+            name="CementSheet"
+            checked={typeOfWall.CementSheet}
+            onChange={handleWallChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Cement Slab"
+            name="CementSlab"
+            checked={typeOfWall.CementSlab}
+            onChange={handleWallChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Double Brick"
+            name="DoubleBrick"
+            checked={typeOfWall.DoubleBrick}
+            onChange={handleWallChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Foarm Cladding"
+            name="FoarmCladding"
+            checked={typeOfWall.FoarmCladding}
+            onChange={handleWallChange}
+          />
+          <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
+          <h3 className="mb-3 mt-3">Type of Roof</h3>
+          <Form.Check
+            type="checkbox"
+            label="Metal Flat Roof"
+            name="MetalFlatRoof"
+            checked={typeOfRoof.MetalFlatRoof}
+            onChange={handleRoofChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Metal Pitch Roof"
+            name="MetalPitchRoof"
+            checked={typeOfRoof.MetalPitchRoof}
+            onChange={handleRoofChange}
+          />
+          <Form.Check
+            type="checkbox"
+            label="Tile Roof"
+            name="TileRoof"
+            checked={typeOfRoof.TileRoof}
+            onChange={handleRoofChange}
+          />
+          <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
           <h3 className="mb-3 mt-3 ">Insulation Condition</h3>
           <Form.Check
             type="checkbox"
@@ -424,7 +635,6 @@ function BtuCalculator() {
             checked={insulation.Poor}
             onChange={handleInsulationChange}
           />
-          <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
           <h3 className="mb-3 mt-3">Sun Exposure</h3>
           <Form.Check
             type="checkbox"
@@ -567,6 +777,11 @@ function BtuCalculator() {
               </tr>
             </tbody>
           </Table>
+          <div className="d-flex justify-content-center mt-3">
+            <Button variant="primary" onClick={saveResultsToCart}>
+              Save to Cart
+            </Button>
+          </div>
         </Container>
       )}
     </div>

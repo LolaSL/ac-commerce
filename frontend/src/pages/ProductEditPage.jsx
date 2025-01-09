@@ -64,6 +64,7 @@ const ProductEditPage = () => {
   const [btu, setBtu] = useState("");
   const [areaCoverage, setAreaCoverage] = useState("");
   const [energyEfficiency, setEnergyEfficiency] = useState("");
+  const [discount, setDiscount] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,6 +84,7 @@ const ProductEditPage = () => {
         setBtu(data.btu);
         setAreaCoverage(data.areaCoverage);
         setEnergyEfficiency(data.energyEfficiency);
+        setDiscount(data.discount)
         dispatch({ type: "FETCH_SUCCESS" });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -112,6 +114,7 @@ const ProductEditPage = () => {
           btu,
           areaCoverage,
           energyEfficiency,
+          discount
         },
         {
           headers: { Authorization: `Bearer ${userInfo.token}` },
@@ -289,9 +292,16 @@ const ProductEditPage = () => {
               value={energyEfficiency}
               onChange={(e) => setEnergyEfficiency(e.target.value)}
             />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="energyEfficiency">
+            <Form.Label>Product Discount</Form.Label>
+            <Form.Control
+              value={discount}
+              onChange={(e) => setDiscount(e.target.value)}
+            />
           </Form.Group>
           <div className="mb-3">
-            <Button disabled={loadingUpdate} type="submit">
+            <Button disabled={loadingUpdate} type="submit" className="btn btn-secondary">
               Update
             </Button>
             {loadingUpdate && <LoadingBox />}

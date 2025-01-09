@@ -482,6 +482,7 @@ const data = {
       company: 'test1',
       experience: 5,
       portfolio: 'portfolio1.link',
+      isAdmin: false
     },
     {
       name: 'Test Two Company',
@@ -492,6 +493,7 @@ const data = {
       company: 'test2',
       experience: 7,
       portfolio: 'portfolio2.link',
+      isAdmin: false
     },
     {
       name: 'Test Three Company',
@@ -502,13 +504,14 @@ const data = {
       company: 'test3',
       experience: 9,
       portfolio: 'portfolio3.link',
+      isAdmin: false
     },
   ],
   projects: [
     {
       name: "Residential House Design",
       client: "John Doe",
-      dueDate: "2024-09-23",
+      dueDate: "2024-12-23",
       status: "In Progress",
       serviceProvider: "test-company1@example.com",
       hoursWorked: 20,
@@ -516,7 +519,7 @@ const data = {
     {
       name: "Office Interior Renovation",
       client: "ABC Corp",
-      dueDate: "2024-09-10",
+      dueDate: "2024-12-10",
       status: "Completed",
       serviceProvider: "test-company2@example.com",
       hoursWorked: 40,
@@ -524,7 +527,7 @@ const data = {
     {
       name: "Construction Design",
       client: "Viki Crage",
-      dueDate: "2024-09-15",
+      dueDate: "2024-11-15",
       status: "In Progress",
       serviceProvider: "test-company3@example.com",
       hoursWorked: 30,
@@ -532,7 +535,7 @@ const data = {
     {
       name: "Loft Renovation",
       client: "Loft&Hubs Corp",
-      dueDate: "2024-09-13",
+      dueDate: "2024-12-13",
       status: "Completed",
       serviceProvider: "test-company1@example.com",
       hoursWorked: 123,
@@ -540,7 +543,7 @@ const data = {
     {
       name: "Appartments Design",
       client: "Michaella Donowan",
-      dueDate: "2024-11-23",
+      dueDate: "2024-12-23",
       status: "In Progress",
       serviceProvider: "test-company2@example.com",
       hoursWorked: 53,
@@ -548,8 +551,8 @@ const data = {
     {
       name: "Ventilation System Architecting",
       client: "Venty Corp",
-      dueDate: "2024-09-26",
-      status: "Paid",
+      dueDate: "2024-11-26",
+      status: "Completed",
       serviceProvider: "test-company3@example.com",
       hoursWorked: 78,
     },
@@ -558,21 +561,21 @@ const data = {
     {
       client: "John Doe",
       text: "Can we update the room layout?",
-      date: "2024-08-18",
+      date: "2024-12-26",
       serviceProvider: "",
       projectName: "Residential House Design"
     },
     {
       client: "ABC Corp",
       text: "Can we upgrade the office layout?",
-      date: "2024-09-26",
+      date: "2024-10-26",
       serviceProvider: "",
       projectName: "Office Interior Renovation"
     },
     {
       client: "Viki Crage",
       text: "Can we upgrade the construction layout?",
-      date: "2024-09-25",
+      date: "2024-11-25",
       serviceProvider: "",
       projectName: "Construction Design",
     },
@@ -580,7 +583,7 @@ const data = {
     {
       client: "Loft&Hubs Corp",
       text: "We obtained the last transh and last milestone",
-      date: "2024-09-05",
+      date: "2024-11-05",
       serviceProvider: "",
       projectName: "Loft Renovation",
 
@@ -588,7 +591,7 @@ const data = {
     {
       client: "Michaella Donowan",
       text: "When can we start nogotiation regarding the first draft be ready?",
-      date: "2024-09-20",
+      date: "2024-12-30",
       serviceProvider: "",
       projectName: "Appartments Design"
     },
@@ -694,7 +697,15 @@ const data = {
       recipientType: 'serviceProvider',
       isRead: false,
       createdAt: new Date(),
-    }
+    },
+    {
+      title: "Get A Quote",
+      message: "Your Dream Deal Starts Here – Get a Quote Now!",
+      type: "quote",
+      recipientType: "user",
+      isRead: false,
+      createdAt: new Date(),
+    },
 
   ],
 

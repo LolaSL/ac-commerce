@@ -136,19 +136,55 @@ export default function UsersProductSales() {
           </Row>
 
           {renderChart(
-            "Sales",
+            "Sales Orders",
             [
               ["Date", "Sales"],
-              ...summary.dailyOrders.map((x) => [x._id, x.sales]),
+              ...(summary.dailyOrders?.map((x) => [new Date(x._id), x.sales]) ||
+                []), // Ensure _id is a valid date or parse accordingly
             ],
             "AreaChart"
           )}
 
           {renderChart(
-            "Categories",
+            "Product Categories",
             [
               ["Category", "Products"],
-              ...summary.productCategories.map((x) => [x._id, x.count]),
+              ...(summary.productCategories?.map((x) => [x._id, x.count]) ||
+                []),
+            ],
+            "PieChart"
+          )}
+          {renderChart(
+            "Product Discount",
+            [
+              ["Category", "Discount"],
+              ...(summary.productDiscount?.map((x) => [
+                x._id || "Unknown",
+                x.discount || 0,
+              ]) || []),
+            ],
+            "PieChart"
+          )}
+
+          {renderChart(
+            "Top Orders by Sales",
+            [
+              ["Order", "Sales"],
+              ...(summary.dailyOrders?.map((x) => [x.orders, x.sales]) || []),
+            ],
+            "BarChart"
+          )}
+
+          {renderChart(
+            "Order Status Distribution",
+            [
+              ["Status", "Number of Orders"],
+              ...(summary.dailyOrders?.map((x) => {
+                return ["Paid", x.paidOrders];
+              }) || []),
+              ...(summary.dailyOrders?.map((x) => {
+                return ["Delivered", x.deliveredOrders];
+              }) || []),
             ],
             "PieChart"
           )}
