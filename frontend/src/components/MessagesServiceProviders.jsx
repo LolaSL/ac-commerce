@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useReducer } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import axios from "axios";
 import { Store } from "../Store";
 import { getError } from "../utils";
 import { Container, Table, Button } from "react-bootstrap";
-
+import {  useLocation } from "react-router-dom"; 
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -16,6 +16,8 @@ const reducer = (state, action) => {
         currentPage: action.payload.currentPage,
         totalPages: action.payload.totalPages,
         totalMessages: action.payload.totalMessages,
+        page: action.payload.page,
+   
       };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
@@ -43,6 +45,43 @@ const MessagesServiceProviders = () => {
       successDelete: false,
     });
 
+  const { search } = useLocation();
+  const sp = new URLSearchParams(search);
+  const page = sp.get("page") || 1;
+
+  const [sortedMessages, setSortedMessages] = useState([]);
+  const [sortColumn, setSortColumn] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
+
+  useEffect(() => {
+    if (messages) {
+      const sorted = [...messages].sort((a, b) => {
+        const valueA = sortColumn === "serviceProvider" ? a[sortColumn]?.name : a[sortColumn];
+        const valueB = sortColumn === "serviceProvider" ? b[sortColumn]?.name : b[sortColumn];
+
+        if (valueA === undefined || valueB === undefined) {
+          return 0;
+        }
+
+      
+        if (typeof valueA === "string" && typeof valueB === "string") {
+          const nameComparison = valueA.localeCompare(valueB);
+          if (nameComparison !== 0) return sortOrder === "asc" ? nameComparison : -nameComparison;
+        }
+
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        if (dateA !== dateB) {
+          return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+        }
+
+        return 0;
+      });
+
+      setSortedMessages(sorted);
+    }
+  }, [messages, sortColumn, sortOrder]);
+
   useEffect(() => {
     const fetchMessages = async () => {
       dispatch({ type: "FETCH_REQUEST" });
@@ -51,12 +90,15 @@ const MessagesServiceProviders = () => {
         return;
       }
       try {
-        const { data } = await axios.get(`/api/service-providers/messages/all`, {
-          params: { page: currentPage, pageSize: 10 },
-          headers: {
-            Authorization: `Bearer ${userInfo.token}`,
-          },
-        });
+        const { data } = await axios.get(
+          `/api/service-providers/messages/all`,
+          {
+            params: { page: currentPage, pageSize: 10 },
+            headers: {
+              Authorization: `Bearer ${userInfo.token}`,
+            },
+          }
+        );
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -64,7 +106,7 @@ const MessagesServiceProviders = () => {
     };
 
     fetchMessages();
-  }, [userInfo, successDelete, currentPage]);
+  }, [userInfo, successDelete, currentPage, page]);
 
   const deleteHandler = async (messageId) => {
     if (!messageId || !messageId.match(/^[0-9a-fA-F]{24}$/)) {
@@ -74,9 +116,12 @@ const MessagesServiceProviders = () => {
     if (window.confirm("Are you sure you want to delete this message?")) {
       dispatch({ type: "DELETE_REQUEST" });
       try {
-        const { data } = await axios.delete(`/api/service-providers/message/${messageId}`, {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        });
+        const { data } = await axios.delete(
+          `/api/service-providers/message/${messageId}`,
+          {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          }
+        );
         dispatch({ type: "DELETE_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "DELETE_FAIL" });
@@ -84,7 +129,15 @@ const MessagesServiceProviders = () => {
       }
     }
   };
-  
+
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    } else {
+      setSortColumn(column);
+      setSortOrder("asc");
+    }
+  };
 
   const editHandler = (messageId) => {
     window.location.href = `/admin/message/${messageId}/edit`;
@@ -95,57 +148,77 @@ const MessagesServiceProviders = () => {
 
   return (
     <Container>
-    <h1 className="mt-4 mb-4 fw-bold">Service Provider Messages</h1>
-    {messages.length === 0 && (
-      <div>
-        <p>No messages available</p>
-        <p>Check API response and ensure messages exist in the database.</p>
-      </div>
-    )}
-    {messages.length > 0 && (
-      <Table striped bordered hover responsive>
-        <thead>
-          <tr>
+      <h1 className="mt-4 mb-4 fw-bold">Service Provider Messages</h1>
+      {messages.length === 0 && (
+        <div>
+          <p>No messages available</p>
+          <p>Check API response and ensure messages exist in the database.</p>
+        </div>
+      )}
+      {messages.length > 0 && (
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
               <th>#</th>
-              <th>Service Provider</th>
-              <th>Client</th>
+              <th>
+                <button
+                  type="button"
+                  onClick={() => handleSort("serviceProvider")}
+                >
+                 Provider{" "}
+                  {sortColumn === "serviceProvider" &&
+                    (sortOrder === "asc" ? "↑" : "↓")}
+                </button>
+              </th>
+              <th>
+                <button type="button" onClick={() => handleSort("client")}>
+                  Client{" "}
+                  {sortColumn === "client" && (sortOrder === "asc" ? "↑" : "↓")}
+                </button>
+              </th>
               <th>Project</th>
-            <th>Message</th>
-            <th>Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {messages.map((message, index) => (
-            <tr key={message._id}>
-              <td>{index + 1}</td>
-              <td>{message.serviceProvider.name}</td>
-              <td>{message.client}</td>
-              <td>{message.projectName}</td>
-              <td>{message.text}</td>
-              <td>{new Date(message.date).toLocaleDateString()}</td>
-              <td>
-                <Button
-                  variant="secondary"
-                  className="me-2 mb-1 btn-sm"
-                  onClick={() => editHandler(message._id)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="danger"
-                  className="me-2 btn-sm"
-                  onClick={() => deleteHandler(message._id)}
-                >
-                  Delete
-                </Button>
-              </td>
+              <th>Message</th>
+              <th>
+                <button type="button" onClick={() => handleSort("date")}>
+                  Date{" "}
+                  {sortColumn === "date" && (sortOrder === "asc" ? "↑" : "↓")}
+                </button>
+              </th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-    )}
-  </Container>
+          </thead>
+          <tbody>
+            {sortedMessages.map((message, index) => (
+              <tr key={message._id}>
+                <td>{index + 1}</td>
+                <td>{message.serviceProvider?.name}</td>
+                <td>{message.client}</td>
+                <td>{message.projectName}</td>
+                <td>{message.text}</td>
+                <td>{new Date(message.date).toLocaleDateString()}</td>
+                <td>
+                  <Button
+                    variant="secondary"
+                    className="me-2 mb-1 btn-sm"
+                    onClick={() => editHandler(message._id)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="danger"
+                    className="me-2 btn-sm"
+                    onClick={() => deleteHandler(message._id)}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
+    
+    </Container>
   );
 };
 

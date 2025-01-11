@@ -43,12 +43,13 @@ main {
   background: linear-gradient(
     90deg,
     #000,
-    rgb(216, 35, 59),
-    rgb(181, 44, 142),
+    rgb(17, 17, 17),
+    rgb(166, 119, 77),
     rgb(94, 108, 122),
-    rgb(216, 35, 59),
-    rgb(222, 193, 76),
-    rgb(59, 138, 138),
+    rgb(17, 17, 17),
+    rgb(242, 231, 136),
+    rgb(131, 140, 150),
+    rgb(229, 148, 77),
     #000
   );
   background-repeat: no-repeat;
@@ -114,14 +115,14 @@ main {
 
 .banner-paragraph {
   text-transform: capitalize;
+  text-shadow: 1px 1px 2px black, 0 0 1em Bisque, 0 0 0.2em Chocolate;
   margin-top: 1rem;
   text-align: justify;
-  font-size: 1rem;
+  font-size: 1.5rem;
   line-height: 1.6;
   text-align: justify;
-  color: black;
+  color: #f2e788;
   font-family: "Josefin Sans";
-  text-shadow: 1px 1px 1px white;
 }
 
 .btn {
@@ -501,13 +502,13 @@ h3 {
   transition: color 0.3s;
 }
 .order-link {
-  color:grey;
+  color: grey;
   text-decoration: none;
   font-weight: bold;
 }
 
 .order-link:hover {
-  color:green;
+  color: green;
   text-decoration: none;
   font-weight: bold;
 }
@@ -967,7 +968,7 @@ form.d-flex {
   font-weight: 700;
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 769px) and (max-width: 1440px) {
   .search-box {
     max-width: 80%;
   }
@@ -1143,6 +1144,67 @@ form.d-flex {
     height: auto;
   }
 }
+
+.btu-calculator-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.btu-form .form-label {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.btu-form .form-control {
+  border-radius: 6px;
+}
+
+.btn-calculate,
+.btn-add,
+.btn-sm {
+  width: 100%;
+  font-size: 1rem;
+  padding: 10px;
+}
+
+.result {
+  background-color: #e9ecef;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+.room-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.room-row .btn {
+  align-self: center;
+}
+
+.radio-group,
+.checkbox-group {
+  margin-top: 10px;
+}
+
+.radio-group label,
+.checkbox-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+hr {
+  border-top: 2px solid #dee2e6;
+  margin: 20px 0;
+}
+
 .btu-calculator-container,
 .square-container {
   border: 5px double grey;
@@ -1205,7 +1267,6 @@ form.d-flex {
   color: #666699;
 }
 
-/* Buttons */
 .btu-form button {
   background-color: #666699;
   color: white;
@@ -1216,14 +1277,14 @@ form.d-flex {
   background-color: #0056b3;
 }
 
-.btn-sm {
+/* .btn-sm {
   background-color: #666699;
   align-items: center;
   color: white;
   border: none;
   cursor: pointer;
   margin-bottom: 30px;
-}
+} */
 
 .btn-sm:hover {
   background-color: rgb(236, 150, 45);
@@ -1292,12 +1353,6 @@ form.d-flex {
   padding: 1rem;
 }
 
-.btu-calculation-measure {
-  width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
 .label-upload {
   color: #666699;
   font-weight: bold;
@@ -1334,17 +1389,18 @@ canvas {
   background: linear-gradient(
     90deg,
     #000,
-    rgb(216, 35, 59),
-    rgb(181, 44, 142),
+    rgb(17, 17, 17),
+    rgb(166, 119, 77),
     rgb(94, 108, 122),
-    rgb(216, 35, 59),
-    rgb(222, 193, 76),
-    rgb(59, 138, 138),
+    rgb(17, 17, 17),
+    rgb(242, 231, 136),
+    rgb(131, 140, 150),
+    rgb(229, 148, 77),
     #000
   );
   background-repeat: no-repeat;
   background-size: 80%;
-  animation: animate 8s linear infinite;
+  animation: animate 9s linear infinite;
   -webkit-background-clip: text;
   -webkit-text-fill-color: rgba(255, 255, 255, 0);
   margin-bottom: 10px;
@@ -1451,10 +1507,22 @@ canvas {
   height: auto;
   max-height: 500px;
 }
+@media (min-width: 769px) and (max-width: 1440px) {
+  .banner-paragraph {
+    font-size: 1.05rem;
+  }
 
+  .responsive-banner {
+    max-height: 300px;
+  }
+  .btn-banner {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+}
 @media (max-width: 768px) {
   .banner-paragraph {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
   }
 
   .responsive-banner {

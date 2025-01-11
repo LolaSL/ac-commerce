@@ -140,7 +140,7 @@ export default function UsersProductSales() {
             [
               ["Date", "Sales"],
               ...(summary.dailyOrders?.map((x) => [new Date(x._id), x.sales]) ||
-                []), // Ensure _id is a valid date or parse accordingly
+                []),
             ],
             "AreaChart"
           )}
@@ -170,11 +170,42 @@ export default function UsersProductSales() {
             "Top Orders by Sales",
             [
               ["Order", "Sales"],
-              ...(summary.dailyOrders?.map((x) => [x.orders, x.sales]) || []),
+              ...(summary.dailyOrders?.map((x) => [
+                `Paid Orders (${x._id})`,
+                x.sales,
+              ]) || []),
             ],
-            "BarChart"
+            "BarChart",
+            {
+              title: "Top Orders by Sales",
+              hAxis: { title: "Orders", minValue: 0 },
+              vAxis: { title: "Sales ($)", minValue: 0 },
+              colors: ["#4285F4"],
+              legend: { position: "none" },
+            }
           )}
 
+          {renderChart(
+            "Orders Status",
+            [
+              ["Status", "Count"],
+              [
+                "Paid",
+                summary.dailyOrders?.reduce(
+                  (sum, x) => sum + x.paidOrders,
+                  0
+                ) || 0,
+              ],
+              [
+                "Not Paid",
+                summary.dailyOrders?.reduce(
+                  (sum, x) => sum + x.notPaidOrders,
+                  0
+                ) || 0,
+              ],
+            ],
+            "PieChart"
+          )}
           {renderChart(
             "Order Status Distribution",
             [

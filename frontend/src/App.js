@@ -62,6 +62,7 @@ import ServiceProviders from './components/ServiceProviders';
 import Notifications from './components/Notifications.jsx';
 import Offers from './pages/Offers.jsx';
 import AdvancedAC from './pages/AdvancedAC.jsx';
+import MessageEditPage from './pages/MessageEditPage.jsx';
 
 
 
@@ -368,6 +369,14 @@ function App() {
                 element={
                   <AdminRoute>
                     <DashboardPage />
+                  </AdminRoute>
+                }
+              ></Route>
+                  <Route
+                path="/admin/message/:id/edit" 
+                element={
+                  <AdminRoute>
+                    <MessageEditPage/>
                   </AdminRoute>
                 }
               ></Route>

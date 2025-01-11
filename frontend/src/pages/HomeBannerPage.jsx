@@ -8,7 +8,7 @@ const notifications = [
   {
     title: "Service Request Assigned",
     message:
-      "You have been assigned a new service request for an air conditioner installation. Please review the details and respond promptly.",
+      "You have got a new service request message. Please review the details and respond promptly.",
     type: "urgent",
     recipientType: "serviceProvider",
     isRead: false,
@@ -99,8 +99,7 @@ export default function HomeBannerPage() {
   const handleNotificationClick = (buttonText) => {
     if (buttonText === "Get Quote") {
       navigate("/uploadfile");
-    }
-    else if (buttonText === "Review Details") {
+    } else if (buttonText === "Review Details") {
       navigate("/serviceprovider/messages");
     }
     setNotification(null);
@@ -113,11 +112,15 @@ export default function HomeBannerPage() {
           notification={notification}
           onClose={() => setNotification(null)}
           buttonText={
-            notification.title === "Get A Quote" ? "Get Quote" : "Review Details"
+            notification.title === "Get A Quote"
+              ? "Get Quote"
+              : "Review Details"
           }
           onButtonClick={() =>
             handleNotificationClick(
-              notification.title === "Get A Quote" ? "Get Quote" : "Review Details"
+              notification.title === "Get A Quote"
+                ? "Get Quote"
+                : "Review Details"
             )
           }
         />

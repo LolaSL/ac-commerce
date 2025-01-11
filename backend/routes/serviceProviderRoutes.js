@@ -56,6 +56,22 @@ export const isServiceProvider = (req, res, next) => {
 
 
 serviceProviderRouter.get(
+  '/all',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    try {
+       const serviceProviders = await ServiceProvider.find({});
+    res.send(serviceProviders);
+    } catch (error) {
+      console.error('Error in serviceProviderRouter.get /:', err);
+      res.status(500).send({ message: err.message });
+    }
+   
+  })
+);
+
+serviceProviderRouter.get(
   '/',
   isAuth,
   isAdmin,
@@ -169,7 +185,7 @@ serviceProviderRouter.get('/projects/:id', async (req, res) => {
 serviceProviderRouter.get(
   '/messages/all',
   isAuth,
-  isAdmin, 
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
     const page = Number(req.query.page) || 1;
     const pageSize = Number(req.query.pageSize) || 10;
@@ -177,7 +193,7 @@ serviceProviderRouter.get(
     try {
       console.log("Fetching messages - Page:", page, "Page Size:", pageSize);
 
-      const count = await Message.countDocuments(); 
+      const count = await Message.countDocuments();
       console.log("Total Messages Count:", count);
 
       const messages = await Message.find({})
@@ -194,7 +210,7 @@ serviceProviderRouter.get(
         totalMessages: count,
       });
     } catch (error) {
-      console.error("Error fetching messages:", error); 
+      console.error("Error fetching messages:", error);
       res.status(500).json({ message: "Error fetching messages", error: error.message });
     }
   }));
@@ -221,32 +237,26 @@ serviceProviderRouter.get(
   })
 );
 
-// Update a specific message
 serviceProviderRouter.put(
   '/messages/:id',
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-    try {
-      const messageId = req.params.id;
-
-      const message = await Message.findById(messageId);
-      if (message) {
-        Object.assign(message, req.body);
-        await message.save();
-        res.send({ message: 'Message Updated', message });
-      } else {
-        res.status(404).send({ message: 'Message Not Found' });
-      }
-    } catch (err) {
-      res
-        .status(500)
-        .send({ message: 'Error updating message', error: err.message });
+    const messageId = req.params.id;
+    const message = await Message.findById(new mongoose.Types.ObjectId(messageId));
+    // const message = await Message.findById(messageId);
+    if (message) {
+      Object.assign(message, req.body);
+      await message.save();
+      res.send({ message: 'Message Updated', message });
+    } else {
+      res.status(404).send({ message: 'Message Not Found' });
     }
   })
 );
 
-// Delete a specific message
+
+
 serviceProviderRouter.delete(
   '/message/:id',
   isAuth,
@@ -293,13 +303,11 @@ serviceProviderRouter.get(
         return;
       }
 
-      // Calculate total earnings
       const totalEarnings = earnings.reduce(
         (sum, earning) => sum + earning.amount,
         0
       );
 
-      // Send notification to admin if total earnings exceed a threshold
       const earningThreshold = 10000;
       if (totalEarnings > earningThreshold) {
         await Notification.create({

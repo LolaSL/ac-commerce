@@ -76,7 +76,7 @@ const ServiceProviders = () => {
     hAxis: { title: "Earnings (USD)", minValue: 0 },
     vAxis: { title: "Provider" },
     legend: "none",
-    colors: ["#10b2ad"], // Customize bar color
+    colors: ["#10b2ad"], 
   };
 
   const pieChartData = [
@@ -99,7 +99,7 @@ const ServiceProviders = () => {
 
   const pieChartOptions = {
     title: "Project Distribution",
-    pieHole: 0.4, // Donut chart
+    pieHole: 0.4,
     is3D: false,
     legend: { position: "bottom" },
     colors: ["#0ac22f", "#cd17ee" ], 

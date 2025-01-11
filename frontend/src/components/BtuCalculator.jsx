@@ -447,7 +447,7 @@ function BtuCalculator() {
                 </Form.Group>
               </Col>
               <Button
-                variant="secondary"
+                variant="primary"
                 onClick={() => removeRoom(index)}
                 className="btn btn-sm mb-4  my-4"
               >
@@ -487,7 +487,7 @@ function BtuCalculator() {
               We may require a scaffold tower for working heights over 1.5m.
             </p>
           </Form.Group>
-
+          <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
           <Form.Group controlId="outdoorSpace" className="my-4">
             <Form.Label>Do You Have Outdoor Space?</Form.Label>
             <Form.Check
@@ -507,7 +507,6 @@ function BtuCalculator() {
               onChange={(e) => setOutdoorSpace(e.target.value)}
             />
           </Form.Group>
-
           <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
           <h3 className="mb-3 mt-3 "> Outdoor Unit (Condenser) Location</h3>
           <Form.Check
@@ -635,6 +634,7 @@ function BtuCalculator() {
             checked={insulation.Poor}
             onChange={handleInsulationChange}
           />
+             <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
           <h3 className="mb-3 mt-3">Sun Exposure</h3>
           <Form.Check
             type="checkbox"
