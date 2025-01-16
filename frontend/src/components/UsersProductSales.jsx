@@ -207,11 +207,11 @@ export default function UsersProductSales() {
             "PieChart"
           )}
           {renderChart(
-            "Order Status Distribution",
+            "Product Status Distribution",
             [
               ["Status", "Number of Orders"],
               ...(summary.dailyOrders?.map((x) => {
-                return ["Paid", x.paidOrders];
+                return ["Not Delivered", x.notDeliveredOrders];
               }) || []),
               ...(summary.dailyOrders?.map((x) => {
                 return ["Delivered", x.deliveredOrders];

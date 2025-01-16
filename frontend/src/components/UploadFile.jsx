@@ -3,6 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import { PDFDocument } from "pdf-lib";
 import * as pdfjsLib from "pdfjs-dist/webpack.mjs";
 import { Helmet } from "react-helmet-async";
+import RoomColorTable from "./RoomColorTable.jsx";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js`;
 
@@ -15,8 +16,75 @@ function UploadFile() {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [comments, setComments] = useState([]);
+  const [roomColors, setRoomColors] = useState([
+    {
+      name: "Living Room",
+      x: 50,
+      y: 50,
+      width: 200,
+      height: 150,
+      color: "#FFFFFF",
+    },
+    {
+      name: "Bedroom",
+      x: 300,
+      y: 50,
+      width: 150,
+      height: 150,
+      color: "#FFFFFF",
+    },
+    {
+      name: "Kitchen",
+      x: 50,
+      y: 250,
+      width: 150,
+      height: 100,
+      color: "#FFFFFF",
+    },
+    {
+      name: "Bathroom",
+      x: 300,
+      y: 250,
+      width: 100,
+      height: 100,
+      color: "#FFFFFF",
+    },
+    {
+      name: "Dining Room",
+      x: 50,
+      y: 400,
+      width: 200,
+      height: 100,
+      color: "#FFFFFF",
+    },
+  ]);
+  const [selectedColor] = useState("#FFD700");
 
-  const RECT_WIDTH = window.innerWidth < 768 ? 20 : 30; // Smaller on mobile
+  const [
+    rooms,
+    // setRooms
+  ] = useState([
+    {
+      id: 1,
+      name: "Living Room",
+      x: 50,
+      y: 50,
+      width: 200,
+      height: 150,
+      color: "#FFFFFF",
+    },
+    {
+      id: 2,
+      name: "Bedroom",
+      x: 300,
+      y: 50,
+      width: 150,
+      height: 100,
+      color: "#FFFFFF",
+    },
+  ]);
+
+  const RECT_WIDTH = window.innerWidth < 768 ? 20 : 30;
   const RECT_HEIGHT = window.innerWidth < 768 ? 10 : 15;
 
   const handleChange = (event) => {
@@ -34,21 +102,50 @@ function UploadFile() {
     }
   };
 
-  const handleCanvasClick = (e) => {
-    const { offsetX, offsetY } = e.nativeEvent;
-    console.log(offsetX, offsetY);
+  const handleCanvasClick = (event) => {
+    const canvas = canvasRef.current;
+    // const context = canvas.getContext('2d');
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    // context.beginPath();
+    // context.arc(x, y, 10, 0, 2 * Math.PI);
+    // context.fillStyle = 'green';
+    // context.fill();
+    const updatedColors = roomColors.map((room) => {
+      if (
+        x >= room.x &&
+        x <= room.x + room.width &&
+        y >= room.y &&
+        y <= room.y + room.height
+      ) {
+        return { ...room, color: selectedColor };
+      }
 
-    if (e.detail === 2) {
-      handleIconDoubleClick(offsetX, offsetY);
+      return room;
+    });
+
+    setRoomColors(updatedColors);
+
+    // if (updatedColors) {
+    //   const roomColor = prompt("Enter a color for this room (e.g., #ff0000):") || "#00ff00";
+
+    //   setRooms((prevRooms) =>
+    //     prevRooms.map((room) =>
+    //       room.id === updatedColors.id ? { ...room, color: roomColor } : room
+    //     )
+    //   );
+    // }
+    if (event.detail === 2) {
+      handleIconDoubleClick(x, y);
     } else {
-      const isNewIcon = handleIconClick(offsetX, offsetY);
-
+      const isNewIcon = handleIconClick(x, y);
       if (isNewIcon) {
         const commentText = prompt("Enter your comment:");
         if (commentText) {
           setComments((prevComments) => [
             ...prevComments,
-            { text: commentText, x: offsetX + 50, y: offsetY - 30 },
+            { text: commentText, x: x + 50, y: y - 30 },
           ]);
         }
       }
@@ -197,19 +294,42 @@ function UploadFile() {
     },
     [color]
   );
+  const handleColorChange = (updatedColors) => {
+    setRoomColors(updatedColors);
+  };
+
+  const drawRoomWithColor = useCallback(
+    (context) => {
+      context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+      roomColors.forEach((room) => {
+        context.fillStyle = room.color;
+        context.fillRect(room.x, room.y, room.width, room.height);
+        context.strokeStyle = "#000000";
+        context.strokeRect(room.x, room.y, room.width, room.height);
+      });
+    },
+    [roomColors]
+  );
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !file) return;
+    const context = canvas.getContext("2d");
+    drawRoomWithColor(context);
+  }, [drawRoomWithColor, file]);
 
   const renderSignature = useCallback(
     (context) => {
       if (isSaved) {
         const text = "APPROVED";
-        const textX = context.canvas.width - 200;
+        const textX = context.canvas.width - 180;
         const textY = 45;
-        const padding = 15;
-        context.font = "bold 25px Arial itallic";
+        const padding = 10;
+        context.font = "bold 18px Arial itallic";
 
         const textMetrics = context.measureText(text);
         const textWidth = textMetrics.width;
-        const textHeight = 20;
+        const textHeight = 18;
 
         context.strokeStyle = "black";
         context.lineWidth = 2;
@@ -242,9 +362,17 @@ function UploadFile() {
     [isSaved]
   );
 
+  const renderRooms = useCallback(
+    (context) => {
+      rooms.forEach((room) => drawRoomWithColor(context, room));
+    },
+    [rooms, drawRoomWithColor]
+  );
+
   const renderPDFOnCanvas = useCallback(
     async (pdfData) => {
       const canvas = canvasRef.current;
+      if (!canvas || !file) return;
       const context = canvas.getContext("2d");
 
       const loadingTask = pdfjsLib.getDocument({ data: pdfData });
@@ -255,28 +383,41 @@ function UploadFile() {
       canvas.width = viewport.width;
       canvas.height = viewport.height;
 
-      const renderContext = {
-        canvasContext: context,
-        viewport: viewport,
-      };
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const typedArray = new Uint8Array(reader.result);
+        const pdf = await pdfjsLib.getDocument(typedArray).promise;
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1 });
 
-      await page.render(renderContext).promise;
-      iconPositions.forEach((icon) => {
-        const rectWidth = 80;
-        const rectHeight = 25;
-        drawRotatedRectangle(
-          context,
-          icon.x,
-          icon.y,
-          rectWidth,
-          rectHeight,
-          icon.angle
-        );
-      });
-      renderComments(context);
-      renderSignature(context);
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
+          canvasContext: context,
+          viewport: viewport,
+        };
+
+        await page.render(renderContext).promise;
+
+        iconPositions.forEach((icon) => {
+          const rectWidth = 80;
+          const rectHeight = 25;
+          drawRotatedRectangle(
+            context,
+            icon.x,
+            icon.y,
+            rectWidth,
+            rectHeight,
+            icon.angle
+          );
+        });
+        renderComments(context);
+        renderSignature(context);
+      };
+      reader.readAsArrayBuffer(file);
     },
-    [iconPositions, renderSignature, drawRotatedRectangle, renderComments]
+    [file, iconPositions, renderSignature, drawRotatedRectangle, renderComments]
   );
 
   useEffect(() => {
@@ -286,6 +427,9 @@ function UploadFile() {
 
     const context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
+    renderRooms(context);
+    drawRoomWithColor(context, "Living Room", 50, 50, 100, 50);
+    drawRoomWithColor(context, "Bedroom", 200, 50, 100, 50);
 
     if (previewUrl) {
       const img = new Image();
@@ -304,6 +448,8 @@ function UploadFile() {
             icon.angle
           );
         });
+        drawRoomWithColor(context);
+
         renderComments(context);
         renderSignature(context);
       };
@@ -323,9 +469,12 @@ function UploadFile() {
     file,
     previewUrl,
     renderPDFOnCanvas,
+    roomColors,
     renderComments,
     renderSignature,
     drawRotatedRectangle,
+    drawRoomWithColor,
+    renderRooms,
   ]);
 
   const saveAsImage = () => {
@@ -406,10 +555,15 @@ function UploadFile() {
         </Form.Group>
       </Form>
 
+      <RoomColorTable
+        roomColors={roomColors}
+        onColorChange={handleColorChange}
+      />
       <h3 className="mt-4 mb-4">Preview of selected file:</h3>
       {previewUrl && (
         <div>
           <canvas
+            id="my-canvas"
             ref={canvasRef}
             width={window.innerWidth * 0.9}
             height={window.innerHeight * 0.6}

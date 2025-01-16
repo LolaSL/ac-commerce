@@ -121,8 +121,6 @@ function ProductPage() {
     }
   };
 
- 
-
   return loading ? (
     <LoadingBox />
   ) : error ? (
@@ -152,25 +150,35 @@ function ProductPage() {
               ></Rating>
             </ListGroup.Item>
             <ListGroup.Item>
-  <Row>
-    <Col>Price:</Col>
-    <Col>
-      {product.discount > 0 ? (
-        <>
-          <span className="text-muted" style={{ textDecoration: "line-through" }}>
-            ${product.price.toFixed(2)}
-          </span>
-          <span className="ms-2">
-            ${((product.price * (1 - product.discount / 100)).toFixed(2))}
-          </span>
-          <span className="ms-2 text-success">On Sale! Save {product.discount}%</span>
-        </>
-      ) : (
-        <span>${product.price.toFixed(2)}</span>
-      )}
-    </Col>
-  </Row>
-</ListGroup.Item>
+              <Row>
+                <Col>
+                  <strong>Price:</strong>
+                </Col>
+                <Col>
+                  {product.discount > 0 ? (
+                    <>
+                      <span
+                        className="text-muted"
+                        style={{ textDecoration: "line-through" }}
+                      >
+                        ${product.price.toFixed(2)}
+                      </span>
+                      <span className="ms-2">
+                        $
+                        {(product.price * (1 - product.discount / 100)).toFixed(
+                          2
+                        )}
+                      </span>
+                      <span className="ms-2 text-success">
+                        On Sale! Save {product.discount}%
+                      </span>
+                    </>
+                  ) : (
+                    <span>${product.price.toFixed(2)}</span>
+                  )}
+                </Col>
+              </Row>
+            </ListGroup.Item>
 
             <ListGroup.Item>
               <Row xs={1} md={2} className="g-2">
@@ -191,8 +199,17 @@ function ProductPage() {
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
-              Description:
+              <strong> Description: </strong>{" "}
               <p className="product-paragraph">{product.description}</p>
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <strong>Product dimensions:</strong>{" "}
+              {product.dimension &&
+              (product.dimension.width > 0 ||
+                product.dimension.height > 0 ||
+                product.dimension.depth > 0)
+                ? `${product.dimension.width} x ${product.dimension.height} x ${product.dimension.depth} cm`
+                : "Not specified"}
             </ListGroup.Item>
           </ListGroup>
         </Col>
@@ -235,6 +252,26 @@ function ProductPage() {
           </Card>
         </Col>
       </Row>
+      <div className="my-3 mb-3">
+        <h2>Documentation</h2>
+        <ul>
+          {product.documents && product.documents.length > 0 ? (
+            product.documents.map((doc, index) => (
+              <li key={index}>
+                <p>
+                  <strong>{doc.description}</strong> (
+                  <a href={doc.url} target="_blank" rel="noopener noreferrer">
+                    {doc.type}
+                  </a>
+                  )
+                </p>
+              </li>
+            ))
+          ) : (
+            <p>No documentation available.</p>
+          )}
+        </ul>
+      </div>
       <div className="my-3">
         <h2 ref={reviewsRef}>Reviews</h2>
         <div className="mb-3">
@@ -285,7 +322,11 @@ function ProductPage() {
               </FloatingLabel>
 
               <div className="mb-2">
-                <Button className="btn btn-secondary" disabled={loadingCreateReview} type="submit">
+                <Button
+                  className="btn btn-secondary"
+                  disabled={loadingCreateReview}
+                  type="submit"
+                >
                   Submit
                 </Button>
                 {loadingCreateReview && <LoadingBox />}

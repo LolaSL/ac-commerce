@@ -10,10 +10,10 @@ const AdvancedAC = () => {
         <title>Advanced Air Conditioning</title>
       </Helmet>
       <article>
-        <h1 className="mb-3 p-3">
+        <h3 className="mb-3 p-3">
           Finding The Perfect Commercial HVAC-R System and Indoor Air Quality
           Solution.
-        </h1>
+        </h3>
         <p className="ac-conditioning">
           Ensuring your Air Conditioning and Indoor Air Quality system is the
           right design, size, and setup for your business is the next step. Here

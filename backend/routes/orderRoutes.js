@@ -84,6 +84,9 @@ orderRouter.get(
             },
             deliveredOrders: {
               $sum: { $cond: [{ $eq: ['$isDelivered', true] }, 1, 0] }
+            },
+            notDeliveredOrders: {
+              $sum: { $cond: [{ $eq: ['$isDelivered', false] }, 1, 0] }
             }
           },
         },

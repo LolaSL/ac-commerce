@@ -42,13 +42,17 @@ productRouter.post(
       areaCoverage: 0,
       energyEfficiency: 0,
       documents: [],
-      discount: 0, 
+      discount: 0,
+      dimension: {
+        width: 0,
+        height: 0,
+        depth: 0,
+      },
     });
     const product = await newProduct.save();
     res.send({ message: 'Product Created', product });
   })
 );
-
 
 productRouter.put(
   '/:id',
@@ -80,6 +84,11 @@ productRouter.put(
       product.areaCoverage = req.body.areaCoverage;
       product.energyEfficiency = req.body.energyEfficiency;
       product.documents = documents;
+      product.dimension = req.body.dimension || {
+        width: 0,
+        height: 0,
+        depth: 0,
+      };
       await product.save();
       res.send({ message: 'Product Updated', product });
     } else {
@@ -211,16 +220,16 @@ productRouter.get(
         : {};
     const discountFilter =
       discount && discount !== 'any'
-        ? discount === '0' // Check for "No Discount"
-          ? { discount: { $eq: 0 } } // Match products with exactly 0 discount
-          : discount.includes('-') // Check if it's a range like "10-20"
+        ? discount === '0'
+          ? { discount: { $eq: 0 } }
+          : discount.includes('-')
             ? {
               discount: {
-                $gte: Number(discount.split('-')[0]), // Min value
-                $lte: Number(discount.split('-')[1]), // Max value
+                $gte: Number(discount.split('-')[0]),
+                $lte: Number(discount.split('-')[1]),
               },
             }
-            : { discount: { $gte: Number(discount) } } // Single value discount
+            : { discount: { $gte: Number(discount) } }
         : {};
 
     const sortOrder =

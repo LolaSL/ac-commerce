@@ -12,13 +12,13 @@ const reviewSchema = new mongoose.Schema(
 );
 
 const documentSchema = new mongoose.Schema({
-  url: { type: String, required: true }, 
-  type: { type: String, enum: ['PDF', 'Image', 'Text', 'HTML'], default: 'PDF' }, 
+  url: { type: String, required: true },
+  type: { type: String, enum: ['PDF', 'Image', 'Text', 'HTML'], default: 'PDF' },
   description: String,
   doors: [
     {
       keyword: { type: String },
-      index: { type: Number }, 
+      index: { type: Number },
     },
   ],
 });
@@ -44,12 +44,19 @@ const productSchema = new mongoose.Schema(
     btu: { type: Number },
     areaCoverage: { type: Number },
     energyEfficiency: { type: Number },
-    documents: [documentSchema], 
+    documents: [documentSchema],
+    dimension: {
+      width: { type: Number, required: true },
+      height: { type: Number, required: true },
+      depth: { type: Number, required: true }
+
+    },
   },
   {
     timestamps: true,
   }
 );
+
 
 const Product = mongoose.model('Product', productSchema);
 export default Product;

@@ -100,6 +100,11 @@ const data = {
       btu: 10000,
       areaCoverage: 16,
       energyEfficiency: 9,
+      dimension: {
+        "width": 56.37,
+        "height": 59.99,
+        "depth": 38.1,
+      },
       documents: [
         {
           url: "https://www.lg.com/us/support/products/documents/LWHD6500.pdf",
@@ -134,6 +139,11 @@ const data = {
       btu: 8000,
       areaCoverage: 13,
       energyEfficiency: 8,
+      dimension: {
+        width: 49.78,
+        height: 31.45,
+        depth: 49.28,
+      },
       documents: [
         {
           url: "https://www.lg.com/us/support/products/documents/LWHD6500.pdf",
@@ -169,6 +179,11 @@ const data = {
       btu: 12000,
       areaCoverage: 20,
       energyEfficiency: 10,
+      dimension: {
+        width: 59.94,
+        height: 38.1,
+        depth: 56.39,
+      },
       documents: [
         {
           url: "https://www.lg.com/us/support/products/documents/LWHD6500.pdf",
@@ -204,6 +219,11 @@ const data = {
       btu: 6000,
       areaCoverage: 10,
       energyEfficiency: 8,
+      dimension: {
+        width: 43.99,
+        height: 69.5,
+        depth: 33.71,
+      },
       documents: [
         {
           url: "https://dzrf1tezfwb3j.cloudfront.net/uploads/ADocuments/90281/2020-03-04-16-43-52.pdf",
@@ -238,6 +258,11 @@ const data = {
       btu: 18000,
       areaCoverage: 100,
       energyEfficiency: 12,
+      dimension: {
+        width: 96.49,
+        height: 31.5,
+        depth: 31.9,
+      },
       documents: [
         {
           url: "https://senville.com/content/manuals/downloads/leto-series-installation-manual.pdf",
@@ -245,9 +270,9 @@ const data = {
           description: "User Manual for Senville 18000 BTU Mini Split AC",
         },
         {
-          url: "https://senville.com/18000-btu-mini-split-air-conditioner-sena-18hf/",
+          url: "https://senville.com/content/manuals/senville-catalog.pdf",
           type: "PDF",
-          description: "https://senville.com/content/manuals/senville-catalog.pdf",
+          description: "Technical Specifications for 18000 BTU Mini Split Air Conditioner",
         },
         {
           url: "https://manuals.plus/wp-content/uploads/2023/08/Senville-18000-BTU-Floor-Mounted-Mini-Split-Heat-Pump-Instruction-Manual_2.png",
@@ -272,6 +297,11 @@ const data = {
       btu: 24000,
       areaCoverage: 139,
       energyEfficiency: 13,
+      dimension: {
+        width: 99.8,
+        height: 34.5,
+        depth: 21,
+      },
       documents: [
         {
           url: "https://www.tcl.com/content/dam/brandsite/region/australia/AU_Mediacenter/download/Multi-Split-User-Manual.pdf",
@@ -306,6 +336,11 @@ const data = {
       btu: 30000,
       areaCoverage: 180,
       energyEfficiency: 14,
+      dimension: {
+        width: 80.01,
+        height: 29.53,
+        depth: 21.43,
+      },
       documents: [
         {
           url: "https://www.daikinac.com/content/assets/DOC/OperationManuals/FTXS15_18_24LVJU%20Operation%20Manual.pdf",
@@ -340,6 +375,11 @@ const data = {
       btu: 16000,
       areaCoverage: 225,
       energyEfficiency: 15.45,
+      dimension: {
+        width: 82,
+        height: 29.9,
+        depth: 21.5,
+      },
       documents: [
         {
           url: "https://refripartes.com/uploads/User%20Manual%20-%20Excellence%20Wind%20Free.pdf",
@@ -374,6 +414,11 @@ const data = {
       btu: 39000,
       areaCoverage: 139,
       energyEfficiency: 13,
+      dimension: {
+        width: 82.26,
+        height: 18.92,
+        depth: 29.71,
+      },
       documents: [
         {
           url: "https://www.mitsubishi-electric.co.nz/materials/Aircon/Manuals/R410a/M-Series/MXZ/1_Operation/CapacityCharts_MXZ-2C52-6C120VA_OBH583A.pdf",
