@@ -16,9 +16,11 @@ import { Store } from "../Store";
 import { useNavigate } from "react-router-dom";
 
 function BtuCalculator() {
-  const { dispatch: ctxDispatch } = useContext(Store);
+  const { state, dispatch: ctxDispatch } = useContext(Store);
   const navigate = useNavigate();
-
+  const {
+    cart: { cartItems },
+  } = state;
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const [areaFeet, setAreaFeet] = useState(0);
@@ -240,6 +242,7 @@ function BtuCalculator() {
   const handleCalculate = async () => {
     const results = [];
     const fetchedProducts = [];
+    let totalBTU = 0;
 
     for (const room of rooms) {
       const { btu, error } = calculateBTUForRoom(room);
@@ -248,6 +251,7 @@ function BtuCalculator() {
         return;
       }
       results.push(btu);
+      totalBTU += btu; 
 
       try {
         const { data } = await axios.get(`/api/products/btu/${btu}`, {
@@ -271,12 +275,31 @@ function BtuCalculator() {
     setBtuResults(results);
     setProducts(fetchedProducts);
     setError("");
+
+    if (totalBTU >= 25000) {
+      const outdoorCondensers = getOutdoorCondensers();
+      fetchedProducts.push(...outdoorCondensers);
+    }
+  };
+
+  const getOutdoorCondensers = () => {
+    return [
+      {
+        name: "Mini Split Outdoor Condenser",
+        slug: "mini-split-outdoor-condensing-unit",
+        category: "Outdoor condenser",
+        image: "/images/p5.jpg",
+        price: 1296.75,
+        btu: 36000,
+      },
+      // Add more outdoor condenser products if needed
+    ];
   };
 
   const saveResultsToCart = () => {
-    rooms.forEach((room, index) => {
-      if (products[index]) {
-        const product = products[index];
+    const addItemToCart = (product) => {
+      const existingItem = cartItems.find((item) => item._id === product._id);
+      if (!existingItem) {
         ctxDispatch({
           type: "CART_ADD_ITEM",
           payload: {
@@ -285,7 +308,35 @@ function BtuCalculator() {
           },
         });
       }
-    });
+    };
+
+    if (Array.isArray(rooms) && Array.isArray(products)) {
+      rooms.forEach((room, index) => {
+        const product = products[index];
+        if (product) {
+          addItemToCart(product);
+        }
+      });
+    } else {
+      console.error("Invalid input: 'rooms' and 'products' must be arrays.");
+    }
+    
+
+    const totalBTU = btuResults.reduce((total, btu) => total + btu, 0);
+
+    const condenserProducts = products.filter(
+      (product) => product.category.toLowerCase() === "outdoor condenser"
+    );
+
+    if (totalBTU >= 96000 && condenserProducts.length >= 2) {
+      condenserProducts.slice(0, 2).forEach((product) => {
+        addItemToCart(product);
+      });
+    } else if (totalBTU >= 60000 && condenserProducts.length > 0) {
+      const product = condenserProducts[0];
+      addItemToCart(product);
+    }
+
     navigate("/cart");
   };
 
@@ -634,7 +685,7 @@ function BtuCalculator() {
             checked={insulation.Poor}
             onChange={handleInsulationChange}
           />
-             <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
+          <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
           <h3 className="mb-3 mt-3">Sun Exposure</h3>
           <Form.Check
             type="checkbox"
@@ -704,7 +755,6 @@ function BtuCalculator() {
           )}
         </Form>
       </Container>
-
       {btuResults.length > 0 && (
         <Container className="btu-results mt-4">
           <h3 className="text-center">BTU Results</h3>
@@ -725,12 +775,12 @@ function BtuCalculator() {
                   <td>{btuResults[index]}</td>
                   <td>
                     <Link
-                      to={`/product/${products[index].slug}`}
+                      to={`/product/${products[index]?.slug}`}
                       className="link-product-details"
                     >
                       <Image
-                        src={products[index].image}
-                        alt={products[index].name}
+                        src={products[index]?.image}
+                        alt={products[index]?.name}
                         style={{
                           width: "50px",
                           height: "auto",
@@ -740,16 +790,54 @@ function BtuCalculator() {
                       />
                     </Link>
                   </td>
-                  <td>{products[index].name}</td>
+                  <td>{products[index]?.name || "No product available"}</td>
                   <td>
-                    {products[index] ? (
-                      products[index].price
-                    ) : (
-                      <span>No product available</span>
-                    )}
+                    {products[index]?.price
+                      ? products[index].price.toFixed(2)
+                      : "No price available"}
                   </td>
                 </tr>
               ))}
+              {(() => {
+                const totalBTU = btuResults.reduce(
+                  (total, btu) => total + btu,
+                  0
+                );
+                const condenserProducts = products.filter(
+                  (product) => product.category === "Outdoor condenser"
+                );
+                if (totalBTU >= 25000 && condenserProducts.length > 0) {
+                  const product = condenserProducts[0];
+                  return (
+                    <tr key="condenser">
+                      <td
+                        colSpan="2"
+                        className="text-center bg-info text-white"
+                      >
+                        Outdoor Condenser
+                      </td>
+                      <td>
+                        <Link to={`/product/${product.slug}`}>
+                          <Image
+                            src={product.image}
+                            alt={product.name}
+                            style={{
+                              width: "50px",
+                              height: "auto",
+                              backgroundColor: "grey",
+                            }}
+                            className="responsive rounded"
+                          />
+                        </Link>
+                      </td>
+                      <td>{product.name}</td>
+                      <td>{product.price.toFixed(2)}</td>
+                    </tr>
+                  );
+                }
+                return null;
+              })()}
+
               <tr>
                 <td className="total-results bg-warning">
                   <strong>Total</strong>
@@ -768,7 +856,7 @@ function BtuCalculator() {
                 <td className="total-results bg-warning">
                   <strong>
                     {products
-                      .reduce((total, product, index) => {
+                      .reduce((total, product) => {
                         return product ? total + product.price : total;
                       }, 0)
                       .toFixed(2)}

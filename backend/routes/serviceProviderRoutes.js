@@ -61,13 +61,13 @@ serviceProviderRouter.get(
   isAdmin,
   expressAsyncHandler(async (req, res) => {
     try {
-       const serviceProviders = await ServiceProvider.find({});
-    res.send(serviceProviders);
+      const serviceProviders = await ServiceProvider.find({});
+      res.send(serviceProviders);
     } catch (error) {
       console.error('Error in serviceProviderRouter.get /:', err);
       res.status(500).send({ message: err.message });
     }
-   
+
   })
 );
 
@@ -378,13 +378,11 @@ serviceProviderRouter.post(
   '/register',
   expressAsyncHandler(async (req, res) => {
     const { name, email, password, typeOfProvider, phone, company, experience, portfolio } = req.body;
-
     const existingProvider = await ServiceProvider.findOne({ email });
     if (existingProvider) {
       res.status(400).send({ message: 'Service Provider with this email already exists' });
       return;
     }
-
     const hashedPassword = bcrypt.hashSync(password, 8);
 
     const serviceProvider = await new ServiceProvider({

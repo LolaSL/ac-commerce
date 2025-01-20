@@ -56,9 +56,9 @@ const HomePage = () => {
         <h1 className="featured-title text-center pt-4 mb-4 fw-bold">
           Featured Products
         </h1>
-        <p className="py-2 mb-2 featured-products text-center">
+        <h3 className="py-2 mb-2 featured-products text-center">
           Introducing our latest line of air conditioning units
-        </p>
+        </h3>
       </article>
       <div className="products">
         {loading ? (

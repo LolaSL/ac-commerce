@@ -14,13 +14,7 @@ const reviewSchema = new mongoose.Schema(
 const documentSchema = new mongoose.Schema({
   url: { type: String, required: true },
   type: { type: String, enum: ['PDF', 'Image', 'Text', 'HTML'], default: 'PDF' },
-  description: String,
-  doors: [
-    {
-      keyword: { type: String },
-      index: { type: Number },
-    },
-  ],
+  description: String
 });
 
 

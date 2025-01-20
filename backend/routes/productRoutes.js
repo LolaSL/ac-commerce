@@ -2,7 +2,7 @@ import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
 import { isAuth, isAdmin } from '../utils.js';
-
+import mongoose from 'mongoose';
 const productRouter = express.Router();
 
 
@@ -37,6 +37,7 @@ productRouter.post(
         'Remote Control',
         'Led',
         'Smart Things',
+
       ],
       btu: 0,
       areaCoverage: 0,
@@ -285,6 +286,7 @@ productRouter.get(
     res.send(categories);
   })
 );
+
 productRouter.get('/brands', async (req, res) => {
   try {
 
@@ -304,12 +306,26 @@ productRouter.get('/slug/:slug', async (req, res) => {
     res.status(404).send({ message: 'Product Not Found' });
   }
 });
-productRouter.get('/:id', async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  if (product) {
-    res.send(product);
-  } else {
-    res.status(404).send({ message: 'Product Not Found' });
+
+productRouter.get('/:id',  async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).send({ message: 'Invalid product ID' });
+  }
+
+  try {
+ 
+    const product = await Product.findById(id);
+
+    if (product) {
+      res.json(product); 
+    } else {
+      res.status(404).send({ message: 'Product not found' }); 
+    }
+  } catch (error) {
+    console.error("Error fetching product details:", error);
+    res.status(500).send({ message: 'Server error, please try again later' }); 
   }
 });
 

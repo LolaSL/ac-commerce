@@ -203,7 +203,7 @@ function ProductPage() {
               <p className="product-paragraph">{product.description}</p>
             </ListGroup.Item>
             <ListGroup.Item>
-              <strong>Product dimensions:</strong>{" "}
+              <strong>Product dimensions (WxHxD):</strong>{" "}
               {product.dimension &&
               (product.dimension.width > 0 ||
                 product.dimension.height > 0 ||

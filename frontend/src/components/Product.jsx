@@ -59,14 +59,11 @@ function Product(props) {
           )}
         </Card.Text>
         <Card.Text>
-  <strong>Dimensions:</strong>{" "}
+  <strong>Product  dimensions (WxHxD):</strong>{" "}<br/>
   {product.dimension && (product.dimension.width > 0 || product.dimension.height > 0 || product.dimension.depth > 0)
     ? `${product.dimension.width} x ${product.dimension.height} x ${product.dimension.depth} cm`
     : "Not specified"}
 </Card.Text>
-
-
-
         {product.countInStock === 0 ? (
           <Button className="btn-out-of-stock" variant="secondary" disabled>
             Out of stock
