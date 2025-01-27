@@ -56,14 +56,14 @@ import BlogDetails from './pages/BlogDetails.jsx';
 import BlogEditPage from './pages/BlogEditPage.jsx';
 import BlogsPage from './pages/Blogspage.jsx';
 import MessagesPage from './pages/MessagesPage.jsx';
-import ServiceProvidersList from './pages/ServiceProvidersList.jsx';
+import ServiceProviderList from './pages/ServiceProviderList.jsx'
 import Users from './components/UsersProductSales.jsx';
 import ServiceProviders from './components/ServiceProviders';
 import Notifications from './components/Notifications.jsx';
 import Offers from './pages/Offers.jsx';
 import AdvancedAC from './pages/AdvancedAC.jsx';
 import MessageEditPage from './pages/MessageEditPage.jsx';
-
+import SeviceProviderEditPage from './pages/SeviceProviderEditPage.jsx'
 
 
 function App() {
@@ -211,6 +211,9 @@ function App() {
                       </LinkContainer>
                       <LinkContainer to="/admin/users">
                         <NavDropdown.Item>Users</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/admin/manage-service-providers">
+                        <NavDropdown.Item>Service Providers</NavDropdown.Item>
                       </LinkContainer>
                       <LinkContainer to="/admin/sellers">
                         <NavDropdown.Item>Sellers</NavDropdown.Item>
@@ -440,7 +443,15 @@ function App() {
                 path="/admin/manage-service-providers"
                 element={
                   <AdminRoute>
-                    <ServiceProvidersList />
+                    <ServiceProviderList />
+                  </AdminRoute>
+                }
+              ></Route>
+                   <Route
+                path="/admin/manage-service-providers/:id"
+                element={
+                  <AdminRoute>
+                    <SeviceProviderEditPage/>
                   </AdminRoute>
                 }
               ></Route>

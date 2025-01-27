@@ -47,7 +47,7 @@ const ServiceProviders = () => {
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
-        const { data } = await axios.get("/api/service-providers", {
+        const { data } = await axios.get("/api/service-providers/summary", {
           params: { page: currentPage, pageSize: 10 },
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });

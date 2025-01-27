@@ -3,8 +3,6 @@ import { Button, Form } from "react-bootstrap";
 import { PDFDocument } from "pdf-lib";
 import * as pdfjsLib from "pdfjs-dist/webpack.mjs";
 import { Helmet } from "react-helmet-async";
-// import RoomColorTable from "./RoomColorTable.jsx";
-
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js`;
 
 function UploadFile() {
@@ -16,85 +14,24 @@ function UploadFile() {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [comments, setComments] = useState([]);
-  // const [roomColors, setRoomColors] = useState([
-  //   {
-  //     name: "Living Room",
-  //     x: 50,
-  //     y: 50,
-  //     width: 200,
-  //     height: 150,
-  //     color: "#FFFFFF",
-  //   },
-  //   {
-  //     name: "Bedroom",
-  //     x: 300,
-  //     y: 50,
-  //     width: 150,
-  //     height: 150,
-  //     color: "#FFFFFF",
-  //   },
-  //   {
-  //     name: "Kitchen",
-  //     x: 50,
-  //     y: 250,
-  //     width: 150,
-  //     height: 100,
-  //     color: "#FFFFFF",
-  //   },
-  //   {
-  //     name: "Bathroom",
-  //     x: 300,
-  //     y: 250,
-  //     width: 100,
-  //     height: 100,
-  //     color: "#FFFFFF",
-  //   },
-  //   {
-  //     name: "Dining Room",
-  //     x: 50,
-  //     y: 400,
-  //     width: 200,
-  //     height: 100,
-  //     color: "#FFFFFF",
-  //   },
-  // ]);
-  // const [selectedColor] = useState("#FFD700");
-
-  // const [
-  //   rooms,
-
-  // ] = useState([
-  //   {
-  //     id: 1,
-  //     name: "Living Room",
-  //     x: 50,
-  //     y: 50,
-  //     width: 200,
-  //     height: 150,
-  //     color: "#FFFFFF",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Bedroom",
-  //     x: 300,
-  //     y: 50,
-  //     width: 150,
-  //     height: 100,
-  //     color: "#FFFFFF",
-  //   },
-  // ]);
-
   const RECT_WIDTH = window.innerWidth < 768 ? 20 : 30;
   const RECT_HEIGHT = window.innerWidth < 768 ? 10 : 15;
 
   const handleChange = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
-      setFile(selectedFile);
-      setPreviewUrl(URL.createObjectURL(selectedFile));
-      setError(null);
-      setIconPositions([]);
-      setComments([]);
+      const fileType = selectedFile.type;
+      if (fileType === "application/pdf") {
+        setFile(selectedFile);
+        setPreviewUrl(URL.createObjectURL(selectedFile));
+        setError(null);
+        setIconPositions([]);
+        setComments([]);
+      } else {
+        setFile(null);
+        setPreviewUrl(null);
+        setError("Only PDF files are allowed.");
+      }
     } else {
       setFile(null);
       setPreviewUrl(null);
@@ -104,38 +41,10 @@ function UploadFile() {
 
   const handleCanvasClick = (event) => {
     const canvas = canvasRef.current;
-    // const context = canvas.getContext('2d');
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    // context.beginPath();
-    // context.arc(x, y, 10, 0, 2 * Math.PI);
-    // context.fillStyle = 'green';
-    // context.fill();
-    // const updatedColors = roomColors.map((room) => {
-    //   if (
-    //     x >= room.x &&
-    //     x <= room.x + room.width &&
-    //     y >= room.y &&
-    //     y <= room.y + room.height
-    //   ) {
-    //     return { ...room, color: selectedColor };
-    //   }
 
-    //   return room;
-    // });
-
-    // setRoomColors(updatedColors);
-
-    // if (updatedColors) {
-    //   const roomColor = prompt("Enter a color for this room (e.g., #ff0000):") || "#00ff00";
-
-    //   setRooms((prevRooms) =>
-    //     prevRooms.map((room) =>
-    //       room.id === updatedColors.id ? { ...room, color: roomColor } : room
-    //     )
-    //   );
-    // }
     if (event.detail === 2) {
       handleIconDoubleClick(x, y);
     } else {
@@ -220,7 +129,7 @@ function UploadFile() {
 
   const renderComments = useCallback(
     (context) => {
-      context.font = "bold 16px Arial";
+      context.font = "bold 18px Arial";
       context.lineWidth = 2;
       context.shadowColor = "grey";
       context.shadowBlur = 1;
@@ -294,38 +203,20 @@ function UploadFile() {
     },
     [color]
   );
-  // const handleColorChange = (updatedColors) => {
-  //   setRoomColors(updatedColors);
-  // };
-
-  // const drawRoomWithColor = useCallback(
-  //   (context) => {
-  //     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-  //     roomColors.forEach((room) => {
-  //       context.fillStyle = room.color;
-  //       context.fillRect(room.x, room.y, room.width, room.height);
-  //       context.strokeStyle = "#000000";
-  //       context.strokeRect(room.x, room.y, room.width, room.height);
-  //     });
-  //   },
-  //   [roomColors]
-  // );
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || !file) return;
-    // const context = canvas.getContext("2d");
-    // drawRoomWithColor(context);
   }, [file]);
 
   const renderSignature = useCallback(
     (context) => {
       if (isSaved) {
         const text = "APPROVED";
-        const textX = context.canvas.width - 180;
+        const textX = context.canvas.width - 580;
         const textY = 45;
         const padding = 10;
-        context.font = "bold 18px Arial itallic";
+        context.font = "bold 16px Calibri itallic";
 
         const textMetrics = context.measureText(text);
         const textWidth = textMetrics.width;
@@ -362,13 +253,6 @@ function UploadFile() {
     [isSaved]
   );
 
-  // const renderRooms = useCallback(
-  //   (context) => {
-  //     rooms.forEach((room) => drawRoomWithColor(context, room));
-  //   },
-  //   [rooms, drawRoomWithColor]
-  // );
-
   const renderPDFOnCanvas = useCallback(
     async (pdfData) => {
       const canvas = canvasRef.current;
@@ -401,8 +285,8 @@ function UploadFile() {
         await page.render(renderContext).promise;
 
         iconPositions.forEach((icon) => {
-          const rectWidth = 80;
-          const rectHeight = 25;
+          const rectWidth = 65;
+          const rectHeight = 15;
           drawRotatedRectangle(
             context,
             icon.x,
@@ -427,18 +311,16 @@ function UploadFile() {
 
     const context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
-    // renderRooms(context);
-    // drawRoomWithColor(context, "Living Room", 50, 50, 100, 50);
-    // drawRoomWithColor(context, "Bedroom", 200, 50, 100, 50);
 
+    // Render Image Preview
     if (previewUrl) {
       const img = new Image();
       img.src = previewUrl;
       img.onload = () => {
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
         iconPositions.forEach((icon) => {
-          const rectWidth = 80;
-          const rectHeight = 30;
+          const rectWidth = 65;
+          const rectHeight = 15;
           drawRotatedRectangle(
             context,
             icon.x,
@@ -448,34 +330,29 @@ function UploadFile() {
             icon.angle
           );
         });
-        // drawRoomWithColor(context);
-
         renderComments(context);
-        renderSignature(context);
+        renderSignature(context); // Render signature only when saving PDF
       };
     }
 
+    // Render PDF Preview
     if (file.type === "application/pdf") {
       const reader = new FileReader();
       reader.onload = async function (e) {
         const pdfData = new Uint8Array(e.target.result);
-
         await renderPDFOnCanvas(pdfData);
       };
       reader.readAsArrayBuffer(file);
     }
-  }, [iconPositions, file, previewUrl, renderPDFOnCanvas, renderComments, renderSignature, drawRotatedRectangle]);
-
-  const saveAsImage = () => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const link = document.createElement("a");
-      link.href = canvas.toDataURL("image/png");
-      link.download = "annotated-image.png";
-      link.click();
-      setIsSaved(true);
-    }
-  };
+  }, [
+    iconPositions,
+    file,
+    previewUrl,
+    renderPDFOnCanvas,
+    renderComments,
+    renderSignature,
+    drawRotatedRectangle,
+  ]);
 
   const saveAsPDF = async () => {
     if (file && file.type === "application/pdf") {
@@ -502,6 +379,18 @@ function UploadFile() {
       setError("The selected file is not a PDF.");
     }
   };
+  const clearCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const context = canvas.getContext("2d");
+    context.clearRect(0, 0, canvas.width, canvas.height); // Clear the entire canvas
+
+    // Optionally, reset any state related to annotations (icons, signature, etc.)
+    setIconPositions([]); // Reset icons (if needed)
+    setPreviewUrl(null); // Reset preview URL (if needed)
+    setIsSaved(false); // Reset saved state (if needed)
+  };
 
   return (
     <div className="upload-file">
@@ -516,7 +405,7 @@ function UploadFile() {
           Upload file sample.{" "}
         </Form.Label>
         <p className="warning fw-bold">
-          *Supported: High Resolution Images & PDFs files. Recommended to place
+          *Supported: High Resolution PDFs files (.pdf). Recommended to place
           air conditioner (rectangle) above door in drawing.
         </p>
         <p className="warning fw-bold">
@@ -532,7 +421,7 @@ function UploadFile() {
           className="mt-4"
           type="file"
           onChange={handleChange}
-          accept="image/*,application/pdf"
+          accept="application/pdf"
         />
         <Form.Group className="mt-3">
           <Form.Label>Select Icon Color:</Form.Label>
@@ -543,12 +432,7 @@ function UploadFile() {
           />
         </Form.Group>
       </Form>
-
-      {/* <RoomColorTable
-        roomColors={roomColors}
-        onColorChange={handleColorChange}
-      /> */}
-      <h3 className="mt-4 mb-4">Preview of selected file:</h3>
+      <h2 className="mt-4 mb-4">Preview of selected file:</h2>
       {previewUrl && (
         <div>
           <canvas
@@ -568,18 +452,24 @@ function UploadFile() {
           />
         </div>
       )}
-      {file && file.type.startsWith("image/") && (
-        <Button variant="secondary" className="mt-2 mb-4" onClick={saveAsImage}>
-          Save as Image
-        </Button>
-      )}
+      <div className="d-flex">
+        {file && file.type === "application/pdf" && (
+          <>
+            <Button
+              variant="secondary"
+              onClick={saveAsPDF}
+              className="mt-2 me-2"
+            >
+              Save as PDF
+            </Button>
+            <Button variant="secondary" className="mt-2" onClick={clearCanvas}>
+              Clear
+            </Button>
+          </>
+        )}
+      </div>
 
-      {file && file.type === "application/pdf" && (
-        <Button variant="secondary" onClick={saveAsPDF} className="mt-2 mb-4">
-          Save as PDF
-        </Button>
-      )}
-      {error && <p className="text-danger">{error}</p>}
+      {error && <p className="error-message mt-4">{error}</p>}
     </div>
   );
 }

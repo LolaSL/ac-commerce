@@ -113,23 +113,36 @@ export default function SellerPage() {
           <div className="seller">
             <h2 className="p-4">{seller.name}</h2>
             <p>Brand: {seller.brand}</p>
-                <p>Information: {seller.info}</p>
-              </div>
-              <div className="video-preview">
-            <p><strong>VIDEO:</strong></p>
+            <p>
+              Company website:{" "}
+              <a
+              href={seller.companyLink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Visit {seller.name}'s Website
+            </a>
+            </p>
+            <p>Information: {seller.info}</p>
+          </div>
+          <div className="video-preview">
+            <p>
+              <strong>VIDEO:</strong>
+            </p>
             <iframe
               className="responsive-iframe rounded"
               width="600"
               height="400"
               src={seller.link}
               title={`${seller.name} Product Video`}
-              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             ></iframe>
           </div>
-          <div >
-            <h2 className="mt-2 mb-2 p-2" ref={reviewsRef}>Reviews</h2>
+          <div>
+            <h2 className="mt-2 mb-2 p-2" ref={reviewsRef}>
+              Reviews
+            </h2>
             <ListGroup>
               {seller.reviews.map((review) => (
                 <ListGroup.Item key={review._id}>
@@ -140,7 +153,7 @@ export default function SellerPage() {
                 </ListGroup.Item>
               ))}
             </ListGroup>
-            <div >
+            <div>
               {userInfo ? (
                 <form onSubmit={submitHandler}>
                   <h2 className="mt-2 mb-2 p-2">Write a customer review</h2>
@@ -172,7 +185,11 @@ export default function SellerPage() {
                     />
                   </FloatingLabel>
                   <div className="mb-3">
-                    <Button disabled={loadingCreateReview} className="btn btn-secondary" type="submit">
+                    <Button
+                      disabled={loadingCreateReview}
+                      className="btn btn-secondary"
+                      type="submit"
+                    >
                       Submit
                     </Button>
                     {loadingCreateReview && <LoadingBox />}

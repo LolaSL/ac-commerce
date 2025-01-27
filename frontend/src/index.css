@@ -770,6 +770,11 @@ button.thumbnail {
   display: flex;
   flex-direction: column;
 }
+.error-message {
+  color: red; 
+  font-weight: bold;
+  
+}
 
 .measure-header {
   width: 100%;

@@ -13,20 +13,20 @@ const initialState = {
     ? JSON.parse(localStorage.getItem('serviceProviderInfo'))
     : null,
 
+    cart: {
+      shippingAddress: localStorage.getItem('shippingAddress')
+        ? JSON.parse(localStorage.getItem('shippingAddress'))
+        : { location: {} },
+  
+      paymentMethod: localStorage.getItem('paymentMethod')
+        ? localStorage.getItem('paymentMethod')
+        : '',
+  
+      cartItems: localStorage.getItem('cartItems')
+        ? JSON.parse(localStorage.getItem('cartItems'))
+        : [],
+    },
 
-  cart: {
-    shippingAddress: localStorage.getItem('shippingAddress')
-      ? JSON.parse(localStorage.getItem('shippingAddress'))
-      : { location: {} },
-
-    paymentMethod: localStorage.getItem('paymentMethod')
-      ? localStorage.getItem('paymentMethod')
-      : '',
-
-    cartItems: localStorage.getItem('cartItems')
-      ? JSON.parse(localStorage.getItem('cartItems'))
-      : [],
-  },
 };
 
 function reducer(state, action) {
@@ -35,29 +35,25 @@ function reducer(state, action) {
       return { ...state, fullBox: true };
     case 'SET_FULLBOX_OFF':
       return { ...state, fullBox: false };
-
-    case "CART_ADD_ITEM": {
-      const newItem = action.payload;
-      const existItem = state.cart.cartItems.find(
-        (item) => item._id === newItem._id
-      );
-      const cartItems = existItem
-        ? state.cart.cartItems.map((item) =>
-          item._id === existItem._id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-        : [...state.cart.cartItems, newItem];
-      return { ...state, cart: { ...state.cart, cartItems } };
-
-    }
-    case 'CART_REMOVE_ITEM': {
-      const cartItems = state.cart.cartItems.filter(
-        (item) => item._id !== action.payload._id
-      );
-      localStorage.setItem('cartItems', JSON.stringify(cartItems));
-      return { ...state, cart: { ...state.cart, cartItems } };
-    }
+      case "CART_ADD_ITEM": {
+        const newItem = action.payload;
+        const existItem = state.cart.cartItems.find(
+          (item) => item._id === newItem._id
+        );
+        const cartItems = existItem
+          ? state.cart.cartItems.map((item) =>
+              item._id === existItem._id ? newItem : item
+            )
+          : [...state.cart.cartItems, newItem];
+        return { ...state, cart: { ...state.cart, cartItems } };
+      }
+      case "CART_REMOVE_ITEM": {
+        const cartItems = state.cart.cartItems.filter(
+          (item) => item._id !== action.payload._id
+        );
+        return { ...state, cart: { ...state.cart, cartItems } };
+      }
+      
     case 'CART_CLEAR':
       return { ...state, cart: { ...state.cart, cartItems: [] } };
 

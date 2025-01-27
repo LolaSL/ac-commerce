@@ -12,6 +12,7 @@ const serviceProviderSchema = new mongoose.Schema(
         company: { type: String },
         experience: { type: Number },
         portfolio: { type: String },
+        isActive: { type: Boolean, default: true, required: true }, 
         isAdmin: { type: Boolean, default: false, required: true },
     },
     {

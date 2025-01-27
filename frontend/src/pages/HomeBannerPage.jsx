@@ -22,7 +22,16 @@ const notifications = [
     isRead: false,
     createdAt: new Date(),
   },
+  {
+    title: "Get A Quote",
+    message: "Stay Cool and Comfortable All Year – Get a Quote Now!",
+    type: "quote",
+    recipientType: "",
+    isRead: false,
+    createdAt: new Date(),
+  },
 ];
+
 export default function HomeBannerPage() {
   const [currentNotificationIndex] = useState(0);
   const [notification, setNotification] = useState(null);
@@ -65,12 +74,9 @@ export default function HomeBannerPage() {
   ];
 
   useEffect(() => {
-    console.log("User Info:", userInfo);
-    console.log("Service Provider Info:", serviceProviderInfo);
-    console.log("Notifications:", notifications);
-
-    if ((userInfo || serviceProviderInfo) && notifications.length > 0) {
+    if (notifications.length > 0) {
       let notificationToShow = null;
+
       if (userInfo) {
         notificationToShow = notifications.find(
           (notification) =>
@@ -81,6 +87,11 @@ export default function HomeBannerPage() {
           (notification) =>
             notification.recipientType === "serviceProvider" &&
             !notification.isRead
+        );
+      } else {
+        notificationToShow = notifications.find(
+          (notification) =>
+            notification.recipientType === "" && !notification.isRead
         );
       }
 
@@ -98,7 +109,11 @@ export default function HomeBannerPage() {
 
   const handleNotificationClick = (buttonText) => {
     if (buttonText === "Get Quote") {
-      navigate("/uploadfile");
+      if (userInfo || serviceProviderInfo) {
+        navigate("/uploadfile");
+      } else {
+        navigate("/signup");
+      }
     } else if (buttonText === "Review Details") {
       navigate("/serviceprovider/messages");
     }

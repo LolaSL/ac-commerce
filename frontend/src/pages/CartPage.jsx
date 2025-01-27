@@ -56,13 +56,13 @@ export default function CartPage() {
             </MessageBox>
           ) : (
             <ListGroup>
-              {cartItems.map((item) => {
+              {cartItems.map((item, index) => {
                 const discountedPrice =
                   item.discount > 0
                     ? item.price * (1 - item.discount / 100)
                     : item.price;
                 return (
-                  <ListGroup.Item key={item._id}>
+                  <ListGroup.Item key={index}>
                     <Row className="align-items-center">
                       <Col md={4}>
                         <Image

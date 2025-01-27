@@ -27,6 +27,8 @@ orderRouter.post(
   '/',
   isAuth,
   expressAsyncHandler(async (req, res) => {
+    console.log('Request Body:', req.body); // Debugging step
+
     const newOrder = new Order({
       orderItems: req.body.orderItems.map((x) => ({ ...x, product: x._id })),
       shippingAddress: req.body.shippingAddress,
@@ -38,10 +40,16 @@ orderRouter.post(
       user: req.user._id,
     });
 
-    const order = await newOrder.save();
-    res.status(201).send({ message: 'New Order Created', order });
+    try {
+      const order = await newOrder.save();
+      res.status(201).send({ message: 'New Order Created', order });
+    } catch (error) {
+      console.error('Order Creation Error:', error);
+      res.status(400).send({ message: 'Error creating order', error });
+    }
   })
 );
+
 
 orderRouter.get(
   '/summary',
@@ -202,6 +210,23 @@ orderRouter.get(
     }
   })
 );
+orderRouter.post('/validate-cart', async (req, res) => {
+  const { cartItems } = req.body;
+  try {
+    const validatedItems = await Promise.all(
+      cartItems.map(async (item) => {
+        const product = await Product.findById(item._id);
+        return {
+          ...item,
+          price: product.price,
+        };
+      })
+    );
+    res.json(validatedItems);
+  } catch (error) {
+    res.status(400).send({ message: 'Invalid Cart Items', error });
+  }
+});
 
 orderRouter.put(
   '/:id/deliver',

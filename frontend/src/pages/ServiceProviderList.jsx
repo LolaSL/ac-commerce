@@ -7,7 +7,7 @@ import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import { Store } from "../Store";
 import { getError } from "../utils";
-
+import { useNavigate } from "react-router-dom";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -37,7 +37,7 @@ const reducer = (state, action) => {
       return state;
   }
 };
-export default function ServiceProvidersList() {
+export default function ServiceProviderList() {
   const [
     { loading, error, serviceProviders, loadingDelete, successDelete },
     dispatch,
@@ -45,21 +45,24 @@ export default function ServiceProvidersList() {
     loading: true,
     error: "",
   });
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { state } = useContext(Store);
-  const { serviceProviderInfo } = state;
+  const { serviceProviderInfo, userInfo } = state;
+  const { token } = userInfo; 
+
+  
   console.log("serviceProviderInfo:", serviceProviderInfo);
+  
   useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/service-providers/`, {
-          headers: {
-            headers: {
-              Authorization: `Bearer ${serviceProviderInfo?.token || ""}`,
-            },
-          },
-        });
+        const { data } = await axios.get(`/api/service-providers/`, config); 
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({
@@ -68,21 +71,25 @@ export default function ServiceProvidersList() {
         });
       }
     };
+    if (token) {
+      fetchData();
+    } else {
+      console.error("Token is missing or invalid");
+    }
     if (successDelete) {
       dispatch({ type: "DELETE_RESET" });
     } else {
       fetchData();
     }
-  }, [serviceProviderInfo, successDelete]);
+  }, [serviceProviderInfo, successDelete, token]);
   useEffect(() => {
     if (!serviceProviderInfo) {
-      // navigate('/login'); // Adjust the path based on your app's routing
     } else {
       const fetchData = async () => {
         try {
           dispatch({ type: "FETCH_REQUEST" });
-          const { data } = await axios.get(`/api/service-providers`, {
-            headers: { Authorization: `Bearer ${serviceProviderInfo.token}` },
+          const { data } = await axios.get(`/api/service-providers/`, {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
           });
           dispatch({ type: "FETCH_SUCCESS", payload: data });
         } catch (err) {
@@ -94,9 +101,9 @@ export default function ServiceProvidersList() {
       };
       fetchData();
     }
-  }, [serviceProviderInfo]);
+  }, [serviceProviderInfo, userInfo.token]);
 
-  const deleteHandler = async (user) => {
+  const deleteHandler = async (serviceProviders) => {
     if (window.confirm("Are you sure to delete?")) {
       try {
         dispatch({ type: "DELETE_REQUEST" });
@@ -132,7 +139,8 @@ export default function ServiceProvidersList() {
               <th>ID</th>
               <th>NAME</th>
               <th>EMAIL</th>
-              <th>IS ADMIN</th>
+                  <th>IS ADMIN</th>
+                  <th>IS ACTIVE</th>
               <th>ACTIONS</th>
             </tr>
           </thead>
@@ -143,6 +151,16 @@ export default function ServiceProvidersList() {
                 <td>{serviceProvider.name}</td>
                 <td>{serviceProvider.email}</td>
                 <td>{serviceProvider.isAdmin ? "YES" : "NO"}</td>
+                <td>{serviceProvider.isActive ? "YES" : "NO"}</td>
+                <td>
+                  <Button
+                    type="button"
+                    variant="light"
+                    onClick={() => navigate(`/admin/manage-service-providers/${serviceProvider._id}`)}
+                  >
+                    Edit
+                  </Button>
+                  </td>
                 <td>
                   <Button
                     type="button"

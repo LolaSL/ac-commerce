@@ -3,6 +3,7 @@ import expressAsyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
 import { isAuth, isAdmin } from '../utils.js';
 import mongoose from 'mongoose';
+
 const productRouter = express.Router();
 
 
@@ -113,6 +114,7 @@ productRouter.delete(
     }
   })
 );
+
 
 productRouter.post(
   '/:id/reviews',

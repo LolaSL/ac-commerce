@@ -118,8 +118,8 @@ export default function PlaceOrderPage() {
             <Card.Body>
               <Card.Title>Items</Card.Title>
               <ListGroup variant="flush">
-                {cart.cartItems.map((item) => (
-                  <ListGroup.Item key={item._id}>
+                {cart.cartItems.map((item, index) => (
+                  <ListGroup.Item key={index}>
                     <Row className="align-items-center">
                     <Link to={`/product/${item.slug}`} className="order-link mb-2">{item.name}</Link>
                       <Col md={6}>

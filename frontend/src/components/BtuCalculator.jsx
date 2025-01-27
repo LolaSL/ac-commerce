@@ -21,6 +21,7 @@ function BtuCalculator() {
   const {
     cart: { cartItems },
   } = state;
+
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const [areaFeet, setAreaFeet] = useState(0);
@@ -251,7 +252,7 @@ function BtuCalculator() {
         return;
       }
       results.push(btu);
-      totalBTU += btu; 
+      totalBTU += btu;
 
       try {
         const { data } = await axios.get(`/api/products/btu/${btu}`, {
@@ -276,7 +277,7 @@ function BtuCalculator() {
     setProducts(fetchedProducts);
     setError("");
 
-    if (totalBTU >= 25000) {
+    if (totalBTU >= 20000) {
       const outdoorCondensers = getOutdoorCondensers();
       fetchedProducts.push(...outdoorCondensers);
     }
@@ -299,12 +300,13 @@ function BtuCalculator() {
   const saveResultsToCart = () => {
     const addItemToCart = (product) => {
       const existingItem = cartItems.find((item) => item._id === product._id);
+      const quantity = existingItem ? existingItem.quantity + 1 : 1;
       if (!existingItem) {
         ctxDispatch({
           type: "CART_ADD_ITEM",
           payload: {
             ...product,
-            quantity: 1,
+           quantity,
           },
         });
       }
@@ -327,18 +329,16 @@ function BtuCalculator() {
     const condenserProducts = products.filter(
       (product) => product.category.toLowerCase() === "outdoor condenser"
     );
-
-    if (totalBTU >= 96000 && condenserProducts.length >= 2) {
-      condenserProducts.slice(0, 2).forEach((product) => {
-        addItemToCart(product);
-      });
-    } else if (totalBTU >= 60000 && condenserProducts.length > 0) {
+      if (totalBTU >= 20000 && condenserProducts.length > 0) {
       const product = condenserProducts[0];
       addItemToCart(product);
     }
 
     navigate("/cart");
   };
+
+  
+  
 
   const handleClear = () => {
     setRooms([{ name: "Bedroom 1", size: "", btu: 0 }]);

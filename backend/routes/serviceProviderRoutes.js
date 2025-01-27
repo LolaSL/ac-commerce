@@ -29,17 +29,24 @@ const generateToken = (serviceProvider) => {
 };
 
 export const isAuth = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
+  const token = req.headers.authorization?.split(' ')[1]; // Extract token from the Authorization header
+
   if (token) {
+    // Verify the token
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
+        console.error('Token verification failed:', err);
         return res.status(401).send({ message: 'Invalid Token' });
       }
-      req.serviceProvider = decoded //for serviceProvider._id dashboard
-      req.user = decoded; //for admin dashboard
-      next();
+
+      
+      req.serviceProvider = decoded; // For service provider dashboard
+      req.user = decoded; // For admin dashboard
+      
+      next(); 
     });
   } else {
+    console.warn('Authorization header is missing or token not found.');
     res.status(401).send({ message: 'Token Not Found' });
   }
 };
@@ -73,6 +80,20 @@ serviceProviderRouter.get(
 
 serviceProviderRouter.get(
   '/',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const serviceProviders = await ServiceProvider.find({});
+      res.send(serviceProviders);
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  })
+);
+
+serviceProviderRouter.get(
+  '/summary',
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
@@ -430,20 +451,23 @@ serviceProviderRouter.post(
 );
 
 
-serviceProviderRouter.get("/:id", isAuth, isServiceProvider, expressAsyncHandler(async (req, res) => {
-  try {
-    const serviceProvider = await ServiceProvider.findById(req.params.id);
-    if (serviceProvider) {
-      res.json(serviceProvider);
-    } else {
-      res.status(404).send({ message: "Service Provider not found" });
+serviceProviderRouter.get(
+  '/:id',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const serviceProvider = await ServiceProvider.findById(req.params.id);
+      if (serviceProvider) {
+        res.send(serviceProvider);
+      } else {
+        res.status(404).send({ message: 'Service provider not found' });
+      }
+    } catch (error) {
+      res.status(500).send({ message: error.message });
     }
-  } catch (error) {
-    res.status(500).send({ message: error.message });
-  }
-})
+  })
 );
-
 
 
 serviceProviderRouter.put(
@@ -481,19 +505,50 @@ serviceProviderRouter.put(
   })
 );
 
-serviceProviderRouter.delete('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
-  try {
-    const serviceProvider = await ServiceProvider.findById(req.params.id);
-    if (!serviceProvider) {
-      return res.status(404).send({ message: 'Service Provider Not Found' });
+serviceProviderRouter.put(
+  '/:id',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const serviceProvider = await ServiceProvider.findById(req.params.id);
+      if (serviceProvider) {
+        serviceProvider.name = req.body.name || serviceProvider.name;
+        serviceProvider.email = req.body.email || serviceProvider.email;
+        serviceProvider.isActive = req.body.isActive !== undefined 
+        ? req.body.isActive 
+        : serviceProvider.isActive;
+
+        const updatedServiceProvider = await serviceProvider.save();
+        res.send({ message: 'Service provider updated successfully', serviceProvider: updatedServiceProvider });
+      } else {
+        res.status(404).send({ message: 'Service provider not found' });
+      }
+    } catch (error) {
+      res.status(500).send({ message: error.message });
     }
-    await serviceProvider.deleteOne(); // Deletes the service provider
-    res.status(200).send({ message: 'Service Provider Deleted Successfully' });
-  } catch (err) {
-    res.status(500).send({ message: 'Error in Deleting Service Provider' });
-  }
-})
+  })
 );
 
+
+
+serviceProviderRouter.delete(
+  '/:id',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const serviceProvider = await ServiceProvider.findById(req.params.id);
+      if (serviceProvider) {
+        await serviceProvider.remove();
+        res.send({ message: 'Service provider deleted successfully' });
+      } else {
+        res.status(404).send({ message: 'Service provider not found' });
+      }
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  })
+);
 
 export default serviceProviderRouter;

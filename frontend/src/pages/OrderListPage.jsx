@@ -40,11 +40,13 @@ const reducer = (state, action) => {
       return state;
   }
 };
+
 export default function OrderListPage() {
   const navigate = useNavigate();
   const { search } = useLocation();
   const { state } = useContext(Store);
   const { userInfo } = state;
+
   const [
     { loading, error, orders, loadingDelete, successDelete, pages },
     dispatch,
@@ -52,6 +54,7 @@ export default function OrderListPage() {
     loading: true,
     error: "",
   });
+
   const sp = new URLSearchParams(search);
   const page = sp.get("page") || 1;
 
@@ -62,12 +65,40 @@ export default function OrderListPage() {
   useEffect(() => {
     if (orders) {
       const sorted = [...orders].sort((a, b) => {
-        if (sortOrder === "asc") {
-          return a[sortColumn]?.localeCompare(b[sortColumn]);
-        } else {
-          return b[sortColumn]?.localeCompare(a[sortColumn]);
+        let valueA = a[sortColumn];
+        let valueB = b[sortColumn];
+
+        // Handle undefined or null values
+        if (valueA == null) return 1;
+        if (valueB == null) return -1;
+
+        // Handle Date columns
+        if (sortColumn === "date" || sortColumn === "paid" || sortColumn === "delivered") {
+          valueA = new Date(valueA);
+          valueB = new Date(valueB);
         }
+
+        // Handle monetary values
+        if (sortColumn === "total" || sortColumn === "paid") {
+          valueA = parseFloat(valueA.replace(/[^0-9.-]+/g, ""));
+          valueB = parseFloat(valueB.replace(/[^0-9.-]+/g, ""));
+        }
+
+        // Handle numeric values
+        if (typeof valueA === "number" && typeof valueB === "number") {
+          return sortOrder === "asc" ? valueA - valueB : valueB - valueA;
+        }
+
+        // Handle string values
+        if (typeof valueA === "string" && typeof valueB === "string") {
+          return sortOrder === "asc"
+            ? valueA.localeCompare(valueB)
+            : valueB.localeCompare(valueA);
+        }
+
+        return 0;
       });
+
       setSortedOrders(sorted);
     }
   }, [orders, sortColumn, sortOrder]);
@@ -153,27 +184,27 @@ export default function OrderListPage() {
                   <button type="button" onClick={() => handleSort("date")}>
                     Date{" "}
                     {sortColumn === "date" && (sortOrder === "asc" ? "↑" : "↓")}
-                  </button>{" "}
+                  </button>
                 </th>
                 <th>
                   <button type="button" onClick={() => handleSort("total")}>
                     Total{" "}
                     {sortColumn === "total" &&
                       (sortOrder === "asc" ? "↑" : "↓")}
-                  </button>{" "}
+                  </button>
                 </th>
                 <th>
                   <button type="button" onClick={() => handleSort("paid")}>
                     Paid{" "}
                     {sortColumn === "paid" && (sortOrder === "asc" ? "↑" : "↓")}
-                  </button>{" "}
+                  </button>
                 </th>
                 <th>
                   <button type="button" onClick={() => handleSort("delivered")}>
-                    Deliverd{" "}
+                    Delivered{" "}
                     {sortColumn === "delivered" &&
                       (sortOrder === "asc" ? "↑" : "↓")}
-                  </button>{" "}
+                  </button>
                 </th>
                 <th>ACTIONS</th>
               </tr>
@@ -186,7 +217,6 @@ export default function OrderListPage() {
                   <td>{order.createdAt.substring(0, 10)}</td>
                   <td>{order.totalPrice.toFixed(2)}</td>
                   <td>{order.isPaid ? order.paidAt.substring(0, 10) : "No"}</td>
-
                   <td>
                     {order.isDelivered
                       ? order.deliveredAt.substring(0, 10)

@@ -443,54 +443,21 @@ const data = {
       rating: 4.5,
       info: "LG offers optimized Heating, Ventilation, and Air Conditioning for both commercial and residential solutions, ensuring fresh and crisp air for various environments.",
       link: "https://www.youtube.com/embed/df0y4MynElM?si=wXHBa1LmiWXyKsI3",
+      companyLink: "https://www.lg.com/global/business/hvac",
       numReviews: 15,
-      isAdmin: false,
-    },
-    {
-      name: 'Towalmark',
-      brand: "Towalmark",
-      info: "Experience superior comfort with our energy-efficient Split Air Conditioner, designed to deliver powerful cooling while minimizing electricity usage. Its quiet operation and sleek, modern design blend seamlessly into your living space, enhancing your home's ambiance. Offering flexible and customizable cooling options, advanced air filters for healthier air, and smart features like remote Wi-Fi control, our Split Air Conditioner is the perfect solution for maintaining an ideal indoor climate while reducing your environmental footprint.",
-      link: "https://m.media-amazon.com/images/S/stores-image-uploads-na-prod/8/AmazonStores/ATVPDKIKX0DER/c5bbd56722a62cba36a71211b72d6ad4.w3000.h600._CR0%2C0%2C3000%2C600_SX1920_.jpg",
-      rating: 4.0,
-      numReviews: 13,
-      isAdmin: false,
-    },
-    {
-      name: 'Senville',
-      brand: "Senville",
-      info: "Senville.com is a leading retailer of mini split air conditioners and efficient heating and cooling products. Established in 2005, we've been helping to reduce energy consumption in home and businesses for over 10 years.",
-      link: "https://www.youtube.com/embed/9EA8Lg5TWKE?si=9iJj50xZpOg87hr9",
-      rating: 3.0,
-      numReviews: 8,
-      isAdmin: false,
-    },
-    {
-      name: 'Daikin',
-      brand: "Daikin",
-      info: "The world's leading air conditioning manufacturer—Daikin. The source of the company's steady growth is its world-class air-conditioning technology developed in Japan. made possible high-quality air conditioners that responds to various user needs.",
-      link: "https://www.youtube.com/embed/0JyUysKJRFQ?si=3BcBL3fdpA5oa92L",
-      rating: 3.0,
-      numReviews: 8,
       isAdmin: false,
     },
     {
       name: 'Samsung',
       brand: "Samsung",
+      rating: 3.0,
       info: "Samsung provides the best air conditioner systems to fit your needs, whether you are seeking solutions for your home or for a business. WindFree™ technology creates a much gentler and milder air flow, evenly distributed through tens of thousands of micro holes, so people in the room feel almost no wind - just comfortable cool air",
       link: "https://www.youtube.com/embed/1dQ1MBSUHoQ?si=XgYwIiFsEHXc1Cl7&clip=UgkxU-wNgQmBp0v_YmQiAkAlIHFzL6GTFAIK&clipt=ENizARjwqAI",
-      rating: 3.0,
+      companyLink: "https://www.samsung.com/levant/business/system-air-conditioner-solutions/home/",
       numReviews: 8,
       isAdmin: false,
-    },
-    {
-      name: 'Mitsubishi Electric Corporation',
-      brand: "Mitsubishi",
-      info: "Mitsubishi Electric Corporation is a Japanese multinational electronics and electrical equipment manufacturing company headquartered in Tokyo, Japan. It was established in 1921 as a spin-off from the electrical machinery manufacturing business of Mitsubishi Shipbuilding (current Mitsubishi Heavy Industries) at the Kobe Shipyard. The products from MELCO include elevators and escalators, high-end home appliances, air conditioning, factory automation systems, train systems, electric motors, pumps, semiconductors, digital signage, and satellites.",
-      link: "https://www.youtube.com/embed/DmPUadxWRBg?si=OecVhAlH7Nt20bAC",
-      rating: 5.0,
-      numReviews: 20,
-      isAdmin: false,
-    },
+    }
+
   ],
   contacts: [
     {
@@ -499,7 +466,7 @@ const data = {
       email: "jane_smith@example.com",
       country: "Canada",
       serviceType: "Air Conditioning Installation",
-      equipmentAge: "1 year", 
+      equipmentAge: "1 year",
       subject: "Inquiry about installation",
       message: "I need a new air conditioner installed."
     },
@@ -525,6 +492,7 @@ const data = {
       company: 'test1',
       experience: 5,
       portfolio: 'portfolio1.link',
+      isActive: true,
       isAdmin: false
     },
     {
@@ -536,6 +504,7 @@ const data = {
       company: 'test2',
       experience: 7,
       portfolio: 'portfolio2.link',
+      isActive: true,
       isAdmin: false
     },
     {
@@ -547,6 +516,19 @@ const data = {
       company: 'test3',
       experience: 9,
       portfolio: 'portfolio3.link',
+      isActive: true,
+      isAdmin: false
+    },
+    {
+      name: 'Test Four Company',
+      email: 'test-company4@example.com',
+      password: bcrypt.hashSync('test4company', 8),
+      typeOfProvider: 'Architect',
+      phone: '12323454',
+      company: 'test4',
+      experience: 9,
+      portfolio: 'portfolio4.link',
+      isActive: false,
       isAdmin: false
     },
   ],
@@ -554,7 +536,7 @@ const data = {
     {
       name: "Residential House Design",
       client: "John Doe",
-      dueDate: "2024-12-23",
+      dueDate: "2025-01-15",
       status: "In Progress",
       serviceProvider: "test-company1@example.com",
       hoursWorked: 20,
@@ -564,7 +546,7 @@ const data = {
       client: "Loft&Hubs Corp",
       dueDate: "2024-12-13",
       status: "Completed",
-      serviceProvider: "test-company1@example.com",
+      serviceProvider: "test-company2@example.com",
       hoursWorked: 123,
     },
     {
@@ -572,32 +554,48 @@ const data = {
       client: "ABC Corp",
       dueDate: "2024-12-10",
       status: "Completed",
-      serviceProvider: "test-company2@example.com",
+      serviceProvider: "test-company3@example.com",
       hoursWorked: 40,
     },
     {
       name: "Appartments Design",
       client: "Michaella Donowan",
       dueDate: "2024-12-23",
-      status: "In Progress",
-      serviceProvider: "test-company2@example.com",
+      status: "Completed",
+      serviceProvider: "test-company4@example.com",
       hoursWorked: 53,
     },
     {
       name: "Construction Design",
       client: "Viki Crage",
-      dueDate: "2024-11-15",
+      dueDate: "2025-01-19",
       status: "In Progress",
-      serviceProvider: "test-company3@example.com",
+      serviceProvider: "test-company1@example.com",
       hoursWorked: 30,
     },
     {
       name: "Ventilation System Architecting",
       client: "Venty Corp",
-      dueDate: "2024-11-26",
+      dueDate: "2024-12-26",
+      status: "In Progress",
+      serviceProvider: "test-company2@example.com",
+      hoursWorked: 78,
+    },
+    {
+      name: "Constraction of a supply and exhaust ventilation system",
+      client: "Zyclon LLP",
+      dueDate: "2024-09-15",
       status: "Completed",
       serviceProvider: "test-company3@example.com",
-      hoursWorked: 78,
+      hoursWorked: 200,
+    },
+    {
+      name: "Design of a chimney system",
+      client: "ACVent Corp",
+      dueDate: "2024-06-26",
+      status: "Completed",
+      serviceProvider: "test-company4@example.com",
+      hoursWorked: 90,
     },
   ],
   messages: [
@@ -605,90 +603,112 @@ const data = {
       client: "John Doe",
       text: "Can we update the room layout?",
       date: "2024-12-26",
-      serviceProvider: "",
+      serviceProvider: "test-company1@example.com",
       projectName: "Residential House Design"
-    },
-    {
-      client: "ABC Corp",
-      text: "Can we upgrade the office layout?",
-      date: "2024-10-26",
-      serviceProvider: "",
-      projectName: "Office Interior Renovation"
-    },
-    {
-      client: "Viki Crage",
-      text: "Can we upgrade the construction layout?",
-      date: "2024-11-25",
-      serviceProvider: "",
-      projectName: "Construction Design",
     },
 
     {
       client: "Loft&Hubs Corp",
       text: "We obtained the last transh and last milestone",
       date: "2024-11-05",
-      serviceProvider: "",
+      serviceProvider: "test-company2@example.com",
       projectName: "Loft Renovation",
 
     },
     {
+      client: "ABC Corp",
+      text: "Can we upgrade the office layout?",
+      date: "2024-10-26",
+      serviceProvider: "test-company3@example.com",
+      projectName: "Office Interior Renovation"
+    },
+
+    {
       client: "Michaella Donowan",
       text: "When can we start nogotiation regarding the first draft be ready?",
       date: "2024-12-30",
-      serviceProvider: "",
+      serviceProvider: "test-company4@example.com",
       projectName: "Appartments Design"
+    },
+    {
+      client: "Viki Crage",
+      text: "Can we upgrade the construction layout?",
+      date: "2024-11-25",
+      serviceProvider: "test-company1@example.com",
+      projectName: "Construction Design",
     },
 
     {
       client: "Venty Corp",
       text: "When will we get the first transh for the first draft and previous milestone?",
-      date: "2024-09-15",
-      serviceProvider: "",
+      date: "2024-11-15",
+      serviceProvider: "test-company2@example.com",
       projectName: "Ventilation System Architecting"
+    },
+    {
+      client: "Zyclon LLP",
+      text: "We got last transh yesterday. We are ready for commissioning fase",
+      date: "2024-08-30",
+      serviceProvider: "test-company3@example.com",
+      projectName: "Constraction of a supply and exhaust ventilation system"
+    },
+
+    {
+      client: "ACVent Corp",
+      text: "Commissioning fase was passed without any obsticles. Can we sign the final account papers?",
+      date: "2024-05-30",
+      serviceProvider: "test-company4@example.com",
+      projectName: "Design of a chimney system"
     },
 
   ],
   earnings: [
     {
-
-      amount: 500,
-      date: '2024-12-20',
+      amount: 645,
+      date: '2025-01-15',
       hoursWorked: 20,
       status: 'Pending',
     },
     {
-
-      amount: 1500,
-      date: '2024-11-29',
-      hoursWorked: 40,
-      status: 'Paid',
-    },
-    {
-
-      amount: 850,
-      date: '2024-12-24',
-      hoursWorked: 30,
-      status: 'Pending',
-    },
-    {
-
-      amount: 2345,
+      amount: 3945,
       date: '2024-12-04',
       hoursWorked: 123,
       status: 'Paid',
     },
     {
-
+      amount: 1282,
+      date: '2024-11-29',
+      hoursWorked: 40,
+      status: 'Paid',
+    },
+    {
       amount: 699,
       date: '2024-12-20',
       hoursWorked: 53,
+      status: 'Paid',
+    },
+    {
+      amount: 968,
+      date: '2025-01-19',
+      hoursWorked: 30,
       status: 'Pending',
     },
     {
-
       amount: 2500,
       date: '2024-12-13',
       hoursWorked: 78,
+      status: 'Pending',
+    },
+    {
+      amount: 6450,
+      date: '2024-09-03',
+      hoursWorked: 200,
+      status: 'Paid',
+    },
+    {
+      amount: 2885,
+      date: '2024-06-12',
+      hoursWorked: 90,
       status: 'Paid',
     },
   ],
@@ -705,14 +725,6 @@ const data = {
       title: 'To implement marketing company for new users.',
       message: 'The marketing company is devoted for new users. To make an asquantence with new service and new products.',
       type: 'urgent',
-      recipientType: 'admin',
-      isRead: false,
-      createdAt: new Date(),
-    },
-    {
-      title: 'Pending Orders Alert',
-      message: 'There are more than 2 pending orders. Immediate action is required.',
-      type: 'info',
       recipientType: 'admin',
       isRead: false,
       createdAt: new Date(),
