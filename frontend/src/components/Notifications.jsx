@@ -5,7 +5,7 @@ import { getError } from "../utils.js";
 import LoadingBox from "./LoadingBox.jsx";
 import MessageBox from "./MessageBox.jsx";
 import { Helmet } from "react-helmet-async";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -14,35 +14,36 @@ const initialState = {
   error: "",
   loadingDelete: false,
   successDelete: false,
-
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
       return { ...state, loading: true, error: "" };
-      case "FETCH_SUCCESS":
-        return { ...state, notifications: action.payload, loading: false };
+    case "FETCH_SUCCESS":
+      return { ...state, notifications: action.payload, loading: false };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
     case "MARK_AS_READ":
       return {
         ...state,
         notifications: state.notifications.map((notification) =>
-          notification._id === action.payload ? { ...notification, isRead: true } : notification
+          notification._id === action.payload
+            ? { ...notification, isRead: true }
+            : notification
         ),
       };
     case "DELETE_REQUEST":
       return { ...state, loadingDelete: true, successDelete: false };
-      case "DELETE_SUCCESS":
-        return {
-          ...state,
-          loadingDelete: false,
-          successDelete: true,
-          notifications: state.notifications.filter(
-            (notification) => notification._id !== action.payload
-          ),
-        };
+    case "DELETE_SUCCESS":
+      return {
+        ...state,
+        loadingDelete: false,
+        successDelete: true,
+        notifications: state.notifications.filter(
+          (notification) => notification._id !== action.payload
+        ),
+      };
     case "DELETE_FAIL":
       return { ...state, loadingDelete: false };
     case "DELETE_RESET":
@@ -53,7 +54,10 @@ const reducer = (state, action) => {
 };
 
 export default function Notifications() {
-  const [{ loading, notifications, error }, dispatch] = useReducer(reducer, initialState);
+  const [{ loading, notifications, error }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
   const { state } = useContext(Store);
   const { userInfo } = state;
 
@@ -93,9 +97,9 @@ export default function Notifications() {
         });
         toast.success("Notification deleted successfully");
         fetchNotifications();
-        dispatch({ type: "DELETE_SUCCESS",  payload: notification._id  });
+        dispatch({ type: "DELETE_SUCCESS", payload: notification._id });
       } catch (err) {
-        console.error('Error deleting notification:', err);
+        console.error("Error deleting notification:", err);
         toast.error(getError(err));
         dispatch({ type: "DELETE_FAIL" });
       }
@@ -127,7 +131,8 @@ export default function Notifications() {
                 borderRadius: "4px",
               }}
             >
-              <strong>{notification.title}</strong> - {notification.message}
+              <strong>{notification.title}</strong> - {notification.message} -{" "}
+              {notification.recipientType}
               {!notification.isRead && (
                 <Button
                   style={{

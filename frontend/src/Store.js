@@ -45,15 +45,48 @@ function reducer(state, action) {
               item._id === existItem._id ? newItem : item
             )
           : [...state.cart.cartItems, newItem];
+      
+        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      
         return { ...state, cart: { ...state.cart, cartItems } };
       }
+      
       case "CART_REMOVE_ITEM": {
         const cartItems = state.cart.cartItems.filter(
           (item) => item._id !== action.payload._id
         );
+      
+        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      
         return { ...state, cart: { ...state.cart, cartItems } };
       }
       
+      case "CART_UPDATE_PRICES": {
+        const itemsPrice = state.cart.cartItems.reduce(
+          (acc, item) =>
+            acc +
+            (item.discount > 0
+              ? item.quantity * item.price * (1 - item.discount / 100)
+              : item.quantity * item.price),
+          0
+        );
+  
+        const taxPrice = itemsPrice * 0.1; 
+        const shippingPrice = itemsPrice > 100 ? 0 : 10; 
+        const totalPrice = itemsPrice + taxPrice + shippingPrice;
+  
+        return {
+          ...state,
+          cart: {
+            ...state.cart,
+            itemsPrice: itemsPrice.toFixed(2),
+            taxPrice: taxPrice.toFixed(2),
+            shippingPrice: shippingPrice.toFixed(2),
+            totalPrice: totalPrice.toFixed(2),
+          },
+        };
+      }
+  
     case 'CART_CLEAR':
       return { ...state, cart: { ...state.cart, cartItems: [] } };
 

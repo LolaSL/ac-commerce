@@ -7,7 +7,6 @@ import Product from '../models/productModel.js';
 import { extractTextFromPDF } from '../utils/pdfUtils.js';
 
 const upload = multer();
-
 const uploadRouter = express.Router();
 
 uploadRouter.post(
@@ -24,46 +23,51 @@ uploadRouter.post(
 
     const streamUpload = (req) => {
       return new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { resource_type: 'auto' },
-          (error, result) => {
-            if (result) {
-              resolve(result);
-            } else {
-              reject(error);
-            }
+        const stream = cloudinary.uploader.upload_stream((error, result) => {
+          if (result) {
+            resolve(result);
+          } else {
+            reject(error);
           }
-        );
+        });
         streamifier.createReadStream(req.file.buffer).pipe(stream);
       });
     };
 
     try {
+      const { productId } = req.body;
+      if (!productId) {
+        return res.status(400).send({ message: 'Product ID is required' });
+      }
 
       const result = await streamUpload(req);
+      console.log('Uploaded Image URL:', result.secure_url);
 
-    
       let extractedText = '';
       if (req.file.mimetype === 'application/pdf') {
         extractedText = await extractTextFromPDF(req.file.buffer);
       }
 
-    
-      const product = await Product.findById(req.body.productId);
-      if (product) {
-        product.documents.push({
-          url: result.secure_url,
-          extractedText: extractedText,
-        });
-        await product.save();
-      } else {
+      const product = await Product.findById(productId);
+      if (!product) {
         return res.status(404).send({ message: 'Product not found' });
       }
 
+      if (!product.images) product.images = [];
+      if (!product.documents) product.documents = [];
+
+      product.images.push(result.secure_url);
+      product.documents.push({
+        url: result.secure_url,
+        extractedText: extractedText,
+      });
+
+      await product.save(); 
+
       res.send({
         message: 'File uploaded successfully',
-        url: result.secure_url,
-        extractedText: extractedText, 
+        imageUrl: result.secure_url,
+        extractedText: extractedText,
       });
     } catch (error) {
       console.error('Error during file upload:', error);

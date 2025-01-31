@@ -65,350 +65,348 @@ const ProductEditPage = () => {
   const [areaCoverage, setAreaCoverage] = useState("");
   const [energyEfficiency, setEnergyEfficiency] = useState("");
   const [discount, setDiscount] = useState("");
-  const [documents, setDocuments] = useState([]); 
+  const [documents, setDocuments] = useState([]);
   const [dimension, setDimension] = useState({
-    width: '',
-    height: '',
-    depth: ''
+    width: "",
+    height: "",
+    depth: "",
   });
 
-useEffect(() => { 
-  const fetchData = async () => {
-    try {
-      dispatch({ type: "FETCH_REQUEST" });
-      const { data } = await axios.get(`/api/products/${productId}`);
-      
-      setName(data.name);
-      setSlug(data.slug);
-      setPrice(data.price);
-      setImage(data.image);
-      setImages(data.images);
-      setCategory(data.category);
-      setCountInStock(data.countInStock);
-      setBrand(data.brand);
-      setDescription(data.description);
-      setFeatures(data.features);
-      setBtu(data.btu);
-      setAreaCoverage(data.areaCoverage);
-      setEnergyEfficiency(data.energyEfficiency);
-      setDiscount(data.discount);
-      setDocuments(data.documents || []); 
-      setDimension({
-        width: data.dimension?.width || '', 
-        height: data.dimension?.height || '',
-        depth: data.dimension?.depth || '',
-      });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        dispatch({ type: "FETCH_REQUEST" });
+        const { data } = await axios.get(`/api/products/${productId}`);
 
-      dispatch({ type: "FETCH_SUCCESS" });
+        setName(data.name);
+        setSlug(data.slug);
+        setPrice(data.price);
+        setImage(data.image);
+        setImages(data.images);
+        setCategory(data.category);
+        setCountInStock(data.countInStock);
+        setBrand(data.brand);
+        setDescription(data.description);
+        setFeatures(data.features);
+        setBtu(data.btu);
+        setAreaCoverage(data.areaCoverage);
+        setEnergyEfficiency(data.energyEfficiency);
+        setDiscount(data.discount);
+        setDocuments(data.documents || []);
+        setDimension({
+          width: data.dimension?.width || "",
+          height: data.dimension?.height || "",
+          depth: data.dimension?.depth || "",
+        });
+
+        dispatch({ type: "FETCH_SUCCESS" });
+      } catch (err) {
+        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+      }
+    };
+    fetchData();
+  }, [productId]);
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch({ type: "UPDATE_REQUEST" });
+
+      await axios.put(
+        `/api/products/${productId}`,
+        {
+          _id: productId,
+          name,
+          slug,
+          price,
+          image,
+          images,
+          category,
+          brand,
+          countInStock,
+          description,
+          features,
+          btu,
+          areaCoverage,
+          energyEfficiency,
+          discount,
+          documents,
+          dimension: {
+            width: dimension.width,
+            height: dimension.height,
+            depth: dimension.depth,
+          },
+        },
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+
+      dispatch({ type: "UPDATE_SUCCESS" });
+      toast.success("Product updated successfully");
+      navigate("/admin/products");
     } catch (err) {
-      dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+      toast.error(getError(err));
+      dispatch({ type: "UPDATE_FAIL" });
     }
   };
-  fetchData();
-}, [productId]);
 
+  const uploadFileHandler = async (e, forImages) => {
+    const file = e.target.files[0];
+    const bodyFormData = new FormData();
+    bodyFormData.append("file", file);
+    bodyFormData.append("productId", productId);
 
-const submitHandler = async (e) => {
-  e.preventDefault();
-  try {
-    dispatch({ type: "UPDATE_REQUEST" });
+    try {
+      dispatch({ type: "UPLOAD_REQUEST" });
 
-    await axios.put(
-      `/api/products/${productId}`,
-      {
-        _id: productId,
-        name,
-        slug,
-        price,
-        image,
-        images,
-        category,
-        brand,
-        countInStock,
-        description,
-        features,
-        btu,
-        areaCoverage,
-        energyEfficiency,
-        discount,
-        documents, 
-        dimension: { 
-          width: dimension.width,
-          height: dimension.height,
-          depth: dimension.depth,
+      const { data } = await axios.post("/api/upload", bodyFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: `Bearer ${userInfo.token}`, 
         },
-      },
-      {
-        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+
+      dispatch({ type: "UPLOAD_SUCCESS" });
+
+      if (file.type === "application/pdf") {
+       
+        setDocuments([
+          ...documents,
+          { url: data.imageUrl, extractedText: data.extractedText },
+        ]);
+      } else if (forImages) {
+
+        setImages([...images, data.imageUrl]);
+      } else {
+
+        setImage(data.imageUrl);
       }
-    );
 
-    dispatch({ type: "UPDATE_SUCCESS" });
-    toast.success("Product updated successfully");
-    navigate("/admin/products");
-  } catch (err) {
-    toast.error(getError(err));
-    dispatch({ type: "UPDATE_FAIL" });
-  }
-};
-
-
-const uploadFileHandler = async (e, type) => {
-  const file = e.target.files[0];
-  const bodyFormData = new FormData();
-  bodyFormData.append("file", file);
-  bodyFormData.append("productId", productId);
-
-  try {
-    dispatch({ type: "UPLOAD_REQUEST" });
-    const { data } = await axios.post("/api/upload", bodyFormData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        authorization: `Bearer ${userInfo.token}`,
-      },
-    });
-    dispatch({ type: "UPLOAD_SUCCESS" });
-
-    if (type === "images") {
-      setImages([...images, data.secure_url]);
-    } else if (type === "documents") {
-      setDocuments([...documents, { name: file.name, url: data.secure_url }]);
-    } else {
-      setImage(data.secure_url);
+      toast.success("File uploaded successfully. Click Update to apply it.");
+    } catch (err) {
+      toast.error(getError(err));
+      dispatch({ type: "UPLOAD_FAIL", payload: getError(err) });
     }
+  };
 
-    toast.success(
-      `${type === "documents" ? "Document" : "Image"} uploaded successfully. Click Update to apply it.`
-    );
-  } catch (err) {
-    toast.error(getError(err));
-    dispatch({ type: "UPLOAD_FAIL", payload: getError(err) });
-  }
-};
-
-
-const deleteFileHandler = async (fileName, type) => {
-  if (type === "images") {
+  const deleteFileHandler = async (fileName, f) => {
+    console.log(fileName, f);
+    console.log(images);
+    console.log(images.filter((x) => x !== fileName));
     setImages(images.filter((x) => x !== fileName));
-    toast.success("Image removed successfully. Click Update to apply it");
-  } else if (type === "documents") {
-    setDocuments(documents.filter((doc) => doc.url !== fileName));
-    toast.success("Document removed successfully. Click Update to apply it");
-  } else {
-    toast.error("Invalid file type specified");
-  }
-};
-
+    toast.success("Image removed successfully. click Update to apply it");
+  };
 
   return (
     <Container className="small-container">
-    <Helmet>
-      <title>Edit Product {productId}</title>
-    </Helmet>
-    <h1>Edit Product {productId}</h1>
-    {loading ? (
-      <LoadingBox />
-    ) : error ? (
-      <MessageBox variant="danger">{error}</MessageBox>
-    ) : (
-      <Form onSubmit={submitHandler}>
-        <Form.Group className="mb-3" controlId="name">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="slug">
-          <Form.Label>Slug</Form.Label>
-          <Form.Control
-            value={slug}
-            onChange={(e) => setSlug(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="price">
-          <Form.Label>Price</Form.Label>
-          <Form.Control
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="image">
-          <Form.Label>Image File</Form.Label>
-          <Form.Control
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="imageFile">
-          <Form.Label>Upload Image</Form.Label>
-          <Form.Control type="file" onChange={(e) => uploadFileHandler(e)} />
-          {loadingUpload && <LoadingBox />}
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="additionalImage">
-          <Form.Label>Additional Images</Form.Label>
-          {images.length === 0 && <MessageBox>No image</MessageBox>}
-          <ListGroup variant="flush">
-            {images.map((x) => (
-              <ListGroup.Item key={x}>
-                {x}
-                <Button variant="light" onClick={() => deleteFileHandler(x)}>
-                  <i className="fa fa-times-circle"></i>
-                </Button>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="additionalImageFile">
-          <Form.Label>Upload Additional Image</Form.Label>
-          <Form.Control
-            type="file"
-            onChange={(e) => uploadFileHandler(e, true)}
-          />
-          {loadingUpload && <LoadingBox />}
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="category">
-          <Form.Label>Category</Form.Label>
-          <Form.Control
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="brand">
-          <Form.Label>Brand</Form.Label>
-          <Form.Control
-            value={brand}
-            onChange={(e) => setBrand(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="countInStock">
-          <Form.Label>Count In Stock</Form.Label>
-          <Form.Control
-            value={countInStock}
-            onChange={(e) => setCountInStock(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="description">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="features">
-          <Form.Label>Features</Form.Label>
-          <Form.Control
-            value={features}
-            onChange={(e) => setFeatures(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="btu">
-          <Form.Label>BTU</Form.Label>
-          <Form.Control
-            value={btu}
-            onChange={(e) => setBtu(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="areaCoverage">
-          <Form.Label>Area Coverage</Form.Label>
-          <Form.Control
-            value={areaCoverage}
-            onChange={(e) => setAreaCoverage(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="energyEfficiency">
-          <Form.Label>Energy Efficiency</Form.Label>
-          <Form.Control
-            value={energyEfficiency}
-            onChange={(e) => setEnergyEfficiency(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="productDiscount">
-          <Form.Label>Product Discount</Form.Label>
-          <Form.Control
-            value={discount}
-            onChange={(e) => setDiscount(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="documents">
-          <Form.Label>Documents</Form.Label>
-          {documents.length === 0 && <MessageBox>No document uploaded</MessageBox>}
-          <ListGroup variant="flush">
-            {documents.map((doc) => (
-              <ListGroup.Item key={doc.url}>
-                {doc.url}
-                <Button
-                  variant="light"
-                  onClick={() => deleteFileHandler(doc.url, "documents")}
-                >
-                  <i className="fa fa-times-circle"></i>
-                </Button>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="uploadDocument">
-          <Form.Label>Upload Document</Form.Label>
-          <Form.Control
-            type="file"
-            onChange={(e) => uploadFileHandler(e, "documents")}
-          />
-          {loadingUpload && <LoadingBox />}
-        </Form.Group>
-  
-        <Form.Group className="mb-3" controlId="dimensionWidth">
-          <Form.Label>Dimension - Width</Form.Label>
-          <Form.Control
-            value={dimension.width}
-            onChange={(e) =>
-              setDimension({ ...dimension, width: e.target.value })
-            }
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="dimensionHeight">
-          <Form.Label>Dimension - Height</Form.Label>
-          <Form.Control
-            value={dimension.height}
-            onChange={(e) =>
-              setDimension({ ...dimension, height: e.target.value })
-            }
-            required
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="dimensionDepth">
-          <Form.Label>Dimension - Depth</Form.Label>
-          <Form.Control
-            value={dimension.depth}
-            onChange={(e) =>
-              setDimension({ ...dimension, depth: e.target.value })
-            }
-            required
-          />
-        </Form.Group>
-        <div className="mb-3">
-          <Button
-            disabled={loadingUpdate}
-            type="submit"
-            className="btn btn-secondary"
-          >
-            Update
-          </Button>
-          {loadingUpdate && <LoadingBox />}
-        </div>
-      </Form>
-    )}
-  </Container>
-  
+      <Helmet>
+        <title>Edit Product {productId}</title>
+      </Helmet>
+      <h1>Edit Product {productId}</h1>
+      {loading ? (
+        <LoadingBox />
+      ) : error ? (
+        <MessageBox variant="danger">{error}</MessageBox>
+      ) : (
+        <Form onSubmit={submitHandler}>
+          <Form.Group className="mb-3" controlId="name">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="slug">
+            <Form.Label>Slug</Form.Label>
+            <Form.Control
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="price">
+            <Form.Label>Price</Form.Label>
+            <Form.Control
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="image">
+            <Form.Label>Image File</Form.Label>
+            <Form.Control
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="imageFile">
+            <Form.Label>Upload Image</Form.Label>
+            <Form.Control type="file" onChange={(e) => uploadFileHandler(e)} />
+            {loadingUpload && <LoadingBox />}
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="additionalImage">
+            <Form.Label>Additional Images</Form.Label>
+            {images.length === 0 && <MessageBox>No image</MessageBox>}
+            <ListGroup variant="flush">
+              {images.map((x) => (
+                <ListGroup.Item key={x}>
+                  {x}
+                  <Button variant="light" onClick={() => deleteFileHandler(x)}>
+                    <i className="fa fa-times-circle"></i>
+                  </Button>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="additionalImageFile">
+            <Form.Label>Upload Aditional Image</Form.Label>
+            <Form.Control
+              type="file"
+              onChange={(e) => uploadFileHandler(e, true)}
+            />
+            {loadingUpload && <LoadingBox />}
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="category">
+            <Form.Label>Category</Form.Label>
+            <Form.Control
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="brand">
+            <Form.Label>Brand</Form.Label>
+            <Form.Control
+              value={brand}
+              onChange={(e) => setBrand(e.target.value)}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="countInStock">
+            <Form.Label>Count In Stock</Form.Label>
+            <Form.Control
+              value={countInStock}
+              onChange={(e) => setCountInStock(e.target.value)}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="description">
+            <Form.Label>Description</Form.Label>
+            <Form.Control
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="features">
+            <Form.Label>Features</Form.Label>
+            <Form.Control
+              value={features}
+              onChange={(e) => setFeatures(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="btu">
+            <Form.Label>BTU</Form.Label>
+            <Form.Control
+              value={btu}
+              onChange={(e) => setBtu(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="areaCoverage">
+            <Form.Label>Area Coverage</Form.Label>
+            <Form.Control
+              value={areaCoverage}
+              onChange={(e) => setAreaCoverage(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="energyEfficiency">
+            <Form.Label>Energy Efficiency</Form.Label>
+            <Form.Control
+              value={energyEfficiency}
+              onChange={(e) => setEnergyEfficiency(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="productDiscount">
+            <Form.Label>Product Discount</Form.Label>
+            <Form.Control
+              value={discount}
+              onChange={(e) => setDiscount(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="documents">
+            <Form.Label>Documents</Form.Label>
+            {documents.length === 0 && (
+              <MessageBox>No document uploaded</MessageBox>
+            )}
+            <ListGroup variant="flush">
+              {documents.map((doc) => (
+                <ListGroup.Item key={doc.url}>
+                  {doc.url}
+                  <Button
+                    variant="light"
+                    onClick={() => deleteFileHandler(doc.url, "documents")}
+                  >
+                    <i className="fa fa-times-circle"></i>
+                  </Button>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="uploadDocument">
+            <Form.Label>Upload Document</Form.Label>
+            <Form.Control
+              type="file"
+              onChange={(e) => uploadFileHandler(e, "documents")}
+            />
+            {loadingUpload && <LoadingBox />}
+          </Form.Group>
 
+          <Form.Group className="mb-3" controlId="dimensionWidth">
+            <Form.Label>Dimension - Width</Form.Label>
+            <Form.Control
+              value={dimension.width}
+              onChange={(e) =>
+                setDimension({ ...dimension, width: e.target.value })
+              }
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="dimensionHeight">
+            <Form.Label>Dimension - Height</Form.Label>
+            <Form.Control
+              value={dimension.height}
+              onChange={(e) =>
+                setDimension({ ...dimension, height: e.target.value })
+              }
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="dimensionDepth">
+            <Form.Label>Dimension - Depth</Form.Label>
+            <Form.Control
+              value={dimension.depth}
+              onChange={(e) =>
+                setDimension({ ...dimension, depth: e.target.value })
+              }
+              required
+            />
+          </Form.Group>
+          <div className="mb-3">
+            <Button
+              disabled={loadingUpdate}
+              type="submit"
+              className="btn btn-secondary"
+            >
+              Update
+            </Button>
+            {loadingUpdate && <LoadingBox />}
+          </div>
+        </Form>
+      )}
+    </Container>
   );
 };
 

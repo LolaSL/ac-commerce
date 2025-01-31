@@ -27,7 +27,7 @@ orderRouter.post(
   '/',
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    console.log('Request Body:', req.body); // Debugging step
+    console.log('Request Body:', req.body); 
 
     const newOrder = new Order({
       orderItems: req.body.orderItems.map((x) => ({ ...x, product: x._id })),

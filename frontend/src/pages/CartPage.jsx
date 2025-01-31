@@ -76,6 +76,7 @@ export default function CartPage() {
                         >
                           {item.name}
                         </Link>
+                        {item.category && <p>{item.category}</p>}
                       </Col>
                       <Col md={3}>
                         <Button

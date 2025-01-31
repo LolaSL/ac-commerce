@@ -59,7 +59,7 @@ notificationRouter.post(
       title,
       message,
       type,
-      recipientType,  // Should be 'admin', 'user', or 'serviceProvider'
+      recipientType,  
     });
 
     const createdNotification = await notification.save();
@@ -68,7 +68,7 @@ notificationRouter.post(
 );
 
 
-// Delete a notification (admin access only)
+
 notificationRouter.delete(
   '/:id',
   isAuth,

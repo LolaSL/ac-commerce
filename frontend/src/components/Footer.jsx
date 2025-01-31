@@ -1,6 +1,5 @@
 import React from "react";
 import NavLink from "react-bootstrap/NavLink";
-// import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +20,6 @@ const Footer = () => {
   };
   return (
     <>
-      {/* <Container> */}
         <footer className="container-fluid ">
           <Row className="bg-secondary text-white p-4">
             <Col className="col-md-6 col-lg-5 col-12 ft-1">
@@ -106,7 +104,6 @@ const Footer = () => {
             </div>
           </Row>
         </footer>
-      {/* </Container> */}
     </>
   );
 };

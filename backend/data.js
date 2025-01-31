@@ -251,7 +251,7 @@ const data = {
       brand: "Samsung",
       rating: 2,
       numReviews: 20,
-      description: " This 16000 BTU  Mini Split AC Wind-Free TM Cooling 5460-22860 BTU. Heating 4435-27300 BTU. Sound Levels insite 58 db outside 65 db. Inverter, Wi-Fi, Wind-Free™ Cooling, AI Comfort, Motion Sensor",
+      description: " This 20000 BTU  Mini Split AC Wind-Free TM Cooling 5460-22860 BTU. Heating 4435-27300 BTU. Sound Levels insite 58 db outside 65 db. Inverter, Wi-Fi, Wind-Free™ Cooling, AI Comfort, Motion Sensor",
       features: "Smart Things",
       btu: 20000,
       areaCoverage: 40,

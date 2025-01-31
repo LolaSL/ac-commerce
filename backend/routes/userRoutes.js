@@ -79,7 +79,7 @@ userRouter.post(
         .messages()
         .send(
           {
-            from: 'Amazona <me@mg.yourdomain.com>',
+            from: 'AC Commerce <me@mg.yourdomain.com>',
             to: `${user.name} <${user.email}>`,
             subject: `Reset Password`,
             html: ` 
@@ -165,14 +165,6 @@ userRouter.post(
   '/signin',
   expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
-    if (user) {
-      const notification = {
-        title: 'Discount Offer',
-        message: 'Check out the latest discount offers!',
-        type: 'discount',
-        recipientType: 'user',
-        isRead: false,
-      };
       if (bcrypt.compareSync(req.body.password, user.password)) {
         res.send({
           _id: user._id,
@@ -180,11 +172,9 @@ userRouter.post(
           email: user.email,
           isAdmin: user.isAdmin,
           token: generateToken(user),
-          notification,
         });
         return;
       }
-    }
     res.status(401).send({ message: 'Invalid email or password' });
   })
 );

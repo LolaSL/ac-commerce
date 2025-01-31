@@ -12,9 +12,7 @@ import serviceProviderRouter from './routes/serviceProviderRoutes.js'
 import blogRouter from './routes/blogRoutes.js'
 import notificationRouter from './routes/notificationRoutes.js';
 
-
 import cors from 'cors';
-
 
 dotenv.config();
 
@@ -33,7 +31,6 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
-
 app.get("/api/keys/paypal", (req, res) => {
     res.send(process.env.PAYPAL_CLIENT_ID || "sb");
 });
@@ -50,19 +47,29 @@ app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/sellers', sellerRouter);
 app.use('/api/contact', contactRouter);
-app.use('/api/service-providers', serviceProviderRouter)
-app.use('/api/blogs', blogRouter)
-app.use('/api/notifications', notificationRouter)
+app.use('/api/service-providers', serviceProviderRouter);
+app.use('/api/blogs', blogRouter);
+app.use('/api/notifications', notificationRouter);
+
 app.get('/', (req, res) => {
     res.send('Server is ready')
-})
+});
+
 app.use((err, req, res, next) => {
     res.status(500).send({ message: err.message });
 });
 
+// Graceful shutdown
+const port = process.env.PORT || 5050;
 
-const port = process.env.PORT || 5000;
+const server = app.listen(5030, () => {
+    console.log(`Server is listening at http://localhost:${port}`);
+});
 
-app.listen(5030, () => {
-    console.log(`Server is listening at http://localhost:${port}`)
-})
+// Gracefully shut down on SIGINT (Ctrl+C)
+process.on('SIGINT', () => {
+    server.close(() => {
+        console.log('Server gracefully shut down');
+        process.exit(0);
+    });
+});

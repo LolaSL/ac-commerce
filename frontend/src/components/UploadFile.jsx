@@ -312,7 +312,6 @@ function UploadFile() {
     const context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Render Image Preview
     if (previewUrl) {
       const img = new Image();
       img.src = previewUrl;
@@ -331,11 +330,10 @@ function UploadFile() {
           );
         });
         renderComments(context);
-        renderSignature(context); // Render signature only when saving PDF
+        renderSignature(context); 
       };
     }
 
-    // Render PDF Preview
     if (file.type === "application/pdf") {
       const reader = new FileReader();
       reader.onload = async function (e) {
@@ -384,12 +382,11 @@ function UploadFile() {
     if (!canvas) return;
 
     const context = canvas.getContext("2d");
-    context.clearRect(0, 0, canvas.width, canvas.height); // Clear the entire canvas
+    context.clearRect(0, 0, canvas.width, canvas.height); 
 
-    // Optionally, reset any state related to annotations (icons, signature, etc.)
-    setIconPositions([]); // Reset icons (if needed)
-    setPreviewUrl(null); // Reset preview URL (if needed)
-    setIsSaved(false); // Reset saved state (if needed)
+    setIconPositions([]); 
+    setPreviewUrl(null); 
+    setIsSaved(false); 
   };
 
   return (

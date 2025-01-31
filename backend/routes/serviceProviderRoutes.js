@@ -29,7 +29,7 @@ const generateToken = (serviceProvider) => {
 };
 
 export const isAuth = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1]; // Extract token from the Authorization header
+  const token = req.headers.authorization?.split(' ')[1]; 
 
   if (token) {
     // Verify the token
@@ -40,8 +40,8 @@ export const isAuth = (req, res, next) => {
       }
 
       
-      req.serviceProvider = decoded; // For service provider dashboard
-      req.user = decoded; // For admin dashboard
+      req.serviceProvider = decoded; 
+      req.user = decoded; 
       
       next(); 
     });
@@ -265,7 +265,7 @@ serviceProviderRouter.put(
   expressAsyncHandler(async (req, res) => {
     const messageId = req.params.id;
     const message = await Message.findById(new mongoose.Types.ObjectId(messageId));
-    // const message = await Message.findById(messageId);
+
     if (message) {
       Object.assign(message, req.body);
       await message.save();
