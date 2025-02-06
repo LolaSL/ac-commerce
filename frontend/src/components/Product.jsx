@@ -9,7 +9,6 @@ import Image from "react-bootstrap/Image";
 
 function Product(props) {
   const { product } = props;
-  console.log(product);
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const {
     cart: { cartItems },

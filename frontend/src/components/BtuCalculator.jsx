@@ -16,15 +16,12 @@ import { Store } from "../Store";
 import { useNavigate } from "react-router-dom";
 
 function BtuCalculator() {
-  const { state, dispatch: ctxDispatch } = useContext(Store);
-  console.log("State:", state);
-  const navigate = useNavigate();
-  const cart = state?.cart || { cartItems: [] };
-  console.log("Cart:", cart);
-  console.log("Cart Items:", state.cart.cartItems);
-  const cartItems = state?.cart?.cartItems || [];
-  console.log("Cart Items:", cartItems);
 
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  
+  const navigate = useNavigate();
+  
+  const cartItems = state?.cart?.cartItems || [];
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const [areaFeet, setAreaFeet] = useState(0);
@@ -33,6 +30,7 @@ function BtuCalculator() {
   const [rooms, setRooms] = useState([{ name: "Bedroom 1", size: "", btu: 0 }]);
   const [ceilingHeight, setCeilingHeight] = useState("2.5");
   const [numPeople, setNumPeople] = useState(2);
+  
   const [insulation, setInsulation] = useState({
     Average: false,
     Good: false,
@@ -273,46 +271,40 @@ function BtuCalculator() {
           fetchedProducts.push(data);
         } else {
           console.warn("Invalid product data received:", data);
-          fetchedProducts.push(null);
         }
       } catch (error) {
         console.error("Product not found for room:", error);
-        fetchedProducts.push(null);
       }
     }
 
     setBtuResults(results);
-    setProducts(fetchedProducts.filter((p) => p !== null));
     setError("");
-
 
     if (totalBTU >= 20000) {
       const outdoorCondensers = getOutdoorCondensers();
       fetchedProducts.push(...outdoorCondensers);
     }
 
-    setProducts(fetchedProducts.filter((p) => p !== null)); // Re-filter products
+    setProducts(fetchedProducts.filter((p) => p !== null));
   };
 
   const getOutdoorCondensers = () => {
     return [
       {
+        _id: "679697c70b59f509788f80d7",
         name: "Mini Split Outdoor Condenser",
         slug: "mini-split-outdoor-condensing-unit",
         category: "Outdoor condenser",
         image: "/images/p5.jpg",
         price: 1296.75,
-        btu: 36000,
+        btu: 40000,
       },
-      // Add more outdoor condenser products if needed
     ];
   };
 
   const saveResultsToCart = () => {
     const addItemToCart = (product, quantity = 1) => {
-      const isValidProduct =
-        product && product._id && !isNaN(product.price) && !isNaN(product.btu);
-      if (!isValidProduct) {
+      if (!product || !product.price || isNaN(product.btu)) {
         console.error("Invalid product data:", product);
         return;
       }
@@ -356,30 +348,21 @@ function BtuCalculator() {
     Object.values(productCount).forEach(({ product, quantity }) => {
       addItemToCart(product, quantity);
     });
+
     const condenserProducts = products.filter(
-      (product) => product.category === "Outdoor condenser"
+      (p) => p.category === "Outdoor condenser"
     );
-    const selectedCondenser = condenserProducts.length > 0 ? condenserProducts[0] : null;
+    condenserProducts.forEach((condenser) => addItemToCart(condenser, 1));
 
-    const totalBTU = products.reduce((total, product) => {
-      if (product && !isNaN(product.btu)) {
-        return total + product.btu;
-      }
-      return total;
-    }, 0);
-
-    if (totalBTU >= 20000 && selectedCondenser) {
-      const outdoorCondensers = getOutdoorCondensers();
-      outdoorCondensers.forEach((condenser) => addItemToCart(condenser, 1));
-    }
-
-    console.log("Final cart items:", cartItems);
     navigate("/cart");
   };
 
   useEffect(() => {
-    console.log(products); 
-  }, [products]);
+    const savedCart = JSON.parse(localStorage.getItem("cartItems"));
+    if (savedCart && savedCart.length > 0) {
+      ctxDispatch({ type: "CART_RESTORE", payload: savedCart });
+    }
+  }, [ctxDispatch]);
 
   const handleClear = () => {
     setRooms([{ name: "Bedroom 1", size: "", btu: 0 }]);
@@ -847,7 +830,6 @@ function BtuCalculator() {
                 const condenserProducts = products.filter(
                   (product) => product.category === "Outdoor condenser"
                 );
-                console.log(condenserProducts);
                 if (totalBTU >= 20000 && condenserProducts.length > 0) {
                   const product = condenserProducts[0];
 
@@ -879,7 +861,7 @@ function BtuCalculator() {
                   );
                 }
 
-                return null; 
+                return null;
               })()}
 
               <tr>

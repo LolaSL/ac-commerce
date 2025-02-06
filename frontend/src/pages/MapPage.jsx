@@ -28,7 +28,7 @@ export default function MapPage() {
 
   const getUserCurrentLocation = () => {
     if (!navigator.geolocation) {
-      alert('Geolocation os not supported by this browser');
+      alert('Geolocation is not supported by this browser');
     } else {
       navigator.geolocation.getCurrentPosition((position) => {
         setCenter({
@@ -42,24 +42,28 @@ export default function MapPage() {
       });
     }
   };
+
   useEffect(() => {
-    const fetch = async () => {
-      const { data } = await axios('/api/keys/google', {
-        headers: { Authorization: `BEARER ${userInfo.token}` },
-      });
-      setGoogleApiKey(data.key);
-      getUserCurrentLocation();
+    const fetchGoogleApiKey = async () => {
+      try {
+        const { data } = await axios('/api/keys/google', {
+          headers: { Authorization: `BEARER ${userInfo.token}` },
+        });
+        setGoogleApiKey(data.key);
+        getUserCurrentLocation();
+      } catch (error) {
+        console.error('Failed to fetch Google API key:', error);
+      }
     };
 
-    fetch();
-    ctxDispatch({
-      type: 'SET_FULLBOX_ON',
-    });
+    fetchGoogleApiKey();
+    ctxDispatch({ type: 'SET_FULLBOX_ON' });
   }, [ctxDispatch, userInfo.token]);
 
   const onLoad = (map) => {
     mapRef.current = map;
   };
+
   const onIdle = () => {
     setLocation({
       lat: mapRef.current.center.lat(),
@@ -70,6 +74,7 @@ export default function MapPage() {
   const onLoadPlaces = (place) => {
     placeRef.current = place;
   };
+
   const onPlacesChanged = () => {
     const place = placeRef.current.getPlaces()[0].geometry.location;
     setCenter({ lat: place.lat(), lng: place.lng() });
@@ -93,14 +98,15 @@ export default function MapPage() {
         googleAddressId: places[0].id,
       },
     });
-    toast.success('location selected successfully.');
+    toast.success('Location selected successfully.');
     navigate('/shipping');
   };
+
   return (
-    <div className="full-box">
+    <div className="full-box" style={{ height: '100vh' }}>
       <LoadScript libraries={libs} googleMapsApiKey={googleApiKey}>
         <GoogleMap
-          id="smaple-map"
+          id="sample-map"
           mapContainerStyle={{ height: '100%', width: '100%' }}
           center={center}
           zoom={15}
@@ -112,13 +118,13 @@ export default function MapPage() {
             onPlacesChanged={onPlacesChanged}
           >
             <div className="map-input-box">
-              <input type="text" placeholder="Enter your address"></input>
+              <input type="text" placeholder="Enter your address" />
               <Button className="btn btn-secondary" type="button" onClick={onConfirm}>
                 Confirm
               </Button>
             </div>
           </StandaloneSearchBox>
-          <Marker position={location} onLoad={onMarkerLoad}></Marker>
+          <Marker position={location} onLoad={onMarkerLoad} />
         </GoogleMap>
       </LoadScript>
     </div>

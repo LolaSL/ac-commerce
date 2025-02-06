@@ -68,28 +68,23 @@ export default function OrderListPage() {
         let valueA = a[sortColumn];
         let valueB = b[sortColumn];
 
-        // Handle undefined or null values
         if (valueA == null) return 1;
         if (valueB == null) return -1;
 
-        // Handle Date columns
         if (sortColumn === "date" || sortColumn === "paid" || sortColumn === "delivered") {
           valueA = new Date(valueA);
           valueB = new Date(valueB);
         }
 
-        // Handle monetary values
         if (sortColumn === "total" || sortColumn === "paid") {
           valueA = parseFloat(valueA.replace(/[^0-9.-]+/g, ""));
           valueB = parseFloat(valueB.replace(/[^0-9.-]+/g, ""));
         }
 
-        // Handle numeric values
         if (typeof valueA === "number" && typeof valueB === "number") {
           return sortOrder === "asc" ? valueA - valueB : valueB - valueA;
         }
 
-        // Handle string values
         if (typeof valueA === "string" && typeof valueB === "string") {
           return sortOrder === "asc"
             ? valueA.localeCompare(valueB)

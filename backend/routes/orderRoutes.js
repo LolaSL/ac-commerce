@@ -23,6 +23,49 @@ orderRouter.get(
   })
 );
 
+// orderRouter.post(
+//   '/',
+//   isAuth,
+//   expressAsyncHandler(async (req, res) => {
+//     // The frontend is already passing the discounted price (discountedPrice)
+//     const orderItems = req.body.orderItems.map((item) => {
+//       // Ensure we use the already discounted price (discountedPrice)
+//       const discountedPrice = item.discountedPrice || (item.discount > 0
+//         ? item.price * (1 - item.discount / 100)
+//         : item.price);
+//       return { ...item, product: item._id, price: discountedPrice };
+//     });
+
+//     const itemsPrice = parseFloat(
+//       orderItems.reduce((acc, item) => acc + item.quantity * item.price, 0).toFixed(2)
+//     );
+
+//     const shippingPrice = parseFloat((itemsPrice > 100 ? 0 : 10).toFixed(2));
+
+//     const taxPrice = parseFloat((0.15 * itemsPrice).toFixed(2));
+
+//     const totalPrice = parseFloat((itemsPrice + shippingPrice + taxPrice).toFixed(2));
+
+//     // Create the order with correct prices
+//     const newOrder = new Order({
+//       orderItems,
+//       shippingAddress: req.body.shippingAddress,
+//       paymentMethod: req.body.paymentMethod,
+//       paymentResult: req.body.paymentResult,
+//       itemsPrice,
+//       shippingPrice,
+//       taxPrice,
+//       totalPrice,
+//       user: req.user._id,
+//     });
+
+//     console.log({ itemsPrice, shippingPrice, taxPrice, totalPrice });
+
+//     const order = await newOrder.save();
+//     res.status(201).send({ message: 'New Order Created', order });
+//   })
+// );
+
 orderRouter.post(
   '/',
   isAuth,
@@ -49,6 +92,7 @@ orderRouter.post(
     }
   })
 );
+
 
 
 orderRouter.get(
@@ -278,7 +322,7 @@ orderRouter.delete(
   expressAsyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id);
     if (order) {
-      await order.remove();
+      await order.deleteOne();
       res.send({ message: 'Order Deleted' });
     } else {
       res.status(404).send({ message: 'Order Not Found' });

@@ -31,7 +31,7 @@ const Projects = () => {
     const fetchProjects = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
-        const token = serviceProviderInfo?.token; // Extract the token from serviceProviderInfo
+        const token = serviceProviderInfo?.token; 
 
         if (!token) {
           throw new Error("Not authenticated, please log in");

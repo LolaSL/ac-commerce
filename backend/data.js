@@ -409,7 +409,7 @@ const data = {
       numReviews: 30,
       description: "The LSU303HLV3 is a single zone mini split outdoor condenser capable of supplying ductless heating and cooling to any room in your home. With inverter technology and quiet operation this well-rounded mini split outdoor condenser is an easy choice for any system. This product requires a compatible indoor unit for functionality.",
       features: "Energy Saving",
-      btu: 36000,
+      btu: 40000,
       areaCoverage: 60,
       energyEfficiency: 13,
       dimension: {

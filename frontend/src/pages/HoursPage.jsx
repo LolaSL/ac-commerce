@@ -42,7 +42,6 @@ const HoursPage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("API Response:", data);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (error) {
         dispatch({ type: "FETCH_FAIL", payload: getError(error) });

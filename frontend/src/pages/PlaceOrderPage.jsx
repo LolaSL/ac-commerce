@@ -1,26 +1,26 @@
-import Axios from 'axios';
-import React, { useContext, useEffect, useReducer } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { Link, useNavigate } from 'react-router-dom';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import ListGroup from 'react-bootstrap/ListGroup';
-import { toast } from 'react-toastify';
-import { getError } from '../utils';
-import { Store } from '../Store';
-import CheckoutSteps from '../components/CheckoutSteps';
-import LoadingBox from '../components/LoadingBox';
+import Axios from "axios";
+import React, { useContext, useEffect, useReducer } from "react";
+import { Helmet } from "react-helmet-async";
+import { Link, useNavigate } from "react-router-dom";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import ListGroup from "react-bootstrap/ListGroup";
+import { toast } from "react-toastify";
+import { getError } from "../utils";
+import { Store } from "../Store";
+import CheckoutSteps from "../components/CheckoutSteps";
+import LoadingBox from "../components/LoadingBox";
 import Image from "react-bootstrap/Image";
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'CREATE_REQUEST':
+    case "CREATE_REQUEST":
       return { ...state, loading: true };
-    case 'CREATE_SUCCESS':
+    case "CREATE_SUCCESS":
       return { ...state, loading: false };
-    case 'CREATE_FAIL':
+    case "CREATE_FAIL":
       return { ...state, loading: false };
     default:
       return state;
@@ -39,7 +39,9 @@ export default function PlaceOrderPage() {
 
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
   cart.itemsPrice = round2(
-    cart.cartItems.reduce((a, c) => a + c.quantity * (c.price * (1 - c.discount / 100)), 0)
+    cart.cartItems.reduce((a, c) => {
+      return a + c.quantity * (c.price * (1 - c.discount / 100));
+    }, 0)
   );
   cart.shippingPrice = cart.itemsPrice > 100 ? round2(0) : round2(10);
   cart.taxPrice = round2(0.15 * cart.itemsPrice);
@@ -47,10 +49,10 @@ export default function PlaceOrderPage() {
 
   const placeOrderHandler = async () => {
     try {
-      dispatch({ type: 'CREATE_REQUEST' });
+      dispatch({ type: "CREATE_REQUEST" });
 
       const { data } = await Axios.post(
-        '/api/orders',
+        "/api/orders",
         {
           orderItems: cart.cartItems,
           shippingAddress: cart.shippingAddress,
@@ -66,19 +68,19 @@ export default function PlaceOrderPage() {
           },
         }
       );
-      ctxDispatch({ type: 'CART_CLEAR' });
-      dispatch({ type: 'CREATE_SUCCESS' });
-      localStorage.removeItem('cartItems');
+      ctxDispatch({ type: "CART_CLEAR" });
+      dispatch({ type: "CREATE_SUCCESS" });
+      localStorage.removeItem("cartItems");
       navigate(`/order/${data.order._id}`);
     } catch (err) {
-      dispatch({ type: 'CREATE_FAIL' });
+      dispatch({ type: "CREATE_FAIL" });
       toast.error(getError(err));
     }
   };
 
   useEffect(() => {
     if (!cart.paymentMethod) {
-      navigate('/payment');
+      navigate("/payment");
     }
   }, [cart, navigate]);
 
@@ -100,7 +102,9 @@ export default function PlaceOrderPage() {
                 {cart.shippingAddress.city}, {cart.shippingAddress.postalCode},
                 {cart.shippingAddress.country}
               </Card.Text>
-              <Link to="/shipping" className="order-link">Edit</Link>
+              <Link to="/shipping" className="order-link">
+                Edit
+              </Link>
             </Card.Body>
           </Card>
 
@@ -110,7 +114,9 @@ export default function PlaceOrderPage() {
               <Card.Text>
                 <strong>Method:</strong> {cart.paymentMethod}
               </Card.Text>
-              <Link to="/payment" className="order-link">Edit</Link>
+              <Link to="/payment" className="order-link">
+                Edit
+              </Link>
             </Card.Body>
           </Card>
 
@@ -121,14 +127,18 @@ export default function PlaceOrderPage() {
                 {cart.cartItems.map((item, index) => (
                   <ListGroup.Item key={index}>
                     <Row className="align-items-center">
-                    <Link to={`/product/${item.slug}`} className="order-link mb-2">{item.name}</Link>
+                      <Link
+                        to={`/product/${item.slug}`}
+                        className="order-link mb-2"
+                      >
+                        {item.name}
+                      </Link>
                       <Col md={6}>
                         <Image
                           src={item.image}
                           alt={item.name}
                           className="img-fluid rounded img-thumbnail"
-                        ></Image>{' '}
-                      
+                        ></Image>{" "}
                       </Col>
                       <Col md={3}>
                         <span>{item.quantity}</span>
@@ -137,8 +147,12 @@ export default function PlaceOrderPage() {
                         <div>
                           ${item.price.toFixed(2)}
                           {item.discount > 0 && (
-                            <div style={{ color: 'green' }}>
-                              (${(item.price * (1 - item.discount / 100)).toFixed(2)} after {item.discount}% off)
+                            <div style={{ color: "green" }}>
+                              ($
+                              {(item.price * (1 - item.discount / 100)).toFixed(
+                                2
+                              )}{" "}
+                              after {item.discount}% off)
                             </div>
                           )}
                         </div>
@@ -147,7 +161,9 @@ export default function PlaceOrderPage() {
                   </ListGroup.Item>
                 ))}
               </ListGroup>
-              <Link to="/cart"  className="order-link mb-2">Edit</Link>
+              <Link to="/cart" className="order-link mb-2">
+                Edit
+              </Link>
             </Card.Body>
           </Card>
         </Col>

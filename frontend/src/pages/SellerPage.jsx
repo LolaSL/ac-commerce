@@ -38,13 +38,11 @@ const reducer = (state, action) => {
 };
 
 export default function SellerPage() {
-  const { id } = useParams();
-  console.log("Editing seller with ID:", id);
 
+  const { id } = useParams();
   const reviewsRef = useRef();
   const { state } = useContext(Store);
   const { userInfo } = state;
-
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
 

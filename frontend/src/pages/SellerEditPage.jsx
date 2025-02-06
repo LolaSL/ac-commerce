@@ -50,7 +50,6 @@ export default function SellerEditPage() {
       try {
         dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axios.get(`/api/sellers/${id}`);
-        console.log("Fetched seller data:", data);
         setName(data.name);
         setBrand(data.brand);
         setInfo(data.info);

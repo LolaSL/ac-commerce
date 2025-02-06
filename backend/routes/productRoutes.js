@@ -234,7 +234,7 @@ productRouter.get(
             }
             : { discount: { $gte: Number(discount) } }
         : {};
-
+    
     const sortOrder =
       order === 'brand'
         ? { brand: 1 }

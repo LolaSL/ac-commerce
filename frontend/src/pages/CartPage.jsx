@@ -18,7 +18,7 @@ export default function CartPage() {
   const {
     cart: { cartItems },
   } = state;
-
+  console.log(cartItems)
   const updateCartHandler = async (item, quantity) => {
     const { data } = await axios.get(`/api/products/${item._id}`);
     if (data.countInStock < quantity) {

@@ -1282,15 +1282,6 @@ hr {
   background-color: #0056b3;
 }
 
-/* .btn-sm {
-  background-color: #666699;
-  align-items: center;
-  color: white;
-  border: none;
-  cursor: pointer;
-  margin-bottom: 30px;
-} */
-
 .btn-sm:hover {
   background-color: rgb(236, 150, 45);
 }

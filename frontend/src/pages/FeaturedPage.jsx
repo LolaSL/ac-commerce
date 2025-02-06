@@ -34,9 +34,7 @@ const HomePage = () => {
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
-        const { data } = await axios.get("/api/products");
-        console.log("Fetched Data:", data); 
-        
+        const { data } = await axios.get("/api/products");      
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         console.error("Error fetching products:", err.message);

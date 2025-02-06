@@ -49,16 +49,6 @@ const ContactPage = () => {
       setLoading(false);
     }
   };
-  console.log({
-    fullName,
-    email,
-    mobilePhone,
-    country,
-    subject,
-    message,
-    serviceType,
-    equipmentAge,
-  });
 
   return (
     <Container>

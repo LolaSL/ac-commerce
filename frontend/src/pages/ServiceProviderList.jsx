@@ -51,8 +51,6 @@ export default function ServiceProviderList() {
   const { token } = userInfo; 
 
   
-  console.log("serviceProviderInfo:", serviceProviderInfo);
-  
   useEffect(() => {
     const config = {
       headers: {
