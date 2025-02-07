@@ -98,7 +98,7 @@ const data = {
       description: "10000 BTU Mini Split Air Conditioner, Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
       features: "Remote Control",
       btu: 10000,
-      areaCoverage: 20,
+      areaCoverage: 25,
       energyEfficiency: 12,
       dimension: {
         width: 89,
@@ -137,7 +137,7 @@ const data = {
       description: "12000 BTU Mini Split Air Conditioner, Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
       features: "Remote Control",
       btu: 12000,
-      areaCoverage: 25,
+      areaCoverage: 30,
       energyEfficiency: 12,
       dimension: {
         width: 89,
@@ -176,7 +176,7 @@ const data = {
       description: "16000 BTU Mini Split Air Conditioner, Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
       features: "Remote Control",
       btu: 16000,
-      areaCoverage: 25,
+      areaCoverage: 42,
       energyEfficiency: 12,
       dimension: {
         width: 89,
@@ -215,7 +215,7 @@ const data = {
       description: "18000 BTU Mini Split Air Conditioner, Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
       features: "Remote Control",
       btu: 18000,
-      areaCoverage: 36,
+      areaCoverage: 45,
       energyEfficiency: 12,
       dimension: {
         width: 89,
@@ -254,7 +254,7 @@ const data = {
       description: " This 20000 BTU  Mini Split AC Wind-Free TM Cooling 5460-22860 BTU. Heating 4435-27300 BTU. Sound Levels insite 58 db outside 65 db. Inverter, Wi-Fi, Wind-Free™ Cooling, AI Comfort, Motion Sensor",
       features: "Smart Things",
       btu: 20000,
-      areaCoverage: 40,
+      areaCoverage: 48,
       energyEfficiency: 15,
       dimension: {
         width: 82,
@@ -293,7 +293,7 @@ const data = {
       description: "24000 BTU Mini Split Air Conditioner, Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
       features: "Remote Control",
       btu: 24000,
-      areaCoverage: 50,
+      areaCoverage: 55,
       energyEfficiency: 12,
       dimension: {
         width: 89,
@@ -332,7 +332,7 @@ const data = {
       description: "30000 BTU Mini Split Air Conditioner, Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
       features: "Remote Control",
       btu: 30000,
-      areaCoverage: 25,
+      areaCoverage: 75,
       energyEfficiency: 12,
       dimension: {
         width: 89,
@@ -371,7 +371,7 @@ const data = {
       description: "36000 BTU Mini Split Air Conditioner, Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
       features: "Remote Control",
       btu: 36000,
-      areaCoverage: 25,
+      areaCoverage: 85,
       energyEfficiency: 12,
       dimension: {
         width: 89,
@@ -397,6 +397,45 @@ const data = {
       ],
     },
     {
+      name: "40000 BTU Mini Split AC",
+      slug: "40000-btu-Mini-Split-air-conditioner",
+      category: "Mini Split AC",
+      image: "/images/p12.jpg",
+      price: 1199,
+      discount: 0,
+      countInStock: 4,
+      brand: "LG",
+      rating: 4.5,
+      numReviews: 139,
+      description: "41000 BTU Mini Split Air Conditioner. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
+      features: "Remote Control",
+      btu: 40000,
+      areaCoverage: 92,
+      energyEfficiency: 12,
+      dimension: {
+        width: 89,
+        height: 21.6,
+        depth: 28,
+      },
+      documents: [
+        {
+          url: "https://www.lg.com/content/dam/channel/wcms/au/support/products/documents/S24AWN.pdf",
+          type: "PDF",
+          description: "User Manual for LG 40000 BTU Mini Split AC",
+        },
+        {
+          url: "https://www.lg.com/content/dam/channel/wcms/au/support/products/documents/Split_Systems_Brochure.pdf",
+          type: "PDF",
+          description: "Technical Specifications for LG 40000 BTU Mini Split AC",
+        },
+        {
+          url: "https://img.yumpu.com/10373739/1/500x640/installation-manual-air-conditioner-lg-duct-free-system.jpg",
+          type: "Image",
+          description: "Installation Guide Image",
+        },
+      ],
+    },
+    {
       name: "Mini Split Outdoor Condenser",
       slug: "mini-split-outdoor-condensing-unit",
       category: "Outdoor condenser",
@@ -406,11 +445,11 @@ const data = {
       countInStock: 3,
       brand: "LG",
       rating: 3,
-      numReviews: 30,
+      numReviews: 18,
       description: "The LSU303HLV3 is a single zone mini split outdoor condenser capable of supplying ductless heating and cooling to any room in your home. With inverter technology and quiet operation this well-rounded mini split outdoor condenser is an easy choice for any system. This product requires a compatible indoor unit for functionality.",
       features: "Energy Saving",
       btu: 46000,
-      areaCoverage: 60,
+      areaCoverage: 115,
       energyEfficiency: 13,
       dimension: {
         width: 83.19,

@@ -58,12 +58,6 @@ function BtuCalculator() {
     FoarmCladding: false,
   });
 
-  const [typeOfRoof, setTypeOfRoof] = useState({
-    MetalFlatRoof: false,
-    MetalPitchRoof: false,
-    TileRoof: false,
-  });
-
   const [OutdoorUnitLocation, setOutdoorUnitLocation] = useState({
     FlatRoof: false,
     PitchedRoof: false,
@@ -145,14 +139,6 @@ function BtuCalculator() {
     }));
   };
 
-  const handleRoofChange = (e) => {
-    const { name, checked } = e.target;
-    setTypeOfRoof((prevState) => ({
-      ...prevState,
-      [name]: checked,
-    }));
-  };
-
   const handleOutdoorUnitLocationChange = (e) => {
     const { name, checked } = e.target;
     setOutdoorUnitLocation((prevState) => ({
@@ -219,16 +205,6 @@ function BtuCalculator() {
     }
     if (typeOfWall.FoarmCladding) {
       baseBTU *= 0.8;
-    }
-
-    if (typeOfRoof.MetalFlatRoof) {
-      baseBTU *= 1.3;
-    }
-    if (typeOfRoof.MetalPitchRoof) {
-      baseBTU *= 1.2;
-    }
-    if (typeOfRoof.TileRoof) {
-      baseBTU *= 0.9;
     }
 
     Object.keys(OutdoorUnitLocation).forEach((location) => {
@@ -662,29 +638,6 @@ function BtuCalculator() {
             name="FoarmCladding"
             checked={typeOfWall.FoarmCladding}
             onChange={handleWallChange}
-          />
-          <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
-          <h3 className="mb-3 mt-3">Type of Roof</h3>
-          <Form.Check
-            type="checkbox"
-            label="Metal Flat Roof"
-            name="MetalFlatRoof"
-            checked={typeOfRoof.MetalFlatRoof}
-            onChange={handleRoofChange}
-          />
-          <Form.Check
-            type="checkbox"
-            label="Metal Pitch Roof"
-            name="MetalPitchRoof"
-            checked={typeOfRoof.MetalPitchRoof}
-            onChange={handleRoofChange}
-          />
-          <Form.Check
-            type="checkbox"
-            label="Tile Roof"
-            name="TileRoof"
-            checked={typeOfRoof.TileRoof}
-            onChange={handleRoofChange}
           />
           <hr className="ms-2 mt-1 mb-5" style={{ width: "66%" }}></hr>
           <h3 className="mb-3 mt-3 ">Insulation Condition</h3>
