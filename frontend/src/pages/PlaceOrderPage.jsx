@@ -38,15 +38,26 @@ export default function PlaceOrderPage() {
   const { cart, userInfo } = state;
 
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
-  cart.itemsPrice = round2(
-    cart.cartItems.reduce((a, c) => {
-      return a + c.quantity * (c.price * (1 - c.discount / 100));
-    }, 0)
-  );
-  cart.shippingPrice = cart.itemsPrice > 100 ? round2(0) : round2(10);
-  cart.taxPrice = round2(0.15 * cart.itemsPrice);
-  cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
 
+    cart.itemsPrice = cart.cartItems?.length
+    ? round2(
+        cart.cartItems.reduce((a, c) => a + c.quantity * (c.price * (1 - (c.discount || 0) / 100)), 0)
+      )
+    : 0;
+  
+  cart.shippingPrice = cart.itemsPrice > 0 ? round2(10) : 0;
+  cart.taxPrice = cart.itemsPrice > 0 ? round2(0.15 * cart.itemsPrice) : 0;
+  cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
+  
+  console.log("Cart Calculations:", { 
+    itemsPrice: cart.itemsPrice, 
+    shippingPrice: cart.shippingPrice, 
+    taxPrice: cart.taxPrice, 
+    totalPrice: cart.totalPrice 
+  });
+  
+
+  
   const placeOrderHandler = async () => {
     try {
       dispatch({ type: "CREATE_REQUEST" });
@@ -79,10 +90,19 @@ export default function PlaceOrderPage() {
   };
 
   useEffect(() => {
+    if (!cart.cartItems || cart.cartItems.length === 0) {
+      toast.error("Cart is empty or calculation error!");
+      return;
+    }
+    if (cart.itemsPrice === 0) {
+      toast.error("Cart calculation issue!");
+      return;
+    }
     if (!cart.paymentMethod) {
       navigate("/payment");
     }
-  }, [cart, navigate]);
+  }, [cart.cartItems, cart.itemsPrice, cart.paymentMethod, navigate]);
+  
 
   return (
     <div>

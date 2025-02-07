@@ -297,7 +297,7 @@ function BtuCalculator() {
         category: "Outdoor condenser",
         image: "/images/p5.jpg",
         price: 1296.75,
-        btu: 40000,
+        btu: 46000,
       },
     ];
   };

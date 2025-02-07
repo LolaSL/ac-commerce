@@ -23,75 +23,44 @@ orderRouter.get(
   })
 );
 
-// orderRouter.post(
-//   '/',
-//   isAuth,
-//   expressAsyncHandler(async (req, res) => {
-//     // The frontend is already passing the discounted price (discountedPrice)
-//     const orderItems = req.body.orderItems.map((item) => {
-//       // Ensure we use the already discounted price (discountedPrice)
-//       const discountedPrice = item.discountedPrice || (item.discount > 0
-//         ? item.price * (1 - item.discount / 100)
-//         : item.price);
-//       return { ...item, product: item._id, price: discountedPrice };
-//     });
-
-//     const itemsPrice = parseFloat(
-//       orderItems.reduce((acc, item) => acc + item.quantity * item.price, 0).toFixed(2)
-//     );
-
-//     const shippingPrice = parseFloat((itemsPrice > 100 ? 0 : 10).toFixed(2));
-
-//     const taxPrice = parseFloat((0.15 * itemsPrice).toFixed(2));
-
-//     const totalPrice = parseFloat((itemsPrice + shippingPrice + taxPrice).toFixed(2));
-
-//     // Create the order with correct prices
-//     const newOrder = new Order({
-//       orderItems,
-//       shippingAddress: req.body.shippingAddress,
-//       paymentMethod: req.body.paymentMethod,
-//       paymentResult: req.body.paymentResult,
-//       itemsPrice,
-//       shippingPrice,
-//       taxPrice,
-//       totalPrice,
-//       user: req.user._id,
-//     });
-
-//     console.log({ itemsPrice, shippingPrice, taxPrice, totalPrice });
-
-//     const order = await newOrder.save();
-//     res.status(201).send({ message: 'New Order Created', order });
-//   })
-// );
-
 orderRouter.post(
   '/',
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    console.log('Request Body:', req.body); 
+
+    const orderItems = req.body.orderItems.map((item) => {
+
+      const discountedPrice = item.discountedPrice || (item.discount > 0
+        ? item.price * (1 - item.discount / 100)
+        : item.price);
+      return { ...item, product: item._id, price: discountedPrice };
+    });
+
+    const itemsPrice = Number.isNaN(parseFloat(req.body.itemsPrice)) ? 0 : parseFloat(req.body.itemsPrice);
+    const shippingPrice = Number.isNaN(parseFloat(req.body.shippingPrice)) ? 10 : parseFloat(req.body.shippingPrice);
+    const taxPrice = Number.isNaN(parseFloat(req.body.taxPrice)) ? 0 : parseFloat(req.body.taxPrice);
+    const totalPrice = Number.isNaN(parseFloat(req.body.totalPrice)) ? itemsPrice + shippingPrice + taxPrice : parseFloat(req.body.totalPrice);
+
 
     const newOrder = new Order({
-      orderItems: req.body.orderItems.map((x) => ({ ...x, product: x._id })),
+      orderItems,
       shippingAddress: req.body.shippingAddress,
       paymentMethod: req.body.paymentMethod,
-      itemsPrice: req.body.itemsPrice,
-      shippingPrice: req.body.shippingPrice,
-      taxPrice: req.body.taxPrice,
-      totalPrice: req.body.totalPrice,
+      paymentResult: req.body.paymentResult,
+      itemsPrice,
+      shippingPrice,
+      taxPrice,
+      totalPrice,
       user: req.user._id,
     });
 
-    try {
-      const order = await newOrder.save();
-      res.status(201).send({ message: 'New Order Created', order });
-    } catch (error) {
-      console.error('Order Creation Error:', error);
-      res.status(400).send({ message: 'Error creating order', error });
-    }
+    console.log({ itemsPrice, shippingPrice, taxPrice, totalPrice });
+
+    const order = await newOrder.save();
+    res.status(201).send({ message: 'New Order Created', order });
   })
 );
+
 
 
 
