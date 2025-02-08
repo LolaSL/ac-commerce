@@ -18,10 +18,20 @@ orderRouter.get(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const orders = await Order.find().populate('user', 'name');
-    res.send(orders);
+    const pageSize = 15; 
+    const page = Number(req.query.page) || 1; 
+    const orders = await Order.find()
+      .populate('user', 'name')
+      .skip(pageSize * (page - 1)) 
+      .limit(pageSize); 
+    const countOrders = await Order.countDocuments(); 
+    const pages = Math.ceil(countOrders / pageSize); 
+
+    res.send({ orders, page, pages });
   })
 );
+
+
 
 orderRouter.post(
   '/',
@@ -60,8 +70,6 @@ orderRouter.post(
     res.status(201).send({ message: 'New Order Created', order });
   })
 );
-
-
 
 
 orderRouter.get(

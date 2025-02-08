@@ -11,7 +11,7 @@ import contactRouter from './routes/contactRoutes.js'
 import serviceProviderRouter from './routes/serviceProviderRoutes.js'
 import blogRouter from './routes/blogRoutes.js'
 import notificationRouter from './routes/notificationRoutes.js';
-
+import path from "path";
 import cors from 'cors';
 
 dotenv.config();
@@ -40,8 +40,8 @@ app.get("/api/keys/google", (req, res) => {
 });
 
 app.use('/api/seed', seedRouter);
-app.use("/api/upload", uploadRouter);
-app.use("/files", express.static("files"));
+const __dirname = path.resolve();
+app.use("/api/upload", uploadRouter, express.static(path.join(__dirname, "/uploads")));
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);

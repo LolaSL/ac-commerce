@@ -16,11 +16,10 @@ import { Store } from "../Store";
 import { useNavigate } from "react-router-dom";
 
 function BtuCalculator() {
-
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  
+
   const navigate = useNavigate();
-  
+
   const cartItems = state?.cart?.cartItems || [];
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
@@ -30,7 +29,7 @@ function BtuCalculator() {
   const [rooms, setRooms] = useState([{ name: "Bedroom 1", size: "", btu: 0 }]);
   const [ceilingHeight, setCeilingHeight] = useState("2.5");
   const [numPeople, setNumPeople] = useState(2);
-  
+
   const [insulation, setInsulation] = useState({
     Average: false,
     Good: false,
@@ -256,9 +255,14 @@ function BtuCalculator() {
     setBtuResults(results);
     setError("");
 
-    if (totalBTU >= 20000) {
-      const outdoorCondensers = getOutdoorCondensers();
-      fetchedProducts.push(...outdoorCondensers);
+    const outdoorCondensers = getOutdoorCondensers();
+
+    const relevantCondenser = outdoorCondensers.find(
+      (condenser) => condenser.btu >= totalBTU * 0.8
+    );
+
+    if (relevantCondenser) {
+      fetchedProducts.push(relevantCondenser);
     }
 
     setProducts(fetchedProducts.filter((p) => p !== null));
@@ -267,13 +271,31 @@ function BtuCalculator() {
   const getOutdoorCondensers = () => {
     return [
       {
-        _id: "679697c70b59f509788f80d7",
-        name: "Mini Split Outdoor Condenser",
-        slug: "mini-split-outdoor-condensing-unit",
+        _id: "67a72d32e7880bc0ed7acb48",
+        name: "48000 BTU CAC, Duct, Outdoor Condenser",
+        slug: "48000-cac-condensing-unit",
         category: "Outdoor condenser",
-        image: "/images/p5.jpg",
+        image: "/images/p22.jpg",
         price: 1296.75,
-        btu: 46000,
+        btu: 48000,
+      },
+      {
+        _id: "67a72d32e7880bc0ed7acb4c",
+        name: "54000 BTU Multi-System Ductless Split Condense",
+        slug: "54000-mini-split-outdoor-condensing-unit",
+        category: "Outdoor condenser",
+        image: "/images/p21.jpg",
+        price: 3520,
+        btu: 54000,
+      },
+      {
+        _id: "67a72d32e7880bc0ed7acb50",
+        name: "60000 BTU Multi-System Ductless Split Condenser",
+        slug: "60000-mini-split-outdoor-condensing-unit",
+        category: "Outdoor condenser",
+        image: "/images/p21.jpg",
+        price: 6764,
+        btu: 60000,
       },
     ];
   };
@@ -775,17 +797,55 @@ function BtuCalculator() {
                   </td>
                 </tr>
               ))}
+
               {(() => {
                 const totalBTU = btuResults.reduce(
                   (total, btu) => total + btu,
                   0
                 );
-                const condenserProducts = products.filter(
-                  (product) => product.category === "Outdoor condenser"
-                );
-                if (totalBTU >= 20000 && condenserProducts.length > 0) {
-                  const product = condenserProducts[0];
+                console.log("Total BTU: ", totalBTU);
 
+                let fetchedProducts = [];
+
+                const outdoorCondensers = getOutdoorCondensers();
+
+                let relevantCondenser = outdoorCondensers.find(
+                  (condenser) => condenser.btu >= totalBTU * 0.8
+                );
+
+                if (!relevantCondenser) {
+                  relevantCondenser = outdoorCondensers.reduce(
+                    (closest, condenser) => {
+                      console.log(
+                        `Checking condenser with BTU: ${
+                          condenser.btu
+                        } against totalBTU * 0.8: ${totalBTU * 0.8}`
+                      );
+
+                      if (
+                        !closest ||
+                        Math.abs(condenser.btu - totalBTU * 0.8) <
+                          Math.abs(closest.btu - totalBTU * 0.8)
+                      ) {
+                        return condenser;
+                      }
+                      return closest;
+                    },
+                    null
+                  );
+                }
+
+                if (relevantCondenser) {
+                  console.log("Relevant Condenser: ", relevantCondenser);
+                  fetchedProducts.push(relevantCondenser);
+                } else {
+                  console.log(
+                    "No relevant condenser found for totalBTU: ",
+                    totalBTU
+                  );
+                }
+
+                if (relevantCondenser) {
                   return (
                     <tr key="condenser">
                       <td
@@ -795,10 +855,10 @@ function BtuCalculator() {
                         Outdoor Condenser
                       </td>
                       <td>
-                        <Link to={`/product/${product.slug}`}>
+                        <Link to={`/product/${relevantCondenser.slug}`}>
                           <Image
-                            src={product.image}
-                            alt={product.name}
+                            src={relevantCondenser.image}
+                            alt={relevantCondenser.name}
                             style={{
                               width: "50px",
                               height: "auto",
@@ -808,8 +868,8 @@ function BtuCalculator() {
                           />
                         </Link>
                       </td>
-                      <td>{product.name}</td>
-                      <td>{product.price.toFixed(2)}</td>
+                      <td>{relevantCondenser.name}</td>
+                      <td>{relevantCondenser.price.toFixed(2)}</td>
                     </tr>
                   );
                 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert, Image } from "react-bootstrap";
 import axios from "axios";
 import { Helmet } from "react-helmet-async";
@@ -49,6 +49,26 @@ const ContactPage = () => {
       setLoading(false);
     }
   };
+ 
+  useEffect(() => {
+    if (responseMessage) {
+      const timer = setTimeout(() => {
+        setResponseMessage(null); 
+      }, 3000); 
+
+      return () => clearTimeout(timer); 
+    }
+  }, [responseMessage]);
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null); 
+      }, 3000); 
+
+      return () => clearTimeout(timer); 
+    }
+  }, [error]);
 
   return (
     <Container>

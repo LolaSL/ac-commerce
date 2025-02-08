@@ -12,25 +12,25 @@ export default function Offers() {
       description: "Get up air conditioners on sale!",
       imageSrc: "/images/offer1.jpg",
       linkTo:
-        "/search?category=Mini%20Split%20AC&query=all&price=all&discount=21-40&rating=all&btu=all&brand=all&order=newest&page=1",
+        "/search?category=all&query=all&price=all&discount=31-40&rating=all&btu=all&brand=all&order=newest&page=1",
       linkText: "Shop Now",
-      criteria: (product) => product.discount >= 10 && product.discount <= 31,
+      criteria: (product) => (product.discount = 40),
     },
     {
       title: "Energy Saver Discount",
       description: "Save money and energy!",
       imageSrc: "/images/offer2.jpg",
       linkTo:
-        "/search?category=Mini%20Split%20AC&query=all&price=all&discount=50&rating=all&btu=all&brand=all&order=newest&page=1",
+        "/search?category=all&query=all&price=all&discount=50&rating=all&btu=all&brand=all&order=newest&page=1",
       linkText: "Learn More",
-      criteria: (product) => Number(product.discount) === 50, 
+      criteria: (product) => (product.discount = 50),
     },
     {
       title: "Combo Deals",
-      description: "Buy 2 AC units and get free installation.",
+      description: "Buy 2 units and get free installation.",
       imageSrc: "/images/offer3.jpg",
       linkTo:
-        "/search?category=Mini%20Split%20AC&query=all&price=all&discount=0&rating=all&btu=all&brand=all&order=newest&page=1",
+        "/search?category=all&query=all&price=all&discount=0&rating=all&btu=all&brand=all&order=newest&page=1",
       linkText: "Explore Deals",
       criteria: () => true,
     },
@@ -54,6 +54,7 @@ export default function Offers() {
 
   const filterOffers = () => {
     if (loading) return [];
+
     return offers.filter((offer) => {
       if (typeof offer.criteria === "function") {
         const matchingProducts = products.filter((product) =>
@@ -94,10 +95,10 @@ export default function Offers() {
                     as={Link}
                     to={
                       offer.linkText === "Shop Now"
-                        ? "/search?category=Mini%20Split%20AC&query=all&price=all&discount=21-40&rating=all&btu=all&brand=all&order=newest&page=1" 
+                        ? "/search?category=all&query=all&price=all&discount=31-40&rating=all&btu=all&brand=all&order=newest&page=1"
                         : offer.linkText === "Learn More"
-                        ? "/search?category=Mini%20Split%20AC&query=all&price=all&discount=50&rating=all&btu=all&brand=all&order=newest&page=1" 
-                        : "/search?category=Mini%20Split%20AC&query=all&price=all&discount=0&rating=all&btu=all&brand=all&order=newest&page=1" 
+                        ? "/search?category=all&query=all&price=all&discount=50&rating=all&btu=all&brand=all&order=newest&page=1"
+                        : "/search?category=all&query=all&price=all&discount=0&rating=all&btu=all&brand=all&order=newest&page=1"
                     }
                   >
                     {offer.linkText}

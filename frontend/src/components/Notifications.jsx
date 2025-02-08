@@ -119,9 +119,10 @@ export default function Notifications() {
       ) : !Array.isArray(notifications) || notifications.length === 0 ? (
         <MessageBox>No notifications to display.</MessageBox>
       ) : (
-        <ul>
+        <ul >
           {notifications.map((notification) => (
             <li
+             className="notification"
               key={notification._id}
               style={{
                 backgroundColor: notification.isRead ? "#e0e0e0" : "#fff",

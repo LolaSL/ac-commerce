@@ -17,6 +17,8 @@ import { Store } from "../Store";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { toast } from "react-toastify";
 import Image from "react-bootstrap/Image";
+import { FaFilePdf } from "react-icons/fa";
+import { FaFileImage } from "react-icons/fa";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -259,11 +261,20 @@ function ProductPage() {
             product.documents.map((doc, index) => (
               <li key={index}>
                 <p>
-                  <strong>{doc.description}</strong> (
+                  <strong>{doc.description} </strong>
                   <a href={doc.url} target="_blank" rel="noopener noreferrer">
-                    {doc.type}
+                    {doc.type === "PDF" ? (
+                      <>
+                        <FaFilePdf color="red" size="1.5em" />
+                      </>
+                    ) : doc.type === "Image" ? (
+                      <>
+                        <FaFileImage color="blue" size="1.5em" />
+                      </>
+                    ) : (
+                      doc.type
+                    )}
                   </a>
-                  )
                 </p>
               </li>
             ))

@@ -53,7 +53,8 @@ const discounts = [
   { name: "Any", value: "any" },
   { name: "No Discount", value: "0" },
   { name: "10% to 20%", value: "10-20" },
-  { name: "21% to 40%", value: "21-40" },
+  { name: "21% to 30%", value: "21-30" },
+  { name: "31% to 40%", value: "31-40" },
   { name: "50%", value: "50" },
 ];
 

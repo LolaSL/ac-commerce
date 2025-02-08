@@ -3,12 +3,12 @@ import React, { useContext, useEffect, useReducer, useState } from "react";
 import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import { Helmet } from "react-helmet-async";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import { Store } from "../Store";
 import { getError } from "../utils";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -17,7 +17,7 @@ const reducer = (state, action) => {
     case "FETCH_SUCCESS":
       return {
         ...state,
-        orders: action.payload,
+        orders: action.payload.orders,
         page: action.payload.page,
         pages: action.payload.pages,
         loading: false,
@@ -56,7 +56,7 @@ export default function OrderListPage() {
   });
 
   const sp = new URLSearchParams(search);
-  const page = sp.get("page") || 1;
+  const currentPage = sp.get("page") || 1;
 
   const [sortedOrders, setSortedOrders] = useState([]);
   const [sortColumn, setSortColumn] = useState("");
@@ -70,8 +70,14 @@ export default function OrderListPage() {
 
         if (valueA == null) return 1;
         if (valueB == null) return -1;
-
-        if (sortColumn === "date" || sortColumn === "paid" || sortColumn === "delivered") {
+        if (valueA === undefined || valueB === undefined) {
+          return 0;
+        }
+        if (
+          sortColumn === "date" ||
+          sortColumn === "paid" ||
+          sortColumn === "delivered"
+        ) {
           valueA = new Date(valueA);
           valueB = new Date(valueB);
         }
@@ -102,7 +108,7 @@ export default function OrderListPage() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/orders`, {
+        const { data } = await axios.get(`/api/orders?page=${currentPage}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: "FETCH_SUCCESS", payload: data });
@@ -118,7 +124,7 @@ export default function OrderListPage() {
     } else {
       fetchData();
     }
-  }, [userInfo, successDelete]);
+  }, [userInfo, successDelete, currentPage]);
 
   const deleteHandler = async (order) => {
     if (window.confirm("Are you sure to delete?")) {
@@ -153,9 +159,9 @@ export default function OrderListPage() {
         <title>Orders</title>
       </Helmet>
       <h1>Orders</h1>
-      {loadingDelete && <LoadingBox></LoadingBox>}
+      {loadingDelete && <LoadingBox />}
       {loading ? (
-        <LoadingBox></LoadingBox>
+        <LoadingBox />
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
@@ -241,16 +247,48 @@ export default function OrderListPage() {
             </tbody>
           </table>
           <div>
-            {[...Array(pages).keys()].map((x) => (
-              <Link
-                className={x + 1 === Number(page) ? "btn text-bold" : "btn"}
-                key={x + 1}
-                to={`/admin/orders?page=${x + 1}`}
-              >
-                {x + 1}
-              </Link>
-            ))}
-          </div>{" "}
+            <nav>
+              <ul className="pagination">
+                <li
+                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                >
+                  <Link
+                    className="page-link"
+                    to={`/admin/orders?page=${Number(currentPage) - 1}`}
+                  >
+                    &lt;
+                  </Link>
+                </li>
+                {[...Array(pages).keys()].map((x) => (
+                  <li
+                    key={x + 1}
+                    className={`page-item ${
+                      x + 1 === Number(currentPage) ? "active" : ""
+                    }`}
+                  >
+                    <Link
+                      className="page-link"
+                      to={`/admin/orders?page=${x + 1}`}
+                    >
+                      {x + 1}
+                    </Link>
+                  </li>
+                ))}
+                <li
+                  className={`page-item ${
+                    currentPage === pages ? "disabled" : ""
+                  }`}
+                >
+                  <Link
+                    className="page-link"
+                    to={`/admin/orders?page=${Number(currentPage) + 1}`}
+                  >
+                    &gt;
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </>
       )}
     </div>

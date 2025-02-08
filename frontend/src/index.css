@@ -1598,6 +1598,14 @@ button.btn-sm {
   font-size: 0.8rem;
 }
 
+ul {
+  list-style-type: none; 
+  padding-left: 0; 
+}
+
+li.notification {
+  list-style-type: none; 
+}
 @media (max-width: 1200px) {
   h1 {
     font-size: 1.8rem;

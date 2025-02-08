@@ -234,7 +234,7 @@ productRouter.get(
             }
             : { discount: { $gte: Number(discount) } }
         : {};
-    
+
     const sortOrder =
       order === 'brand'
         ? { brand: 1 }
@@ -270,6 +270,7 @@ productRouter.get(
       ...brandFilter,
       ...discountFilter,
     });
+
 
     res.send({
       products,
@@ -309,7 +310,7 @@ productRouter.get('/slug/:slug', async (req, res) => {
   }
 });
 
-productRouter.get('/:id',  async (req, res) => {
+productRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -317,17 +318,17 @@ productRouter.get('/:id',  async (req, res) => {
   }
 
   try {
- 
+
     const product = await Product.findById(id);
 
     if (product) {
-      res.json(product); 
+      res.json(product);
     } else {
-      res.status(404).send({ message: 'Product not found' }); 
+      res.status(404).send({ message: 'Product not found' });
     }
   } catch (error) {
     console.error("Error fetching product details:", error);
-    res.status(500).send({ message: 'Server error, please try again later' }); 
+    res.status(500).send({ message: 'Server error, please try again later' });
   }
 });
 
