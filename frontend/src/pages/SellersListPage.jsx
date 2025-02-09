@@ -50,7 +50,7 @@ export default function SellersListPage() {
     {
       loading,
       error,
-      sellers,
+      sellers = [],
       pages,
       loadingCreate,
       loadingDelete,
@@ -60,12 +60,14 @@ export default function SellersListPage() {
   ] = useReducer(reducer, {
     loading: true,
     error: "",
+    sellers: [],
+    pages: 1,
   });
 
   const navigate = useNavigate();
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
-  const page = sp.get("page") || 1;
+  const currentPage = Number(sp.get("page")) || 1;
 
   const { state } = useContext(Store);
   const { userInfo } = state;
@@ -79,21 +81,25 @@ export default function SellersListPage() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/sellers/admin?page=${page}`, {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        });
+        const { data } = await axios.get(
+          `/api/sellers?page=${currentPage}`, 
+          {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          }
+        );
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
       }
     };
-
+  
     if (successDelete) {
       dispatch({ type: "DELETE_RESET" });
     } else {
       fetchData();
     }
-  }, [page, userInfo, successDelete]);
+  }, [currentPage, userInfo, successDelete]);
+  
 
   const createHandler = async (e) => {
     e.preventDefault();
@@ -197,22 +203,54 @@ export default function SellersListPage() {
             </tbody>
           </table>
           <div>
-            {[...Array(pages).keys()].map((x) => (
-              <Link
-                className={x + 1 === Number(page) ? "btn text-bold" : "btn"}
-                key={x + 1}
-                to={`/admin/sellers?page=${x + 1}`}
-              >
-                {x + 1}
-              </Link>
-            ))}
+            <nav>
+              <ul className="pagination">
+                <li
+                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                >
+                  <Link
+                    className="page-link"
+                    to={`/admin/sellers?page=${Number(currentPage) - 1}`}
+                  >
+                    &lt;
+                  </Link>
+                </li>
+                {[...Array(pages).keys()].map((x) => (
+                  <li
+                    key={x + 1}
+                    className={`page-item ${
+                      x + 1 === Number(currentPage) ? "active" : ""
+                    }`}
+                  >
+                    <Link
+                      className="page-link"
+                      to={`/admin/sellers?page=${x + 1}`}
+                    >
+                      {x + 1}
+                    </Link>
+                  </li>
+                ))}
+                <li
+                  className={`page-item ${
+                    currentPage === pages ? "disabled" : ""
+                  }`}
+                >
+                  <Link
+                    className="page-link"
+                    to={`/admin/sellers?page=${Number(currentPage) + 1}`}
+                  >
+                    &gt;
+                  </Link>
+                </li>
+              </ul>
+            </nav>
           </div>
         </>
       )}
 
       <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
-        <Modal.Header closeButton >
-          <Modal.Title >Create Seller</Modal.Title>
+        <Modal.Header closeButton>
+          <Modal.Title>Create Seller</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={createHandler}>

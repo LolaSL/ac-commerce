@@ -7,34 +7,29 @@ const sellerRouter = express.Router();
 
 sellerRouter.get(
   '/',
-  expressAsyncHandler(async (req, res) => {
-    const sellers = await Seller.find({});
-    res.send(sellers);
-  })
-);
-const PAGE_SIZE = 10;
-
-sellerRouter.get(
-  '/admin',
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const { query } = req;
-    const page = query.page || 1;
-    const pageSize = query.pageSize || PAGE_SIZE;
+    try {
+      const pageSize = 10;
+      const page = Number(req.query.page) || 1;
 
-    const sellers = await Seller.find()
-      .skip(pageSize * (page - 1))
-      .limit(pageSize);
-    const countSellers = await Seller.countDocuments();
-    res.send({
-     sellers,
-      countSellers,
-      page,
-      pages: Math.ceil(countSellers / pageSize),
-    });
+      const countSellers = await Seller.countDocuments();
+      const sellers = await Seller.find({})
+        .skip(pageSize * (page - 1))
+        .limit(pageSize);
+
+      res.send({
+        sellers,
+        page,
+        pages: Math.ceil(countSellers / pageSize),
+      });
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
   })
 );
+
 
 sellerRouter.get(
   '/:id',

@@ -73,7 +73,7 @@ export default function ProductListPage() {
   const navigate = useNavigate();
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
-  const page = sp.get("page") || 1;
+  const currentPage = sp.get("page") || 1;
 
   const { state } = useContext(Store);
   const { userInfo } = state;
@@ -115,7 +115,7 @@ export default function ProductListPage() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/products/admin?page=${page}`, {
+        const { data } = await axios.get(`/api/products/admin?page=${currentPage}`, {
          
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
@@ -130,7 +130,7 @@ export default function ProductListPage() {
     } else {
       fetchData();
     }
-  }, [page, userInfo, successDelete]);
+  }, [currentPage, userInfo, successDelete]);
 
   const createHandler = async () => {
     if (window.confirm("Are you sure to create?")) {
@@ -275,15 +275,47 @@ export default function ProductListPage() {
             </tbody>
           </table>
           <div>
-            {[...Array(pages).keys()].map((x) => (
-              <Link
-                className={x + 1 === Number(page) ? "btn text-bold" : "btn"}
-                key={x + 1}
-                to={`/admin/products?page=${x + 1}`}
-              >
-                {x + 1}
-              </Link>
-            ))}
+            <nav>
+              <ul className="pagination">
+                <li
+                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                >
+                  <Link
+                    className="page-link"
+                    to={`/admin/products?page=${Number(currentPage) - 1}`}
+                  >
+                    &lt;
+                  </Link>
+                </li>
+                {[...Array(pages).keys()].map((x) => (
+                  <li
+                    key={x + 1}
+                    className={`page-item ${
+                      x + 1 === Number(currentPage) ? "active" : ""
+                    }`}
+                  >
+                    <Link
+                      className="page-link"
+                      to={`/admin/products?page=${x + 1}`}
+                    >
+                      {x + 1}
+                    </Link>
+                  </li>
+                ))}
+                <li
+                  className={`page-item ${
+                    currentPage === pages ? "disabled" : ""
+                  }`}
+                >
+                  <Link
+                    className="page-link"
+                    to={`/admin/products?page=${Number(currentPage) + 1}`}
+                  >
+                    &gt;
+                  </Link>
+                </li>
+              </ul>
+            </nav>
           </div>
         </>
       )}

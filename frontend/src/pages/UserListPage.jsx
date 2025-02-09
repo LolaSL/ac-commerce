@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { Helmet } from "react-helmet-async";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
@@ -16,7 +16,9 @@ const reducer = (state, action) => {
     case "FETCH_SUCCESS":
       return {
         ...state,
-        users: action.payload,
+        users: action.payload.users,
+        page: action.payload.page,
+        pages: action.payload.pages,
         loading: false,
       };
     case "FETCH_FAIL":
@@ -39,15 +41,23 @@ const reducer = (state, action) => {
 };
 
 export default function UserListPage() {
+
   const navigate = useNavigate();
-  const [{ loading, error, users, loadingDelete, successDelete }, dispatch] =
+  const { search } = useLocation();
+  const { state } = useContext(Store);
+  const { userInfo } = state;
+
+  const [{ loading, error, users=[], loadingDelete, successDelete, pages }, dispatch] =
     useReducer(reducer, {
       loading: true,
       error: "",
+      users: [], 
+      pages: 1,
     });
 
-  const { state } = useContext(Store);
-  const { userInfo } = state;
+  const sp = new URLSearchParams(search);
+  const currentPage = Number(sp.get("page")) || 1;
+
 
   const [sortedUsers, setSortedUsers] = useState([]);
   const [sortColumn, setSortColumn] = useState("");
@@ -57,11 +67,11 @@ export default function UserListPage() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/users`, {
+        const { data } = await axios.get(`/api/users?page=${currentPage}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: "FETCH_SUCCESS", payload: data });
-        setSortedUsers(data); 
+        setSortedUsers(data.users || []);
       } catch (err) {
         dispatch({
           type: "FETCH_FAIL",
@@ -74,22 +84,23 @@ export default function UserListPage() {
     } else {
       fetchData();
     }
-  }, [userInfo, successDelete]);
+  }, [userInfo, successDelete, currentPage]);
+  
 
   useEffect(() => {
-
-    if (users) {
+    if (Array.isArray(users) && users.length > 0) {
       const sorted = [...users].sort((a, b) => {
-        if (sortOrder === "asc") {
-          return a[sortColumn]?.localeCompare(b[sortColumn]);
-        } else {
-          return b[sortColumn]?.localeCompare(a[sortColumn]);
-        }
+        if (!a[sortColumn] || !b[sortColumn]) return 0; 
+        return sortOrder === "asc"
+          ? a[sortColumn].localeCompare(b[sortColumn])
+          : b[sortColumn].localeCompare(a[sortColumn]);
       });
       setSortedUsers(sorted);
+    } else {
+      setSortedUsers([]); 
     }
   }, [users, sortColumn, sortOrder]);
-
+  
   const deleteHandler = async (user) => {
     if (window.confirm("Are you sure to delete?")) {
       try {
@@ -129,7 +140,8 @@ export default function UserListPage() {
         <LoadingBox></LoadingBox>
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
-      ) : (
+        ) : (
+            <>
         <table className="table">
           <thead>
             <tr>
@@ -181,7 +193,51 @@ export default function UserListPage() {
               </tr>
             ))}
           </tbody>
-        </table>
+            </table>
+            <div>
+            <nav>
+              <ul className="pagination">
+                <li
+                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                >
+                  <Link
+                    className="page-link"
+                    to={`/admin/users?page=${Number(currentPage) - 1}`}
+                  >
+                    &lt;
+                  </Link>
+                </li>
+                {[...Array(pages).keys()].map((x) => (
+                  <li
+                    key={x + 1}
+                    className={`page-item ${
+                      x + 1 === Number(currentPage) ? "active" : ""
+                    }`}
+                  >
+                    <Link
+                      className="page-link"
+                      to={`/admin/users?page=${x + 1}`}
+                    >
+                      {x + 1}
+                    </Link>
+                  </li>
+                ))}
+                <li
+                  className={`page-item ${
+                    currentPage === pages ? "disabled" : ""
+                  }`}
+                >
+                  <Link
+                    className="page-link"
+                    to={`/admin/users?page=${Number(currentPage) + 1}`}
+                  >
+                    &gt;
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+              </div>
+              </>
       )}
     </div>
   );

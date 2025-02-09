@@ -29,7 +29,7 @@ const generateToken = (serviceProvider) => {
 };
 
 export const isAuth = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1]; 
+  const token = req.headers.authorization?.split(' ')[1];
 
   if (token) {
     // Verify the token
@@ -39,11 +39,11 @@ export const isAuth = (req, res, next) => {
         return res.status(401).send({ message: 'Invalid Token' });
       }
 
-      
-      req.serviceProvider = decoded; 
-      req.user = decoded; 
-      
-      next(); 
+
+      req.serviceProvider = decoded;
+      req.user = decoded;
+
+      next();
     });
   } else {
     console.warn('Authorization header is missing or token not found.');
@@ -84,13 +84,21 @@ serviceProviderRouter.get(
   isAdmin,
   expressAsyncHandler(async (req, res) => {
     try {
-      const serviceProviders = await ServiceProvider.find({});
-      res.send(serviceProviders);
+      const pageSize = 10;
+      const page = Number(req.query.page) || 1;
+      const countServiceProviders = await ServiceProvider.countDocuments();
+      const serviceProviders = await ServiceProvider.find({})
+        .skip(pageSize * (page - 1))
+        .limit(pageSize);
+      const pages = Math.ceil(countServiceProviders / pageSize);
+      
+      res.send({ serviceProviders, page, pages }); 
     } catch (error) {
       res.status(500).send({ message: error.message });
     }
   })
 );
+
 
 serviceProviderRouter.get(
   '/summary',
@@ -515,9 +523,9 @@ serviceProviderRouter.put(
       if (serviceProvider) {
         serviceProvider.name = req.body.name || serviceProvider.name;
         serviceProvider.email = req.body.email || serviceProvider.email;
-        serviceProvider.isActive = req.body.isActive !== undefined 
-        ? req.body.isActive 
-        : serviceProvider.isActive;
+        serviceProvider.isActive = req.body.isActive !== undefined
+          ? req.body.isActive
+          : serviceProvider.isActive;
 
         const updatedServiceProvider = await serviceProvider.save();
         res.send({ message: 'Service provider updated successfully', serviceProvider: updatedServiceProvider });

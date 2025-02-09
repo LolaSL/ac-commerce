@@ -26,7 +26,6 @@ orderRouter.get(
       .limit(pageSize); 
     const countOrders = await Order.countDocuments(); 
     const pages = Math.ceil(countOrders / pageSize); 
-
     res.send({ orders, page, pages });
   })
 );

@@ -17,10 +17,17 @@ userRouter.get(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const users = await User.find({});
-    res.send(users);
+    const pageSize = 10;
+    const page = Number(req.query.page) || 1;
+    const countUsers = await User.countDocuments();
+    const users = await User.find({})
+      .skip(pageSize * (page - 1))
+      .limit(pageSize);
+    const pages = Math.ceil(countUsers / pageSize);
+    res.send({ users, page, pages });
   })
 );
+
 
 userRouter.get(
   '/:id',
@@ -165,16 +172,16 @@ userRouter.post(
   '/signin',
   expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
-      if (bcrypt.compareSync(req.body.password, user.password)) {
-        res.send({
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          isAdmin: user.isAdmin,
-          token: generateToken(user),
-        });
-        return;
-      }
+    if (bcrypt.compareSync(req.body.password, user.password)) {
+      res.send({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        token: generateToken(user),
+      });
+      return;
+    }
     res.status(401).send({ message: 'Invalid email or password' });
   })
 );
