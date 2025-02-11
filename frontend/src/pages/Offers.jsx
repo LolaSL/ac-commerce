@@ -70,7 +70,7 @@ export default function Offers() {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4">Special Offers</h1>
+      <h1 className="offers text-center mb-4">Special Offers</h1>
       {loading ? (
         <div className="text-center">
           <Spinner animation="border" role="status">
@@ -88,8 +88,8 @@ export default function Offers() {
                   alt={offer.title}
                 />
                 <Card.Body>
-                  <Card.Title>{offer.title}</Card.Title>
-                  <Card.Text>{offer.description}</Card.Text>
+                  <Card.Title className="offer-title">{offer.title}</Card.Title>
+                  <Card.Text className="offer-desc">{offer.description}</Card.Text>
                   <Button
                     variant="secondary"
                     as={Link}

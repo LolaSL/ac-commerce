@@ -29,7 +29,7 @@ main {
   text-align: relative;
   color: black;
 }
-
+.offers,
 .banner-title,
 .blogs-title,
 .sellers-title,
@@ -106,6 +106,19 @@ main {
     color: black;
   }
 }
+  .offer-title {
+color: hsl(0, 81.20%, 39.60%);
+text-shadow: 1px 1px 2px grey;
+font-weight: lighter;
+font-family: "Cedarville Cursive", cursive;
+  }
+
+  .offer-desc {
+    color:  rgb(33, 110, 90);
+    font-weight: lighter;
+    font-family: "Cedarville Cursive", cursive;
+  }
+
 .text {
   text-align: justify;
   text-transform: capitalize;

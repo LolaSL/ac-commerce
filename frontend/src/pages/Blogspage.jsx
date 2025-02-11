@@ -165,8 +165,8 @@ export default function BlogsPage() {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Title</th>
-                <th>shortDescription</th>
+                <th>TITLE</th>
+                <th>DESCRIPTION</th>
                 <th>ACTIONS</th>
               </tr>
             </thead>

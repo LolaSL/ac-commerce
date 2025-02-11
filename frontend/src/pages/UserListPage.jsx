@@ -152,13 +152,13 @@ export default function UserListPage() {
               </th>
               <th>
                 <button type="button" onClick={() => handleSort("name")}>
-                  Name{" "}
+                 NAME{" "}
                   {sortColumn === "name" && (sortOrder === "asc" ? "↑" : "↓")}
                 </button>
               </th>
               <th>
                 <button type="button" onClick={() => handleSort("email")}>
-                  Email{" "}
+                 EMAIL{" "}
                   {sortColumn === "email" && (sortOrder === "asc" ? "↑" : "↓")}
                 </button>
               </th>

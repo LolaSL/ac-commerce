@@ -6,7 +6,6 @@ import mongoose from 'mongoose';
 
 const blogRouter = express.Router();
 
-const PAGE_SIZE = 10;
 
 const validateObjectId = (req, res, next) => {
     const { id } = req.params;

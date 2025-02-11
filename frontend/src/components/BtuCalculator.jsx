@@ -215,11 +215,65 @@ function BtuCalculator() {
     return { btu: Math.round(baseBTU), error: null };
   };
 
+  // const handleCalculate = async () => {
+  //   const results = [];
+  //   const fetchedProducts = [];
+  //   let totalBTU = 0;
+
+  //   for (const room of rooms) {
+  //     const { btu, error } = calculateBTUForRoom(room);
+  //     if (error) {
+  //       setError(error);
+  //       return;
+  //     }
+  //     results.push(btu);
+  //     totalBTU += btu;
+
+  //     try {
+  //       const { data } = await axios.get(`/api/products/btu/${btu}`, {
+  //         params: {
+  //           insulation: Object.keys(insulation).filter(
+  //             (key) => insulation[key]
+  //           ),
+  //           sunExposure: Object.keys(sunExposure).filter(
+  //             (key) => sunExposure[key]
+  //           ),
+  //           climate: Object.keys(climate).filter((key) => climate[key]),
+  //         },
+  //       });
+
+  //       if (data && typeof data === "object" && data._id) {
+  //         fetchedProducts.push(data);
+  //       } else {
+  //         console.warn("Invalid product data received:", data);
+  //       }
+  //     } catch (error) {
+  //       console.error("Product not found for room:", error);
+  //     }
+  //   }
+
+  //   setBtuResults(results);
+  //   setError("");
+
+  //   const outdoorCondensers = getOutdoorCondensers();
+
+  //   const relevantCondenser = outdoorCondensers.find(
+  //     (condenser) => condenser.btu >= totalBTU * 0.8
+  //   );
+
+  //   if (relevantCondenser) {
+  //     fetchedProducts.push(relevantCondenser);
+  //   }
+
+  //   setProducts(fetchedProducts.filter((p) => p !== null));
+  // };
+
+
   const handleCalculate = async () => {
     const results = [];
     const fetchedProducts = [];
     let totalBTU = 0;
-
+  
     for (const room of rooms) {
       const { btu, error } = calculateBTUForRoom(room);
       if (error) {
@@ -228,20 +282,16 @@ function BtuCalculator() {
       }
       results.push(btu);
       totalBTU += btu;
-
+  
       try {
         const { data } = await axios.get(`/api/products/btu/${btu}`, {
           params: {
-            insulation: Object.keys(insulation).filter(
-              (key) => insulation[key]
-            ),
-            sunExposure: Object.keys(sunExposure).filter(
-              (key) => sunExposure[key]
-            ),
+            insulation: Object.keys(insulation).filter((key) => insulation[key]),
+            sunExposure: Object.keys(sunExposure).filter((key) => sunExposure[key]),
             climate: Object.keys(climate).filter((key) => climate[key]),
           },
         });
-
+  
         if (data && typeof data === "object" && data._id) {
           fetchedProducts.push(data);
         } else {
@@ -251,28 +301,59 @@ function BtuCalculator() {
         console.error("Product not found for room:", error);
       }
     }
-
+  
     setBtuResults(results);
     setError("");
-
+  
+    // Get available outdoor condensers
     const outdoorCondensers = getOutdoorCondensers();
-
-    const relevantCondenser = outdoorCondensers.find(
-      (condenser) => condenser.btu >= totalBTU * 0.8
-    );
-
-    if (relevantCondenser) {
-      fetchedProducts.push(relevantCondenser);
-    }
-
+  
+    // Function to determine the best combination of condensers
+    const selectedCondensers = selectCondensers(outdoorCondensers, totalBTU);
+  
+    // Add selected condensers to fetched products
+    fetchedProducts.push(...selectedCondensers);
+  
     setProducts(fetchedProducts.filter((p) => p !== null));
   };
-
+  
+  // Function to find the best combination of condensers
+  const selectCondensers = (condensers, totalBTU) => {
+    const sortedCondensers = [...condensers].sort((a, b) => b.btu - a.btu);
+    const selected = [];
+    let remainingBTU = totalBTU;
+  
+    for (const condenser of sortedCondensers) {
+      while (remainingBTU >= condenser.btu) {
+        selected.push(condenser);
+        remainingBTU -= condenser.btu;
+      }
+    }
+  
+    // If some BTU is still left, pick the closest available condenser
+    if (remainingBTU > 0) {
+      const closestCondenser = sortedCondensers.find(c => c.btu >= remainingBTU);
+      if (closestCondenser) selected.push(closestCondenser);
+    }
+  
+    return selected;
+  };
+  
+  
   const getOutdoorCondensers = () => {
     return [
       {
+        _id: "67aa1dae5d0d1d6a4a0a5521",
+        name: "18000 BTU Outdoor Condenser",
+        slug: "18000-outdoor-condensing-unit",
+        category: "Outdoor condenser",
+        image: "/images/p23.jpg",
+        price: 2415,
+        btu: 18000,
+      },
+      {
         _id: "67a72d32e7880bc0ed7acb48",
-        name: "48000 BTU CAC, Duct, Outdoor Condenser",
+        name: "48000 BTU Outdoor Condenser",
         slug: "48000-cac-condensing-unit",
         category: "Outdoor condenser",
         image: "/images/p22.jpg",
@@ -281,7 +362,7 @@ function BtuCalculator() {
       },
       {
         _id: "67a72d32e7880bc0ed7acb4c",
-        name: "54000 BTU Multi-System Ductless Split Condense",
+        name: "54000 BTU Multi-System Condenser",
         slug: "54000-mini-split-outdoor-condensing-unit",
         category: "Outdoor condenser",
         image: "/images/p21.jpg",
@@ -290,7 +371,7 @@ function BtuCalculator() {
       },
       {
         _id: "67a72d32e7880bc0ed7acb50",
-        name: "60000 BTU Multi-System Ductless Split Condenser",
+        name: "60000 BTU Multi-System Condenser",
         slug: "60000-mini-split-outdoor-condensing-unit",
         category: "Outdoor condenser",
         image: "/images/p21.jpg",
@@ -805,76 +886,69 @@ function BtuCalculator() {
                 );
                 console.log("Total BTU: ", totalBTU);
 
-                let fetchedProducts = [];
-
                 const outdoorCondensers = getOutdoorCondensers();
+                let requiredCondensers = [];
+                let remainingBTU = totalBTU;
 
-                let relevantCondenser = outdoorCondensers.find(
-                  (condenser) => condenser.btu >= totalBTU * 0.8
-                );
+                while (remainingBTU > 0) {
+                  // Create a separate function to calculate the relevant condenser
+                  const findRelevantCondenser = (remainingBTU) => {
+                    return (
+                      outdoorCondensers.find(
+                        (condenser) => condenser.btu >= remainingBTU * 0.8
+                      ) ||
+                      outdoorCondensers.reduce((closest, condenser) => {
+                        return !closest ||
+                          Math.abs(condenser.btu - remainingBTU * 0.8) <
+                            Math.abs(closest.btu - remainingBTU * 0.8)
+                          ? condenser
+                          : closest;
+                      }, null)
+                    );
+                  };
 
-                if (!relevantCondenser) {
-                  relevantCondenser = outdoorCondensers.reduce(
-                    (closest, condenser) => {
-                      console.log(
-                        `Checking condenser with BTU: ${
-                          condenser.btu
-                        } against totalBTU * 0.8: ${totalBTU * 0.8}`
-                      );
+                  const relevantCondenser = findRelevantCondenser(remainingBTU);
 
-                      if (
-                        !closest ||
-                        Math.abs(condenser.btu - totalBTU * 0.8) <
-                          Math.abs(closest.btu - totalBTU * 0.8)
-                      ) {
-                        return condenser;
-                      }
-                      return closest;
-                    },
-                    null
-                  );
+                  if (relevantCondenser) {
+                    requiredCondensers.push(relevantCondenser);
+                    remainingBTU -= relevantCondenser.btu;
+                  } else {
+                    console.warn(
+                      "No suitable condenser found for remaining BTU:",
+                      remainingBTU
+                    );
+                    break; // Prevents infinite loops
+                  }
                 }
 
-                if (relevantCondenser) {
-                  console.log("Relevant Condenser: ", relevantCondenser);
-                  fetchedProducts.push(relevantCondenser);
-                } else {
-                  console.log(
-                    "No relevant condenser found for totalBTU: ",
-                    totalBTU
-                  );
-                }
-
-                if (relevantCondenser) {
-                  return (
-                    <tr key="condenser">
-                      <td
-                        colSpan="2"
-                        className="text-center bg-info text-white"
-                      >
-                        Outdoor Condenser
-                      </td>
-                      <td>
-                        <Link to={`/product/${relevantCondenser.slug}`}>
-                          <Image
-                            src={relevantCondenser.image}
-                            alt={relevantCondenser.name}
-                            style={{
-                              width: "50px",
-                              height: "auto",
-                              backgroundColor: "grey",
-                            }}
-                            className="responsive rounded"
-                          />
-                        </Link>
-                      </td>
-                      <td>{relevantCondenser.name}</td>
-                      <td>{relevantCondenser.price.toFixed(2)}</td>
-                    </tr>
-                  );
-                }
-
-                return null;
+                return requiredCondensers.length > 0
+                  ? requiredCondensers.map((condenser, index) => (
+                      <tr key={`condenser-${index}`}>
+                        <td
+                          colSpan="2"
+                          className="text-center bg-info text-white"
+                        >
+                          Outdoor Condenser
+                        </td>
+                        <td>
+                          <Link to={`/product/${condenser.slug}`}>
+                            <Image
+                              src={condenser.image}
+                              alt={condenser.name}
+                              style={{
+                                width: "50px",
+                                height: "auto",
+                                backgroundColor: "grey",
+                              }}
+                              className="responsive rounded"
+                            />
+                          </Link>
+                        </td>
+                        <td>{condenser.name}</td>
+                        <td>{condenser.price.toFixed(2)}</td>
+                      </tr>
+                    ))
+                  : null;
               })()}
 
               <tr>

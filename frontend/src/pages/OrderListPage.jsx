@@ -42,7 +42,6 @@ const reducer = (state, action) => {
 };
 
 export default function OrderListPage() {
-  
   const navigate = useNavigate();
   const { search } = useLocation();
   const { state } = useContext(Store);
@@ -60,51 +59,32 @@ export default function OrderListPage() {
   const currentPage = sp.get("page") || 1;
 
   const [sortedOrders, setSortedOrders] = useState([]);
-  const [sortColumn, setSortColumn] = useState("");
+  const [sortColumn, setSortColumn] = useState("date"); // Default column to sort
   const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
-    if (orders) {
-      const sorted = [...orders].sort((a, b) => {
-        let valueA = a[sortColumn];
-        let valueB = b[sortColumn];
+    if (!orders || orders.length === 0) return;
 
-        if (valueA == null) return 1;
-        if (valueB == null) return -1;
-        if (valueA === undefined || valueB === undefined) {
-          return 0;
-        }
-        if (
-          sortColumn === "date" ||
-          sortColumn === "paid" ||
-          sortColumn === "delivered"
-        ) {
-          valueA = new Date(valueA);
-          valueB = new Date(valueB);
-        }
+    const sorted = [...orders].sort((a, b) => {
+      let valueA = a[sortColumn];
+      let valueB = b[sortColumn];
 
-        if (sortColumn === "total" || sortColumn === "paid") {
-          valueA = parseFloat(valueA.replace(/[^0-9.-]+/g, ""));
-          valueB = parseFloat(valueB.replace(/[^0-9.-]+/g, ""));
-        }
+      if (valueA == null && valueB == null) return 0;
+      if (valueA == null) return 1;
+      if (valueB == null) return -1;
 
-        if (typeof valueA === "number" && typeof valueB === "number") {
-          return sortOrder === "asc" ? valueA - valueB : valueB - valueA;
-        }
+      // String comparison
+      if (typeof valueA === "string" && typeof valueB === "string") {
+        return sortOrder === "asc"
+          ? valueA.localeCompare(valueB)
+          : valueB.localeCompare(valueA);
+      }
 
-        if (typeof valueA === "string" && typeof valueB === "string") {
-          return sortOrder === "asc"
-            ? valueA.localeCompare(valueB)
-            : valueB.localeCompare(valueA);
-        }
+      return 0;
+    });
 
-        return 0;
-      });
-
-      setSortedOrders(sorted);
-    }
+    setSortedOrders(sorted);
   }, [orders, sortColumn, sortOrder]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -176,38 +156,11 @@ export default function OrderListPage() {
                     {sortColumn === "_id" && (sortOrder === "asc" ? "↑" : "↓")}
                   </button>
                 </th>
-                <th>
-                  <button type="button" onClick={() => handleSort("user")}>
-                    User{" "}
-                    {sortColumn === "user" && (sortOrder === "asc" ? "↑" : "↓")}
-                  </button>
-                </th>
-                <th>
-                  <button type="button" onClick={() => handleSort("date")}>
-                    Date{" "}
-                    {sortColumn === "date" && (sortOrder === "asc" ? "↑" : "↓")}
-                  </button>
-                </th>
-                <th>
-                  <button type="button" onClick={() => handleSort("total")}>
-                    Total{" "}
-                    {sortColumn === "total" &&
-                      (sortOrder === "asc" ? "↑" : "↓")}
-                  </button>
-                </th>
-                <th>
-                  <button type="button" onClick={() => handleSort("paid")}>
-                    Paid{" "}
-                    {sortColumn === "paid" && (sortOrder === "asc" ? "↑" : "↓")}
-                  </button>
-                </th>
-                <th>
-                  <button type="button" onClick={() => handleSort("delivered")}>
-                    Delivered{" "}
-                    {sortColumn === "delivered" &&
-                      (sortOrder === "asc" ? "↑" : "↓")}
-                  </button>
-                </th>
+                <th>USER</th>
+                <th>DATE</th>
+                <th>TOTAL</th>
+                <th>PAID</th>
+                <th>DELIVERED</th>
                 <th>ACTIONS</th>
               </tr>
             </thead>

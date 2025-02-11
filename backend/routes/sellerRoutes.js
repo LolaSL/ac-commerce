@@ -6,6 +6,19 @@ import { isAuth, isAdmin } from '../utils.js';
 const sellerRouter = express.Router();
 
 sellerRouter.get(
+  '/all',
+  expressAsyncHandler(async (req, res) => {
+      try {
+          const sellers = await Seller.find({});
+          res.json(sellers);
+      } catch (err) {
+          res.status(500).json({ message: err.message });
+      }
+  })
+);
+
+
+sellerRouter.get(
   '/',
   isAuth,
   isAdmin,
