@@ -311,7 +311,7 @@ productRouter.get('/slug/:slug', async (req, res) => {
 });
 
 productRouter.get('/:id', async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({ message: 'Invalid product ID' });

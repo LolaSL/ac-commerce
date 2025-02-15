@@ -59,14 +59,12 @@ app.use((err, req, res, next) => {
     res.status(500).send({ message: err.message });
 });
 
-// Graceful shutdown
 const port = process.env.PORT || 5050;
 
 const server = app.listen(5030, () => {
     console.log(`Server is listening at http://localhost:${port}`);
 });
 
-// Gracefully shut down on SIGINT (Ctrl+C)
 process.on('SIGINT', () => {
     server.close(() => {
         console.log('Server gracefully shut down');
