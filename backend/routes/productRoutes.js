@@ -310,25 +310,51 @@ productRouter.get('/slug/:slug', async (req, res) => {
   }
 });
 
-productRouter.get('/:id', async (req, res) => {
-  const { id } = req.params.id;
+productRouter.get("/:id", async (req, res) => {
+  const { id } = req.params; 
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send({ message: 'Invalid product ID' });
+    return res.status(400).json({ message: "Invalid product ID" });
   }
 
   try {
-
     const product = await Product.findById(id);
 
     if (product) {
       res.json(product);
     } else {
-      res.status(404).send({ message: 'Product not found' });
+      res.status(404).json({ message: "Product not found" });
     }
   } catch (error) {
     console.error("Error fetching product details:", error);
-    res.status(500).send({ message: 'Server error, please try again later' });
+    res.status(500).json({ message: "Server error, please try again later" });
+  }
+});
+
+productRouter.get('/condensers/:btu', async (req, res) => {
+  try {
+    const requiredBTU = parseInt(req.params.btu);
+    
+    const condensers = await Product.find({ category: "Outdoor condenser" }).sort({ btu: 1 });
+
+    let selected = [];
+    let totalBTU = 0;
+
+    for (let condenser of condensers) {
+      while (totalBTU + condenser.btu <= requiredBTU) {
+        selected.push(condenser);
+        totalBTU += condenser.btu;
+      }
+      if (totalBTU >= requiredBTU) break;
+    }
+
+    if (selected.length === 0) {
+      return res.status(404).json({ message: "No suitable condenser found." });
+    }
+
+    res.json(selected);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
   }
 });
 

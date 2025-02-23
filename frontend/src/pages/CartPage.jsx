@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Store } from "../Store";
 import { Helmet } from "react-helmet-async";
 import Row from "react-bootstrap/Row";
@@ -10,6 +10,7 @@ import Card from "react-bootstrap/Card";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Image from "react-bootstrap/Image";
+import ModalWindow from "../components/ModalWindow.jsx";
 
 export default function CartPage() {
   const navigate = useNavigate();
@@ -19,17 +20,81 @@ export default function CartPage() {
     cart: { cartItems },
   } = state;
   console.log("Cart product details:", cartItems);
-  const updateCartHandler = async (item, quantity) => {
-    const { data } = await axios.get(`/api/products/${item._id}`);
-    console.log('Item ID:', item._id);
-    if (data.countInStock < quantity) {
-      window.alert("Sorry. Product is out of stock");
-      return;
-    }
+  const [showAlert, setShowAlert] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
+
+  const totalBTU = cartItems.reduce((a, c) => a + c.quantity * c.btu, 0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowAlert(false);
+    }, 6000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const addToCart = (product) => {
     ctxDispatch({
       type: "CART_ADD_ITEM",
-      payload: { ...item, quantity },
+      payload: { ...product, quantity: 1 },
     });
+  };
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const { data } = await axios.get(
+          "/api/products?category=Outdoor%20Condenser"
+        );
+        setRecommendedProducts(data);
+        console.log("Fetched Products:", data);
+      } catch (error) {
+        console.error("Error fetching recommended products:", error);
+      }
+    };
+
+    if (showModal) {
+      fetchProducts();
+    }
+  }, [showModal]);
+
+  const updateCartHandler = async (item, quantity) => {
+    try {
+      if (!item || !item._id) {
+        console.error("Invalid item data:", item);
+        window.alert("Error: Product ID is missing");
+        return;
+      }
+
+      console.log("Fetching product data for ID:", item._id);
+
+      const { data } = await axios.get(`/api/products/${item._id}`);
+
+      if (!data || typeof data.countInStock !== "number") {
+        console.error("Invalid response from server:", data);
+        window.alert("Error: Product data is invalid");
+        return;
+      }
+
+      if (data.countInStock < quantity) {
+        window.alert("Sorry. Product is out of stock");
+        return;
+      }
+
+      ctxDispatch({
+        type: "CART_ADD_ITEM",
+        payload: { ...item, quantity },
+      });
+    } catch (error) {
+      console.error("Error updating cart:", error);
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        window.alert(
+          `Error: ${error.response.data.message || "Failed to update cart"}`
+        );
+      }
+    }
   };
 
   const removeItemHandler = (item) => {
@@ -39,6 +104,27 @@ export default function CartPage() {
   const checkoutHandler = () => {
     navigate("/signin?redirect=/shipping");
   };
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const { data } = await axios.get(
+          "/api/products?category=Outdoor%20Condenser"
+        );
+        const condensers = data.filter(
+          (product) => product.category === "Outdoor Condenser"
+        );
+
+        setRecommendedProducts(condensers);
+        console.log("Fetched Condenser Products:", condensers);
+      } catch (error) {
+        console.error("Error fetching recommended products:", error);
+      }
+    };
+
+    if (showModal) {
+      fetchProducts();
+    }
+  }, [showModal]);
 
   return (
     <div className="p-4">
@@ -46,6 +132,29 @@ export default function CartPage() {
         <title>Shopping Cart</title>
       </Helmet>
       <h1>Shopping Cart</h1>
+
+      <div className="p-4">
+        {showAlert && (
+          <div className="bg-info p-3 mb-3 text-center">
+            <strong>
+              Recommended Condenser: {(totalBTU * 0.8).toFixed(0)}
+            </strong>
+          </div>
+        )}
+      </div>
+      <Button
+        variant="primary"
+        onClick={() => setShowModal(true)}
+        className="btn btn-secondary mb-4"
+      >
+        Select a Recommended Condenser
+      </Button>
+      <ModalWindow
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        products={recommendedProducts}
+        addToCart={addToCart}
+      />
       <Row>
         <Col md={8}>
           {cartItems.length === 0 ? (
@@ -86,8 +195,9 @@ export default function CartPage() {
                           }
                           variant="light"
                           disabled={item.quantity === 1}
+                          className="btn-icon"
                         >
-                          <i className="fas fa-minus-circle"></i>
+                          <i className="fas fa-minus-circle icon-color"></i>
                         </Button>{" "}
                         <span>{item.quantity}</span>{" "}
                         <Button
@@ -96,10 +206,12 @@ export default function CartPage() {
                             updateCartHandler(item, item.quantity + 1)
                           }
                           disabled={item.quantity === item.countInStock}
+                          className="btn-icon"
                         >
-                          <i className="fas fa-plus-circle"></i>
+                          <i className="fas fa-plus-circle icon-color"></i>
                         </Button>
                       </Col>
+
                       <Col md={3}>
                         {item.discount > 0 ? (
                           <>
