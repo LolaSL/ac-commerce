@@ -56,9 +56,9 @@ function BtuCalculator() {
       HeavilyShaded: false,
     },
     climate: {
-      Average: false, // (Warsaw)
-      Hot: false, // (Tel-Aviv)
-      Cold: false, // (Stockholm)
+      AverageWarsaw: false,
+      HotTelAviv: false,
+      ColdStockholm: false,
     },
   });
 
@@ -75,7 +75,6 @@ function BtuCalculator() {
       PitchedRoof: 1.1,
       WallBrackets: 1.05,
       HardGround: 1.0,
-      SoftGround: 0.95,
     },
   };
 
@@ -230,7 +229,7 @@ function BtuCalculator() {
 
     setOptimalProductCount(optimalProductCount);
 
-    if (totalBTU >= 20000) {
+    if (totalBTU >= 10000) {
       setShowCondenser(true);
     } else {
       setShowCondenser(false);
@@ -307,13 +306,31 @@ function BtuCalculator() {
     setNumPeople(2);
 
     setOptions({
-      insulation: { Average: false, Good: false, Poor: false },
+      OutdoorUnitLocation: {
+        PitchedRoof: false,
+        WallBrackets: false,
+        HardGround: false,
+      },
+      typeOfWall: {
+        BrickVeneer: false,
+        DoubleBrick: false,
+        FoamCladding: false,
+      },
+      insulation: {
+        Average: false,
+        Good: false,
+        Poor: false,
+      },
       sunExposure: {
         Average: false,
         FullSunlight: false,
         HeavilyShaded: false,
       },
-      climate: { Average: false, Hot: false, Cold: false },
+      climate: {
+        AverageWarsaw: false, // (Warsaw)
+        HotTelAviv: false, // (Tel-Aviv)
+        ColdStockholm: false, // (Stockholm)
+      },
     });
 
     setBtuResults([]);
@@ -601,7 +618,13 @@ function BtuCalculator() {
                     {optimalProductCount || "No optimal product available"}
                   </strong>
                 </td>
-                <td className="total-results bg-warning"></td>
+                <td className="total-results bg-warning">
+                  <strong>
+                    {products
+                      .reduce((total, product) => total + (product.btu || 0), 0)
+                      .toFixed(0)}
+                  </strong>
+                </td>
                 <td className="total-results bg-warning">
                   <strong>
                     {products.length > 0
@@ -632,8 +655,15 @@ function BtuCalculator() {
             <tr className="text-center">
               <td colSpan="5" className="text-center bg-info ">
                 <strong>
-                  {" "}
-                  Recommended Condenser {(totalBTU * 0.8).toFixed(0)}
+                  <strong>
+                    Recommended Condenser:{" "}
+                    {(
+                      products.reduce(
+                        (total, product) => total + (product.btu || 0),
+                        0
+                      ) * 0.8
+                    ).toFixed(0)} BTU
+                  </strong>
                 </strong>
               </td>
             </tr>

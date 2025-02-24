@@ -19,20 +19,31 @@ export default function CartPage() {
   const {
     cart: { cartItems },
   } = state;
-  console.log("Cart product details:", cartItems);
+
   const [showAlert, setShowAlert] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [recommendedProducts, setRecommendedProducts] = useState([]);
+  const [totalBTU, setTotalBTU] = useState(0);
 
-  const totalBTU = cartItems.reduce((a, c) => a + c.quantity * c.btu, 0);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowAlert(false);
-    }, 6000);
+   
+    const airConditionerBTU = cartItems
+      .filter((item) => item.category !== "Outdoor Condenser") 
+      .reduce((sum, item) => sum + item.quantity * (item.btu || 0), 0);
+  
+    setTotalBTU(airConditionerBTU); 
+  }, [cartItems]);
+  const recommendedCondenser = totalBTU ? (totalBTU * 0.8).toFixed(0) : 0;  
 
-    return () => clearTimeout(timer);
-  }, []);
+  useEffect(() => {
+  
+      const timer = setTimeout(() => {
+        setShowAlert(false);
+      }, 6000);
+  
+    return () => clearTimeout(timer);  
+  }, [showAlert, totalBTU]);
 
   const addToCart = (product) => {
     ctxDispatch({
@@ -48,7 +59,6 @@ export default function CartPage() {
           "/api/products?category=Outdoor%20Condenser"
         );
         setRecommendedProducts(data);
-        console.log("Fetched Products:", data);
       } catch (error) {
         console.error("Error fetching recommended products:", error);
       }
@@ -66,8 +76,6 @@ export default function CartPage() {
         window.alert("Error: Product ID is missing");
         return;
       }
-
-      console.log("Fetching product data for ID:", item._id);
 
       const { data } = await axios.get(`/api/products/${item._id}`);
 
@@ -115,7 +123,7 @@ export default function CartPage() {
         );
 
         setRecommendedProducts(condensers);
-        console.log("Fetched Condenser Products:", condensers);
+
       } catch (error) {
         console.error("Error fetching recommended products:", error);
       }
@@ -137,8 +145,8 @@ export default function CartPage() {
         {showAlert && (
           <div className="bg-info p-3 mb-3 text-center">
             <strong>
-              Recommended Condenser: {(totalBTU * 0.8).toFixed(0)}
-            </strong>
+    Recommended Condenser: {recommendedCondenser}
+  </strong>
           </div>
         )}
       </div>
@@ -178,7 +186,7 @@ export default function CartPage() {
                         <Image
                           src={item.image}
                           alt={item.name}
-                          className="img-fluid rounded img-thumbnail"
+                          className="img-fluid rounded cart-thumbnail"
                         ></Image>{" "}
                         <Link
                           className="nav-link-product"

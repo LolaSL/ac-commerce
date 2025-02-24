@@ -7,31 +7,31 @@ const AboutUs = () => {
       <Helmet>
         <title>About Us</title>
       </Helmet>
-      <article className="about mt-4 mb-4">
+      <article className="about">
       <div
-  className="p-5 text-center responsive-image rounded mb-3"
+  className="p-5 text-center responsive-image rounded "
   style={{
     backgroundImage: `url("/images/about-us1.jpg")`,
     MaxHeight: "100%", 
   }}
 >
-  <h1 className="mb-4 text-white p-4 about-title">About Us</h1>
+  {/* <h1 className="mb-4 text-white p-4 about-title">About Us</h1> */}
 </div>
 
-        <p className="about-paragraph mt-4 pb-2">
+        <h3 className="about-paragraph ">
           <strong>AC Commerce</strong> is committed to complying with local laws and regulations
           and to applying a strict ethical code of conduct to all employees
-        </p>
-        <p className="about-paragraph mt-4 pb-2">
+        </h3>
+        <h4 className="about-paragraph mt-4 pb-2">
           The company believes that ethical management is a tool for responding
           to rapid changes in the global business environment and building trust
           with various stakeholders, including customers,
           shareholders,employees, business partners, and local communities.
-        </p>
-        <p className="about-paragraph mt-4 pb-4">
+        </h4>
+        <h4 className="about-paragraph mt-4 pb-4">
           AC Commerce continues to train its employees and use monitoring
           systems while practicing fair and transparent corporate governance.
-        </p>
+        </h4>
       </article>
       <article className="about mt-4 mb-4">
         <div
@@ -42,11 +42,11 @@ const AboutUs = () => {
           }}
         >
           {" "}
-          <h2 className="mb-4 text-center text-white p-4 mission-title">
+          {/* <h2 className="mb-4 text-center text-white  mission-title">
             Our Mission
-          </h2>
+          </h2> */}
         </div>
-        <p className="about-paragraph mt-4 pb-4">
+        <h3 className="about-paragraph mt-4">
          <strong>Our Mission</strong> is to provide innovative and energy-efficient air
           conditioning solutions that enhance comfort and well-being in every
           space we serve. We are committed to delivering exceptional quality,
@@ -54,7 +54,7 @@ const AboutUs = () => {
           cutting-edge technology and sustainable practices, we aim to create a
           cooler, healthier environment for our clients, while contributing to a
           greener planet.
-        </p>
+        </h3>
       </article>
       <article className="about mt-4 mb-4">
         <div
@@ -64,14 +64,13 @@ const AboutUs = () => {
             MaxHeight: "100%", 
           }}
         >
-          <h2 className=" text-center text-white goals-title">Our Goals</h2>
           
         </div>
-        <p className="goals-paragraph  mt-2 pb-4">
-          <strong>Our Goals</strong>  is to make every home and business environment more comfortable, with the perfect air conditioning solution that suits your specific requirements—whether you're cooling a small room or an entire building. We are committed to helping our customers find the right product, providing expert recommendations, and ensuring energy efficiency to reduce both environmental impact and energy bills.</p>
+        <h3 className="goals-paragraph  mt-2 pb-4">
+          <strong>Our Goals</strong>  is to make every home and business environment more comfortable, with the perfect air conditioning solution that suits your specific requirements—whether you're cooling a small room or an entire building. We are committed to helping our customers find the right product, providing expert recommendations, and ensuring energy efficiency to reduce both environmental impact and energy bills.</h3>
 
-<p className="goals-paragraph  mt-2 pb-4">We believe in sustainability, quality, and customer satisfaction, and we strive to offer the best in cooling technology to keep you cool all year round.
-          </p>{" "}
+<h4 className="goals-paragraph  mt-2 pb-4">We believe in sustainability, quality, and customer satisfaction, and we strive to offer the best in cooling technology to keep you cool all year round.
+          </h4>{" "}
       </article>
     </   Container>
   );

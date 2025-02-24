@@ -8,8 +8,8 @@ export default function Offers() {
 
   const offers = [
     {
-      title: "Winter Sale!",
-      description: "Get up air conditioners on sale!",
+      title: "Spring Sale!",
+      description: "Indoor and Outdoor units on sale!",
       imageSrc: "/images/offer1.jpg",
       linkTo:
         "/search?category=all&query=all&price=all&discount=31-40&rating=all&btu=all&brand=all&order=newest&page=1",
@@ -26,8 +26,8 @@ export default function Offers() {
       criteria: (product) => (product.discount = 50),
     },
     {
-      title: "Combo Deals",
-      description: "Buy 2 units and get free installation.",
+      title: "Combo Deals:",
+      description: "Buy 2 units - get free installation.",
       imageSrc: "/images/offer3.jpg",
       linkTo:
         "/search?category=all&query=all&price=all&discount=0&rating=all&btu=all&brand=all&order=newest&page=1",

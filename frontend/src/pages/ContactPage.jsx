@@ -79,7 +79,7 @@ const ContactPage = () => {
         <Image
           src="/images/contact.jpg"
           alt="Contact Us"
-          className="responsive rounded mt-4"
+          className="responsive img rounded mt-4"
         />
       </div>
       <div className="contact-form">

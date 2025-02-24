@@ -157,7 +157,7 @@ export default function PlaceOrderPage() {
                         <Image
                           src={item.image}
                           alt={item.name}
-                          className="img-fluid rounded img-thumbnail"
+                          className="img-fluid rounded cart-thumbnail"
                         ></Image>{" "}
                       </Col>
                       <Col md={3}>

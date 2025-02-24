@@ -3,10 +3,10 @@ import axios from "axios";
 import { getError } from "../utils";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
-import Rating from "../components/Rating";
 import { Link } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
+import {Card } from 'react-bootstrap'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -59,37 +59,23 @@ export default function SellersPage() {
         <LoadingBox></LoadingBox>
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
-      ) : (
+        ) : (
+            
         <div>
-          {sellers.map((seller) => (
-            <div key={seller._id} className="mt-4 mb-4">
+          {sellers.map((seller, index) => (<Card className="mb-3">
+            <div key={index} className="mt-4 mb-4">
               <Link
                 to={`/sellers/${seller._id}`}
-                className="seller-name text-secondary"
+                className="seller-name text-secondary "
               >
-                <h2 className="seller-name">{seller.name}</h2>
+                <h2 className="seller-name p-4">{seller.name}</h2>
               </Link>
-              <p>Brand: {seller.brand}</p>
-              <p className="seller-paragraph">Information: {seller.info}</p>
-              <div>
-                {seller.reviews?.length === 0 && (
-                  <MessageBox>No Reviews</MessageBox>
-                )}
-                <ul>
-                  {seller.reviews?.map((review) => (
-                    <li key={review._id}>
-                      <strong>{review.name}</strong>
-                      <Rating rating={review.rating} caption=" "></Rating>
-                      <p>{review.comment}</p>
-                      <p>{review.createdAt.substring(0, 10)}</p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ))}
+              <p className="p-4">Brand: {seller.brand}</p>
+              <p className="seller-paragraph p-2">Information: {seller.info}</p>
+           </div> </Card>
+         ))}
         </div>
       )}
-    </Container>
+    </Container> 
   );
 }

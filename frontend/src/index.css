@@ -377,8 +377,8 @@ font-family: "Cedarville Cursive", cursive;
 
 .card-link,
 .cart-thumbnail {
-  width: 80px;
-  height: 80px;
+  width: 65px;
+  height: 65px;
   object-fit: cover;
   text-decoration: none;
   font-size: 14px;
@@ -398,20 +398,19 @@ button {
   cursor: pointer;
   border-radius: 9px;
 }
-/* Define button icon color */
+
 .btn-icon i {
-  color: #333; /* Default color for the icons */
+  color: #333; 
   transition: color 0.2s ease;
 }
 
-/* Button disabled state: make icons a light color */
+
 .btn-icon:disabled i {
-  color: #d3d3d3; /* Light gray when disabled */
+  color: #d3d3d3; 
 }
 
-/* Optional: Change color on hover */
 .btn-icon:hover i {
-  color: #007bff; /* Customize the color to match the theme */
+  color: #007bff; 
 }
 
 button:hover {
@@ -564,7 +563,7 @@ h3 {
   }
 }
 
-/* Small Devices (landscape phones, 576px and up) */
+
 @media (min-width: 481px) and (max-width: 767.98px) {
   .search-title {
     font-size: 0.9rem;
@@ -577,7 +576,7 @@ h3 {
   }
 }
 
-/* Medium Devices (tablets, 768px and up) */
+
 @media (min-width: 768px) and (max-width: 991px) {
   .search-title {
     font-size: 1.1rem;
@@ -589,7 +588,7 @@ h3 {
   }
 }
 
-/* Large Devices (desktops, 992px and up) */
+
 @media (min-width: 992px) and (max-width: 1199.98px) {
   .search-title {
     font-size: 1.2rem;
@@ -601,7 +600,6 @@ h3 {
   }
 }
 
-/* Extra Large Devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
   .search-title {
     font-size: 1.3rem;
@@ -1806,3 +1804,78 @@ li.notification {
   background-color: #0056b3;
 }
 
+.seller-container {
+  padding: 20px;
+}
+
+.sellers-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.seller-name {
+  text-decoration: none;
+  color: #333; /* Default text color */
+  display: block; /* Make the link a block to fill the card */
+  text-align: center; /* Center the seller name */
+}
+
+.seller-name h2{
+  margin: 0;
+}
+
+.seller-paragraph {
+  margin-bottom: 10px;
+}
+
+/* Grid layout for sellers */
+.seller-container > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+  gap: 20px;
+}
+
+/* Card styles (adjust as needed) */
+.seller-container .card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .seller-container > div {
+    grid-template-columns: 1fr; /* Single column on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .seller-container {
+    padding: 10px; /* Adjust padding for smaller screens */
+  }
+}
+
+.seller-container .mb-3{
+  margin-bottom: 1rem;
+}
+
+.seller-container .mt-4{
+  margin-top: 1.5rem;
+}
+
+.seller-container .mb-4{
+  margin-bottom: 1.5rem;
+}
+
+.seller-container .p-4{
+  padding: 1.5rem;
+}
+
+.seller-container .p-2{
+  padding: 0.5rem;
+}
+
+.seller-container .text-secondary{
+  color: grey;
+}
