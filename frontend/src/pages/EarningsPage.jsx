@@ -56,8 +56,9 @@ const EarningsPage = () => {
   if (error) return <p>Error loading earnings: {error}</p>;
 
   return (
-    <Container>
+    <Container className="provider-container">
       <h1 className="mt-4 mb-4 fw-bold">Earnings</h1>
+      <div className="table-responsive">
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -68,17 +69,17 @@ const EarningsPage = () => {
             <th>Date</th>
             <th>Status</th>
           </tr>
-        </thead>
+        </thead> 
         <tbody>
           {earnings && earnings.length > 0 ? (
             earnings.map((earning, index) => (
               <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{earning.projectName.name}</td>
-                <td>{earning.projectName.hoursWorked}</td>
-                <td>{earning.amount}</td>
-                <td>{new Date(earning.date).toLocaleDateString()}</td>
-                <td>{earning.status}</td>
+               <td data-label="ID">{index + 1}</td>
+               <td data-label="Project name">{earning.projectName.name}</td>
+               <td data-label="Time On Project">{earning.projectName.hoursWorked}</td>
+               <td data-label="Amount Earned">{earning.amount}</td>
+               <td data-label="Date">{new Date(earning.date).toLocaleDateString()}</td>
+               <td data-label="Status">{earning.status}</td>
               </tr>
             ))
           ) : (
@@ -87,7 +88,8 @@ const EarningsPage = () => {
             </tr>
           )}
         </tbody>
-      </Table>
+        </Table>
+        </div>
     </Container>
   );
 };

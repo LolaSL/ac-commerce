@@ -108,7 +108,11 @@ export default function SellerPage() {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <>
-          <div className="seller">
+              <div className="seller">
+              <div className="logo-container p-4">
+           <img src={`${seller.logo}`} alt={`${seller.name} logo`} className="seller-logo" />
+
+          </div>
             <h2 className="p-4">{seller.name}</h2>
             <p>Brand: {seller.brand}</p>
             <p>

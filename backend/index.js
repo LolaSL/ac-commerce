@@ -50,6 +50,7 @@ app.use('/api/contact', contactRouter);
 app.use('/api/service-providers', serviceProviderRouter);
 app.use('/api/blogs', blogRouter);
 app.use('/api/notifications', notificationRouter);
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
 app.get('/', (req, res) => {
     res.send('Server is ready')

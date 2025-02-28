@@ -33,12 +33,25 @@ productRouter.post(
       features: [
         'Heating',
         'Cooling',
-        'Wi-Fi',
+        'Wi-Fi embedded',
         'Energy Saving',
         'Remote Control',
         'Led',
         'Smart Things',
-
+        "Anti-Bacteria Filter",
+        "Dust Filter",
+        "Motion Sensor",
+        "Fast Cooling",
+        "Dual Sensing",
+        "Smart Operation",
+        "Anti Corrosion Gold Fin™",
+        "Auto Restart"
+      ],
+      mode:[
+        "Cooling Mode",
+       " Drying Mode ",       
+        "Fan Mode",
+        "Silent Mode "
       ],
       btu: 0,
       areaCoverage: 0,
@@ -65,7 +78,9 @@ productRouter.put(
     const features = Array.isArray(req.body.features)
       ? req.body.features
       : req.body.features.split(',').map((feature) => feature.trim());
-
+      const mode = Array.isArray(req.body.mode)
+      ? req.body.mode
+      : req.body.mode.split(',').map((mode) => mode.trim());
     const documents = Array.isArray(req.body.documents)
       ? req.body.documents
       : JSON.parse(req.body.documents || '[]');
@@ -82,6 +97,7 @@ productRouter.put(
       product.countInStock = req.body.countInStock;
       product.description = req.body.description;
       product.features = features;
+      product.mode = mode;
       product.btu = req.body.btu;
       product.areaCoverage = req.body.areaCoverage;
       product.energyEfficiency = req.body.energyEfficiency;

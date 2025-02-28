@@ -251,7 +251,12 @@ export default function OrderPage() {
                 {order.orderItems.map((item) => (
                   <ListGroup.Item key={item._id}>
                     <Row className="align-items-center">
-                    <Link to={`/product/${item.slug}`} className="mb-2 order-link">{item.name}</Link>
+                      <Link
+                        to={`/product/${item.slug}`}
+                        className="mb-2 order-link"
+                      >
+                        {item.name}
+                      </Link>
                       <Col md={6}>
                         <Image
                           src={item.image}
@@ -266,8 +271,12 @@ export default function OrderPage() {
                         <div>
                           ${item.price.toFixed(2)}
                           {item.discount > 0 && (
-                            <div style={{ color: 'green' }}>
-                              (${(item.price * (1 - item.discount / 100)).toFixed(2)} after {item.discount}% off)
+                            <div style={{ color: "green" }}>
+                              ($
+                              {(item.price * (1 - item.discount / 100)).toFixed(
+                                2
+                              )}{" "}
+                              after {item.discount}% off)
                             </div>
                           )}
                         </div>
@@ -332,7 +341,11 @@ export default function OrderPage() {
                   <ListGroup.Item>
                     {loadingDeliver && <LoadingBox></LoadingBox>}
                     <div className="d-grid">
-                      <Button  className="btn btn-secondary" type="button" onClick={deliverOrderHandler}>
+                      <Button
+                        className="btn btn-secondary"
+                        type="button"
+                        onClick={deliverOrderHandler}
+                      >
                         Deliver Order
                       </Button>
                     </div>

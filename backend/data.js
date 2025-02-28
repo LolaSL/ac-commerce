@@ -96,7 +96,23 @@ const data = {
       rating: 4.5,
       numReviews: 139,
       description: "10000 BTU Mini Split Air Conditioner, Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
-      features: "Remote Control",
+      features: [
+        'Energy Saving',
+        'Remote Control',
+        "Anti-Bacteria Filter",
+        "Dust Filter",
+        "Fast Cooling",
+        "Dual Sensing",
+        "Anti Corrosion Gold Fin™",
+        "Auto Restart",
+        "Smart Operation"
+      ],
+      mode: [
+        "Cooling Mode",
+        " Drying Mode ",
+        "Fan Mode",
+        "Silent Mode"
+      ],
       btu: 10000,
       areaCoverage: 25,
       energyEfficiency: 12,
@@ -135,7 +151,23 @@ const data = {
       rating: 4.5,
       numReviews: 139,
       description: "12000 BTU Mini Split Air Conditioner, Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
-      features: "Remote Control",
+      features: [
+        'Energy Saving',
+        'Remote Control',
+        "Anti-Bacteria Filter",
+        "Dust Filter",
+        "Fast Cooling",
+        "Dual Sensing",
+        "Anti Corrosion Gold Fin™",
+        "Auto Restart",
+        "Smart Operation"
+      ],
+      mode: [
+        "Cooling Mode",
+        " Drying Mode ",
+        "Fan Mode",
+        "Silent Mode"
+      ],
       btu: 12000,
       areaCoverage: 30,
       energyEfficiency: 12,
@@ -174,7 +206,23 @@ const data = {
       rating: 4.5,
       numReviews: 139,
       description: "16000 BTU Mini Split Air Conditioner, Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
-      features: "Remote Control",
+      features: [
+        'Energy Saving',
+        'Remote Control',
+        "Anti-Bacteria Filter",
+        "Dust Filter",
+        "Fast Cooling",
+        "Dual Sensing",
+        "Anti Corrosion Gold Fin™",
+        "Auto Restart",
+        "Smart Operation"
+      ],
+      mode: [
+        "Cooling Mode",
+        " Drying Mode ",
+        "Fan Mode",
+        "Silent Mode"
+      ],
       btu: 16000,
       areaCoverage: 42,
       energyEfficiency: 12,
@@ -213,7 +261,23 @@ const data = {
       rating: 3.5,
       numReviews: 123,
       description: "18000 BTU Mini Split Air Conditioner, Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
-      features: "Remote Control",
+      features: [
+        'Energy Saving',
+        'Remote Control',
+        "Anti-Bacteria Filter",
+        "Dust Filter",
+        "Fast Cooling",
+        "Dual Sensing",
+        "Anti Corrosion Gold Fin™",
+        "Auto Restart",
+        "Smart Operation"
+      ],
+      mode: [
+        "Cooling Mode",
+        " Drying Mode ",
+        "Fan Mode",
+        "Silent Mode"
+      ],
       btu: 18000,
       areaCoverage: 45,
       energyEfficiency: 12,
@@ -252,10 +316,27 @@ const data = {
       rating: 2,
       numReviews: 20,
       description: " This 20000 BTU  Mini Split AC Wind-Free TM Cooling 5460-22860 BTU. Heating 4435-27300 BTU. Sound Levels insite 58 db outside 65 db. Inverter, Wi-Fi, Wind-Free™ Cooling, AI Comfort, Motion Sensor",
-      features: "Smart Things",
+      features: [
+        'Heating',
+        'Cooling',
+        'Wi-Fi embedded',
+        'Energy Saving',
+        'Remote Control',
+        'Led',
+        'Smart Things',
+        "Anti-Bacteria Filter",
+        "Dust Filter",
+        "Motion Sensor"
+      ],
+      mode: [
+        "Cooling Mode",
+        " Drying Mode ",
+        "Fan Mode",
+        "Silent Mode"
+      ],
       btu: 20000,
       areaCoverage: 48,
-      energyEfficiency: 15,
+      energyEfficiency: 9.7,
       dimension: {
         width: 82,
         height: 29.9,
@@ -280,6 +361,62 @@ const data = {
       ],
     },
     {
+      name: "22000 BTU Mini Split AC",
+      slug: "22000-btu-Mini-Split-air-conditioner",
+      category: "Mini Split AC",
+      image: "/images/p26.jpg",
+      price: 665.99,
+      discount: 0,
+      countInStock: 4,
+      brand: "Haier",
+      rating: 3.5,
+      numReviews: 119,
+      description: "Haier inverter air conditioner 2.5 hp - BTU 22000 - 2024 series - model Haier OZ 25 INV +WIFI. The air conditioner with a clean and modern design, inverter technology with a reliable, energy-efficient and economical operation, a variety of functions for advanced use - quiet, with efficient and fast air distribution and adjusting the operation of the air conditioner to your needs, with the sleep function making your sleeping experience nothing less than perfect. Has a hydropoli coating to prevent corrosion and effective control via WiFi.",
+      features: [
+        'Heating',
+        'Cooling',
+        'Wi-Fi',
+        'Energy Saving',
+        'Remote Control',
+        'Led',
+        'Smart Things',
+        "Anti-Bacteria Filter",
+        "Dust Filter",
+        "Smart Operation"
+      ],
+      mode: [
+        "Cooling Mode",
+        " Drying Mode ",
+        "Fan Mode",
+        "Silent Mode"
+      ],
+      btu: 22000,
+      areaCoverage: 50,
+      energyEfficiency: 12,
+      dimension: {
+        width: 80,
+        height: 55.3,
+        depth: 28,
+      },
+      documents: [
+        {
+          url: "https://www.haier.com/sa/air-conditioners/hsu-24lpa13r2-t3db-.shtml?spm=sa.ProductList_pc.productList_20190530.5",
+          type: "PDF",
+          description: "User Manual for LG 22000 BTU Mini Split AC",
+        },
+        {
+          url: "https://www.haier.com/sa/air-conditioners/hsu-24lpa13r2-t3db-.shtml?spm=sa.ProductList_pc.productList_20190530.5",
+          type: "PDF",
+          description: "Technical Specifications for LG 22000 BTU Mini Split AC",
+        },
+        {
+          url: "https://www.haier.com/sa/air-conditioners/hsu-24lpa13r2-t3db-.shtml?spm=sa.ProductDetail_pc.productHistory_20190530.3",
+          type: "Image",
+          description: "Installation Guide Image",
+        },
+      ],
+    },
+    {
       name: "24000 BTU Mini Split AC",
       slug: "24000-btu-Mini-Split-air-conditioner",
       category: "Mini Split AC",
@@ -291,7 +428,23 @@ const data = {
       rating: 4.5,
       numReviews: 139,
       description: "24000 BTU Mini Split Air Conditioner, Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
-      features: "Remote Control",
+      features: [
+        'Energy Saving',
+        'Remote Control',
+        "Anti-Bacteria Filter",
+        "Dust Filter",
+        "Fast Cooling",
+        "Dual Sensing",
+        "Anti Corrosion Gold Fin™",
+        "Auto Restart",
+        "Smart Operation"
+      ],
+      mode: [
+        "Cooling Mode",
+        " Drying Mode ",
+        "Fan Mode",
+        "Silent Mode"
+      ],
       btu: 24000,
       areaCoverage: 55,
       energyEfficiency: 12,
@@ -330,7 +483,23 @@ const data = {
       rating: 4.5,
       numReviews: 139,
       description: "30000 BTU Mini Split Air Conditioner, Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
-      features: "Remote Control",
+      features: [
+        'Energy Saving',
+        'Remote Control',
+        "Anti-Bacteria Filter",
+        "Dust Filter",
+        "Fast Cooling",
+        "Dual Sensing",
+        "Anti Corrosion Gold Fin™",
+        "Auto Restart",
+        "Smart Operation"
+      ],
+      mode: [
+        "Cooling Mode",
+        " Drying Mode ",
+        "Fan Mode",
+        "Silent Mode"
+      ],
       btu: 30000,
       areaCoverage: 75,
       energyEfficiency: 12,
@@ -369,7 +538,23 @@ const data = {
       rating: 4.5,
       numReviews: 139,
       description: "36000 BTU Mini Split Air Conditioner, Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
-      features: "Remote Control",
+      features: [
+        'Energy Saving',
+        'Remote Control',
+        "Anti-Bacteria Filter",
+        "Dust Filter",
+        "Fast Cooling",
+        "Dual Sensing",
+        "Anti Corrosion Gold Fin™",
+        "Auto Restart",
+        "Smart Operation"
+      ],
+      mode: [
+        "Cooling Mode",
+        " Drying Mode ",
+        "Fan Mode",
+        "Silent Mode"
+      ],
       btu: 36000,
       areaCoverage: 85,
       energyEfficiency: 12,
@@ -402,13 +587,29 @@ const data = {
       category: "Mini Split AC",
       image: "/images/p12.jpg",
       price: 1199,
-      discount:40,
+      discount: 40,
       countInStock: 4,
       brand: "LG",
       rating: 4.5,
       numReviews: 139,
       description: "40000 BTU Mini Split Air Conditioner. Model LSA3AR2M. Smart Saver System. 10 Meter Wind Blast. Easy to Clean Filter. Optimal Airflow. Two Years Compressor, Parts and service warranty.",
-      features: "Remote Control",
+      features: [
+        'Energy Saving',
+        'Remote Control',
+        "Anti-Bacteria Filter",
+        "Dust Filter",
+        "Fast Cooling",
+        "Dual Sensing",
+        "Anti Corrosion Gold Fin™",
+        "Auto Restart",
+        "Smart Operation"
+      ],
+      mode: [
+        "Cooling Mode",
+        " Drying Mode ",
+        "Fan Mode",
+        "Silent Mode"
+      ],
       btu: 40000,
       areaCoverage: 92,
       energyEfficiency: 12,
@@ -720,8 +921,9 @@ const data = {
       info: "LG offers optimized Heating, Ventilation, and Air Conditioning for both commercial and residential solutions, ensuring fresh and crisp air for various environments.",
       link: "https://www.youtube.com/embed/df0y4MynElM?si=wXHBa1LmiWXyKsI3",
       companyLink: "https://www.lg.com/global/business/hvac",
-      numReviews: 15,
+      numReviews: 30,
       isAdmin: false,
+      logo: "/images/lg-logo.png"
     },
     {
       name: 'Samsung',
@@ -730,18 +932,31 @@ const data = {
       info: "Samsung provides the best air conditioner systems to fit your needs, whether you are seeking solutions for your home or for a business. WindFree™ technology creates a much gentler and milder air flow, evenly distributed through tens of thousands of micro holes, so people in the room feel almost no wind - just comfortable cool air",
       link: "https://www.youtube.com/embed/1dQ1MBSUHoQ?si=XgYwIiFsEHXc1Cl7&clip=UgkxU-wNgQmBp0v_YmQiAkAlIHFzL6GTFAIK&clipt=ENizARjwqAI",
       companyLink: "https://www.samsung.com/levant/business/system-air-conditioner-solutions/home/",
-      numReviews: 8,
+      numReviews: 33,
       isAdmin: false,
+      logo: "/images/samsung-logo.png"
     },
     {
       name: 'Lennox',
       brand: "Lennox",
-      rating: 4.5,
+      rating: 2.5,
       info: "Lennox International Inc. is an American provider of climate control products for the heating, ventilation, and air conditioning (HVAC) and refrigeration markets.",
       link: "https://www.youtube.com/embed/PYiNnQwo04w?si=ZWkYIzkpP4VSmVPZ",
       companyLink: "https://www.lennox.com/residential/",
-      numReviews: 8,
+      numReviews: 18,
       isAdmin: false,
+      logo: "/images/lennox-logo.png"
+    },
+    {
+      name: 'Haier',
+      brand: "Haier",
+      rating: 3.4,
+      info: "Haier Group Corporation is a Chinese multinational home appliances and consumer electronics company headquartered in Qingdao, Shandong. Its Haier Smart Home Company affiliate, of which it owns 35%, designs, develops, manufactures and sells home appliances including refrigerators, air conditioners.",
+      link: "https://www.youtube.com/embed/OCFJNvhj4hI?si=e4zIp1Qteo71eQOl",
+      companyLink: "https://www.haier.com/global/about-haier/",
+      numReviews: 25,
+      isAdmin: false,
+      logo: "/images/haier-logo.png"
     }
 
   ],
@@ -895,7 +1110,7 @@ const data = {
 
     {
       client: "Loft&Hubs Corp",
-      text: "We obtained the last transh and last milestone",
+      text: "We obtained the last transh and last milestone.",
       date: "2024-11-05",
       serviceProvider: "test-company2@example.com",
       projectName: "Loft Renovation",
@@ -911,29 +1126,29 @@ const data = {
 
     {
       client: "Michaella Donowan",
-      text: "When can we start nogotiation regarding the first draft be ready?",
-      date: "2024-12-30",
+      text: "Negotiation Status regarding the project readiness is 'Closed'.",
+      date: "2024-12-23",
       serviceProvider: "test-company4@example.com",
       projectName: "Appartments Design"
     },
     {
       client: "Viki Crage",
       text: "Can we upgrade the construction layout?",
-      date: "2024-11-25",
+      date: "2025-01-22",
       serviceProvider: "test-company1@example.com",
       projectName: "Construction Design",
     },
 
     {
       client: "Venty Corp",
-      text: "When will we get the first transh for the first draft and previous milestone?",
-      date: "2024-11-15",
+      text: "When will we get the second transh for the second draft and previous milestone?",
+      date: "2025-02-15",
       serviceProvider: "test-company2@example.com",
       projectName: "Ventilation System Architecting"
     },
     {
       client: "Zyclon LLP",
-      text: "We got last transh yesterday. We are ready for commissioning fase",
+      text: "We got the last transh yesterday. We are ready for commissioning phase.",
       date: "2024-08-30",
       serviceProvider: "test-company3@example.com",
       projectName: "Constraction of a supply and exhaust ventilation system"
@@ -941,7 +1156,7 @@ const data = {
 
     {
       client: "ACVent Corp",
-      text: "Commissioning fase was passed without any obsticles. Can we sign the final account papers?",
+      text: "	The commissioning phase was passed without any obstacles. Can we sign the final account papers?",
       date: "2024-05-30",
       serviceProvider: "test-company4@example.com",
       projectName: "Design of a chimney system"
@@ -980,9 +1195,9 @@ const data = {
       status: 'Pending',
     },
     {
-      amount: 2500,
-      date: '2024-12-13',
-      hoursWorked: 78,
+      amount: 5000,
+      date: '2025-02-13',
+      hoursWorked: 156,
       status: 'Pending',
     },
     {

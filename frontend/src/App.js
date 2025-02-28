@@ -235,35 +235,35 @@ function App() {
               : 'side-navbar d-flex justify-content-between flex-wrap flex-column bg-secondary'
           }
         >
-          <Nav className="flex-column text-white w-100 p-2" >
-            <Nav.Item className='search-title'>
+          <Nav className="flex-column text-white w-100 p-4" >
+            <Nav.Item className='search-title me-auto'>
               <strong>Categories</strong>
             </Nav.Item>
             {categories.map((category) => (
               <Nav.Item key={category}>
                 <LinkContainer
-                  to={{ pathname: '/search', search: `category=${category}` }}
+                  to={{ pathname: '/search', search: `category=${category}` }} 
                   onClick={() => setSidebarIsOpen(false)}
                 >
-                  <Nav.Link>{category}</Nav.Link>
+                  <Nav.Link className='px-1'>{category}</Nav.Link>
                 </LinkContainer>
               </Nav.Item>
             ))}
-            <Nav.Item className='search-title'>
+            <Nav.Item className='search-title me-auto'>
               <Link to="/uploadfile" onClick={checkoutHandler} className="links fw-bold">Get A Quote</Link>
             </Nav.Item>
-            <Nav.Item className='search-title'>
+            <Nav.Item className='search-title me-auto'>
               <Link to="/offers" onClick={checkoutOffersHandler} className="links fw-bold">Offers</Link>
             </Nav.Item>
-            <Nav.Item className='search-title'>
+            <Nav.Item className='search-title me-auto'>
               <Link to="/sellers" className="links fw-bold">Sellers</Link>
             </Nav.Item>
-            <Nav.Item className='search-title'>
+            <Nav.Item className='search-title me-auto'>
               <Link to="/blogs" className="links fw-bold">Blogs</Link>
             </Nav.Item>
-            <Nav.Item className='search-title'>
+            <Nav.Item className='search-title me-auto'>
               <Link to="/contact" className="links fw-bold">Contact</Link>
-            </Nav.Item>    <Nav.Item className='search-title'>
+            </Nav.Item>    <Nav.Item className='search-title me-auto'>
               <Link to="/about-us" className="links fw-bold">About Us</Link>
             </Nav.Item>
           </Nav>

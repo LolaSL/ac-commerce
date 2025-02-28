@@ -44,7 +44,9 @@ export default function SellerEditPage() {
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
   const [info, setInfo] = useState("");
-
+  const [logo, setLogo] = useState("");
+  const [companyLink, setCompanyLink] = useState("");
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,6 +55,8 @@ export default function SellerEditPage() {
         setName(data.name);
         setBrand(data.brand);
         setInfo(data.info);
+        setLogo(data.logo);
+        setCompanyLink(data.companyLink);
         dispatch({ type: "FETCH_SUCCESS" });
       } catch (err) {
         dispatch({
@@ -75,6 +79,8 @@ export default function SellerEditPage() {
           name,
           brand,
           info,
+          logo,
+          companyLink
         },
         {
           headers: { Authorization: `Bearer ${userInfo.token}` },
@@ -102,7 +108,25 @@ export default function SellerEditPage() {
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
-        <Form onSubmit={submitHandler}>
+            <Form onSubmit={submitHandler}>
+        <Form.Group className="mb-3" controlId="logo">
+        <Form.Label>Logo</Form.Label>
+        <Form.Control
+          type="file"
+          accept="image/*"
+          required
+          onChange={(e) => setLogo(e.target.files[0])} 
+        />
+              </Form.Group>     
+              <Form.Group className="mb-3" controlId="companyLink">
+        <Form.Label>Company Link</Form.Label>
+        <Form.Control
+          type="text"
+          required
+          value={companyLink}
+          onChange={(e) => setCompanyLink(e.target.value)}
+        />
+      </Form.Group>        
           <Form.Group className="mb-3" controlId="name">
             <Form.Label>Name</Form.Label>
             <Form.Control

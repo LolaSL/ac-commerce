@@ -6,7 +6,7 @@ import MessageBox from "../components/MessageBox";
 import { Link } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
-import {Card } from 'react-bootstrap'
+import { Card } from "react-bootstrap";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -48,7 +48,7 @@ export default function SellersPage() {
     };
     fetchData();
   }, []);
-
+  
   return (
     <Container className="seller-container">
       <Helmet>
@@ -59,23 +59,36 @@ export default function SellersPage() {
         <LoadingBox></LoadingBox>
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
-        ) : (
-            
+      ) : (
         <div>
-          {sellers.map((seller, index) => (<Card className="mb-3">
-            <div key={index} className="mt-4 mb-4">
-              <Link
-                to={`/sellers/${seller._id}`}
-                className="seller-name text-secondary "
-              >
-                <h2 className="seller-name p-4">{seller.name}</h2>
-              </Link>
-              <p className="p-4">Brand: {seller.brand}</p>
-              <p className="seller-paragraph p-2">Information: {seller.info}</p>
-           </div> </Card>
-         ))}
+          {sellers.map((seller, index) => (
+            <Card key={index} className="mb-3">
+              <div className="mt-4 mb-4">
+              {seller.logo ? (
+          <div className="logo-container p-4">
+           <img src={`${seller.logo}`} alt={`${seller.name} logo`} className="seller-logo" />
+
+          </div>
+        ) : (
+          <p>No logo available</p>
+        )}
+                <Link
+                  to={`/sellers/${seller._id}`}
+                  className="seller-name text-secondary"
+                >
+                  <h2 className="seller-name p-4">{seller.name}</h2>
+                </Link>
+     
+
+                <p className="p-4">Brand: {seller.brand}</p>
+                <p className="seller-paragraph p-2">
+                  Information: {seller.info}
+                </p>
+              </div>
+            </Card>
+          ))}
         </div>
       )}
-    </Container> 
+    </Container>
   );
 }

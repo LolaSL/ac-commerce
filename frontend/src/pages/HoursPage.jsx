@@ -9,7 +9,7 @@ const reducer = (state, action) => {
     case "FETCH_REQUEST":
       return { ...state, loading: true };
     case "FETCH_SUCCESS":
-      return { ...state, earnings: action.payload, loading: false }; 
+      return { ...state, earnings: action.payload, loading: false };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
     default:
@@ -55,34 +55,40 @@ const HoursPage = () => {
   if (error) return <p>Error loading earnings: {error}</p>;
 
   return (
-    <Container>
+    <Container className="provider-container">
       <h1 className="mt-4 mb-4 fw-bold">Work Duration</h1>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Project Name</th>
-            <th>Time On Project</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {earnings.length > 0 ? (
-            earnings.map((earning, index) => (
-              <tr key={earning._id}>
-                <td>{index + 1}</td>
-                <td>{earning.projectName.name}</td>{" "}
-                <td>{earning.projectName.hoursWorked}</td>{" "}
-                <td>{new Date(earning.date).toLocaleDateString()}</td>
-              </tr>
-            ))
-          ) : (
+      <div className="table-responsive">
+        <Table striped bordered hover>
+          <thead>
             <tr>
-              <td colSpan="4">No earnings data found</td>
+              <th>ID</th>
+              <th>Project Name</th>
+              <th>Time On Project</th>
+              <th>Date</th>
             </tr>
-          )}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {earnings.length > 0 ? (
+              earnings.map((earning, index) => (
+                <tr key={earning._id}>
+                  <td data-label="ID">{index + 1}</td>
+                  <td data-label="Project Name">{earning.projectName.name}</td>{" "}
+                  <td data-label="Time On Project">
+                    {earning.projectName.hoursWorked}
+                  </td>{" "}
+                  <td data-label="Date">
+                    {new Date(earning.date).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4">No earnings data found</td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      </div>
     </Container>
   );
 };

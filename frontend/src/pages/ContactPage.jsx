@@ -49,24 +49,24 @@ const ContactPage = () => {
       setLoading(false);
     }
   };
- 
+
   useEffect(() => {
     if (responseMessage) {
       const timer = setTimeout(() => {
-        setResponseMessage(null); 
-      }, 3000); 
+        setResponseMessage(null);
+      }, 3000);
 
-      return () => clearTimeout(timer); 
+      return () => clearTimeout(timer);
     }
   }, [responseMessage]);
 
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
-        setError(null); 
-      }, 3000); 
+        setError(null);
+      }, 3000);
 
-      return () => clearTimeout(timer); 
+      return () => clearTimeout(timer);
     }
   }, [error]);
 
@@ -79,11 +79,13 @@ const ContactPage = () => {
         <Image
           src="/images/contact.jpg"
           alt="Contact Us"
-          className="responsive img rounded mt-4"
+          className="responsive-image-contact rounded mt-4"
         />
       </div>
       <div className="contact-form">
-        <h3 className="text-center fw-bold mt-4 mb-4">Contact Us</h3>
+        <h1 className="text-center contact-title fw-bold mt-4 mb-4">
+          Contact Us
+        </h1>
 
         {responseMessage && <Alert variant="success">{responseMessage}</Alert>}
         {error && <Alert variant="danger">{error}</Alert>}
@@ -190,16 +192,16 @@ const ContactPage = () => {
             />
           </Form.Group>
           <Button
-            variant="secondary"
+            variant="success"
             type="submit"
-            className="mt-4 mb-4"
+            className="mt-4 mb-4 btn btn-success"
             disabled={loading}
           >
             {loading ? "Submitting..." : "Submit"}
           </Button>
         </Form>
         <div className="contact-info">
-          <div className="info-item">
+          <div className="secondary-item">
             <i className="fas fa-map-marker-alt"></i>
             <p>
               1234 Street Name
@@ -207,7 +209,7 @@ const ContactPage = () => {
               City, State, Zip Code
             </p>
           </div>
-          <div className="info-item">
+          <div className="secondary-item">
             <i className="fas fa-phone-alt"></i>
             <p>
               251 546 9442
@@ -215,7 +217,7 @@ const ContactPage = () => {
               630 446 8851
             </p>
           </div>
-          <div className="info-item">
+          <div className="secondary-item">
             <i className="fas fa-envelope"></i>
             <p>
               info@example.com

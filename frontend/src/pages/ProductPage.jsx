@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 import Image from "react-bootstrap/Image";
 import { FaFilePdf } from "react-icons/fa";
 import { FaFileImage } from "react-icons/fa";
-
+import { BsSnow, BsDroplet, BsFan, BsVolumeMute } from "react-icons/bs";
 const reducer = (state, action) => {
   switch (action.type) {
     case "REFRESH_PRODUCT":
@@ -39,6 +39,13 @@ const reducer = (state, action) => {
     default:
       return state;
   }
+};
+
+const modeIcons = {
+  "Cooling Mode": <BsSnow className="mode-icon" />,
+  "Drying Mode": <BsDroplet className="mode-icon" />,
+  "Fan Mode": <BsFan className="mode-icon" />,
+  "Silent Mode": <BsVolumeMute className="mode-icon" />,
 };
 
 function ProductPage() {
@@ -129,8 +136,16 @@ function ProductPage() {
     <MessageBox variant="danger">{error}</MessageBox>
   ) : (
     <div className="p-4">
+      <Helmet>
+        <title>{product.name}</title>
+      </Helmet>
       <Row>
         <Col md={6}>
+          <ListGroup.Item>
+            <h1 className="product-title">
+              <strong>{product.name}</strong>
+            </h1>
+          </ListGroup.Item>
           <Image
             className="responsive"
             src={selectedImage || product.image}
@@ -139,12 +154,6 @@ function ProductPage() {
         </Col>
         <Col md={3}>
           <ListGroup variant="flush">
-            <ListGroup.Item>
-              <Helmet>
-                <title>{product.name}</title>
-              </Helmet>
-              <h1>{product.name}</h1>
-            </ListGroup.Item>
             <ListGroup.Item>
               <Rating
                 rating={product.rating}
@@ -201,8 +210,40 @@ function ProductPage() {
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
-              <strong> Description: </strong>{" "}
+              <strong> Description: </strong>
               <p className="product-paragraph">{product.description}</p>
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <strong>BTU:</strong> {product.btu}BTU
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <strong>Area coverage:</strong> {product.areaCoverage}m2
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <strong>Energy eficiency:</strong> {product.energyEfficiency}
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <strong>Product Features:</strong> <br />
+              {product.features?.join(", ")}
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <strong>Mode:</strong> <br />
+              {product.mode?.map((m, index) => {
+                const trimmedMode = m.trim();
+                return (
+                  <span
+                    key={index}
+                    style={{
+                      marginRight: "10px",
+                      display: "inline-flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    {modeIcons[trimmedMode] || "❓"}{" "}
+                    <span style={{ marginLeft: "5px" }}>{trimmedMode}</span>
+                  </span>
+                );
+              })}
             </ListGroup.Item>
             <ListGroup.Item>
               <strong>Product dimensions (WxHxD):</strong>{" "}
@@ -255,7 +296,7 @@ function ProductPage() {
         </Col>
       </Row>
       <div className="my-3 mb-3">
-        <h2>Documentation</h2>
+        <h3 className="product-title">Documentation</h3>
         <ul>
           {product.documents && product.documents.length > 0 ? (
             product.documents.map((doc, index) => (
@@ -284,7 +325,9 @@ function ProductPage() {
         </ul>
       </div>
       <div className="my-3">
-        <h2 ref={reviewsRef}>Reviews</h2>
+        <h3 className="product-title" ref={reviewsRef}>
+          Reviews
+        </h3>
         <div className="mb-3">
           {product.reviews.length === 0 && (
             <MessageBox>No review found</MessageBox>
@@ -303,7 +346,7 @@ function ProductPage() {
         <div className="my-3">
           {userInfo ? (
             <form onSubmit={submitHandler}>
-              <h2>Write a customer review</h2>
+              <h3 className="product-title">Write a customer review</h3>
               <Form.Group className="mb-3" controlId="rating">
                 <Form.Label>Rating</Form.Label>
                 <Form.Control

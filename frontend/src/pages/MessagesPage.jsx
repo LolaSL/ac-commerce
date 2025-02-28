@@ -56,27 +56,28 @@ const MessagesPage = ({ messageId }) => {
   if (error) return <p>Error loading messgaes: {error}</p>;
 
   return (
-    <Container>
+    <Container className="provider-container">
       <h1 className="mt-4 mb-4 fw-bold">Messages</h1>
+      <div className="table-responsive">
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>#</th>
+            <th>ID</th>
             <th>Client Name</th>
             <th>Project Name</th>
             <th>Message</th>
             <th>Date</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody> 
           {messages && messages.length > 0 ? (
             messages.map((message, index) => (
               <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{message.client}</td>
-                <td>{message.projectName}</td>
-                <td>{message.text}</td>
-                <td>{new Date(message.date).toLocaleDateString()}</td>
+                 <td data-label="ID">{index + 1}</td>
+                 <td data-label="Client Name">{message.client}</td>
+                 <td data-label="Project Name">{message.projectName}</td>
+                 <td data-label="Message">{message.text}</td>
+                 <td data-label="Date">{new Date(message.date).toLocaleDateString()}</td>
               </tr>
             ))
           ) : (
@@ -86,6 +87,7 @@ const MessagesPage = ({ messageId }) => {
           )}
         </tbody>
       </Table>
+      </div>
     </Container>
   );
 };

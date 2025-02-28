@@ -44,10 +44,17 @@ export default function PlaceOrderPage() {
         cart.cartItems.reduce((a, c) => a + c.quantity * (c.price * (1 - (c.discount || 0) / 100)), 0)
       )
     : 0;
-  
-  cart.shippingPrice = cart.itemsPrice > 0 ? round2(10) : 0;
-  cart.taxPrice = cart.itemsPrice > 0 ? round2(0.15 * cart.itemsPrice) : 0;
-  cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
+    const getShippingPrice = (itemsPrice, items) => {
+      if (itemsPrice > 5000) return round2(100); 
+      if (itemsPrice > 2000) return round2(50);
+      if (itemsPrice > 500) return round2(25);
+      return round2(10);
+    };
+    
+    cart.shippingPrice = getShippingPrice(cart.itemsPrice, cart.cartItems);
+    cart.taxPrice = round2(0.15 * cart.itemsPrice);
+    cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
+    
   
   console.log("Cart Calculations:", { 
     itemsPrice: cart.itemsPrice, 

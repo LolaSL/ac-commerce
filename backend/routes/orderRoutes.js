@@ -18,14 +18,14 @@ orderRouter.get(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const pageSize = 15; 
-    const page = Number(req.query.page) || 1; 
+    const pageSize = 15;
+    const page = Number(req.query.page) || 1;
     const orders = await Order.find()
       .populate('user', 'name')
-      .skip(pageSize * (page - 1)) 
-      .limit(pageSize); 
-    const countOrders = await Order.countDocuments(); 
-    const pages = Math.ceil(countOrders / pageSize); 
+      .skip(pageSize * (page - 1))
+      .limit(pageSize);
+    const countOrders = await Order.countDocuments();
+    const pages = Math.ceil(countOrders / pageSize);
     res.send({ orders, page, pages });
   })
 );
@@ -213,10 +213,20 @@ orderRouter.get(
   '/mine',
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const orders = await Order.find({ user: req.user._id });
-    res.send(orders);
+    const pageSize = 15;
+    const page = Number(req.query.page) || 1;
+    const countOrders = await Order.countDocuments({ user: req.user._id });
+    const orders = await Order.find({ user: req.user._id })
+      .sort({ createdAt: -1 })
+      .skip(pageSize * (page - 1))
+      .limit(pageSize);
+
+    const pages = Math.ceil(countOrders / pageSize);
+
+    res.send({ orders, page, pages });
   })
 );
+
 
 orderRouter.get(
   '/:id',

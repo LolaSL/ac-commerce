@@ -35,6 +35,7 @@ const productSchema = new mongoose.Schema(
     numReviews: { type: Number, required: true },
     reviews: [reviewSchema],
     features: [{ type: String }],
+    mode:[{ type: String }],
     btu: { type: Number },
     areaCoverage: { type: Number },
     energyEfficiency: { type: Number },

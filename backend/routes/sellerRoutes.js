@@ -2,46 +2,47 @@ import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import Seller from '../models/sellerModel.js';
 import { isAuth, isAdmin } from '../utils.js';
-
+import multer from 'multer';
+const upload = multer()
 const sellerRouter = express.Router();
 
 sellerRouter.get(
   '/all',
   expressAsyncHandler(async (req, res) => {
-      try {
-          const sellers = await Seller.find({});
-          res.json(sellers);
-      } catch (err) {
-          res.status(500).json({ message: err.message });
-      }
+    try {
+      const sellers = await Seller.find({});
+      res.json(sellers);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
   })
 );
 
 
 sellerRouter.get(
-  '/',
-  isAuth,
-  isAdmin,
+  "/",
   expressAsyncHandler(async (req, res) => {
     try {
-      const pageSize = 10;
+      
       const page = Number(req.query.page) || 1;
-
-      const countSellers = await Seller.countDocuments();
-      const sellers = await Seller.find({})
-        .skip(pageSize * (page - 1))
-        .limit(pageSize);
-
-      res.send({
-        sellers,
+      const limit = Number(req.query.limit) || 10;
+      const skip = (page - 1) * limit;
+      const sellers = await Seller.find().skip(skip).limit(limit);
+      const count = await Seller.countDocuments(); 
+      const totalPages = Math.ceil(count / limit);  
+      res.json({
         page,
-        pages: Math.ceil(countSellers / pageSize),
+        totalPages,
+        sellers,
       });
     } catch (error) {
-      res.status(500).send({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
   })
 );
+
+
+
 
 
 sellerRouter.get(
@@ -58,23 +59,34 @@ sellerRouter.get(
 
 
 sellerRouter.post(
-  '/',
+  "/",
   isAuth,
   isAdmin,
+  upload.single("logo"),
   expressAsyncHandler(async (req, res) => {
-    const newSeller = new Seller({
-      name: req.body.name,
-      brand: req.body.brand,
-      info: req.body.info,
-    });
-    try {
-      const seller = await newSeller.save();
-      res.status(201).send({ _id: seller._id, message: 'Seller Created' });
-    } catch (err) {
-      res.status(500).send({ message: 'Error creating seller' });
-    }
+
+      const { name, brand, info, companyLink } = req.body;
+      const logo = req.file ? `/uploads/${req.file.filename}` : "";
+
+      if (!name || !brand || !info || !companyLink || !logo) {
+        return res.status(400).json({ message: "All fields are required!" });
+      }
+
+      const newSeller = new Seller({
+        name,
+        brand,
+        info,
+        companyLink,
+        logo,
+      });
+
+      const savedSeller = await newSeller.save();
+      console.log(savedSeller);
+ 
   })
 );
+
+
 
 
 sellerRouter.put(
@@ -84,9 +96,11 @@ sellerRouter.put(
   expressAsyncHandler(async (req, res) => {
     const seller = await Seller.findById(req.params.id);
     if (seller) {
+      seller.image = req.body.image;
       seller.name = req.body.name || seller.name;
       seller.brand = req.body.brand || seller.brand;
       seller.info = req.body.info || seller.info;
+      seller.companyLink = req.body.companyLink;
       try {
         const updatedSeller = await seller.save();
         res.send({ message: 'Seller Updated', seller: updatedSeller });

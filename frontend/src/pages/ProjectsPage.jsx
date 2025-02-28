@@ -56,33 +56,32 @@ const Projects = () => {
   if (error) return <p>Error loading projects: {error}</p>;
 
   return (
-    <Container>
-      <h2 className="mt-4 mb-4 fw-bold"> Projects</h2>
-      {projects.length > 0 ? (
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Status</th>
-              <th>Time On Project</th>
-            </tr>
-          </thead>
-          <tbody>
-            {projects.map((project, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{project.name}</td>
-                <td>{project.status}</td>
-                <td>{project.hoursWorked}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      ) : (
-        <p>No projects available</p>
-      )}
-    </Container>
+<Container classname="provider-container">
+  <h2 className="mt-4 mb-4 fw-bold">Projects</h2>
+  <div className="table-responsive">
+    <Table striped bordered hover>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Project Name</th>
+          <th>Status</th>
+          <th>Time On Project</th>
+        </tr>
+      </thead>
+      <tbody>
+        {projects.map((project, index) => (
+          <tr key={index}>
+            <td data-label="ID">{index + 1}</td>
+            <td data-label="Project Name">{project.name}</td>
+            <td data-label="Status">{project.status}</td>
+            <td data-label="Time On Project">{project.hoursWorked}</td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
+  </div>
+</Container>
+
   );
 };
 

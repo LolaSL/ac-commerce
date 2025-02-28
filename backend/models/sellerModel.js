@@ -20,10 +20,11 @@ const sellerSchema = new mongoose.Schema(
     brand: { type: String, required: true },
     info: { type: String, required: true },
     link: { type: String, required: true },
-    companyLink:{ type: String, required: true },
+    companyLink: { type: String, required: true },
     rating: { type: Number, default: 0 },
     numReviews: { type: Number, default: 0 },
     reviews: [reviewSchema],
+    logo: { type: String, default: "" },
   },
   {
     timestamps: true,
