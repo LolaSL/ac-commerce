@@ -4,11 +4,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
 import { toast } from "react-toastify";
 import { Store } from "../Store.js";
 import LoadingBox from "../components/LoadingBox.jsx";
 import MessageBox from "../components/MessageBox.jsx";
 import { getError } from "../utils.js";
+import { Helmet } from "react-helmet-async";
+import { Table } from "react-bootstrap";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -105,7 +108,7 @@ export default function BlogsPage() {
       try {
         dispatch({ type: "CREATE_REQUEST" });
         const { data } = await axios.post(
-         `/api/blogs/`,
+          `/api/blogs/`,
           {},
           {
             headers: { Authorization: `Bearer ${userInfo.token}` },
@@ -138,14 +141,21 @@ export default function BlogsPage() {
   };
 
   return (
-    <div className="p-4">
+    <Container className="provider-container">
+      <Helmet>
+        <title>Blogs </title>
+      </Helmet>
       <Row>
         <Col>
           <h1>Blogs</h1>
         </Col>
         <Col className="col text-end">
           <div>
-            <Button type="button" className="btn btn-secondary" onClick={createHandler}>
+            <Button
+              type="button"
+              className="btn btn-secondary"
+              onClick={createHandler}
+            >
               Create Blog
             </Button>
           </div>
@@ -160,8 +170,8 @@ export default function BlogsPage() {
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
-        <>
-          <table className="table">
+        <div className="table-responsive">
+          <Table striped bordered hover>
             <thead>
               <tr>
                 <th>ID</th>
@@ -173,9 +183,9 @@ export default function BlogsPage() {
             <tbody>
               {blogs.map((blog) => (
                 <tr key={blog._id}>
-                  <td>{blog._id}</td>
-                  <td>{blog.title}</td>
-                  <td>{blog.shortDescription}</td>
+                  <td data-label="ID">{blog._id}</td>
+                  <td data-label="Title">{blog.title}</td>
+                  <td data-label="Description">{blog.shortDescription}</td>
 
                   <td>
                     <Button
@@ -197,7 +207,7 @@ export default function BlogsPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
           <div>
             <nav>
               <ul className="pagination">
@@ -241,8 +251,8 @@ export default function BlogsPage() {
               </ul>
             </nav>
           </div>
-        </>
+        </div>
       )}
-    </div>
+    </Container>
   );
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useReducer, useState } from "react";
-import Button from "react-bootstrap/Button";
+import { Container, Table, Button } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -129,7 +129,7 @@ export default function UserListPage() {
   };
 
   return (
-    <div className="p-4">
+    <Container className="provider-container">
       <Helmet>
         <title>Users</title>
       </Helmet>
@@ -141,8 +141,8 @@ export default function UserListPage() {
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
         ) : (
-            <>
-        <table className="table">
+            <div className="table-responsive">
+        <Table striped bordered hover>
           <thead>
             <tr>
               <th>
@@ -169,10 +169,10 @@ export default function UserListPage() {
           <tbody>
             {sortedUsers.map((user) => (
               <tr key={user._id}>
-                <td>{user._id}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.isAdmin ? "YES" : "NO"}</td>
+                <td data-label="ID">{user._id}</td>
+                <td data-label="Name">{user.name}</td>
+                <td data-label="Email">{user.email}</td>
+                <td data-label="Is Admin">{user.isAdmin ? "YES" : "NO"}</td>
                 <td>
                   <Button
                     type="button"
@@ -193,7 +193,7 @@ export default function UserListPage() {
               </tr>
             ))}
           </tbody>
-            </table>
+            </Table>
             <div>
             <nav>
               <ul className="pagination">
@@ -237,8 +237,8 @@ export default function UserListPage() {
               </ul>
             </nav>
               </div>
-              </>
+              </div>
       )}
-    </div>
+    </Container>
   );
 }

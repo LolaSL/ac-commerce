@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useReducer} from "react";
 import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 import { Store } from "../Store";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import { getError } from "../utils";
+import { Container, Table, Button } from "react-bootstrap";
+import { Helmet } from "react-helmet-async";
+
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -105,7 +107,10 @@ const SellersEditPage = () => {
   };
 
   return (
-    <div className="p-4">
+    <Container className="provider-container">
+    <Helmet>
+<title>Hours Page</title>
+</Helmet>
 
       {loadingCreate && <LoadingBox></LoadingBox>}
       {loadingDelete && <LoadingBox></LoadingBox>}
@@ -115,8 +120,8 @@ const SellersEditPage = () => {
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
-        <>
-          <table className="table">
+        <div className="table-responsive">
+          <Table striped bordered hover>
             <thead>
               <tr>
                 <th>ID</th>
@@ -125,18 +130,17 @@ const SellersEditPage = () => {
                 <th>NAME</th>
                 <th>BRAND</th>
                 <th>INFO</th>
-               
-                <th>ACTIONS</th>
+                    <th>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
               {sellers.map((seller) => (
                 <tr key={seller._id}>
-                  <td>{seller._id}</td>
-                  <td>
+                  <td data-label="ID">{seller._id}</td>
+                  <td data-label="Logo">
                     <img src={seller.logo} alt="logo" width="50" />
                   </td>
-                  <td>
+                  <td  data-label="Link">
                     <a
                       href={seller.companyLink}
                       target="_blank"
@@ -145,9 +149,9 @@ const SellersEditPage = () => {
                       View
                     </a>
                   </td>
-                  <td>{seller.name}</td>
-                  <td>{seller.brand}</td>
-                  <td>{seller.info}</td>
+                  <td data-label="Name">{seller.name}</td>
+                  <td data-label="Brand">{seller.brand}</td>
+                  <td data-label="Info">{seller.info}</td>
                   
                   <td>
                     <Button
@@ -157,7 +161,7 @@ const SellersEditPage = () => {
                     >
                       Edit
                     </Button>
-                </td><td>
+                    &nbsp;
                     <Button
                       type="button"
                       variant="light"
@@ -169,35 +173,34 @@ const SellersEditPage = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
           <div>
             <nav>
               <ul className="pagination">
                 <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                  <Link className="page-link" to={`/admin/serviceProviders?page=${currentPage - 1}`}>
+                  <Link className="page-link" to={`/admin/serviceProviders?page=${Number(currentPage) - 1}`}>
                     &lt;
                   </Link>
                 </li>
                 {[...Array(pages).keys()].map((x) => (
-                  <li key={x + 1} className={`page-item ${x + 1 === currentPage ? "active" : ""}`}>
+                  <li key={x + 1} className={`page-item ${x + 1 === Number(currentPage) ? "active" : ""}`}>
                     <Link className="page-link" to={`/admin/serviceProviders?page=${x + 1}`}>
                       {x + 1}
                     </Link>
                   </li>
                 ))}
                 <li className={`page-item ${currentPage === pages ? "disabled" : ""}`}>
-                  <Link className="page-link" to={`/admin/serviceProviders?page=${currentPage + 1}`}>
+                  <Link className="page-link" to={`/admin/serviceProviders?page=${Number(currentPage) + 1}`}>
                     &gt;
                   </Link>
                 </li>
               </ul>
             </nav>
           </div>
-          
-        </>
+          </div>
       )}
       
-    </div>
+    </Container>
   );
 };
 

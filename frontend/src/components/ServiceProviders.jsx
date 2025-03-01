@@ -5,8 +5,8 @@ import { Store } from "../Store";
 import { getError } from "../utils";
 import LoadingBox from "../components/LoadingBox.jsx";
 import MessageBox from "../components/MessageBox.jsx";
-import { Table } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
+import { Container, Table } from "react-bootstrap";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -123,7 +123,7 @@ const ServiceProviders = () => {
   };
 
   return (
-    <div>
+    <Container className="provider-container">
       <Helmet>
         <title>Service Providers Dashboard</title>
       </Helmet>
@@ -133,7 +133,7 @@ const ServiceProviders = () => {
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
-        <>
+        <div className="table-responsive">
           <Table striped bordered hover responsive className="table-sm">
             <thead>
               <tr>
@@ -153,26 +153,30 @@ const ServiceProviders = () => {
               {serviceProviders.length > 0 ? (
                 serviceProviders.map((serviceProvider, index) => (
                   <tr key={index}>
-                    <td>{(currentPage - 1) * 10 + index + 1}</td>
-                    <td>{serviceProvider.name}</td>
-                    <td>{serviceProvider.company}</td>
-                    <td>{serviceProvider.typeOfProvider}</td>
-                    <td>{serviceProvider.experience} years</td>
-                    <td>{serviceProvider.email}</td>
-                    <td>{serviceProvider.phone}</td>
-                    <td className="text-center">
-                      {serviceProvider.completedProjects}
-                    </td>
-                    <td>{serviceProvider.inProgressProjects}</td>
-                    <td>${serviceProvider.totalEarnings?.toFixed(2) || 0}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="10">No service providers found</td>
-                </tr>
-              )}
-            </tbody>
+              <td data-label="ID">{(currentPage - 1) * 10 + index + 1}</td>
+              <td data-label="Name">{serviceProvider.name}</td>
+              <td data-label="Company">{serviceProvider.company}</td>
+              <td data-label="Specialty">{serviceProvider.typeOfProvider}</td>
+              <td data-label="Experience">{serviceProvider.experience} years</td>
+              <td data-label="Email">{serviceProvider.email}</td>
+              <td data-label="Phone">{serviceProvider.phone}</td>
+              <td data-label="Completed Projects" className="text-center">
+                {serviceProvider.completedProjects}
+              </td>
+              <td data-label="In Progress Projects">
+                {serviceProvider.inProgressProjects}
+              </td>
+              <td data-label="Total Earnings">
+                ${serviceProvider.totalEarnings?.toFixed(2) || 0}
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="10" className="text-center">No service providers found</td>
+          </tr>
+        )}
+      </tbody>
           </Table>
           <div className="mt-5">
             <h3>Project Distribution</h3>
@@ -214,9 +218,9 @@ const ServiceProviders = () => {
               Next
             </button>
           </div>
-        </>
+          </div>
       )}
-    </div>
+    </Container>
   );
 };
 

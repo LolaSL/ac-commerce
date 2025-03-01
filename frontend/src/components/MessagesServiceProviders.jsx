@@ -3,7 +3,8 @@ import axios from "axios";
 import { Store } from "../Store";
 import { getError } from "../utils";
 import { Container, Table, Button } from "react-bootstrap";
-import {  useLocation } from "react-router-dom"; 
+import { useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -17,7 +18,6 @@ const reducer = (state, action) => {
         totalPages: action.payload.totalPages,
         totalMessages: action.payload.totalMessages,
         page: action.payload.page,
-   
       };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
@@ -56,17 +56,23 @@ const MessagesServiceProviders = () => {
   useEffect(() => {
     if (messages) {
       const sorted = [...messages].sort((a, b) => {
-        const valueA = sortColumn === "serviceProvider" ? a[sortColumn]?.name : a[sortColumn];
-        const valueB = sortColumn === "serviceProvider" ? b[sortColumn]?.name : b[sortColumn];
+        const valueA =
+          sortColumn === "serviceProvider"
+            ? a[sortColumn]?.name
+            : a[sortColumn];
+        const valueB =
+          sortColumn === "serviceProvider"
+            ? b[sortColumn]?.name
+            : b[sortColumn];
 
         if (valueA === undefined || valueB === undefined) {
           return 0;
         }
 
-      
         if (typeof valueA === "string" && typeof valueB === "string") {
           const nameComparison = valueA.localeCompare(valueB);
-          if (nameComparison !== 0) return sortOrder === "asc" ? nameComparison : -nameComparison;
+          if (nameComparison !== 0)
+            return sortOrder === "asc" ? nameComparison : -nameComparison;
         }
 
         const dateA = new Date(a.date);
@@ -148,6 +154,9 @@ const MessagesServiceProviders = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>Service Provider Messagese</title>
+      </Helmet>
       <h1 className="mt-4 mb-4 fw-bold">Service Provider Messages</h1>
       {messages.length === 0 && (
         <div>
@@ -156,7 +165,8 @@ const MessagesServiceProviders = () => {
         </div>
       )}
       {messages.length > 0 && (
-        <Table striped bordered hover responsive>
+            <div className="table-responsive">
+        <Table striped bordered hover responsive className="messages">
           <thead>
             <tr>
               <th>#</th>
@@ -165,7 +175,7 @@ const MessagesServiceProviders = () => {
                   type="button"
                   onClick={() => handleSort("serviceProvider")}
                 >
-                 Provider{" "}
+                  Provider{" "}
                   {sortColumn === "serviceProvider" &&
                     (sortOrder === "asc" ? "↑" : "↓")}
                 </button>
@@ -190,12 +200,15 @@ const MessagesServiceProviders = () => {
           <tbody>
             {sortedMessages.map((message, index) => (
               <tr key={message._id}>
-                <td>{index + 1}</td>
-                <td>{message.serviceProvider?.name}</td>
-                <td>{message.client}</td>
-                <td>{message.projectName}</td>
-                <td>{message.text}</td>
-                <td>{new Date(message.date).toLocaleDateString()}</td>
+                <td data-label="ID">{index + 1}</td>
+                <td data-label= "Provider ">{message.serviceProvider?.name}</td>
+                <td data-label="Client ">{message.client}</td>
+                <td data-label="Project">{message.projectName}</td>
+                <td data-label="Message" colSpan="2" style={{ maxWidth: '500px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+  
+        {message.text.length > 100 ? message.text.substring(0, 100) + "..." : message.text}
+      </td>
+                <td data-label="Date">{new Date(message.date).toLocaleDateString()}</td>
                 <td>
                   <Button
                     variant="secondary"
@@ -215,9 +228,9 @@ const MessagesServiceProviders = () => {
               </tr>
             ))}
           </tbody>
-        </Table>
+          </Table>
+        </div>
       )}
-    
     </Container>
   );
 };

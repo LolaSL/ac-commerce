@@ -5,12 +5,14 @@ import ServiceProviders from "../components/ServiceProviders.jsx";
 import Notifications from "../components/Notifications.jsx";
 import MessagesServiceProviders from "../components/MessagesServiceProviders.jsx";
 
-export default function DashboardPage() {
-  const [activeComponent, setActiveComponent] = useState("Users");
 
+export default function DashboardPage() {
+
+  const [activeComponent, setActiveComponent] = useState("Users Product Sales");
+  
   const renderComponent = () => {
     switch (activeComponent) {
-      case "Users":
+      case "Users Product Sales":
         return <UsersProductSales />;
       case "ServiceProviders":
         return <ServiceProviders />;
@@ -24,54 +26,58 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="dashboard-container">
-      <Helmet>
-        <title>Dashboard</title>
-      </Helmet>
-      <div className="sidebar">
-        <h3>Dashboard</h3>
-        <ul>
-          <li>
-            <button
-              className={
-                activeComponent === "Users Product Sales"
-                  ? "active"
-                  : "btn-outline"
-              }
-              onClick={() => setActiveComponent("Users Product Sales")}
-            >
-              Users Product Sales
-            </button>
-          </li>
-          <li>
-            <button
-              className={activeComponent === "ServiceProviders" ? "active" : ""}
-              onClick={() => setActiveComponent("ServiceProviders")}
-            >
-              Service Providers
-            </button>
-          </li>
-          <li>
-            <button
-              className={
-                activeComponent === "MessagesServiceProviders" ? "active" : ""
-              }
-              onClick={() => setActiveComponent("MessagesServiceProviders")}
-            >
-              Messages of Service Providers
-            </button>
-          </li>
-          <li>
-            <button
-              className={activeComponent === "Notification" ? "active" : ""}
-              onClick={() => setActiveComponent("Notification")}
-            >
-              Notifications
-            </button>
-          </li>
-        </ul>
+
+      <div className="dashboard-container">
+        <Helmet>
+          <title>Dashboard</title>
+        </Helmet>
+
+        {/* Sidebar */}
+        <div className="sidebar">
+          <h3>Dashboard</h3>
+          <ul>
+            <li>
+              <button
+                className={
+                  activeComponent === "Users Product Sales"
+                    ? "active"
+                    : "btn-outline"
+                }
+                onClick={() => setActiveComponent("Users Product Sales")}
+              >
+                Users Product Sales
+              </button>
+            </li>
+            <li>
+              <button
+                className={activeComponent === "ServiceProviders" ? "active" : ""}
+                onClick={() => setActiveComponent("ServiceProviders")}
+              >
+                Service Providers
+              </button>
+            </li>
+            <li>
+              <button
+                className={
+                  activeComponent === "MessagesServiceProviders" ? "active" : ""
+                }
+                onClick={() => setActiveComponent("MessagesServiceProviders")}
+              >
+                Messages of Service Providers
+              </button>
+            </li>
+            <li>
+              <button
+                className={activeComponent === "Notification" ? "active" : ""}
+                onClick={() => setActiveComponent("Notification")}
+              >
+                Notifications
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div className="main-content">{renderComponent()}</div>
       </div>
-      <div className="main-content">{renderComponent()}</div>
-    </div>
+ 
   );
 }

@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useContext, useEffect, useReducer } from "react";
-import Button from "react-bootstrap/Button";
 import { Helmet } from "react-helmet-async";
 import { toast } from "react-toastify";
 import LoadingBox from "../components/LoadingBox";
@@ -8,7 +7,7 @@ import MessageBox from "../components/MessageBox";
 import { Store } from "../Store";
 import { getError } from "../utils";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-
+import { Container, Table, Button } from "react-bootstrap";
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -36,13 +35,22 @@ const reducer = (state, action) => {
 };
 
 export default function ServiceProviderList() {
-  const [{ loading, error, serviceProviders = [], loadingDelete, successDelete, pages }, dispatch] =
-    useReducer(reducer, {
-      loading: true,
-      error: "",
-      serviceProviders: [],
-      pages: 1,
-    });
+  const [
+    {
+      loading,
+      error,
+      serviceProviders = [],
+      loadingDelete,
+      successDelete,
+      pages,
+    },
+    dispatch,
+  ] = useReducer(reducer, {
+    loading: true,
+    error: "",
+    serviceProviders: [],
+    pages: 1,
+  });
 
   const navigate = useNavigate();
   const { state } = useContext(Store);
@@ -57,9 +65,12 @@ export default function ServiceProviderList() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/service-providers?page=${currentPage}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const { data } = await axios.get(
+          `/api/service-providers?page=${currentPage}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -71,7 +82,7 @@ export default function ServiceProviderList() {
     } else {
       console.error("Token is missing or invalid");
     }
-    
+
     if (successDelete) {
       dispatch({ type: "DELETE_RESET" });
       fetchData();
@@ -95,7 +106,7 @@ export default function ServiceProviderList() {
   };
 
   return (
-    <div>
+    <Container className="provider-container">
       <Helmet>
         <title>Service Providers</title>
       </Helmet>
@@ -107,8 +118,8 @@ export default function ServiceProviderList() {
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
-        <>
-          <table className="table">
+        <div className="table-responsive">
+           <Table striped bordered hover>
             <thead>
               <tr>
                 <th>ID</th>
@@ -122,54 +133,81 @@ export default function ServiceProviderList() {
             <tbody>
               {serviceProviders.map((serviceProvider) => (
                 <tr key={serviceProvider._id}>
-                  <td>{serviceProvider._id}</td>
-                  <td>{serviceProvider.name}</td>
-                  <td>{serviceProvider.email}</td>
-                  <td>{serviceProvider.isAdmin ? "YES" : "NO"}</td>
-                  <td>{serviceProvider.isActive ? "YES" : "NO"}</td>
-                  <td>
+                  <td data-label="ID">{serviceProvider._id}</td>
+                  <td data-label="Name">{serviceProvider.name}</td>
+                  <td data-label="Email">{serviceProvider.email}</td>
+                  <td data-label="Is Admin">{serviceProvider.isAdmin ? "YES" : "NO"}</td>
+                  <td data-label="Is Active">{serviceProvider.isActive ? "YES" : "NO"}</td>
+                  <td >
                     <Button
                       type="button"
                       variant="light"
-                      onClick={() => navigate(`/admin/manage-service-providers/${serviceProvider._id}`)}
+                      onClick={() =>
+                        navigate(
+                          `/admin/manage-service-providers/${serviceProvider._id}`
+                        )
+                      }
                     >
                       Edit
                     </Button>
-                  </td>
-                  <td>
-                    <Button type="button" variant="light" onClick={() => deleteHandler(serviceProvider)}>
+                    &nbsp;
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => deleteHandler(serviceProvider)}
+                    >
                       Delete
                     </Button>
                   </td>
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
           <div>
             <nav>
               <ul className="pagination">
-                <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                  <Link className="page-link" to={`/admin/serviceProviders?page=${currentPage - 1}`}>
+                <li
+                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                >
+                  <Link
+                    className="page-link"
+                    to={`/admin/serviceProviders?page=${currentPage - 1}`}
+                  >
                     &lt;
                   </Link>
                 </li>
                 {[...Array(pages).keys()].map((x) => (
-                  <li key={x + 1} className={`page-item ${x + 1 === currentPage ? "active" : ""}`}>
-                    <Link className="page-link" to={`/admin/serviceProviders?page=${x + 1}`}>
+                  <li
+                    key={x + 1}
+                    className={`page-item ${
+                      x + 1 === currentPage ? "active" : ""
+                    }`}
+                  >
+                    <Link
+                      className="page-link"
+                      to={`/admin/serviceProviders?page=${x + 1}`}
+                    >
                       {x + 1}
                     </Link>
                   </li>
                 ))}
-                <li className={`page-item ${currentPage === pages ? "disabled" : ""}`}>
-                  <Link className="page-link" to={`/admin/serviceProviders?page=${currentPage + 1}`}>
+                <li
+                  className={`page-item ${
+                    currentPage === pages ? "disabled" : ""
+                  }`}
+                >
+                  <Link
+                    className="page-link"
+                    to={`/admin/serviceProviders?page=${currentPage + 1}`}
+                  >
                     &gt;
                   </Link>
                 </li>
               </ul>
             </nav>
           </div>
-        </>
+        </div>
       )}
-    </div>
+    </Container>
   );
 }

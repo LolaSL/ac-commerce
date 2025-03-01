@@ -227,24 +227,26 @@ function ProductPage() {
               {product.features?.join(", ")}
             </ListGroup.Item>
             <ListGroup.Item>
-              <strong>Mode:</strong> <br />
-              {product.mode?.map((m, index) => {
-                const trimmedMode = m.trim();
-                return (
-                  <span
-                    key={index}
-                    style={{
-                      marginRight: "10px",
-                      display: "inline-flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    {modeIcons[trimmedMode] || "❓"}{" "}
-                    <span style={{ marginLeft: "5px" }}>{trimmedMode}</span>
-                  </span>
-                );
-              })}
-            </ListGroup.Item>
+  <strong>Mode:</strong> <br />
+  {product.mode?.map((m, index) => {
+    const trimmedMode = m.trim();
+    const icon = modeIcons[trimmedMode]; 
+    
+    return icon ? ( 
+      <span
+        key={index}
+        style={{
+          marginRight: "10px",
+          display: "inline-flex",
+          alignItems: "center",
+        }}
+      >
+        {icon} <span style={{ marginLeft: "5px" }}>{trimmedMode}</span>
+      </span>
+    ) : null; 
+  })}
+</ListGroup.Item>
+
             <ListGroup.Item>
               <strong>Product dimensions (WxHxD):</strong>{" "}
               {product.dimension &&

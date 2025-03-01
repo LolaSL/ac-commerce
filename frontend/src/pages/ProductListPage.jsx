@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
+import { Container, Table, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { Store } from "../Store";
 import LoadingBox from "../components/LoadingBox";
@@ -179,7 +179,7 @@ export default function ProductListPage() {
   };
 
   return (
-    <div className="p-4">
+    <Container className="provider-container">
       <Helmet>
         <title>Products</title>
       </Helmet>
@@ -204,8 +204,8 @@ export default function ProductListPage() {
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
-        <>
-          <table className="table">
+        <div className="table-responsive">
+          <Table striped bordered hover>
             <thead>
               <tr>
                 <th>
@@ -248,11 +248,11 @@ export default function ProductListPage() {
             <tbody>
               {sortedProducts.map((product) => (
                 <tr key={product._id}>
-                  <td>{product._id}</td>
-                  <td>{product.name}</td>
-                  <td>{product.price}</td>
-                  <td>{product.category}</td>
-                  <td>{product.brand}</td>
+                  <td data-label="ID">{product._id}</td>
+                  <td data-label="Name">{product.name}</td>
+                  <td data-label="Price">{product.price}</td>
+                  <td data-label="Category">{product.category}</td>
+                  <td data-label="Brand">{product.brand}</td>
                   <td>
                     <Button
                       type="button"
@@ -273,7 +273,7 @@ export default function ProductListPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
           <div>
             <nav>
               <ul className="pagination">
@@ -317,8 +317,8 @@ export default function ProductListPage() {
               </ul>
             </nav>
           </div>
-        </>
+        </div>
       )}
-    </div>
+    </Container>
   );
 }

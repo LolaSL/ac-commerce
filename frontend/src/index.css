@@ -1530,6 +1530,31 @@ canvas {
   font-weight: bold;
 }
 
+@media screen and (max-width: 768px) {
+
+.sidebar h3{
+  font-size: 16px;
+}
+  .sidebar {
+    width: 140px; /* Further narrow down the sidebar on small screens */
+    padding: 0.5rem;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+    height: 100%;
+    margin:0px;
+  }
+
+  .sidebar ul {
+    padding-left: 0;
+  }
+
+  .sidebar button {
+    width: 100%;
+    padding: 0.8rem 0;
+  }
+}
+
 .main-content {
   flex-grow: 1;
   padding: 1rem;
@@ -1631,6 +1656,20 @@ th {
   font-size: 1.2rem;
   color: #6c757d;
 }
+
+td {
+  word-wrap: break-word; 
+  overflow-wrap: break-word; 
+  white-space: normal; 
+}
+
+td[data-label="Message"] {
+  word-wrap: break-word;
+  max-width: 500px; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 button {
   margin-right: 0.5rem;

@@ -7,7 +7,8 @@ import MessageBox from "../components/MessageBox.jsx";
 import { Store } from "../Store.js";
 import { getError } from "../utils";
 import Button from "react-bootstrap/esm/Button";
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
+import { Container, Table } from "react-bootstrap";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -33,11 +34,9 @@ export default function OrderHistoryPage() {
   const { userInfo } = state;
   const navigate = useNavigate();
   const { search } = useLocation();
-  const [{ loading, error, orders,  pages }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, orders, pages }, dispatch] = useReducer(reducer, {
     loading: true,
     error: "",
-
-
   });
 
   const sp = new URLSearchParams(search);
@@ -62,52 +61,64 @@ export default function OrderHistoryPage() {
     fetchData();
   }, [userInfo, currentPage]);
   return (
-    <div>
-    <Helmet>
-      <title>Order History</title>
-    </Helmet>
+    <Container className="provider-container">
+      <Helmet>
+        <title>Order History</title>
+      </Helmet>
 
-    <h1>Order History</h1>
-    {loading ? (
-      <LoadingBox />
-    ) : error ? (
-      <MessageBox variant="danger">{error}</MessageBox>
-    ) : (
-      <>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>DATE</th>
-              <th>TOTAL</th>
-              <th>PAID</th>
-              <th>DELIVERED</th>
-              <th>ACTIONS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order._id}>
-                <td>{order._id}</td>
-                <td>{order.createdAt.substring(0, 10)}</td>
-                <td>${order.totalPrice.toFixed(2)}</td>
-                <td>{order.isPaid ? order.paidAt.substring(0, 10) : "No"}</td>
-                <td>{order.isDelivered ? order.deliveredAt.substring(0, 10) : "No"}</td>
-                <td>
-                  <Button
-                    type="button"
-                    variant="light"
-                    onClick={() => navigate(`/order/${order._id}`)}
-                  >
-                    Details
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <h1>Order History</h1>
 
-        <div>
+      {loading ? (
+        <LoadingBox />
+      ) : error ? (
+        <MessageBox variant="danger">{error}</MessageBox>
+      ) : (
+        <>
+          <div className="table-responsive">
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>DATE</th>
+                  <th>TOTAL</th>
+                  <th>PAID</th>
+                  <th>DELIVERED</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order._id}>
+                    <td data-label="ID">{order._id}</td>
+                    <td data-label="Date">
+                      {order.createdAt.substring(0, 10)}
+                    </td>
+                    <td data-label="Total">${order.totalPrice.toFixed(2)}</td>
+                    <td data-label="Paid">
+                      {order.isPaid ? order.paidAt.substring(0, 10) : "No"}
+                    </td>
+                    <td data-label="Delivered">
+                      {order.isDelivered
+                        ? order.deliveredAt.substring(0, 10)
+                        : "No"}
+                    </td>
+                    <td>
+                      <Button
+                        type="button"
+                        variant="light"
+                        onClick={() => navigate(`/order/${order._id}`)}
+                      >
+                        Details
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+
+          {/* Pagination */}
+          <div className="d-flex justify-content-center mt-3">
             <nav>
               <ul className="pagination">
                 <li
@@ -150,8 +161,8 @@ export default function OrderHistoryPage() {
               </ul>
             </nav>
           </div>
-      </>
-    )}
-  </div>
-);
+        </>
+      )}
+    </Container>
+  );
 }

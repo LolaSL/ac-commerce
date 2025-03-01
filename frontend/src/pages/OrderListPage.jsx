@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import { toast } from "react-toastify";
-import Button from "react-bootstrap/Button";
+import { Container, Table, Button } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useLocation } from "react-router-dom";
 import LoadingBox from "../components/LoadingBox";
@@ -72,8 +72,6 @@ export default function OrderListPage() {
       if (valueA == null && valueB == null) return 0;
       if (valueA == null) return 1;
       if (valueB == null) return -1;
-
-      // String comparison
       if (typeof valueA === "string" && typeof valueB === "string") {
         return sortOrder === "asc"
           ? valueA.localeCompare(valueB)
@@ -135,7 +133,7 @@ export default function OrderListPage() {
   };
 
   return (
-    <div className="p-4">
+    <Container className="provider-container">
       <Helmet>
         <title>Orders</title>
       </Helmet>
@@ -146,8 +144,8 @@ export default function OrderListPage() {
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
-        <>
-          <table className="table">
+        <div className="table-responsive">
+          <Table striped bordered hover>
             <thead>
               <tr>
                 <th>
@@ -165,14 +163,14 @@ export default function OrderListPage() {
               </tr>
             </thead>
             <tbody>
-              {sortedOrders.map((order) => (
+              {sortedOrders.map((order) => ( 
                 <tr key={order._id}>
-                  <td>{order._id}</td>
-                  <td>{order.user ? order.user.name : "DELETED USER"}</td>
-                  <td>{order.createdAt.substring(0, 10)}</td>
-                  <td>{order.totalPrice.toFixed(2)}</td>
-                  <td>{order.isPaid ? order.paidAt.substring(0, 10) : "No"}</td>
-                  <td>
+                  <td data-label="ID">{order._id}</td>
+                  <td data-label="USER">{order.user ? order.user.name : "DELETED USER"}</td>
+                  <td data-label="DATE">{order.createdAt.substring(0, 10)}</td>
+                  <td data-label="Total">{order.totalPrice.toFixed(2)}</td>
+                  <td data-label="Paid">{order.isPaid ? order.paidAt.substring(0, 10) : "No"}</td>
+                  <td data-label="Delivered">
                     {order.isDelivered
                       ? order.deliveredAt.substring(0, 10)
                       : "No"}
@@ -199,7 +197,7 @@ export default function OrderListPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
           <div>
             <nav>
               <ul className="pagination">
@@ -243,8 +241,8 @@ export default function OrderListPage() {
               </ul>
             </nav>
           </div>
-        </>
+        </div>
       )}
-    </div>
+    </Container>
   );
 }
