@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer} from "react";
+import React, { useContext, useEffect, useReducer } from "react";
 import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -9,7 +9,6 @@ import { getError } from "../utils";
 import { Container, Table, Button } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
 
-
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -19,7 +18,7 @@ const reducer = (state, action) => {
         ...state,
         sellers: action.payload.sellers,
         page: action.payload.page,
-        pages: action.payload.pages,
+        totalPages: action.payload.totalPages,
         loading: false,
       };
     case "FETCH_FAIL":
@@ -49,7 +48,7 @@ const SellersEditPage = () => {
       loading,
       error,
       sellers,
-      pages,
+      totalPages,
       loadingCreate,
       loadingDelete,
       successDelete,
@@ -59,13 +58,13 @@ const SellersEditPage = () => {
     loading: true,
     error: "",
     sellers: [],
-    pages: 1,
+    totalPages: 1,
   });
 
   const navigate = useNavigate();
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
-  const currentPage = Number(sp.get("page")) || 1;
+  const currentPage = sp.get("page") || 1;
   const { state } = useContext(Store);
   const { userInfo } = state;
 
@@ -73,7 +72,7 @@ const SellersEditPage = () => {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/sellers?page=${currentPage}`, {
+        const { data } = await axios.get(`/api/sellers/?page=${currentPage}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: "FETCH_SUCCESS", payload: data });
@@ -88,7 +87,6 @@ const SellersEditPage = () => {
       fetchData();
     }
   }, [currentPage, userInfo, successDelete]);
-
 
   const deleteHandler = async (seller) => {
     if (window.confirm("Are you sure to delete?")) {
@@ -108,9 +106,9 @@ const SellersEditPage = () => {
 
   return (
     <Container className="provider-container">
-    <Helmet>
-<title>Hours Page</title>
-</Helmet>
+      <Helmet>
+        <title>Hours Page</title>
+      </Helmet>
 
       {loadingCreate && <LoadingBox></LoadingBox>}
       {loadingDelete && <LoadingBox></LoadingBox>}
@@ -125,12 +123,12 @@ const SellersEditPage = () => {
             <thead>
               <tr>
                 <th>ID</th>
-                    <th>LOGO</th>
-                    <th>LINK</th>
+                <th>LOGO</th>
+                <th>LINK</th>
                 <th>NAME</th>
                 <th>BRAND</th>
                 <th>INFO</th>
-                    <th>ACTIONS</th>
+                <th>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
@@ -140,7 +138,7 @@ const SellersEditPage = () => {
                   <td data-label="Logo">
                     <img src={seller.logo} alt="logo" width="50" />
                   </td>
-                  <td  data-label="Link">
+                  <td data-label="Link">
                     <a
                       href={seller.companyLink}
                       target="_blank"
@@ -152,7 +150,7 @@ const SellersEditPage = () => {
                   <td data-label="Name">{seller.name}</td>
                   <td data-label="Brand">{seller.brand}</td>
                   <td data-label="Info">{seller.info}</td>
-                  
+
                   <td>
                     <Button
                       type="button"
@@ -177,29 +175,52 @@ const SellersEditPage = () => {
           <div>
             <nav>
               <ul className="pagination">
-                <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                  <Link className="page-link" to={`/admin/serviceProviders?page=${Number(currentPage) - 1}`}>
+                <li
+                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                >
+                  <Link
+                    className="page-link"
+                    to={`/admin/serviceProviders?page=${
+                      Number(currentPage) - 1
+                    }`}
+                  >
                     &lt;
                   </Link>
                 </li>
-                {[...Array(pages).keys()].map((x) => (
-                  <li key={x + 1} className={`page-item ${x + 1 === Number(currentPage) ? "active" : ""}`}>
-                    <Link className="page-link" to={`/admin/serviceProviders?page=${x + 1}`}>
+                {[...Array(totalPages).keys()].map((x) => (
+                  <li
+                    key={x + 1}
+                    className={`page-item ${
+                      x + 1 === Number(currentPage) ? "active" : ""
+                    }`}
+                  >
+                    <Link
+                      className="page-link"
+                      to={`/admin/serviceProviders?page=${x + 1}`}
+                    >
                       {x + 1}
                     </Link>
                   </li>
                 ))}
-                <li className={`page-item ${currentPage === pages ? "disabled" : ""}`}>
-                  <Link className="page-link" to={`/admin/serviceProviders?page=${Number(currentPage) + 1}`}>
+                <li
+                  className={`page-item ${
+                    currentPage === totalPages ? "disabled" : ""
+                  }`}
+                >
+                  <Link
+                    className="page-link"
+                    to={`/admin/serviceProviders?page=${
+                      Number(currentPage) + 1
+                    }`}
+                  >
                     &gt;
                   </Link>
                 </li>
               </ul>
             </nav>
           </div>
-          </div>
+        </div>
       )}
-      
     </Container>
   );
 };

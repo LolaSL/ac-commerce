@@ -61,6 +61,7 @@ const ProductEditPage = () => {
   const [brand, setBrand] = useState("");
   const [description, setDescription] = useState("");
   const [features, setFeatures] = useState("");
+  const [mode, setMode] = useState("");
   const [btu, setBtu] = useState("");
   const [areaCoverage, setAreaCoverage] = useState("");
   const [energyEfficiency, setEnergyEfficiency] = useState("");
@@ -88,6 +89,7 @@ const ProductEditPage = () => {
         setBrand(data.brand);
         setDescription(data.description);
         setFeatures(data.features);
+        setMode(data.mode);
         setBtu(data.btu);
         setAreaCoverage(data.areaCoverage);
         setEnergyEfficiency(data.energyEfficiency);
@@ -126,6 +128,7 @@ const ProductEditPage = () => {
           countInStock,
           description,
           features,
+          mode,
           btu,
           areaCoverage,
           energyEfficiency,
@@ -163,23 +166,20 @@ const ProductEditPage = () => {
       const { data } = await axios.post("/api/upload", bodyFormData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          authorization: `Bearer ${userInfo.token}`, 
+          authorization: `Bearer ${userInfo.token}`,
         },
       });
 
       dispatch({ type: "UPLOAD_SUCCESS" });
 
       if (file.type === "application/pdf") {
-       
         setDocuments([
           ...documents,
           { url: data.imageUrl, extractedText: data.extractedText },
         ]);
       } else if (forImages) {
-
         setImages([...images, data.imageUrl]);
       } else {
-
         setImage(data.imageUrl);
       }
 
@@ -306,6 +306,13 @@ const ProductEditPage = () => {
             <Form.Control
               value={features}
               onChange={(e) => setFeatures(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="features">
+            <Form.Label>Mode</Form.Label>
+            <Form.Control
+              value={mode}
+              onChange={(e) => setMode(e.target.value)}
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="btu">

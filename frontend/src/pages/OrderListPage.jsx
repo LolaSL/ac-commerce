@@ -87,7 +87,7 @@ export default function OrderListPage() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/orders?page=${currentPage}`, {
+        const { data } = await axios.get(`/api/orders/?page=${currentPage}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: "FETCH_SUCCESS", payload: data });
@@ -206,7 +206,7 @@ export default function OrderListPage() {
                 >
                   <Link
                     className="page-link"
-                    to={`/admin/orders?page=${Number(currentPage) - 1}`}
+                    to={`/admin/orders/?page=${Number(currentPage) - 1}`}
                   >
                     &lt;
                   </Link>
@@ -220,7 +220,7 @@ export default function OrderListPage() {
                   >
                     <Link
                       className="page-link"
-                      to={`/admin/orders?page=${x + 1}`}
+                      to={`/admin/orders/?page=${x + 1}`}
                     >
                       {x + 1}
                     </Link>
@@ -233,7 +233,7 @@ export default function OrderListPage() {
                 >
                   <Link
                     className="page-link"
-                    to={`/admin/orders?page=${Number(currentPage) + 1}`}
+                    to={`/admin/orders/?page=${Number(currentPage) + 1}`}
                   >
                     &gt;
                   </Link>

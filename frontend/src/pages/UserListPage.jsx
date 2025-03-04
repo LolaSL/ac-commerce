@@ -41,27 +41,27 @@ const reducer = (state, action) => {
 };
 
 export default function UserListPage() {
-
   const navigate = useNavigate();
   const { search } = useLocation();
   const { state } = useContext(Store);
   const { userInfo } = state;
 
-  const [{ loading, error, users=[], loadingDelete, successDelete, pages }, dispatch] =
-    useReducer(reducer, {
-      loading: true,
-      error: "",
-      users: [], 
-      pages: 1,
-    });
+  const [
+    { loading, error, users = [], loadingDelete, successDelete, pages },
+    dispatch,
+  ] = useReducer(reducer, {
+    loading: true,
+    error: "",
+    users: [],
+    pages: 1,
+  });
 
   const sp = new URLSearchParams(search);
-  const currentPage = Number(sp.get("page")) || 1;
-
+  const currentPage = sp.get("page") || 1;
 
   const [sortedUsers, setSortedUsers] = useState([]);
   const [sortColumn, setSortColumn] = useState("");
-  const [sortOrder, setSortOrder] = useState("asc"); 
+  const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,22 +85,21 @@ export default function UserListPage() {
       fetchData();
     }
   }, [userInfo, successDelete, currentPage]);
-  
 
   useEffect(() => {
     if (Array.isArray(users) && users.length > 0) {
       const sorted = [...users].sort((a, b) => {
-        if (!a[sortColumn] || !b[sortColumn]) return 0; 
+        if (!a[sortColumn] || !b[sortColumn]) return 0;
         return sortOrder === "asc"
           ? a[sortColumn].localeCompare(b[sortColumn])
           : b[sortColumn].localeCompare(a[sortColumn]);
       });
       setSortedUsers(sorted);
     } else {
-      setSortedUsers([]); 
+      setSortedUsers([]);
     }
   }, [users, sortColumn, sortOrder]);
-  
+
   const deleteHandler = async (user) => {
     if (window.confirm("Are you sure to delete?")) {
       try {
@@ -140,61 +139,63 @@ export default function UserListPage() {
         <LoadingBox></LoadingBox>
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
-        ) : (
-            <div className="table-responsive">
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>
-                <button type="button" onClick={() => handleSort("_id")}>
-                  ID {sortColumn === "_id" && (sortOrder === "asc" ? "↑" : "↓")}
-                </button>
-              </th>
-              <th>
-                <button type="button" onClick={() => handleSort("name")}>
-                 NAME{" "}
-                  {sortColumn === "name" && (sortOrder === "asc" ? "↑" : "↓")}
-                </button>
-              </th>
-              <th>
-                <button type="button" onClick={() => handleSort("email")}>
-                 EMAIL{" "}
-                  {sortColumn === "email" && (sortOrder === "asc" ? "↑" : "↓")}
-                </button>
-              </th>
-              <th>IS ADMIN</th>
-              <th>ACTIONS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedUsers.map((user) => (
-              <tr key={user._id}>
-                <td data-label="ID">{user._id}</td>
-                <td data-label="Name">{user.name}</td>
-                <td data-label="Email">{user.email}</td>
-                <td data-label="Is Admin">{user.isAdmin ? "YES" : "NO"}</td>
-                <td>
-                  <Button
-                    type="button"
-                    variant="light"
-                    onClick={() => navigate(`/admin/user/${user._id}`)}
-                  >
-                    Edit
-                  </Button>
-                  &nbsp;
-                  <Button
-                    type="button"
-                    variant="light"
-                    onClick={() => deleteHandler(user)}
-                  >
-                    Delete
-                  </Button>
-                </td>
+      ) : (
+        <div className="table-responsive">
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>
+                  <button type="button" onClick={() => handleSort("_id")}>
+                    ID{" "}
+                    {sortColumn === "_id" && (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>
+                </th>
+                <th>
+                  <button type="button" onClick={() => handleSort("name")}>
+                    NAME{" "}
+                    {sortColumn === "name" && (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>
+                </th>
+                <th>
+                  <button type="button" onClick={() => handleSort("email")}>
+                    EMAIL{" "}
+                    {sortColumn === "email" &&
+                      (sortOrder === "asc" ? "↑" : "↓")}
+                  </button>
+                </th>
+                <th>IS ADMIN</th>
+                <th>ACTIONS</th>
               </tr>
-            ))}
-          </tbody>
-            </Table>
-            <div>
+            </thead>
+            <tbody>
+              {sortedUsers.map((user) => (
+                <tr key={user._id}>
+                  <td data-label="ID">{user._id}</td>
+                  <td data-label="Name">{user.name}</td>
+                  <td data-label="Email">{user.email}</td>
+                  <td data-label="Is Admin">{user.isAdmin ? "YES" : "NO"}</td>
+                  <td>
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => navigate(`/admin/user/${user._id}`)}
+                    >
+                      Edit
+                    </Button>
+                    &nbsp;
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => deleteHandler(user)}
+                    >
+                      Delete
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <div>
             <nav>
               <ul className="pagination">
                 <li
@@ -236,8 +237,8 @@ export default function UserListPage() {
                 </li>
               </ul>
             </nav>
-              </div>
-              </div>
+          </div>
+        </div>
       )}
     </Container>
   );

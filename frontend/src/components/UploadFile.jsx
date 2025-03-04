@@ -213,41 +213,64 @@ function UploadFile() {
     (context) => {
       if (isSaved) {
         const text = "APPROVED";
-        const textX = context.canvas.width - 580;
-        const textY = 45;
         const padding = 10;
-        context.font = "bold 16px Calibri itallic";
+        const fontSize = 14;
+        context.font = `bold ${fontSize}px Calibri italic`;
 
         const textMetrics = context.measureText(text);
         const textWidth = textMetrics.width;
-        const textHeight = 18;
+        const textHeight = fontSize;
 
-        context.strokeStyle = "black";
-        context.lineWidth = 2;
+        const textX = context.canvas.width - textWidth - padding - 500;
+        const textY = 100 + textHeight + padding;
+
+        const drawRoundedRect = (x, y, width, height, radius) => {
+          context.beginPath();
+          context.moveTo(x + radius, y);
+          context.lineTo(x + width - radius, y);
+          context.quadraticCurveTo(x + width, y, x + width, y + radius);
+          context.lineTo(x + width, y + height - radius);
+          context.quadraticCurveTo(
+            x + width,
+            y + height,
+            x + width - radius,
+            y + height
+          );
+          context.lineTo(x + radius, y + height);
+          context.quadraticCurveTo(x, y + height, x, y + height - radius);
+          context.lineTo(x, y + radius);
+          context.quadraticCurveTo(x, y, x + radius, y);
+          context.closePath();
+        };
+
         context.fillStyle = "white";
-        context.shadowColor = "grey";
-        context.shadowBlur = 1;
-
-        context.fillRect(
+        drawRoundedRect(
           textX - padding,
           textY - textHeight - padding / 2,
           textWidth + 2 * padding,
-          textHeight + padding
+          textHeight + padding,
+          10
         );
+        context.fill();
 
-        context.strokeRect(
-          textX - padding,
-          textY - textHeight - padding / 2,
-          textWidth + 2 * padding,
-          textHeight + padding
-        );
+        context.strokeStyle = "#0933ce";
+        context.lineWidth = 1.5;
+        context.setLineDash([5, 5]);
+        context.stroke();
 
-        context.fillStyle = "#FF0000";
+        context.shadowColor = "rgba(0, 0, 0, 0.5)";
+        context.shadowBlur = 4;
+        context.shadowOffsetX = 2;
+        context.shadowOffsetY = 2;
+
+        context.fillStyle = "#ce092d";
         context.fillText(text, textX, textY);
 
-        context.beginPath();
+        context.shadowColor = "transparent";
+        context.shadowBlur = 0;
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 0;
         context.setLineDash([]);
-        context.stroke();
       }
     },
     [isSaved]
@@ -285,8 +308,8 @@ function UploadFile() {
         await page.render(renderContext).promise;
 
         iconPositions.forEach((icon) => {
-          const rectWidth = 65;
-          const rectHeight = 15;
+          const rectWidth = 45;
+          const rectHeight = 11;
           drawRotatedRectangle(
             context,
             icon.x,
@@ -330,7 +353,7 @@ function UploadFile() {
           );
         });
         renderComments(context);
-        renderSignature(context); 
+        renderSignature(context);
       };
     }
 
@@ -382,11 +405,11 @@ function UploadFile() {
     if (!canvas) return;
 
     const context = canvas.getContext("2d");
-    context.clearRect(0, 0, canvas.width, canvas.height); 
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
-    setIconPositions([]); 
-    setPreviewUrl(null); 
-    setIsSaved(false); 
+    setIconPositions([]);
+    setPreviewUrl(null);
+    setIsSaved(false);
   };
 
   return (

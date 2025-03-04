@@ -18,7 +18,7 @@ export default function SearchBox() {
       className="search-form d-flex me-auto my-4 w-100"
       onSubmit={submitHandler}
     >
-      <InputGroup className="search-box">
+      <InputGroup className="search-box ">
         <FormControl
           type="text"
           name="q"
@@ -27,6 +27,7 @@ export default function SearchBox() {
           placeholder="search products..."
           aria-label="Search Products"
           aria-describedby="button-search"
+          className=" rounded"
         ></FormControl>
         <Button
           variant="btn btn-outline-secondary rounded"

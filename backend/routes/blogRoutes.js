@@ -19,13 +19,15 @@ const validateObjectId = (req, res, next) => {
 blogRouter.get(
     '/',
     expressAsyncHandler(async (req, res) => {
-        try {
-            const blogs = await Blog.find({});
-            res.json(blogs);
-        } catch (err) {
-            res.status(500).json({ message: err.message });
-        }
-    })
+        const pageSize = 10;
+    const page = Number(req.query.page) || 1;
+      const blogs = await Blog.find({})
+      .skip(pageSize * (page - 1))
+      .limit(pageSize);  
+      const countBlogs = await Blog.countDocuments();
+    const pages = Math.ceil(countBlogs / pageSize);
+    res.send({ blogs, page, pages });
+  })
 );
 
 

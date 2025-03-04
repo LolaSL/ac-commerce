@@ -85,7 +85,7 @@ export default function BlogsPage() {
       try {
         dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axios.get(
-          `/api/blogs/admin/blogs-list?page=${currentPage}`,
+          `/api/blogs/admin/blogs-list/?page=${currentPage}`,
           {
             headers: { Authorization: `Bearer ${userInfo.token}` },
           }
@@ -216,7 +216,7 @@ export default function BlogsPage() {
                 >
                   <Link
                     className="page-link"
-                    to={`/admin/blogs?page=${Number(currentPage) - 1}`}
+                    to={`/admin/blogs/?page=${Number(currentPage) - 1}`}
                   >
                     &lt;
                   </Link>
@@ -230,7 +230,7 @@ export default function BlogsPage() {
                   >
                     <Link
                       className="page-link"
-                      to={`/admin/blogs?page=${x + 1}`}
+                      to={`/admin/blogs/?page=${x + 1}`}
                     >
                       {x + 1}
                     </Link>
@@ -243,7 +243,7 @@ export default function BlogsPage() {
                 >
                   <Link
                     className="page-link"
-                    to={`/admin/blogs?page=${Number(currentPage) + 1}`}
+                    to={`/admin/blogs/?page=${Number(currentPage) + 1}`}
                   >
                     &gt;
                   </Link>

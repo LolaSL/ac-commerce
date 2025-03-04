@@ -198,22 +198,22 @@ const ServiceProviders = () => {
               options={barChartOptions}
             />
           </div>
-          <div>
+          <div className="pagination my-3 text-center">
             <button
               className="btn btn-primary mx-2"
               onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage <= 1}
+              disabled={currentPage === 1}
             >
               Previous
             </button>
             <span>
               {" "}
-              {currentPage} / {totalPages}{" "}
+              Page {currentPage} / {totalPages}{" "}
             </span>
             <button
               className="btn btn-primary mx-2"
               onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage >= totalPages}
+              disabled={currentPage === totalPages}
             >
               Next
             </button>

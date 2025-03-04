@@ -988,8 +988,8 @@ const data = {
       name: 'Test One Company',
       email: 'test-company1@example.com',
       password: bcrypt.hashSync('12345', 8),
-      typeOfProvider: 'designer',
-      phone: '1234567890',
+      typeOfProvider: 'design',
+      phone: '1234567812',
       company: 'test1',
       experience: 5,
       portfolio: 'portfolio1.link',
@@ -1000,7 +1000,7 @@ const data = {
       name: 'Test Two Company',
       email: 'test-company2@example.com',
       password: bcrypt.hashSync('test2company', 8),
-      typeOfProvider: 'designer',
+      typeOfProvider: 'design',
       phone: '1234567890',
       company: 'test2',
       experience: 7,
@@ -1012,8 +1012,8 @@ const data = {
       name: 'Test Three Company',
       email: 'test-company3@example.com',
       password: bcrypt.hashSync('test3company', 8),
-      typeOfProvider: 'Architect',
-      phone: '1234567890',
+      typeOfProvider: 'Architecting',
+      phone: '1234567856',
       company: 'test3',
       experience: 9,
       portfolio: 'portfolio3.link',
@@ -1024,11 +1024,23 @@ const data = {
       name: 'Test Four Company',
       email: 'test-company4@example.com',
       password: bcrypt.hashSync('test4company', 8),
-      typeOfProvider: 'Architect',
-      phone: '12323454',
+      typeOfProvider: 'Architecting',
+      phone: '1234567934',
       company: 'test4',
       experience: 9,
       portfolio: 'portfolio4.link',
+      isActive: false,
+      isAdmin: false
+    },
+    {
+      name: 'Test Five Company',
+      email: 'test-company5@example.com',
+      password: bcrypt.hashSync('test5company', 8),
+      typeOfProvider: 'HVAC System Planning',
+      phone: '12323454',
+      company: 'test5',
+      experience: 9,
+      portfolio: 'portfolio5.link',
       isActive: false,
       isAdmin: false
     },
@@ -1067,6 +1079,14 @@ const data = {
       hoursWorked: 53,
     },
     {
+      name: "HVAC System Planning",
+      client: "Marvine MC'Machon",
+      dueDate: "2025-02-02",
+      status: "In Progress",
+      serviceProvider: "test-company5@example.com",
+      hoursWorked: 2,
+    },
+    {
       name: "Construction Design",
       client: "Viki Crage",
       dueDate: "2025-01-19",
@@ -1095,6 +1115,14 @@ const data = {
       client: "ACVent Corp",
       dueDate: "2024-06-26",
       status: "Completed",
+      serviceProvider: "test-company4@example.com",
+      hoursWorked: 90,
+    },
+    {
+      name: "HVAC System Planning & Arcitect",
+      client: "Cooling System Ltd",
+      dueDate: "2024-02-12",
+      status: "In Progress",
       serviceProvider: "test-company4@example.com",
       hoursWorked: 90,
     },
@@ -1132,6 +1160,13 @@ const data = {
       projectName: "Appartments Design"
     },
     {
+      client: "Marvine MC'Machon",
+      text: "HVAC System Planning development. First phase - events planning.",
+      date: "2025-03-03",
+      serviceProvider: "test-company5@example.com",
+      projectName: "HVAC System Planning"
+    },
+    {
       client: "Viki Crage",
       text: "Can we upgrade the construction layout?",
       date: "2025-01-22",
@@ -1161,7 +1196,13 @@ const data = {
       serviceProvider: "test-company4@example.com",
       projectName: "Design of a chimney system"
     },
-
+    {
+      client: "Cooling System Ltd",
+      text: "	The commissioning phase was passed without any obstacles. Can we sign the final account papers?",
+      date: "2025-02-19",
+      serviceProvider: "test-company5@example.com",
+      projectName: "HVAC System Planning & Arcitect"
+    },
   ],
   earnings: [
     {
@@ -1189,11 +1230,18 @@ const data = {
       status: 'Paid',
     },
     {
+      amount: 300,
+      date: '2025-03-03',
+      hoursWorked: 20,
+      status: 'Pending',
+    },
+    {
       amount: 968,
       date: '2025-01-19',
       hoursWorked: 30,
       status: 'Pending',
     },
+
     {
       amount: 5000,
       date: '2025-02-13',
@@ -1211,6 +1259,12 @@ const data = {
       date: '2024-06-12',
       hoursWorked: 90,
       status: 'Paid',
+    },
+    {
+      amount: 300,
+      date: '2025-03-03',
+      hoursWorked: 13,
+      status: 'Pending',
     },
   ],
   notifications: [

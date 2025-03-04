@@ -327,9 +327,9 @@ function BtuCalculator() {
         HeavilyShaded: false,
       },
       climate: {
-        AverageWarsaw: false, // (Warsaw)
-        HotTelAviv: false, // (Tel-Aviv)
-        ColdStockholm: false, // (Stockholm)
+        AverageWarsaw: false, 
+        HotTelAviv: false, 
+        ColdStockholm: false, 
       },
     });
 
@@ -558,6 +558,7 @@ function BtuCalculator() {
       {btuResults.length > 0 && (
         <Container className="btu-results mt-4">
           <h3 className="text-center">BTU Results</h3>
+          <div className="table-responsive">
           <Table bordered hover className="table-responsive-md">
             <thead>
               <tr>
@@ -570,8 +571,9 @@ function BtuCalculator() {
                 const product = products[index] || {};
                 return (
                   <tr key={index}>
-                    <td>{room.name}</td> <td>{btuResults[index]}</td>
-                    <td>
+                    <td data-label="Room">{room.name}</td>
+                    <td data-label="BTU">{btuResults[index]}</td>
+                    <td data-label="Optimal Ptoduct">
                       {product.slug ? (
                         <Link
                           to={`/product/${product.slug}`}
@@ -592,8 +594,8 @@ function BtuCalculator() {
                         "No product available"
                       )}
                     </td>
-                    <td>{product.name || "No product available"}</td>
-                    <td>
+                    <td data-label="Product Details">{product.name || "No product available"}</td>
+                    <td data-label="Product Price">
                       {product.discount > 0
                         ? (
                             product.price -
@@ -607,25 +609,25 @@ function BtuCalculator() {
                 );
               })}
               <tr>
-                <td className="total-results bg-warning">
+                <td data-label="Total"  className="total-results bg-warning">
                   <strong>Total</strong>
                 </td>
-                <td className="total-results bg-warning">
+                <td   data-label="Total Btu" className="total-results bg-warning">
                   <strong>{totalBTU}</strong>
                 </td>
-                <td className="total-results bg-warning">
+                <td data-label="Total Optimal Products"  className="total-results bg-warning">
                   <strong>
                     {optimalProductCount || "No optimal product available"}
                   </strong>
                 </td>
-                <td className="total-results bg-warning">
+                <td   data-label="Total Product BTU" className="total-results bg-warning">
                   <strong>
                     {products
                       .reduce((total, product) => total + (product.btu || 0), 0)
                       .toFixed(0)}
                   </strong>
                 </td>
-                <td className="total-results bg-warning">
+                <td  data-label="Total Product Price" className="total-results bg-warning">
                   <strong>
                     {products.length > 0
                       ? products
@@ -641,7 +643,8 @@ function BtuCalculator() {
                 </td>
               </tr>
             </tbody>
-          </Table>
+            </Table>
+            </div>
           <div className="d-flex justify-content-center mt-3">
             <Button
               variant="primary"

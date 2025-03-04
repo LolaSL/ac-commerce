@@ -59,7 +59,7 @@ export default function ServiceProviderList() {
   const { token } = userInfo;
 
   const sp = new URLSearchParams(search);
-  const currentPage = Number(sp.get("page")) || 1;
+  const currentPage = sp.get("page") || 1;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -119,7 +119,7 @@ export default function ServiceProviderList() {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <div className="table-responsive">
-           <Table striped bordered hover>
+          <Table striped bordered hover>
             <thead>
               <tr>
                 <th>ID</th>
@@ -136,9 +136,13 @@ export default function ServiceProviderList() {
                   <td data-label="ID">{serviceProvider._id}</td>
                   <td data-label="Name">{serviceProvider.name}</td>
                   <td data-label="Email">{serviceProvider.email}</td>
-                  <td data-label="Is Admin">{serviceProvider.isAdmin ? "YES" : "NO"}</td>
-                  <td data-label="Is Active">{serviceProvider.isActive ? "YES" : "NO"}</td>
-                  <td >
+                  <td data-label="Is Admin">
+                    {serviceProvider.isAdmin ? "YES" : "NO"}
+                  </td>
+                  <td data-label="Is Active">
+                    {serviceProvider.isActive ? "YES" : "NO"}
+                  </td>
+                  <td>
                     <Button
                       type="button"
                       variant="light"

@@ -27,7 +27,7 @@ export default function Offers() {
     },
     {
       title: "Combo Deals:",
-      description: "Buy 2 units - get free installation.",
+      description: "Buy 2 units & get free installation.",
       imageSrc: "/images/offer3.jpg",
       linkTo:
         "/search?category=all&query=all&price=all&discount=0&rating=all&btu=all&brand=all&order=newest&page=1",
@@ -89,7 +89,9 @@ export default function Offers() {
                 />
                 <Card.Body>
                   <Card.Title className="offer-title">{offer.title}</Card.Title>
-                  <Card.Text className="offer-desc">{offer.description}</Card.Text>
+                  <Card.Text className="offer-desc">
+                    {offer.description}
+                  </Card.Text>
                   <Button
                     variant="secondary"
                     as={Link}
