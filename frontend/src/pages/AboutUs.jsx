@@ -7,7 +7,7 @@ const AboutUs = () => {
       <Helmet>
         <title>About Us</title>
       </Helmet>
-      <article className="about">
+      <article className="about mt-4 mb-4">
         <div
           className="p-5 text-center responsive-image-about rounded mb-3"
           style={{
@@ -15,7 +15,6 @@ const AboutUs = () => {
             MaxHeight: "100%",
           }}
         ></div>
-
         <h3 className="about-paragraph p-2">
           <strong>AC Commerce</strong> is committed to complying with local laws
           and regulations and to applying a strict ethical code of conduct to

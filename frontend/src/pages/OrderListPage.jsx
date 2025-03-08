@@ -59,7 +59,7 @@ export default function OrderListPage() {
   const currentPage = sp.get("page") || 1;
 
   const [sortedOrders, setSortedOrders] = useState([]);
-  const [sortColumn, setSortColumn] = useState("date"); // Default column to sort
+  const [sortColumn, setSortColumn] = useState("date");
   const [sortOrder, setSortOrder] = useState("asc");
 
   useEffect(() => {

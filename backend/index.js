@@ -40,7 +40,6 @@ app.get("/api/keys/google", (req, res) => {
 });
 
 app.use('/api/seed', seedRouter);
-const __dirname = path.resolve();
 app.use("/api/upload", uploadRouter, express.static(path.join(__dirname, "/uploads")));
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
@@ -52,9 +51,12 @@ app.use('/api/blogs', blogRouter);
 app.use('/api/notifications', notificationRouter);
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
-app.get('/', (req, res) => {
-    res.send('Server is ready')
-});
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "/frontend/build")));
+app.get("*", (req, res) =>
+    res.sendFile(path.join(__dirname, "/frontend/build/index.html"))
+);
+
 
 app.use((err, req, res, next) => {
     res.status(500).send({ message: err.message });

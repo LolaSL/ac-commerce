@@ -144,7 +144,6 @@ main {
   text-shadow: 1px 1px 1px grey;
 }
 
-/* General Styles */
 .featured-title {
   font-size: 2.5rem;
   font-weight: bold;
@@ -301,12 +300,13 @@ main {
 
 .responsive {
   width: 100%;
-  height: 100%;
+  height: auto;
   border: none;
   box-shadow: 1px 1px 1px solid grey;
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
+  text-align: center;
 }
 .sale-badge {
   position: absolute;
@@ -442,10 +442,13 @@ button:hover {
   color: white;
   text-shadow: 1px 1px 1px black;
 }
+
 .handwritten {
   font-family: "Cedarville Cursive", cursive;
-  font-size: 15px;
-  color: white;
+  font-size: 16px;
+  color:rgb(236, 150, 45);
+  text-shadow: 1px 1px 1px black;
+  font-weight:bold;
 }
  {
   color: white;
@@ -707,6 +710,32 @@ button.thumbnail {
   align-items: center;
   margin: 20px 0;
   padding: 0;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contact-item i {
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.contact-item a {
+  text-decoration: none;
+  color: white;
+}
+
+.contact-item a:hover {
+  color: #ccc;
+}
+
+.contact-item .fa-phone-volume {
+  font-size: 16px;
 }
 
 .info-item {
@@ -1055,7 +1084,6 @@ form.d-flex {
   min-height: 300px;
 }
 
-/* Responsive Adjustments */
 @media (max-width: 992px) {
   .about-paragraph,
   .goals-paragraph {
@@ -1104,6 +1132,13 @@ form.d-flex {
   font-size: 1.5rem;
   margin-bottom: 20px;
 }
+
+.blog-title {
+  text-align: center;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+}
+
 .blog-item {
   position: relative;
   width: 100%;
@@ -1133,10 +1168,9 @@ form.d-flex {
   padding: 20px;
   text-align: left;
 }
-
-.blog-title {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+.blog h1 {
+  font-weight: bold;
+  font-size: 2rem;
 }
 
 .blogs-title {
@@ -1531,18 +1565,17 @@ canvas {
 }
 
 @media screen and (max-width: 768px) {
-
-.sidebar h3{
-  font-size: 16px;
-}
+  .sidebar h3 {
+    font-size: 16px;
+  }
   .sidebar {
-    width: 140px; /* Further narrow down the sidebar on small screens */
+    width: 140px;
     padding: 0.5rem;
     border-right: none;
     border-bottom: 1px solid #ddd;
     position: relative;
     height: 100%;
-    margin:0px;
+    margin: 0px;
   }
 
   .sidebar ul {
@@ -1618,7 +1651,8 @@ canvas {
   transform: translate(-50%, -50%);
   width: 300px;
   padding: 20px;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(12, 11, 11, 0.8);
+  text-shadow: 1px 1px 5px white;
   color: white;
   border-radius: 8px;
   z-index: 9999;
@@ -1629,11 +1663,21 @@ canvas {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+.text-danger{
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+}
+
+.notification-paragraph{
+  font-weight: bold;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+}
+
 h1 {
   text-align: center;
-  font-size: 2rem;
+  font-size: 3.2rem;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
+  font-weight: bold;
 }
 
 table {
@@ -1658,18 +1702,17 @@ th {
 }
 
 td {
-  word-wrap: break-word; 
-  overflow-wrap: break-word; 
-  white-space: normal; 
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 td[data-label="Message"] {
   word-wrap: break-word;
-  max-width: 500px; 
+  max-width: 500px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 
 button {
   margin-right: 0.5rem;
@@ -2069,7 +2112,7 @@ li.notification {
   color: white;
 }
 .pagination button {
-  min-width: 100px; /* Ensures buttons are not too small */
+  min-width: 100px;
   padding: 8px 16px;
   font-size: 1rem;
 }
@@ -2101,10 +2144,11 @@ li.notification {
 
 h2 {
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.7rem;
   margin-bottom: 20px;
   font-weight: bold;
 }
+
 
 .table {
   width: 100%;

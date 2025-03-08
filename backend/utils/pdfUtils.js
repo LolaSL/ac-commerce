@@ -29,7 +29,7 @@ export const extractTextFromPDF = async (buffer) => {
  * @returns {Array} - List of detected doors with positions (mock for now).
  */
 export const detectDoorsInPDF = (text) => {
-  const doorKeywords = ['DOOR', 'DR', 'ENTRANCE']; // Add more as needed
+  const doorKeywords = ['DOOR', 'DR', 'ENTRANCE']; 
   const doors = [];
 
   doorKeywords.forEach((keyword) => {

@@ -116,8 +116,6 @@ export default function OrderHistoryPage() {
               </tbody>
             </Table>
           </div>
-
-          {/* Pagination */}
           <div className="d-flex justify-content-center mt-3">
             <nav>
               <ul className="pagination">

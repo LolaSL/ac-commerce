@@ -31,8 +31,6 @@ export default function DashboardPage() {
         <Helmet>
           <title>Dashboard</title>
         </Helmet>
-
-        {/* Sidebar */}
         <div className="sidebar">
           <h3>Dashboard</h3>
           <ul>

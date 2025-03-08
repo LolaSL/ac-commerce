@@ -344,7 +344,6 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-
               <Route path="/placeorder" element={<PlaceOrderPage />} />
               <Route
                 path="/order/:id"

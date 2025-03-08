@@ -11,7 +11,14 @@ const reducer = (state, action) => {
     case "FETCH_REQUEST":
       return { ...state, loading: true };
     case "FETCH_SUCCESS":
-      return { ...state, blogs: action.payload, loading: false };
+      return {
+        ...state,
+        blogs: action.payload.blogs,
+        page: action.payload.page,
+        pages: action.payload.pages,
+        loading: false,
+      };
+
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
     default:
@@ -20,7 +27,7 @@ const reducer = (state, action) => {
 };
 
 function BlogList() {
-  const [{ loading, error, blogs }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, blogs = [] }, dispatch] = useReducer(reducer, {
     blogs: [],
     loading: true,
     error: "",

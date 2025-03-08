@@ -26,7 +26,8 @@ blogRouter.get(
       .limit(pageSize);  
       const countBlogs = await Blog.countDocuments();
     const pages = Math.ceil(countBlogs / pageSize);
-    res.send({ blogs, page, pages });
+    res.send({ blogs, page, pages }); 
+
   })
 );
 

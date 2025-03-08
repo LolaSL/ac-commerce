@@ -21,8 +21,8 @@ function BlogDetails() {
   }
 
   return (
-    <Container>
-      <h1 className="mt-4 mb-4">{blog.title}</h1>
+    <Container className="blog">
+      <h1 className="blog-title mt-4 mb-4">{blog.title}</h1>
       <div>
         <Image className="responsive" src={blog.image} alt={`Blog Image `} />
       </div>

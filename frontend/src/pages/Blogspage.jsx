@@ -60,7 +60,7 @@ export default function BlogsPage() {
     {
       loading,
       error,
-      blogs,
+      blogs = [],
       pages,
       loadingCreate,
       loadingDelete,
@@ -84,12 +84,9 @@ export default function BlogsPage() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(
-          `/api/blogs/admin/blogs-list/?page=${currentPage}`,
-          {
-            headers: { Authorization: `Bearer ${userInfo.token}` },
-          }
-        );
+        const { data } = await axios.get(`/api/blogs?page=${currentPage}`, {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        });
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -108,7 +105,7 @@ export default function BlogsPage() {
       try {
         dispatch({ type: "CREATE_REQUEST" });
         const { data } = await axios.post(
-          `/api/blogs/`,
+          `/api/blogs`,
           {},
           {
             headers: { Authorization: `Bearer ${userInfo.token}` },
@@ -143,7 +140,7 @@ export default function BlogsPage() {
   return (
     <Container className="provider-container">
       <Helmet>
-        <title>Blogs </title>
+        <title>Blogs</title>
       </Helmet>
       <Row>
         <Col>
@@ -216,7 +213,7 @@ export default function BlogsPage() {
                 >
                   <Link
                     className="page-link"
-                    to={`/admin/blogs/?page=${Number(currentPage) - 1}`}
+                    to={`/admin/blogs?page=${Number(currentPage) - 1}`}
                   >
                     &lt;
                   </Link>
@@ -230,7 +227,7 @@ export default function BlogsPage() {
                   >
                     <Link
                       className="page-link"
-                      to={`/admin/blogs/?page=${x + 1}`}
+                      to={`/admin/blogs?page=${x + 1}`}
                     >
                       {x + 1}
                     </Link>
@@ -243,7 +240,7 @@ export default function BlogsPage() {
                 >
                   <Link
                     className="page-link"
-                    to={`/admin/blogs/?page=${Number(currentPage) + 1}`}
+                    to={`/admin/blogs?page=${Number(currentPage) + 1}`}
                   >
                     &gt;
                   </Link>
