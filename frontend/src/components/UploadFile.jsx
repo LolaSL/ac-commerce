@@ -17,8 +17,8 @@ function UploadFile() {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [comments, setComments] = useState([]);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [newComment, setNewComment] = useState("");
+  // const [modalIsOpen, setModalIsOpen] = useState(false);
+  // const [newComment, setNewComment] = useState("");
   const [setCommentPosition] = useState({ x: 0, y: 0 });
   const RECT_WIDTH = window.innerWidth < 768 ? 20 : 30;
   const RECT_HEIGHT = window.innerWidth < 768 ? 10 : 15;
@@ -135,42 +135,42 @@ function UploadFile() {
   //   }
   // };
 
-  let lastTapTime = 0;
+  // let lastTapTime = 0;
 
-  const handleCanvasTouchStart = (e) => {
-    e.preventDefault();
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    const touch = e.touches[0];
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
+  // const handleCanvasTouchStart = (e) => {
+  //   e.preventDefault();
+  //   const canvas = canvasRef.current;
+  //   const rect = canvas.getBoundingClientRect();
+  //   const touch = e.touches[0];
+  //   const x = touch.clientX - rect.left;
+  //   const y = touch.clientY - rect.top;
 
-    const currentTime = new Date().getTime();
-    const timeSinceLastTap = currentTime - lastTapTime;
+  //   const currentTime = new Date().getTime();
+  //   const timeSinceLastTap = currentTime - lastTapTime;
 
-    if (timeSinceLastTap < 300 && timeSinceLastTap > 0) {
-      handleIconDoubleClick(x, y); // Double tap logic
-    } else {
-      const isNewIcon = handleIconClick(x, y);
-      if (isNewIcon) {
-        // Store position & show modal
-        setCommentPosition({ x: x + 50, y: y - 30 });
-        setModalIsOpen(true);
-      }
-    }
-    lastTapTime = currentTime;
-  };
+  //   if (timeSinceLastTap < 300 && timeSinceLastTap > 0) {
+  //     handleIconDoubleClick(x, y); // Double tap logic
+  //   } else {
+  //     const isNewIcon = handleIconClick(x, y);
+  //     if (isNewIcon) {
+  //       // Store position & show modal
+  //       setCommentPosition({ x: x + 50, y: y - 30 });
+  //       setModalIsOpen(true);
+  //     }
+  //   }
+  //   lastTapTime = currentTime;
+  // };
 
-  const handleSaveComment = () => {
-    if (newComment.trim() !== "") {
-      setComments((prevComments) => [
-        ...prevComments,
-        { text: newComment, x: 100, y: 100 },
-      ]);
-    }
-    setModalIsOpen(false);
-    setNewComment(""); // Clear input after saving
-  };
+  // const handleSaveComment = () => {
+  //   if (newComment.trim() !== "") {
+  //     setComments((prevComments) => [
+  //       ...prevComments,
+  //       { text: newComment, x: 100, y: 100 },
+  //     ]);
+  //   }
+  //   setModalIsOpen(false);
+  //   setNewComment(""); // Clear input after saving
+  // };
 
   const renderComments = useCallback(
     (context) => {
@@ -522,7 +522,7 @@ function UploadFile() {
             width={window.innerWidth * 0.9}
             height={window.innerHeight * 0.6}
             onClick={handleCanvasClick}
-            onTouchStart={handleCanvasTouchStart}
+            // onTouchStart={handleCanvasTouchStart}
             style={{
               backgroundImage: `url(${previewUrl})`,
               backgroundSize: "cover",
@@ -531,11 +531,11 @@ function UploadFile() {
               margin: "0 auto",
             }}
           />
-          <div>
-            {/* Open Modal Button */}
+          {/* <div>
+          
             <button onClick={() => setModalIsOpen(true)}>Open Modal</button>
 
-            {/* Custom Modal */}
+        
             {modalIsOpen && (
               <div
                 style={{
@@ -560,7 +560,7 @@ function UploadFile() {
               </div>
             )}
 
-            {/* Background Overlay */}
+          
             {modalIsOpen && (
               <div
                 onClick={() => setModalIsOpen(false)}
@@ -575,7 +575,7 @@ function UploadFile() {
                 }}
               />
             )}
-          </div>
+          </div> */}
         </div>
       )}
       <div className="d-flex">
