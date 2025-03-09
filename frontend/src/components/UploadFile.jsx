@@ -3,10 +3,10 @@ import { Button, Form } from "react-bootstrap";
 import { PDFDocument } from "pdf-lib";
 import * as pdfjsLib from "pdfjs-dist/webpack.mjs";
 import { Helmet } from "react-helmet-async";
-import Modal from "react-modal";
+// import Modal from "react-modal";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js`;
-Modal.setAppElement("#root");
+// Modal.setAppElement("#root");
 
 function UploadFile() {
   const [file, setFile] = useState(null);
@@ -19,7 +19,7 @@ function UploadFile() {
   const [comments, setComments] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [newComment, setNewComment] = useState("");
-  const [commentPosition, setCommentPosition] = useState({ x: 0, y: 0 });
+  const [setCommentPosition] = useState({ x: 0, y: 0 });
   const RECT_WIDTH = window.innerWidth < 768 ? 20 : 30;
   const RECT_HEIGHT = window.innerWidth < 768 ? 10 : 15;
 
@@ -50,6 +50,8 @@ function UploadFile() {
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
+
+    setCommentPosition({ x, y });
 
     if (event.detail === 2) {
       handleIconDoubleClick(x, y);
@@ -161,13 +163,13 @@ function UploadFile() {
 
   const handleSaveComment = () => {
     if (newComment.trim() !== "") {
-      setComments([
-        ...comments,
-        { text: newComment, x: commentPosition.x, y: commentPosition.y },
+      setComments((prevComments) => [
+        ...prevComments,
+        { text: newComment, x: 100, y: 100 },
       ]);
     }
-    setNewComment("");
     setModalIsOpen(false);
+    setNewComment(""); // Clear input after saving
   };
 
   const renderComments = useCallback(
@@ -529,20 +531,51 @@ function UploadFile() {
               margin: "0 auto",
             }}
           />
-          <Modal
-            isOpen={modalIsOpen}
-            onRequestClose={() => setModalIsOpen(false)}
-            contentLabel="Add Comment"
-          >
-            <h2>Add a Comment</h2>
-            <input
-              type="text"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-            />
-            <button onClick={handleSaveComment}>Save</button>
-            <button onClick={() => setModalIsOpen(false)}>Cancel</button>
-          </Modal>
+          <div>
+            {/* Open Modal Button */}
+            <button onClick={() => setModalIsOpen(true)}>Open Modal</button>
+
+            {/* Custom Modal */}
+            {modalIsOpen && (
+              <div
+                style={{
+                  position: "fixed",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  backgroundColor: "white",
+                  padding: "20px",
+                  boxShadow: "0 0 10px rgba(0,0,0,0.3)",
+                  zIndex: 1000,
+                }}
+              >
+                <h2>Add a Comment</h2>
+                <input
+                  type="text"
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                />
+                <button onClick={handleSaveComment}>Save</button>
+                <button onClick={() => setModalIsOpen(false)}>Cancel</button>
+              </div>
+            )}
+
+            {/* Background Overlay */}
+            {modalIsOpen && (
+              <div
+                onClick={() => setModalIsOpen(false)}
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                  zIndex: 999,
+                }}
+              />
+            )}
+          </div>
         </div>
       )}
       <div className="d-flex">
