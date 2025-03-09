@@ -14,5 +14,8 @@
   },
   "author": "",
   "license": "ISC",
-  "homepage": "https://github.com/LolaSL/ac-commerce#readme"
+  "homepage": "https://github.com/LolaSL/ac-commerce#readme",
+  "dependencies": {
+    "react-modal": "^3.16.3"
+  }
 }

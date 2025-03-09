@@ -3,7 +3,10 @@ import { Button, Form } from "react-bootstrap";
 import { PDFDocument } from "pdf-lib";
 import * as pdfjsLib from "pdfjs-dist/webpack.mjs";
 import { Helmet } from "react-helmet-async";
+import Modal from "react-modal";
+
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js`;
+Modal.setAppElement("#root");
 
 function UploadFile() {
   const [file, setFile] = useState(null);
@@ -14,6 +17,9 @@ function UploadFile() {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [comments, setComments] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [newComment, setNewComment] = useState("");
+  const [commentPosition, setCommentPosition] = useState({ x: 0, y: 0 });
   const RECT_WIDTH = window.innerWidth < 768 ? 20 : 30;
   const RECT_HEIGHT = window.innerWidth < 768 ? 10 : 15;
 
@@ -127,39 +133,42 @@ function UploadFile() {
   //   }
   // };
 
-
   let lastTapTime = 0;
 
-const handleCanvasTouchStart = (e) => {
-  e.preventDefault(); // Prevents page scrolling
-  const canvas = canvasRef.current;
-  const rect = canvas.getBoundingClientRect();
-  const touch = e.touches[0];
-  const x = touch.clientX - rect.left;
-  const y = touch.clientY - rect.top;
+  const handleCanvasTouchStart = (e) => {
+    e.preventDefault();
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
 
-  const currentTime = new Date().getTime();
-  const timeSinceLastTap = currentTime - lastTapTime;
+    const currentTime = new Date().getTime();
+    const timeSinceLastTap = currentTime - lastTapTime;
 
-  if (timeSinceLastTap < 300 && timeSinceLastTap > 0) {
-    // Double-tap detected
-    handleIconDoubleClick(x, y);
-  } else {
-    // Single tap detected
-    const isNewIcon = handleIconClick(x, y);
-    if (isNewIcon) {
-      const commentText = prompt("Enter your comment:");
-      if (commentText) {
-        setComments((prevComments) => [
-          ...prevComments,
-          { text: commentText, x: x + 50, y: y - 30 },
-        ]);
+    if (timeSinceLastTap < 300 && timeSinceLastTap > 0) {
+      handleIconDoubleClick(x, y); // Double tap logic
+    } else {
+      const isNewIcon = handleIconClick(x, y);
+      if (isNewIcon) {
+        // Store position & show modal
+        setCommentPosition({ x: x + 50, y: y - 30 });
+        setModalIsOpen(true);
       }
     }
-  }
+    lastTapTime = currentTime;
+  };
 
-  lastTapTime = currentTime;
-};
+  const handleSaveComment = () => {
+    if (newComment.trim() !== "") {
+      setComments([
+        ...comments,
+        { text: newComment, x: commentPosition.x, y: commentPosition.y },
+      ]);
+    }
+    setNewComment("");
+    setModalIsOpen(false);
+  };
 
   const renderComments = useCallback(
     (context) => {
@@ -505,22 +514,35 @@ const handleCanvasTouchStart = (e) => {
             }}
           /> */}
 
-<canvas
-  id="my-canvas"
-  ref={canvasRef}
-  width={window.innerWidth * 0.9}
-  height={window.innerHeight * 0.6}
-  onClick={handleCanvasClick} // For desktop
-  onTouchStart={handleCanvasTouchStart} // For mobile
-  style={{
-    backgroundImage: `url(${previewUrl})`,
-    backgroundSize: "cover",
-    cursor: "pointer",
-    display: "block",
-    margin: "0 auto",
-  }}
-/>
-
+          <canvas
+            id="my-canvas"
+            ref={canvasRef}
+            width={window.innerWidth * 0.9}
+            height={window.innerHeight * 0.6}
+            onClick={handleCanvasClick}
+            onTouchStart={handleCanvasTouchStart}
+            style={{
+              backgroundImage: `url(${previewUrl})`,
+              backgroundSize: "cover",
+              cursor: "pointer",
+              display: "block",
+              margin: "0 auto",
+            }}
+          />
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={() => setModalIsOpen(false)}
+            contentLabel="Add Comment"
+          >
+            <h2>Add a Comment</h2>
+            <input
+              type="text"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+            />
+            <button onClick={handleSaveComment}>Save</button>
+            <button onClick={() => setModalIsOpen(false)}>Cancel</button>
+          </Modal>
         </div>
       )}
       <div className="d-flex">
