@@ -106,26 +106,60 @@ function UploadFile() {
     }
   };
 
-  const handleCanvasTouch = (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const offsetX = touch.clientX - e.target.offsetLeft;
-    const offsetY = touch.clientY - e.target.offsetTop;
+  // const handleCanvasTouch = (e) => {
+  //   e.preventDefault();
+  //   const touch = e.touches[0];
+  //   const offsetX = touch.clientX - e.target.offsetLeft;
+  //   const offsetY = touch.clientY - e.target.offsetTop;
 
-    if (e.detail === 2) {
-      handleIconDoubleClick(offsetX, offsetY);
-    } else {
-      handleIconClick(offsetX, offsetY);
-    }
-  };
+  //   if (e.detail === 2) {
+  //     handleIconDoubleClick(offsetX, offsetY);
+  //   } else {
+  //     handleIconClick(offsetX, offsetY);
+  //   }
+  // };
 
-  const handleCanvasEvent = (e) => {
-    if (window.innerWidth > 768) {
-      handleCanvasClick(e);
-    } else {
-      handleCanvasTouch(e);
+  // const handleCanvasEvent = (e) => {
+  //   if (window.innerWidth > 768) {
+  //     handleCanvasClick(e);
+  //   } else {
+  //     handleCanvasTouch(e);
+  //   }
+  // };
+
+
+  let lastTapTime = 0;
+
+const handleCanvasTouchStart = (e) => {
+  e.preventDefault(); // Prevents page scrolling
+  const canvas = canvasRef.current;
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches[0];
+  const x = touch.clientX - rect.left;
+  const y = touch.clientY - rect.top;
+
+  const currentTime = new Date().getTime();
+  const timeSinceLastTap = currentTime - lastTapTime;
+
+  if (timeSinceLastTap < 300 && timeSinceLastTap > 0) {
+    // Double-tap detected
+    handleIconDoubleClick(x, y);
+  } else {
+    // Single tap detected
+    const isNewIcon = handleIconClick(x, y);
+    if (isNewIcon) {
+      const commentText = prompt("Enter your comment:");
+      if (commentText) {
+        setComments((prevComments) => [
+          ...prevComments,
+          { text: commentText, x: x + 50, y: y - 30 },
+        ]);
+      }
     }
-  };
+  }
+
+  lastTapTime = currentTime;
+};
 
   const renderComments = useCallback(
     (context) => {
@@ -455,7 +489,7 @@ function UploadFile() {
       <h2 className="mt-4 mb-4">Preview of selected file:</h2>
       {previewUrl && (
         <div>
-          <canvas
+          {/* <canvas
             id="my-canvas"
             ref={canvasRef}
             width={window.innerWidth * 0.9}
@@ -469,7 +503,24 @@ function UploadFile() {
               display: "block",
               margin: "0 auto",
             }}
-          />
+          /> */}
+
+<canvas
+  id="my-canvas"
+  ref={canvasRef}
+  width={window.innerWidth * 0.9}
+  height={window.innerHeight * 0.6}
+  onClick={handleCanvasClick} // For desktop
+  onTouchStart={handleCanvasTouchStart} // For mobile
+  style={{
+    backgroundImage: `url(${previewUrl})`,
+    backgroundSize: "cover",
+    cursor: "pointer",
+    display: "block",
+    margin: "0 auto",
+  }}
+/>
+
         </div>
       )}
       <div className="d-flex">
