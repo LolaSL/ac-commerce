@@ -40,11 +40,6 @@ app.get("/api/keys/google", (req, res) => {
 });
 
 app.use('/api/seed', seedRouter);
-const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, "/frontend/build")));
-app.get("*", (req, res) =>
-    res.sendFile(path.join(__dirname, "/frontend/build/index.html"))
-);
 
 app.use("/api/upload", uploadRouter);
 app.use('/api/products', productRouter);
@@ -55,17 +50,20 @@ app.use('/api/contact', contactRouter);
 app.use('/api/service-providers', serviceProviderRouter);
 app.use('/api/blogs', blogRouter);
 app.use('/api/notifications', notificationRouter);
+
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "/frontend/build")));
+app.get("*", (req, res) =>
+    res.sendFile(path.join(__dirname, "/frontend/build/index.html"))
+);
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
-
-
 
 app.use((err, req, res, next) => {
     res.status(500).send({ message: err.message });
 });
 
 const port = process.env.PORT || 5050;
-
-const server = app.listen(5030, () => {
+const server = app.listen(port, () => {
     console.log(`Server is listening at http://localhost:${port}`);
 });
 
