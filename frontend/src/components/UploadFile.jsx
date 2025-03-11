@@ -3,10 +3,8 @@ import { Button, Form } from "react-bootstrap";
 import { PDFDocument } from "pdf-lib";
 import * as pdfjsLib from "pdfjs-dist/webpack.mjs";
 import { Helmet } from "react-helmet-async";
-// import Modal from "react-modal";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js`;
-// Modal.setAppElement("#root");
 
 function UploadFile() {
   const [file, setFile] = useState(null);
@@ -17,9 +15,6 @@ function UploadFile() {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [comments, setComments] = useState([]);
-  // const [modalIsOpen, setModalIsOpen] = useState(false);
-  // const [newComment, setNewComment] = useState("");
-  const [setCommentPosition] = useState({ x: 0, y: 0 });
   const RECT_WIDTH = window.innerWidth < 768 ? 20 : 30;
   const RECT_HEIGHT = window.innerWidth < 768 ? 10 : 15;
 
@@ -50,8 +45,6 @@ function UploadFile() {
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-
-    setCommentPosition({ x, y });
 
     if (event.detail === 2) {
       handleIconDoubleClick(x, y);
@@ -114,63 +107,14 @@ function UploadFile() {
     }
   };
 
-  // const handleCanvasTouch = (e) => {
-  //   e.preventDefault();
-  //   const touch = e.touches[0];
-  //   const offsetX = touch.clientX - e.target.offsetLeft;
-  //   const offsetY = touch.clientY - e.target.offsetTop;
-
-  //   if (e.detail === 2) {
-  //     handleIconDoubleClick(offsetX, offsetY);
-  //   } else {
-  //     handleIconClick(offsetX, offsetY);
-  //   }
-  // };
-
-  // const handleCanvasEvent = (e) => {
-  //   if (window.innerWidth > 768) {
-  //     handleCanvasClick(e);
-  //   } else {
-  //     handleCanvasTouch(e);
-  //   }
-  // };
-
-  // let lastTapTime = 0;
-
-  // const handleCanvasTouchStart = (e) => {
-  //   e.preventDefault();
-  //   const canvas = canvasRef.current;
-  //   const rect = canvas.getBoundingClientRect();
-  //   const touch = e.touches[0];
-  //   const x = touch.clientX - rect.left;
-  //   const y = touch.clientY - rect.top;
-
-  //   const currentTime = new Date().getTime();
-  //   const timeSinceLastTap = currentTime - lastTapTime;
-
-  //   if (timeSinceLastTap < 300 && timeSinceLastTap > 0) {
-  //     handleIconDoubleClick(x, y); // Double tap logic
-  //   } else {
-  //     const isNewIcon = handleIconClick(x, y);
-  //     if (isNewIcon) {
-  //       // Store position & show modal
-  //       setCommentPosition({ x: x + 50, y: y - 30 });
-  //       setModalIsOpen(true);
-  //     }
-  //   }
-  //   lastTapTime = currentTime;
-  // };
-
-  // const handleSaveComment = () => {
-  //   if (newComment.trim() !== "") {
-  //     setComments((prevComments) => [
-  //       ...prevComments,
-  //       { text: newComment, x: 100, y: 100 },
-  //     ]);
-  //   }
-  //   setModalIsOpen(false);
-  //   setNewComment(""); // Clear input after saving
-  // };
+  const handleCanvasEvent = (e) => {
+    // if (window.innerWidth > 768) {
+    handleCanvasClick(e);
+    // }
+    // else {
+    //   handleCanvasTouch(e);
+    // }
+  };
 
   const renderComments = useCallback(
     (context) => {
@@ -500,12 +444,11 @@ function UploadFile() {
       <h2 className="mt-4 mb-4">Preview of selected file:</h2>
       {previewUrl && (
         <div>
-          {/* <canvas
+          <canvas
             id="my-canvas"
             ref={canvasRef}
             width={window.innerWidth * 0.9}
             height={window.innerHeight * 0.6}
-            onTouchStart={handleCanvasTouch}
             onClick={handleCanvasEvent}
             style={{
               backgroundImage: `url(${previewUrl})`,
@@ -514,68 +457,7 @@ function UploadFile() {
               display: "block",
               margin: "0 auto",
             }}
-          /> */}
-
-          <canvas
-            id="my-canvas"
-            ref={canvasRef}
-            width={window.innerWidth * 0.9}
-            height={window.innerHeight * 0.6}
-            onClick={handleCanvasClick}
-            // onTouchStart={handleCanvasTouchStart}
-            style={{
-              backgroundImage: `url(${previewUrl})`,
-              backgroundSize: "cover",
-              cursor: "pointer",
-              display: "block",
-              margin: "0 auto",
-            }}
           />
-          {/* <div>
-          
-            <button onClick={() => setModalIsOpen(true)}>Open Modal</button>
-
-        
-            {modalIsOpen && (
-              <div
-                style={{
-                  position: "fixed",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  backgroundColor: "white",
-                  padding: "20px",
-                  boxShadow: "0 0 10px rgba(0,0,0,0.3)",
-                  zIndex: 1000,
-                }}
-              >
-                <h2>Add a Comment</h2>
-                <input
-                  type="text"
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                />
-                <button onClick={handleSaveComment}>Save</button>
-                <button onClick={() => setModalIsOpen(false)}>Cancel</button>
-              </div>
-            )}
-
-          
-            {modalIsOpen && (
-              <div
-                onClick={() => setModalIsOpen(false)}
-                style={{
-                  position: "fixed",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  backgroundColor: "rgba(0,0,0,0.5)",
-                  zIndex: 999,
-                }}
-              />
-            )}
-          </div> */}
         </div>
       )}
       <div className="d-flex">
@@ -594,7 +476,6 @@ function UploadFile() {
           </>
         )}
       </div>
-
       {error && <p className="error-message mt-4">{error}</p>}
     </div>
   );
