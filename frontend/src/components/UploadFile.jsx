@@ -107,14 +107,36 @@ function UploadFile() {
     }
   };
 
-  const handleCanvasEvent = (e) => {
-    // if (window.innerWidth > 768) {
-    handleCanvasClick(e);
-    // }
-    // else {
-    //   handleCanvasTouch(e);
-    // }
+
+  const handleCanvasTouch = (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const offsetX = touch.clientX - e.target.offsetLeft;
+    const offsetY = touch.clientY - e.target.offsetTop;
+
+    if (e.detail === 2) {
+      handleIconDoubleClick(offsetX, offsetY);
+    } else {
+      handleIconClick(offsetX, offsetY);
+    }
   };
+
+  const handleCanvasEvent = (e) => {
+    if (window.innerWidth > 768) {
+      handleCanvasClick(e);
+    } else {
+      handleCanvasTouch(e);
+    }
+  };
+
+  // const handleCanvasEvent = (e) => {
+  //   // if (window.innerWidth > 768) {
+  //   handleCanvasClick(e);
+  //   // }
+  //   // else {
+  //   //   handleCanvasTouch(e);
+  //   // }
+  // };
 
   const renderComments = useCallback(
     (context) => {
