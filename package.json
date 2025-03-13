@@ -14,5 +14,8 @@
   },
   "author": "",
   "license": "ISC",
-  "homepage": "https://github.com/LolaSL/ac-commerce#readme"
+  "homepage": "https://github.com/LolaSL/ac-commerce#readme",
+  "dependencies": {
+    "@paypal/paypal-server-sdk": "^0.6.1"
+  }
 }

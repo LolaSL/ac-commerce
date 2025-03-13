@@ -10,6 +10,7 @@ import Earnings from '../models/earningModel.js';
 import Blog from '../models/blogModel.js';
 import data from '../data.js';
 import Notification from '../models/notificationModel.js';
+import Ad from '../models/adModel.js';
 
 
 
@@ -28,7 +29,7 @@ seedRouter.get('/', async (req, res) => {
     await Earnings.deleteMany({});
     await Blog.deleteMany({});
     await Notification.deleteMany({});
-
+    await Ad.deleteMany({});
 
     const createdServiceProviders = await ServiceProvider.insertMany(data.serviceProviders);
 
@@ -72,6 +73,10 @@ seedRouter.get('/', async (req, res) => {
     const createdContacts = await Contact.insertMany(data.contacts);
     const createdBlogs = await Blog.insertMany(data.blogs);
     const createdNotifications = await Notification.insertMany(data.notifications);
+    console.log('Inserting Ads...');
+    const createdAds = await Ad.insertMany(data.Ads);
+    console.log('Ads Created:', createdAds);
+
 
     res.send({
       createdProducts,
@@ -83,7 +88,8 @@ seedRouter.get('/', async (req, res) => {
       createdMessages,
       createdEarnings,
       createdBlogs,
-      createdNotifications
+      createdNotifications,
+      createdAds
     });
   } catch (error) {
     res.status(500).send({ message: 'Error seeding data', error: error.message });

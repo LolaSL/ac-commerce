@@ -7,7 +7,7 @@ import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox.jsx";
 import MessageBox from "../components/MessageBox.jsx";
 import { Link } from "react-router-dom";
-
+import ActiveAds from "../components/ActiveAds.jsx";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -54,6 +54,7 @@ const HomePage = () => {
         <h1 className="featured-title text-center pt-4 mb-4 fw-bold">
           Featured Products
         </h1>
+        <ActiveAds />
         <h3 className="py-2 mb-2 featured-products text-center">
           Introducing our latest line of air conditioning units
         </h3>
