@@ -106,19 +106,33 @@ function UploadFile() {
       return true;
     }
   };
-
+  const lastTouch = { time: 0, x: 0, y: 0 };
 
   const handleCanvasTouch = (e) => {
     e.preventDefault();
     const touch = e.touches[0];
-    const offsetX = touch.clientX - e.target.offsetLeft;
-    const offsetY = touch.clientY - e.target.offsetTop;
 
-    if (e.detail === 2) {
+    const rect = e.target.getBoundingClientRect();
+    const offsetX = touch.clientX - rect.left;
+    const offsetY = touch.clientY - rect.top;
+
+    // Detect double tap (instead of `e.detail`)
+    const currentTime = new Date().getTime();
+    const tapGap = currentTime - lastTouch.time;
+
+    if (
+      tapGap < 300 &&
+      Math.abs(lastTouch.x - offsetX) < 10 &&
+      Math.abs(lastTouch.y - offsetY) < 10
+    ) {
       handleIconDoubleClick(offsetX, offsetY);
     } else {
       handleIconClick(offsetX, offsetY);
     }
+
+    lastTouch.time = currentTime;
+    lastTouch.x = offsetX;
+    lastTouch.y = offsetY;
   };
 
   const handleCanvasEvent = (e) => {
@@ -128,6 +142,27 @@ function UploadFile() {
       handleCanvasTouch(e);
     }
   };
+
+  // const handleCanvasTouch = (e) => {
+  //   e.preventDefault();
+  //   const touch = e.touches[0];
+  //   const offsetX = touch.clientX - e.target.offsetLeft;
+  //   const offsetY = touch.clientY - e.target.offsetTop;
+
+  //   if (e.detail === 2) {
+  //     handleIconDoubleClick(offsetX, offsetY);
+  //   } else {
+  //     handleIconClick(offsetX, offsetY);
+  //   }
+  // };
+
+  // const handleCanvasEvent = (e) => {
+  //   if (window.innerWidth > 768) {
+  //     handleCanvasClick(e);
+  //   } else {
+  //     handleCanvasTouch(e);
+  //   }
+  // };
 
   // const handleCanvasEvent = (e) => {
   //   // if (window.innerWidth > 768) {
@@ -472,12 +507,14 @@ function UploadFile() {
             width={window.innerWidth * 0.9}
             height={window.innerHeight * 0.6}
             onClick={handleCanvasEvent}
+            onTouchStart={handleCanvasTouch} // Explicitly handle touch events
             style={{
               backgroundImage: `url(${previewUrl})`,
               backgroundSize: "cover",
               cursor: "pointer",
               display: "block",
               margin: "0 auto",
+              touchAction: "none", // Prevents accidental zooming
             }}
           />
         </div>

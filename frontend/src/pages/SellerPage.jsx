@@ -133,8 +133,8 @@ export default function SellerPage() {
             </p>
             <iframe
               className="responsive-iframe rounded"
-              width="600"
-              height="400"
+              // width="600"
+              // height="400"
               src={seller.link}
               title={`${seller.name} Product Video`}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
