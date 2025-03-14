@@ -127,14 +127,12 @@ export default function SellerPage() {
             </p>
             <p>Information: {seller.info}</p>
           </div>
-          <div className="video-preview">
+          <div className="iframe-container">
             <p>
               <strong>VIDEO:</strong>
             </p>
             <iframe
-              className="responsive-iframe rounded"
-              // width="600"
-              // height="400"
+              className="rounded"
               src={seller.link}
               title={`${seller.name} Product Video`}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

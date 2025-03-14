@@ -50,7 +50,6 @@ export default function ForgetPasswordPage() {
             onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Group>
-
         <div className="mb-3">
           <Button className="btn btn-secondary" type="submit">submit</Button>
         </div>
