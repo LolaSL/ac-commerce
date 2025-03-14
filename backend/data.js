@@ -913,22 +913,6 @@ const data = {
     },
 
   ],
- ads: [
-    {
-      title: "Cool Air Conditioning - Stay Chill!",
-      image: "/images/ad1.jpg", 
-      link: "https://coolac.com",
-      price: 200,
-      status: "active", 
-    },
-    {
-      title: "Energy Efficient ACs - Save More!",
-      image: "/images/ad2.jpg",
-      link: "https://energyac.com",
-      price: 180,
-      status: "pending",
-    },
-  ],
   sellers: [
     {
       name: 'LG',

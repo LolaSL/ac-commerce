@@ -11,7 +11,6 @@ import contactRouter from './routes/contactRoutes.js'
 import serviceProviderRouter from './routes/serviceProviderRoutes.js'
 import blogRouter from './routes/blogRoutes.js'
 import notificationRouter from './routes/notificationRoutes.js';
-import adRouter from './routes/adRoutes.js';
 import path from "path";
 import cors from 'cors';
 
@@ -51,7 +50,7 @@ app.use('/api/contact', contactRouter);
 app.use('/api/service-providers', serviceProviderRouter);
 app.use('/api/blogs', blogRouter);
 app.use('/api/notifications', notificationRouter);
-app.use('/api/ads', adRouter);
+
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "/frontend/build")));

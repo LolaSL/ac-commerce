@@ -9,8 +9,8 @@ export const baseUrl = () =>
     process.env.BASE_URL
         ? process.env.BASE_URL
         : process.env.NODE_ENV !== 'production'
-            ? 'http://localhost:3000'
-            : 'https://yourdomain.com';
+            ? 'http://localhost:5050'
+            : 'https://ac-commerce.onrender.com';
 
 
 
@@ -35,7 +35,7 @@ export const isAuth = (req, res, next) => {
     const authorization = req.headers.authorization;
 
     if (authorization && authorization.startsWith('Bearer ')) {
-        const token = authorization.split(' ')[1]; 
+        const token = authorization.split(' ')[1];
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
                 return res.status(401).send({ message: 'Invalid token' });
@@ -50,13 +50,13 @@ export const isAuth = (req, res, next) => {
 
 export const isAdmin = (req, res, next) => {
     if (req.user && req.user.isAdmin) {
-      console.log('Admin Access Granted:', req.user);
-      next();
+        console.log('Admin Access Granted:', req.user);
+        next();
     } else {
-      console.log('Admin Access Denied:', req.user);
-      res.status(401).send({ message: 'Not authorized as an admin' });
+        console.log('Admin Access Denied:', req.user);
+        res.status(401).send({ message: 'Not authorized as an admin' });
     }
-  };
+};
 
 
 

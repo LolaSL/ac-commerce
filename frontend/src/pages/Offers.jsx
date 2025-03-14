@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Card, Button, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-
 export default function Offers() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
