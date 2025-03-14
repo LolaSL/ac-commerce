@@ -3,7 +3,7 @@ import Banner from "../components/Banner.jsx";
 import NotificationPopUp from "../components/NotificationPopUp";
 import { Store } from "../Store";
 import { useNavigate } from "react-router-dom";
-import ActiveAds from "../components/ActiveAds.jsx";
+
 
 const notifications = [
   {
@@ -141,7 +141,7 @@ export default function HomeBannerPage() {
           }
         />
       )}
-      <ActiveAds />
+     
       {banners.map((banner, index) => (
         <Banner
           key={index}

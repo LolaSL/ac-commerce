@@ -22,7 +22,7 @@ const reducer = (state, action) => {
   }
 };
 
-const HomePage = () => {
+const FeaturedPage = () => {
   const [{ loading, error, products }, dispatch] = useReducer(reducer, {
     products: [],
     loading: true,
@@ -87,4 +87,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default FeaturedPage;

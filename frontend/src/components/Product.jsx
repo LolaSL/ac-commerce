@@ -1,10 +1,10 @@
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
-import Rating from "./Rating";
+import Rating from "./Rating.jsx";
 import axios from "axios";
 import { useContext } from "react";
-import { Store } from "../Store";
+import { Store } from "../Store.js";
 import Image from "react-bootstrap/Image";
 
 function Product(props) {
@@ -57,12 +57,6 @@ function Product(props) {
             </span>
           )}
         </Card.Text>
-        {/* <Card.Text>
-  <strong>Product  dimensions (WxHxD):</strong>{" "}<br/>
-  {product.dimension && (product.dimension.width > 0 || product.dimension.height > 0 || product.dimension.depth > 0)
-    ? `${product.dimension.width} x ${product.dimension.height} x ${product.dimension.depth} cm`
-    : "Not specified"}
-</Card.Text> */}
         {product.countInStock === 0 ? (
           <Button className="btn-out-of-stock" variant="secondary" disabled>
             Out of stock

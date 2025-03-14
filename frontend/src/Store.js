@@ -8,7 +8,7 @@ const initialState = {
   userInfo: localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo'))
     : null,
-
+    ads: [],
   serviceProviderInfo: localStorage.getItem('serviceProviderInfo')
     ? JSON.parse(localStorage.getItem('serviceProviderInfo'))
     : null,
@@ -35,6 +35,8 @@ function reducer(state, action) {
       return { ...state, fullBox: true };
     case 'SET_FULLBOX_OFF':
       return { ...state, fullBox: false };
+      case "SET_ADS":
+        return { ...state, ads: action.payload.ads };
       case "CART_ADD_ITEM": {
         const newItem = action.payload;
         const existItem = state.cart.cartItems.find(
