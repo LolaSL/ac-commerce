@@ -51,7 +51,9 @@ function UploadFile() {
     } else {
       const isNewIcon = handleIconClick(x, y);
       if (isNewIcon) {
-        const commentText = prompt("Enter your comment:");
+        const commentText = prompt(
+          "Enter your ac unit number (ac1, ac2, ...):"
+        );
         if (commentText) {
           setComments((prevComments) => [
             ...prevComments,
@@ -437,6 +439,9 @@ function UploadFile() {
         </p>
         <p className="warning fw-bold">
           *Delete rectangle: <kbd>Double Click</kbd>
+        </p>
+        <p className="warning fw-bold">
+          *For saving approved drawing: <kbd>Double Click</kbd>
         </p>
         <Form.Control
           className="mt-4"
