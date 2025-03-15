@@ -1518,7 +1518,7 @@ iframe {
   display: block;
 }
 
-@media only screen and (max-width: 560px) {
+@media only screen and (max-width: 478px) {
   .iframe-container {
     max-width: 90vw;
   }
@@ -1528,7 +1528,7 @@ iframe {
   }
 }
 
-@media only screen and (min-width: 561px) and (max-width: 1024px) {
+@media only screen and (min-width: 479px) and (max-width: 1024px) {
   .iframe-container {
     max-width: 80vw;
   }

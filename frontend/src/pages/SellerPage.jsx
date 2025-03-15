@@ -38,7 +38,6 @@ const reducer = (state, action) => {
 };
 
 export default function SellerPage() {
-
   const { id } = useParams();
   const reviewsRef = useRef();
   const { state } = useContext(Store);
@@ -108,22 +107,25 @@ export default function SellerPage() {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <>
-              <div className="seller">
-              <div className="logo-container p-4">
-           <img src={`${seller.logo}`} alt={`${seller.name} logo`} className="seller-logo" />
-
-          </div>
+          <div className="seller">
+            <div className="logo-container p-4">
+              <img
+                src={`${seller.logo}`}
+                alt={`${seller.name} logo`}
+                className="seller-logo"
+              />
+            </div>
             <h2 className="p-4">{seller.name}</h2>
             <p>Brand: {seller.brand}</p>
             <p>
               Company website:{" "}
               <a
-              href={seller.companyLink}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Visit {seller.name}'s Website
-            </a>
+                href={seller.companyLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Visit {seller.name}'s Website
+              </a>
             </p>
             <p>Information: {seller.info}</p>
           </div>

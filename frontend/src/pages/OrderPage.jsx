@@ -16,6 +16,10 @@ import { getError } from "../utils";
 import { toast } from "react-toastify";
 import Image from "react-bootstrap/Image";
 
+function printOrder() {
+  window.print();
+}
+
 function reducer(state, action) {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -321,6 +325,15 @@ export default function OrderPage() {
                     </Col>
                   </Row>
                 </ListGroup.Item>
+                {order.isPaid && (
+                  <ListGroup.Item>
+                    <div className="d-grid">
+                      <Button onClick={printOrder} className="btn btn-info">
+                        Print Order
+                      </Button>
+                    </div>
+                  </ListGroup.Item>
+                )}
                 {!order.isPaid && (
                   <ListGroup.Item>
                     {isPending ? (

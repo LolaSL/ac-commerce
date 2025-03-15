@@ -107,7 +107,7 @@ function UploadFile() {
     }
   };
 
-    const handleCanvasTouch = (e) => {
+  const handleCanvasTouch = (e) => {
     e.preventDefault();
     const touch = e.touches[0];
     const offsetX = touch.clientX - e.target.offsetLeft;
