@@ -327,9 +327,9 @@ function BtuCalculator() {
         HeavilyShaded: false,
       },
       climate: {
-        AverageWarsaw: false, 
-        HotTelAviv: false, 
-        ColdStockholm: false, 
+        AverageWarsaw: false,
+        HotTelAviv: false,
+        ColdStockholm: false,
       },
     });
 
@@ -559,92 +559,112 @@ function BtuCalculator() {
         <Container className="btu-results mt-4">
           <h3 className="text-center">BTU Results</h3>
           <div className="table-responsive">
-          <Table bordered hover className="table-responsive-md">
-            <thead>
-              <tr>
-                <th>Room</th> <th>BTU</th> <th>Optimal Product</th>
-                <th>Product Details</th> <th>Product Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rooms.map((room, index) => {
-                const product = products[index] || {};
-                return (
-                  <tr key={index}>
-                    <td data-label="Room">{room.name}</td>
-                    <td data-label="BTU">{btuResults[index]}</td>
-                    <td data-label="Optimal Ptoduct">
-                      {product.slug ? (
-                        <Link
-                          to={`/product/${product.slug}`}
-                          className="link-product-details"
-                        >
-                          <Image
-                            src={product.image || "/images/placeholder.png"}
-                            alt={product.name || "No product available"}
-                            style={{
-                              width: "50px",
-                              height: "auto",
-                              backgroundColor: "grey",
-                            }}
-                            className="responsive rounded"
-                          />
-                        </Link>
-                      ) : (
-                        "No product available"
-                      )}
-                    </td>
-                    <td data-label="Product Details">{product.name || "No product available"}</td>
-                    <td data-label="Product Price">
-                      {product.discount > 0
-                        ? (
-                            product.price -
-                            (product.price * product.discount) / 100
-                          ).toFixed(2)
-                        : product.price
-                        ? product.price.toFixed(2)
-                        : "No price available"}
-                    </td>
-                  </tr>
-                );
-              })}
-              <tr>
-                <td data-label="Total"  className="total-results bg-warning">
-                  <strong>Total</strong>
-                </td>
-                <td   data-label="Total Btu" className="total-results bg-warning">
-                  <strong>{totalBTU}</strong>
-                </td>
-                <td data-label="Total Optimal Products"  className="total-results bg-warning">
-                  <strong>
-                    {optimalProductCount || "No optimal product available"}
-                  </strong>
-                </td>
-                <td   data-label="Total Product BTU" className="total-results bg-warning">
-                  <strong>
-                    {products
-                      .reduce((total, product) => total + (product.btu || 0), 0)
-                      .toFixed(0)}
-                  </strong>
-                </td>
-                <td  data-label="Total Product Price" className="total-results bg-warning">
-                  <strong>
-                    {products.length > 0
-                      ? products
-                          .reduce((total, product) => {
-                            const price =
+            <Table bordered hover className="table-responsive-md">
+              <thead>
+                <tr>
+                  <th>Room</th>
+                  <th>Room BTU</th>
+                  <th>Optimal Product</th>
+                  <th>Product BTU</th>
+                  <th>Product Price, ($)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rooms.map((room, index) => {
+                  const product = products[index] || {};
+                  return (
+                    <tr key={index}>
+                      <td data-label="Room">{room.name}</td>
+                      <td data-label="Room BTU">{btuResults[index]}</td>
+                      <td data-label="Optimal Product">
+                        {product.slug ? (
+                          <Link
+                            to={`/product/${product.slug}`}
+                            className="link-product-details"
+                          >
+                            <Image
+                              src={product.image || "/images/placeholder.png"}
+                              alt={product.name || "No product available"}
+                              style={{
+                                width: "50px",
+                                height: "auto",
+                                backgroundColor: "grey",
+                              }}
+                              className="responsive rounded"
+                            />
+                          </Link>
+                        ) : (
+                          "No product available"
+                        )}
+                      </td>
+                      <td data-label="Product BTU">
+                        {product.name || "No product available"}
+                      </td>
+                      <td data-label="Product Price">
+                        {product.discount > 0
+                          ? (
                               product.price -
-                              (product.price * (product.discount || 0)) / 100;
-                            return total + price;
-                          }, 0)
-                          .toFixed(2)
-                      : "No price available"}
-                  </strong>
-                </td>
-              </tr>
-            </tbody>
+                              (product.price * product.discount) / 100
+                            ).toFixed(2)
+                          : product.price
+                          ? product.price.toFixed(2)
+                          : "No price available"}
+                      </td>
+                    </tr>
+                  );
+                })}
+                <tr>
+                  <td data-label="Total" className="total-results bg-warning">
+                    <strong>Total</strong>
+                  </td>
+                  <td
+                    data-label="Total Room Btu"
+                    className="total-results bg-warning"
+                  >
+                    <strong>{totalBTU}</strong>
+                  </td>
+                  <td
+                    data-label="Total Optimal Products"
+                    className="total-results bg-warning"
+                  >
+                    <strong>
+                      {optimalProductCount || "No optimal product available"}
+                    </strong>
+                  </td>
+                  <td
+                    data-label="Total Product BTU"
+                    className="total-results bg-warning"
+                  >
+                    <strong>
+                      {products
+                        .reduce(
+                          (total, product) => total + (product.btu || 0),
+                          0
+                        )
+                        .toFixed(0)}
+                    </strong>
+                  </td>
+                  <td
+                    data-label="Total Product Price"
+                    className="total-results bg-warning"
+                  >
+                    <strong>
+                      {products.length > 0
+                        ? products
+                            .reduce((total, product) => {
+                              const price =
+                                product.price -
+                                (product.price * (product.discount || 0)) / 100;
+                              return total + price;
+                            }, 0)
+                            .toFixed(2)
+                        : "No price available"}
+                    </strong>
+                  </td>
+                </tr>
+              </tbody>
             </Table>
-            </div>
+          </div>
           <div className="d-flex justify-content-center mt-3">
             <Button
               variant="primary"
@@ -665,7 +685,8 @@ function BtuCalculator() {
                         (total, product) => total + (product.btu || 0),
                         0
                       ) * 0.8
-                    ).toFixed(0)} BTU
+                    ).toFixed(0)}{" "}
+                    BTU
                   </strong>
                 </strong>
               </td>

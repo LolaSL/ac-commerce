@@ -15,8 +15,8 @@ function UploadFile() {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [comments, setComments] = useState([]);
-  const RECT_WIDTH = window.innerWidth < 768 ? 20 : 30;
-  const RECT_HEIGHT = window.innerWidth < 768 ? 10 : 15;
+  const RECT_WIDTH = window.innerWidth < 268 ? 20 : 30;
+  const RECT_HEIGHT = window.innerWidth < 268 ? 10 : 15;
 
   const handleChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -123,7 +123,7 @@ function UploadFile() {
   };
 
   const handleCanvasEvent = (e) => {
-    if (window.innerWidth > 768) {
+    if (window.innerWidth > 268) {
       handleCanvasClick(e);
     } else {
       handleCanvasTouch(e);
