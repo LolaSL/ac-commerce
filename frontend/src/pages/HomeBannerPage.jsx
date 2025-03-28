@@ -4,7 +4,6 @@ import NotificationPopUp from "../components/NotificationPopUp";
 import { Store } from "../Store";
 import { useNavigate } from "react-router-dom";
 
-
 const notifications = [
   {
     title: "Service Request Assigned",
@@ -45,7 +44,7 @@ export default function HomeBannerPage() {
       title: "Welcome To AC Commerce",
       imageSrc: "/images/header2.jpg",
       paragraph:
-        "Stay cool and comfortable all year and revolutionize climate with our advanced air conditioning.",
+        "Stay cool and comfortable all year with our advanced air conditioning.",
       linkTo: "/advanced-ac",
       linkText: "Learn More",
     },
@@ -68,7 +67,7 @@ export default function HomeBannerPage() {
       title: "Featured Products",
       imageSrc: "/images/hero.jpg",
       paragraph:
-        "Maximize the comfort of your apartment, office, or villa with our advanced air systems.",
+        "Maximize the comfort of your property with our advanced air systems.",
       linkTo: "/products",
       linkText: "Explore Now",
     },
@@ -141,7 +140,7 @@ export default function HomeBannerPage() {
           }
         />
       )}
-     
+
       {banners.map((banner, index) => (
         <Banner
           key={index}

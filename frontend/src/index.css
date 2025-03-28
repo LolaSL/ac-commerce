@@ -1168,6 +1168,7 @@ form.d-flex {
   padding: 20px;
   text-align: left;
 }
+
 .blog h1 {
   font-weight: bold;
   font-size: 2rem;
@@ -1221,6 +1222,14 @@ form.d-flex {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 480px) {
+  .blog-content {
+    padding: 15px;
+    font-size: 0.85rem;
+    background-color: rgba(0, 0, 0, 0.75);
+  }
 }
 
 @media (max-width: 768px) {
