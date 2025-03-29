@@ -1160,50 +1160,29 @@ form.d-flex {
 
 .blog-content {
   position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 0;
+  left: 0;
+  width: 100%;
   background: rgba(0, 0, 0, 0.7);
   color: white;
   padding: 20px;
-  width: 80%;
   text-align: center;
-  border-radius: 10px;
-}
-
-@media (max-width: 768px) {
-  .blog-content {
-    width: 90%;
-    padding: 15px;
-    bottom: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .blog-content {
-    width: 95%;
-    padding: 10px;
-    font-size: 14px;
-    bottom: 5px;
-  }
+  box-sizing: border-box;
 }
 
 .blog-title {
-  font-size: 20px;
+  font-size: 1.2em;
   font-weight: bold;
-  color: white;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+  margin-bottom: 10px;
 }
 
 .blog-description {
-  font-size: 16px;
-  color: white;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+  font-size: 1em;
+  margin-bottom: 15px;
 }
 
 .blog-link {
   display: inline-block;
-  margin-top: 10px;
   padding: 8px 15px;
   background: #ff9900;
   color: white;
@@ -1215,6 +1194,39 @@ form.d-flex {
 
 .blog-link:hover {
   background: #cc7a00;
+}
+
+@media (max-width: 768px) {
+  .blog-content {
+    padding: 15px;
+  }
+
+  .blog-title {
+    font-size: 1.1em;
+  }
+
+  .blog-description {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  .blog-content {
+    padding: 10px;
+  }
+
+  .blog-title {
+    font-size: 1em;
+  }
+
+  .blog-description {
+    font-size: 0.85em;
+  }
+
+  .blog-link {
+    padding: 6px 12px;
+    font-size: 0.9em;
+  }
 }
 
 .blog h1 {
