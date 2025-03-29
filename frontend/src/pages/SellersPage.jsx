@@ -78,13 +78,7 @@ export default function SellersPage() {
                 >
                   <h2 className="seller-name p-4">{seller.name}</h2>
                 </Link>
-     
-
-                <p className="p-4">Brand: {seller.brand}</p>
-                <p className="seller-paragraph p-2">
-                  Information: {seller.info}
-                </p>
-              </div>
+                  </div>
             </Card>
           ))}
         </div>

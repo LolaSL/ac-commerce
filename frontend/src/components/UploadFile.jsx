@@ -63,6 +63,7 @@ function UploadFile() {
       }
     }
   };
+
   let lastTapTime = 0;
 
   const handleIconClick = (offsetX, offsetY) => {
@@ -90,26 +91,34 @@ function UploadFile() {
     }
   };
 
+  let tapTimeout = null;
+  
   const handleCanvasTouch = (e) => {
     e.preventDefault();
     const touch = e.touches[0];
     const canvasRect = e.target.getBoundingClientRect();
+
     const offsetX = touch.clientX - canvasRect.left;
-    const offsetY = touch.clientY - canvasRect.top;
+    const offsetY = touch.clientY - canvasRect.top + window.scrollY;
+  
     const currentTime = new Date().getTime();
     const tapLength = currentTime - lastTapTime;
-
+  
     if (tapLength < 300 && tapLength > 0) {
-      // Double tap detected (within 300ms)
+      
+      clearTimeout(tapTimeout);
       handleIconDoubleClick(offsetX, offsetY);
-      e.preventDefault(); // Prevent zooming
+      e.preventDefault(); 
     } else {
-      handleIconClick(offsetX, offsetY);
+ 
+      tapTimeout = setTimeout(() => {
+        handleIconClick(offsetX, offsetY);
+      }, 300);
     }
-
+  
     lastTapTime = currentTime;
   };
-
+  
   const handleIconDoubleClick = (offsetX, offsetY) => {
     const existingIconIndex = iconPositions.findIndex((icon) => {
       return (
@@ -119,7 +128,7 @@ function UploadFile() {
         offsetY <= icon.y + RECT_HEIGHT
       );
     });
-
+  
     if (existingIconIndex !== -1) {
       setIconPositions((prevIcons) =>
         prevIcons.filter((_, index) => index !== existingIconIndex)
@@ -129,53 +138,6 @@ function UploadFile() {
       );
     }
   };
-
-  // const handleIconDoubleClick = (offsetX, offsetY) => {
-  //   const existingIconIndex = iconPositions.findIndex((icon) => {
-  //     return (
-  //       offsetX >= icon.x - RECT_WIDTH &&
-  //       offsetX <= icon.x + RECT_WIDTH &&
-  //       offsetY >= icon.y - RECT_HEIGHT &&
-  //       offsetY <= icon.y + RECT_HEIGHT
-  //     );
-  //   });
-
-  //   if (existingIconIndex !== -1) {
-  //     setIconPositions((prevIcons) =>
-  //       prevIcons.filter((_, index) => index !== existingIconIndex)
-  //     );
-  //     setComments((prevComments) =>
-  //       prevComments.filter((_, index) => index !== existingIconIndex)
-  //     );
-  //   }
-  // };
-
-  // const handleCanvasTouch = (e) => {
-  //   e.preventDefault();
-  //   const touch = e.touches[0];
-  //   const offsetX = touch.clientX - e.target.offsetLeft;
-  //   const offsetY = touch.clientY - e.target.offsetTop;
-
-  //   if (e.detail === 2) {
-  //     handleIconDoubleClick(offsetX, offsetY);
-  //   } else {
-  //     handleIconClick(offsetX, offsetY);
-  //   }
-  // };
-
-  // const handleCanvasTouch = (e) => {
-  //   e.preventDefault();
-  //   const touch = e.touches[0];
-  //   const canvasRect = e.target.getBoundingClientRect(); // Get canvas position
-  //   const offsetX = touch.clientX - canvasRect.left;
-  //   const offsetY = touch.clientY - canvasRect.top;
-
-  //   if (e.touches.length === 2) {
-  //     handleIconDoubleClick(offsetX, offsetY);
-  //   } else {
-  //     handleIconClick(offsetX, offsetY);
-  //   }
-  // };
 
   const handleCanvasEvent = (e) => {
     if (window.innerWidth > 268) {
