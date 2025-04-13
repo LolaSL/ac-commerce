@@ -921,7 +921,7 @@ const data = {
       info: "LG offers optimized Heating, Ventilation, and Air Conditioning for both commercial and residential solutions, ensuring fresh and crisp air for various environments.",
       link: "https://www.youtube.com/embed/df0y4MynElM?si=wXHBa1LmiWXyKsI3",
       companyLink: "https://www.lg.com/global/business/hvac",
-      numReviews: 30,
+      numReviews: 39,
       isAdmin: false,
       logo: "/images/lg-logo.png"
     },
@@ -932,7 +932,7 @@ const data = {
       info: "Samsung provides the best air conditioner systems to fit your needs, whether you are seeking solutions for your home or for a business. WindFree™ technology creates a much gentler and milder air flow, evenly distributed through tens of thousands of micro holes, so people in the room feel almost no wind - just comfortable cool air",
       link: "https://www.youtube.com/embed/1dQ1MBSUHoQ?si=XgYwIiFsEHXc1Cl7&clip=UgkxU-wNgQmBp0v_YmQiAkAlIHFzL6GTFAIK&clipt=ENizARjwqAI",
       companyLink: "https://www.samsung.com/levant/business/system-air-conditioner-solutions/home/",
-      numReviews: 33,
+      numReviews: 38,
       isAdmin: false,
       logo: "/images/samsung-logo.png"
     },
@@ -943,7 +943,7 @@ const data = {
       info: "Lennox International Inc. is an American provider of climate control products for the heating, ventilation, and air conditioning (HVAC) and refrigeration markets.",
       link: "https://www.youtube.com/embed/PYiNnQwo04w?si=ZWkYIzkpP4VSmVPZ",
       companyLink: "https://www.lennox.com/residential/",
-      numReviews: 18,
+      numReviews: 15,
       isAdmin: false,
       logo: "/images/lennox-logo.png"
     },
@@ -957,6 +957,50 @@ const data = {
       numReviews: 25,
       isAdmin: false,
       logo: "/images/haier-logo.png"
+    },
+    {
+      name: 'Daikin',
+      brand: "Daikin",
+      rating: 3.0,
+      info: "The world's leading air conditioning manufacturer—Daikin. The source of the company's steady growth is its world-class air-conditioning technology developed in Japan. made possible high-quality air conditioners that responds to various user needs.",
+      link: "https://www.youtube.com/embed/0JyUysKJRFQ?si=3BcBL3fdpA5oa92L",
+      companyLink: "https://www.daikin.com/",
+      numReviews: 19,
+      isAdmin: false,
+      logo: "/images/daikin-logo.png"
+    },
+    {
+      name: 'Mitsubishi Electric Corporation',
+      brand: "Mitsubishi",
+      rating: 5.0,
+      info: "Mitsubishi Electric Corporation is a Japanese multinational electronics and electrical equipment manufacturing company headquartered in Tokyo, Japan. It was established in 1921 as a spin-off from the electrical machinery manufacturing business of Mitsubishi Shipbuilding (current Mitsubishi Heavy Industries) at the Kobe Shipyard. The products from MELCO include elevators and escalators, high-end home appliances, air conditioning, factory automation systems, train systems, electric motors, pumps, semiconductors, digital signage, and satellites.",
+      link: "https://www.youtube.com/embed/DmPUadxWRBg?si=OecVhAlH7Nt20bAC",
+      companyLink: "https://www.mitsubishielectric.com/en/",
+      numReviews: 45,
+      isAdmin: false,
+      logo: "/images/mitsubishi-logo.png"
+    },
+    {
+      name: 'Fujitsu General',
+      brand: "Fujitsu",
+      rating: 4.0,
+      info: "Fujitsu General  manufactures and markets various air conditioning units and humidity control solutions under the General & Fujitsu brands.",
+      link: "https://www.youtube.com/embed/3t8gdztZX0I?si=nKEeyFadP0IdTh9Z",
+      companyLink: "https://www.fujitsu-general.com/global/products/vrf/",
+      numReviews: 40,
+      isAdmin: false,
+      logo: "/images/fujitsu-logo.png"
+    },
+    {
+      name: 'Electra CP',
+      brand: "Electra",
+      rating: 5,
+      info: "The company imports, markets, and distributes appliances from global and local brands, including residential and commercial air conditioners, HVAC systems, white goods, brown goods, and small appliances. In addition, the company manufactures and purchases various types of climate-control systems for distribution in the domestic and foreign markets, through a manufacturing plant it operates in cooperation with Bosch.",
+      link: "https://www.youtube.com/embed/CqmJlh-6tWs?si=C-CTQ_i5FTyNMsz0",
+      companyLink: "https://www.electra.co.il/en",
+      numReviews: 55,
+      isAdmin: false,
+      logo: "/images/electra-logo.png"
     }
 
   ],
