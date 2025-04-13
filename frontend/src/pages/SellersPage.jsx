@@ -55,6 +55,7 @@ export default function SellersPage() {
         <title>Sellers</title>
       </Helmet>
       <h1 className="sellers-title">Sellers</h1>
+      <h2>Air Conditioning Products and VRF Systems</h2>
       {loading ? (
         <LoadingBox></LoadingBox>
       ) : error ? (
