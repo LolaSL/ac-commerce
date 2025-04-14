@@ -256,7 +256,7 @@ function App() {
               <Link to="/offers" onClick={checkoutOffersHandler} className="links fw-bold">Offers</Link>
             </Nav.Item>
             <Nav.Item className='search-title me-auto'>
-              <Link to="/sellers" className="links fw-bold">Sellers</Link>
+              <Link to="/sellers" className="links fw-bold">Explore Suppliers</Link>
             </Nav.Item>
             <Nav.Item className='search-title me-auto'>
               <Link to="/blogs" className="links fw-bold">Blogs</Link>

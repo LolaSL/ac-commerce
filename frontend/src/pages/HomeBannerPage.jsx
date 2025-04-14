@@ -44,7 +44,7 @@ export default function HomeBannerPage() {
       title: "Welcome To AC Commerce",
       imageSrc: "/images/header2.jpg",
       paragraph:
-        "Stay cool and comfortable all year with our advanced air conditioning.",
+        "Save Time. Cut Costs. Stay Ahead.",
       linkTo: "/advanced-ac",
       linkText: "Learn More",
     },
@@ -59,7 +59,7 @@ export default function HomeBannerPage() {
       title: "Stay with AC Commerce",
       imageSrc: "/images/banner1.jpg",
       paragraph:
-        "Design and project your own air conditioning at your property.",
+        "Redefining Air Conditioning Design — Smart. Fast. Certified.",
       linkTo: "/uploadfile",
       linkText: "Design Now",
     },

@@ -936,17 +936,17 @@ const data = {
       isAdmin: false,
       logo: "/images/samsung-logo.png"
     },
-    {
-      name: 'Lennox',
-      brand: "Lennox",
-      rating: 2.5,
-      info: "Lennox International Inc. is an American provider of climate control products for the heating, ventilation, and air conditioning (HVAC) and refrigeration markets.",
-      link: "https://www.youtube.com/embed/PYiNnQwo04w?si=ZWkYIzkpP4VSmVPZ",
-      companyLink: "https://www.lennox.com/residential/",
-      numReviews: 15,
-      isAdmin: false,
-      logo: "/images/lennox-logo.png"
-    },
+    // {
+    //   name: 'Lennox',
+    //   brand: "Lennox",
+    //   rating: 2.5,
+    //   info: "Lennox International Inc. is an American provider of climate control products for the heating, ventilation, and air conditioning (HVAC) and refrigeration markets.",
+    //   link: "https://www.youtube.com/embed/PYiNnQwo04w?si=ZWkYIzkpP4VSmVPZ",
+    //   companyLink: "https://www.lennox.com/residential/",
+    //   numReviews: 15,
+    //   isAdmin: false,
+    //   logo: "/images/lennox-logo.png"
+    // },
     {
       name: 'Haier',
       brand: "Haier",

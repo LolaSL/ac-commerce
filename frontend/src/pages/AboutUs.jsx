@@ -16,61 +16,89 @@ const AboutUs = () => {
           }}
         ></div>
         <h3 className="about-paragraph p-2">
-          <strong>AC Commerce</strong> is committed to complying with local laws
-          and regulations and to applying a strict ethical code of conduct to
-          all employees
+          <strong>AC Commerce</strong> is a cutting-edge platform designed to
+          fully automate the planning and design process for air conditioning
+          systems — eliminating the need for professional intervention in the
+          early stages.
         </h3>
         <h3 className="about-paragraph mt-4 pb-2">
-          The company believes that ethical management is a tool for responding
-          to rapid changes in the global business environment and building trust
-          with various stakeholders, including customers, shareholders,
-          employees, business partners, and local communities.
+          Our platform delivers precise, efficient, and professionally validated
+          air conditioning plans for any property by automatically generating
+          digitally signed designs tailored to the specific requirements of each
+          project.
         </h3>
         <h3 className="about-paragraph mt-4 pb-4">
-          AC Commerce continues to train its employees and use monitoring
-          systems while practicing fair and transparent corporate governance.
+          While there are numerous platforms dedicated to architectural and
+          engineering planning, none currently address the specialized needs of
+          air conditioning system design without requiring the involvement of a
+          licensed professional. AC Commerce bridges this gap by offering a
+          comprehensive, user-friendly solution.
         </h3>
       </article>
       <article className="about mt-4 mb-4">
-        <div
-          className="p-5 text-center responsive-image-about rounded "
-          style={{
-            backgroundImage: `url("/images/about-us2.jpg")`,
-            MaxHeight: "100%",
-          }}
-        ></div>
         <h3 className="about-paragraph mt-4">
-          <strong>Our Mission</strong> is to provide innovative and
-          energy-efficient air conditioning solutions that enhance comfort and
-          well-being in every space we serve. We are committed to delivering
-          exceptional quality, unmatched reliability, and superior customer
-          service. By leveraging cutting-edge technology and sustainable
-          practices, we aim to create a cooler, healthier environment for our
-          clients, while contributing to a greener planet.
+          <strong>
+            Our Measurement Service System process is straightforward:
+          </strong>
+          <ul>
+            <li>Upload your architectural plan ( PDF file)</li>
+            <li>
+              Place created air conditioning unit with relevant comment on the
+              uploaded architectural plan.
+            </li>
+            <li>
+              Save AC architectural plan — complete with a digital signature
+              from a certified air conditioning engineer
+            </li>
+            <li>
+              Complete a short set of guided questions of BTU Calculator
+              regarding the property’s specifications and user preferences.
+            </li>
+            <li>
+              {" "}
+              Receive BTU results from BTU table: the list of recommended air
+              conditioning products chosen by your preferences, BTU, and
+              recommended outdoor condenser.
+            </li>
+          </ul>
         </h3>
       </article>
       <article className="about mt-4 mb-4">
-        <div
-          className="p-5 text-center responsive-image-about rounded "
-          style={{
-            backgroundImage: `url("/images/about-us3.jpg")`,
-            MaxHeight: "100%",
-          }}
-        ></div>
         <h3 className="goals-paragraph  mt-2 pb-4">
-          <strong>Our Goals</strong> is to make every home and business
-          environment more comfortable, with the perfect air conditioning
-          solution that suits your specific requirements—whether you're cooling
-          a small room or an entire building. We are committed to helping our
-          customers find the right product, providing expert recommendations,
-          and ensuring energy efficiency to reduce both environmental impact and
-          energy bills.
+          <strong>With AC Commenrce, users can</strong>
+          <ul>
+            <li>Generate air conditioning system layouts.</li>
+            <li>Share professional-grade visual designs.</li>
+            <li>Conduct price comparisons.</li>
+            <li>
+              Facilitate the acquisition of required equipment — all within a
+              single streamlined platform.
+            </li>
+          </ul>
         </h3>
         <h3 className="goals-paragraph  mt-2 pb-4">
-          We believe in sustainability, quality, and customer satisfaction, and
-          we strive to offer the best in cooling technology to keep you cool all
-          year round.
+          Traditionally, the planning and design of air conditioning systems
+          have been exclusively handled by professionals — a process often
+          characterized by high costs, extended timelines, and significant
+          effort from both service providers and clients. AC Commerce redefines
+          this process by delivering substantial cost savings and reducing
+          project turnaround times for both consumers and industry
+          professionals.
         </h3>{" "}
+      </article>
+      <article className="about mt-4 mb-4">
+        <h3 className="goals-paragraph  mt-2 pb-4">
+          <strong>Our Target Audience</strong>
+          <ul>
+            <li>Contractors</li>
+            <li>Architects</li>
+            <li>Air Conditioning Consultants</li>
+            <li>Air Conditioning Contractors</li>
+            <li>Renovation Specialists</li>
+            <li>Air Conditioning Retailers</li>
+            <li>Property Owners</li>
+          </ul>
+        </h3>
       </article>
     </Container>
   );
