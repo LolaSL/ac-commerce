@@ -10,6 +10,7 @@ const AdvancedAC = () => {
         <title>Advanced Air Conditioning</title>
       </Helmet>
       <article>
+        <h1>Advanced Air Conditioning 2025</h1>
         <h2 className="mb-3 p-3">
           As we step into 2025, the HVAC industry is buzzing with advancements
           that promise to make homes more comfortable, energy-efficient, and
@@ -19,27 +20,27 @@ const AdvancedAC = () => {
           what’s new.
         </h2>
         <h3>Energy-Efficient Systems: Saving More, Consuming Less</h3>
-        <ul className="ac-conditioning">
-          <li>
-            Energy efficiency is a leading trend in 2025 HVAC. Modern systems
-            utilize innovations like variable-speed compressors and advanced
-            sensors to maximize comfort while minimizing energy consumption and
-            environmental impact.
-          </li>
-          <li>
+        <h4 className="ac-conditioning">
+          Energy efficiency is a leading trend in 2025 HVAC. Modern systems
+          utilize innovations like variable-speed compressors and advanced
+          sensors to maximize comfort while minimizing energy consumption and
+          environmental impact.
+          <h4>
             {" "}
             In 2025, energy efficiency is a key focus in HVAC. New systems
             employ technologies such as variable-speed compressors and improved
             heat exchangers to deliver optimal comfort with lower energy use and
             a smaller carbon footprint.
-          </li>
-        </ul>
+          </h4>
+        </h4>
 
         <div className="mb-4 text-center pb-4">
           <Image
             src="/images/ac5.jpg"
             alt="Air Conditioning"
-            className="responsive rounded"
+            className="responsive-image-advanced rounded"
+            width="600"
+            height="400"
           />
         </div>
       </article>
@@ -56,7 +57,9 @@ const AdvancedAC = () => {
           <Image
             src="/images/ac6.jpg"
             alt="Air Conditioning"
-            className="responsive rounded"
+            className="responsive-image-advanced rounded"
+            width="600"
+            height="400"
           />
         </div>
       </article>
@@ -73,7 +76,27 @@ const AdvancedAC = () => {
           <Image
             src="/images/ac7.jpg"
             alt="Air Conditioning team"
-            className="responsive rounded"
+            className="responsive-image-advanced rounded"
+            width="600"
+            height="400"
+          />
+        </div>
+      </article>
+      <article>
+        <h3 className="mb-2 p-4">Why Upgrade in 2025?</h3>
+        <h4>
+          With these exciting advancements, 2025 is the ideal time to upgrade
+          your HVAC system. Whether you’re looking to save on energy costs,
+          reduce your environmental impact, or enjoy the convenience of smart
+          technology, there’s a solution for every home.
+        </h4>
+        <div className="mb-4 text-center">
+          <Image
+            src="/images/ac8.jpg"
+            alt="Air Conditioning team"
+            className="responsive-image-advanced rounded"
+            width="600"
+            height="400"
           />
         </div>
       </article>

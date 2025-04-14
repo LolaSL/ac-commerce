@@ -761,6 +761,10 @@ button.thumbnail {
 .fa-envelope {
   font-size: 30px;
 }
+.responsive-image-advanced{
+  max-width: 100%;
+  height: auto;
+}
 
 .responsive-image-contact {
   min-width: 90%;
