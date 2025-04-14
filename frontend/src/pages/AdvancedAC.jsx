@@ -10,22 +10,22 @@ const AdvancedAC = () => {
         <title>Advanced Air Conditioning</title>
       </Helmet>
       <article>
-        <h1>Advanced Air Conditioning 2025</h1>
-        <h2 className="mb-3 p-3 ac-conditioning">
+        <h2>Advanced Air Conditioning 2025</h2>
+        <h3 className="mb-3 p-3">
           As we step into 2025, the HVAC industry is buzzing with advancements
           that promise to make homes more comfortable, energy-efficient, and
           environmentally friendly. From cutting-edge technology to
           eco-conscious solutions, the future of HVAC is here. If you’ve been
           considering upgrading your system, now is the perfect time to explore
           what’s new.
-        </h2>
-        <h3>Energy-Efficient Systems: Saving More, Consuming Less</h3>
-        <h4 className="ac-conditioning">
+        </h3>
+        <h3 className="mb-3 p-3">Energy-Efficient Systems: Saving More, Consuming Less</h3>
+        <h4 className="mb-3 p-3 ac-conditioning">
           Energy efficiency is a leading trend in 2025 HVAC. Modern systems
           utilize innovations like variable-speed compressors and advanced
           sensors to maximize comfort while minimizing energy consumption and
           environmental impact.
-          <h4>
+          <h4 className="mb-3 p-3 ac-conditioning">
             {" "}
             In 2025, energy efficiency is a key focus in HVAC. New systems
             employ technologies such as variable-speed compressors and improved
@@ -46,7 +46,7 @@ const AdvancedAC = () => {
       </article>
       <article>
         <h3 className="mb-2 p-4">Heat Pumps: The All-Weather Solution</h3>
-        <h4 className="ac-conditioning">
+        <h4 className="mb-3 p-3 ac-conditioning">
           Heat pumps are becoming a go-to solution for homeowners seeking
           year-round comfort and energy efficiency. With advancements in
           cold-climate heat pump technology, these systems can now effectively
@@ -65,7 +65,7 @@ const AdvancedAC = () => {
       </article>
       <article>
         <h3 className="mb-2 p-4">Indoor Air Quality Innovations</h3>
-        <h4 className="ac-conditioning">
+        <h4 className="mb-3 p-3 ac-conditioning">
           Improving indoor air quality (IAQ) is a top priority for 2025. HVAC
           systems are now integrating air purifiers, UV-C light technology, and
           high-efficiency particulate air (HEPA) filters to remove allergens,
@@ -84,7 +84,7 @@ const AdvancedAC = () => {
       </article>
       <article>
         <h3 className="mb-2 p-4">Why Upgrade in 2025?</h3>
-        <h4 className="ac-conditioning">
+        <h4 className="mb-3 p-3 ac-conditioning">
           With these exciting advancements, 2025 is the ideal time to upgrade
           your HVAC system. Whether you’re looking to save on energy costs,
           reduce your environmental impact, or enjoy the convenience of smart
