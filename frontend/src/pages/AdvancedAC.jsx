@@ -19,21 +19,18 @@ const AdvancedAC = () => {
           considering upgrading your system, now is the perfect time to explore
           what’s new.
         </h3>
-        <h3 className="mb-3 p-3">Energy-Efficient Systems: Saving More, Consuming Less</h3>
+        <h3 className="mb-3 p-3">
+          Energy-Efficient Systems: Saving More, Consuming Less
+        </h3>
         <h4 className="mb-3 p-3 ac-conditioning">
           Energy efficiency is a leading trend in 2025 HVAC. Modern systems
           utilize innovations like variable-speed compressors and advanced
           sensors to maximize comfort while minimizing energy consumption and
-          environmental impact.
-          <h4 className="mb-3 p-3 ac-conditioning">
-            {" "}
-            In 2025, energy efficiency is a key focus in HVAC. New systems
-            employ technologies such as variable-speed compressors and improved
-            heat exchangers to deliver optimal comfort with lower energy use and
-            a smaller carbon footprint.
-          </h4>
+          environmental impact. In 2025, energy efficiency is a key focus in
+          HVAC. New systems employ technologies such as variable-speed
+          compressors and improved heat exchangers to deliver optimal comfort
+          with lower energy use and a smaller carbon footprint.
         </h4>
-
         <div className="mb-4 text-center pb-4">
           <Image
             src="/images/ac5.jpg"

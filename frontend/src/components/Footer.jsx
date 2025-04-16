@@ -12,10 +12,6 @@ const Footer = () => {
     navigate("/signin?redirect=/uploadfile");
   };
 
-  const checkoutOffersHandler = (e) => {
-    e.preventDefault();
-    window.location.href = "/signin?redirect=/offers";
-  };
   return (
     <>
       <footer className="container-fluid ">
@@ -79,21 +75,21 @@ const Footer = () => {
             </NavLink>
             <NavLink
               className="text-white"
-              href="/offers"
-              onClick={checkoutOffersHandler}
-            >
-              Offers
-            </NavLink>
-            <NavLink className="text-white" href="/sellers">
-              Sellers
-            </NavLink>
-            <NavLink
-              className="text-white"
               href="/uploadfile"
               onClick={handleNavigation}
             >
               Get A Quote
             </NavLink>
+            <NavLink
+              className="text-white"
+              href="/offers"
+            >
+              Offers
+            </NavLink>
+            <NavLink className="text-white" href="/sellers">
+            Explore Suppliers
+            </NavLink>
+       
 
             <NavLink className="text-white" href="/blogs">
               Blogs

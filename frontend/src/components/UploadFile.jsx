@@ -1,22 +1,24 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import { Stage, Layer, Rect, Line, Text } from "react-konva";
 import { Button, Form } from "react-bootstrap";
 import { PDFDocument } from "pdf-lib";
-import * as pdfjsLib from "pdfjs-dist/webpack.mjs";
-import { Helmet } from "react-helmet-async";
+import * as pdfjsLib from "pdfjs-dist";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js`;
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js`;
 
-function UploadFile() {
-  const [file, setFile] = useState(null);
-  const [error, setError] = useState(null);
+const UploadFile = () => {
   const [iconPositions, setIconPositions] = useState([]);
-  const canvasRef = useRef(null);
-  const [color, setColor] = useState("#ee1169");
-  const [previewUrl, setPreviewUrl] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
+  const canvasRef = useRef(null);
+  const [file, setFile] = useState(null);
+  const stageRef = useRef(null);
+  const [pdfSize, setPdfSize] = useState({ width: "100%", height: "100%" });
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [error, setError] = useState(null);
   const [comments, setComments] = useState([]);
-  const RECT_WIDTH = window.innerWidth < 268 ? 20 : 30;
-  const RECT_HEIGHT = window.innerWidth < 268 ? 10 : 15;
+  const [rectangles, setRectangles] = useState([]);
+  const [isRotating, setIsRotating] = useState(false);
+  const [lines, setLines] = useState([]);
 
   const handleChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -40,116 +42,187 @@ function UploadFile() {
     }
   };
 
-  const handleCanvasClick = (event) => {
-    const canvas = canvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+  const handleStageClick = (event) => {
+    if (event.target === event.target.getStage() && !isRotating) {
+      const pointerPosition = stageRef.current.getPointerPosition();
+      if (!pointerPosition) return;
+      const commentText = prompt("Enter your ac unit number (ac1, ac2, ...):");
 
-    if (event.detail === 2) {
-      handleIconDoubleClick(x, y);
-    } else {
-      const isNewIcon = handleIconClick(x, y);
-      if (isNewIcon) {
-        const commentText = prompt(
-          "Enter your ac unit number (ac1, ac2, ...):"
-        );
-        if (commentText) {
-          setComments((prevComments) => [
-            ...prevComments,
-            { text: commentText, x: x + 50, y: y - 30 },
-          ]);
-        }
+      if (commentText) {
+        const newRectId = Date.now();
+        const newRect = {
+          id: newRectId,
+          x: pointerPosition.x,
+          y: pointerPosition.y,
+          width: 50,
+          height: 20,
+          fill: "rgba(20, 205, 230)",
+          rotation: 0,
+        };
+        setRectangles((prevRects) => [...prevRects, newRect]);
+
+        const newCommentId = `comment-${Date.now()}`;
+        const newComment = {
+          id: newCommentId,
+          rectId: newRectId,
+          text: commentText,
+          x: pointerPosition.x + 60,
+          y: pointerPosition.y - 10,
+          fill: "rgba(226, 218, 228, 0.3)",
+        };
+        setComments((prevComments) => [...prevComments, newComment]);
+        const newLine = {
+          id: `line-${Date.now()}`,
+          rectId: newRectId,
+          commentId: newCommentId,
+          points: [
+            newRect.x + newRect.width / 2,
+            newRect.y + newRect.height / 2,
+            newComment.x,
+            newComment.y,
+          ],
+          stroke: "black",
+          strokeWidth: 1,
+        };
+        setLines((prevLines) => [...prevLines, newLine]);
       }
     }
   };
 
-  let lastTapTime = 0;
+  const handleTouchStart = (e) => {
+    console.log("Touch started!", e.target.attrs.id);
+    const clickedRectId = e.target.attrs.id; 
 
-  const handleIconClick = (offsetX, offsetY) => {
-    const existingIconIndex = iconPositions.findIndex((icon) => {
-      return (
-        offsetX >= icon.x - 30 &&
-        offsetX <= icon.x + 30 &&
-        offsetY >= icon.y - 15 &&
-        offsetY <= icon.y + 15
-      );
-    });
+    const handleTouchEnd = () => {
+      const touchDuration = Date.now() - touchStartTime;
+      if (touchDuration >= 800) {
+        // 800ms = tap-and-hold
+        console.log("Tap-and-hold detected for:", clickedRectId);
 
-    if (existingIconIndex !== -1) {
-      const newIcons = [...iconPositions];
-      newIcons[existingIconIndex].angle =
-        (newIcons[existingIconIndex].angle + Math.PI / 2) % (2 * Math.PI);
-      setIconPositions(newIcons);
-      return false;
-    } else {
-      setIconPositions((prevIcons) => [
-        ...prevIcons,
-        { x: offsetX, y: offsetY, angle: 0 },
-      ]);
-      return true;
-    }
+        // Deletion logic:
+        setRectangles((prevRects) =>
+          prevRects.filter((r) => r.id !== clickedRectId)
+        );
+
+        setComments((prevComments) =>
+          prevComments.filter((comment) => comment.rectId !== clickedRectId)
+        );
+
+        setLines((prevLines) =>
+          prevLines.filter((line) => line.rectId !== clickedRectId)
+        );
+      }
+    };
+
+    const touchStartTime = Date.now();
+    window.addEventListener("touchend", handleTouchEnd, { once: true });
   };
 
-  let tapTimeout = null;
-  
-  const handleCanvasTouch = (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const canvasRect = e.target.getBoundingClientRect();
-
-    const offsetX = touch.clientX - canvasRect.left;
-    const offsetY = touch.clientY - canvasRect.top + window.scrollY;
-  
-    const currentTime = new Date().getTime();
-    const tapLength = currentTime - lastTapTime;
-  
-    if (tapLength < 300 && tapLength > 0) {
-      
-      clearTimeout(tapTimeout);
-      handleIconDoubleClick(offsetX, offsetY);
-      e.preventDefault(); 
-    } else {
- 
-      tapTimeout = setTimeout(() => {
-        handleIconClick(offsetX, offsetY);
-      }, 300);
-    }
-  
-    lastTapTime = currentTime;
-  };
-  
-  const handleIconDoubleClick = (offsetX, offsetY) => {
-    const existingIconIndex = iconPositions.findIndex((icon) => {
-      return (
-        offsetX >= icon.x - RECT_WIDTH &&
-        offsetX <= icon.x + RECT_WIDTH &&
-        offsetY >= icon.y - RECT_HEIGHT &&
-        offsetY <= icon.y + RECT_HEIGHT
-      );
-    });
-  
-    if (existingIconIndex !== -1) {
-      setIconPositions((prevIcons) =>
-        prevIcons.filter((_, index) => index !== existingIconIndex)
-      );
-      setComments((prevComments) =>
-        prevComments.filter((_, index) => index !== existingIconIndex)
-      );
-    }
+  const handleRectangleRightClick = (event) => {
+    event.evt.preventDefault();
+    const clickedRectId = event.target.attrs.id;
+    setRectangles((prevRects) =>
+      prevRects.filter((r) => r.id !== clickedRectId)
+    );
+    setComments((prevComments) =>
+      prevComments.filter((comment) => comment.rectId !== clickedRectId)
+    );
+    setLines((prevLines) =>
+      prevLines.filter((line) => line.rectId !== clickedRectId)
+    );
   };
 
   const handleCanvasEvent = (e) => {
     if (window.innerWidth > 268) {
-      handleCanvasClick(e);
-    } else {
-      handleCanvasTouch(e);
+      handleStageClick(e);
     }
   };
 
+  const handleDragMove = (e) => {
+    const draggedNode = e.target;
+    const layer = draggedNode.getLayer();
+    if (layer) {
+      layer.batchDraw();
+    }
+  };
+
+  const handleDragEnd = (e) => {
+    const draggedNode = e.target;
+    const draggedId = draggedNode.id();
+
+    setRectangles((prevRects) =>
+      prevRects.map((rect) =>
+        rect.id === draggedId
+          ? { ...rect, x: draggedNode.x(), y: draggedNode.y() }
+          : rect
+      )
+    );
+
+    setComments((prevComments) =>
+      prevComments.map((comment) => {
+        if (comment.rectId === draggedId) {
+          const newCommentPos = {
+            x: draggedNode.x() + 60,
+            y: draggedNode.y() - 10,
+          };
+          return { ...comment, ...newCommentPos };
+        }
+        return comment;
+      })
+    );
+
+    setLines((prevLines) =>
+      prevLines.map((line) => {
+        const isRect = line.rectId === draggedId;
+        const isComment = line.commentId === draggedId;
+        let rect = null;
+        let comment = null;
+
+        if (isRect || isComment) {
+          rect = isRect
+            ? {
+                x: draggedNode.x(),
+                y: draggedNode.y(),
+                width: draggedNode.width(),
+                height: draggedNode.height(),
+              }
+            : rectangles.find((r) => r.id === line.rectId);
+
+          comment = isComment
+            ? { x: draggedNode.x(), y: draggedNode.y() }
+            : comments.find((c) => c.rectId === draggedId);
+
+          if (rect && comment) {
+            return {
+              ...line,
+              points: [
+                rect.x + rect.width / 2,
+                rect.y + rect.height / 2,
+                comment.x,
+                comment.y,
+              ],
+            };
+          }
+        }
+
+        return line;
+      })
+    );
+  };
+
+  const rotateRectangle = useCallback((rectId) => {
+    console.log("rotateRectangle called for:", rectId);
+    console.trace();
+    setRectangles((prevRects) =>
+      prevRects.map((rect) =>
+        rect.id === rectId ? { ...rect, rotation: rect.rotation + 90 } : rect
+      )
+    );
+  }, []);
+
   const renderComments = useCallback(
     (context) => {
-      context.font = "bold 18px Arial";
+      context.font = "bold 17px Arial";
       context.lineWidth = 2;
       context.shadowColor = "grey";
       context.shadowBlur = 1;
@@ -212,25 +285,13 @@ function UploadFile() {
     [comments]
   );
 
-  const drawRotatedRectangle = useCallback(
-    (context, x, y, width, height, angle) => {
-      context.save();
-      context.translate(x, y);
-      context.rotate(angle);
-      context.fillStyle = color;
-      context.fillRect(-width / 2, -height / 2, width, height);
-      context.restore();
-    },
-    [color]
-  );
-
-  useEffect(() => {
+  const memoizedCallback = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas || !file) return;
-  }, [file]);
+    if (!canvas) return;
+    const context = canvas.getContext("2d");
+    if (!context) return;
 
-  const renderSignature = useCallback(
-    (context) => {
+    const renderSignature = () => {
       if (isSaved) {
         const text = "APPROVED";
         const padding = 10;
@@ -292,8 +353,20 @@ function UploadFile() {
         context.shadowOffsetY = 0;
         context.setLineDash([]);
       }
+    };
+
+    renderSignature();
+  }, [isSaved]);
+
+  const drawRotatedRectangle = useCallback(
+    (context, x, y, width, height, angle) => {
+      context.save();
+      context.translate(x, y);
+      context.rotate(angle);
+      context.fillRect(-width / 2, -height / 2, width, height);
+      context.restore();
     },
-    [isSaved]
+    []
   );
 
   const renderPDFOnCanvas = useCallback(
@@ -306,55 +379,48 @@ function UploadFile() {
       const pdf = await loadingTask.promise;
       const page = await pdf.getPage(1);
       const viewport = page.getViewport({ scale: 1.5 });
-
+      setPdfSize({ width: viewport.width, height: viewport.height });
       canvas.width = viewport.width;
       canvas.height = viewport.height;
 
-      const reader = new FileReader();
-      reader.onload = async () => {
-        const typedArray = new Uint8Array(reader.result);
-        const pdf = await pdfjsLib.getDocument(typedArray).promise;
-        const page = await pdf.getPage(1);
-        const viewport = page.getViewport({ scale: 1 });
-
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-
-        const renderContext = {
-          canvasContext: context,
-          viewport: viewport,
-        };
-
-        await page.render(renderContext).promise;
-
-        iconPositions.forEach((icon) => {
-          const rectWidth = 45;
-          const rectHeight = 11;
-          drawRotatedRectangle(
-            context,
-            icon.x,
-            icon.y,
-            rectWidth,
-            rectHeight,
-            icon.angle
-          );
-        });
-        renderComments(context);
-        renderSignature(context);
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport,
       };
-      reader.readAsArrayBuffer(file);
+
+      await page.render(renderContext).promise;
+
+      iconPositions.forEach((icon) => {
+        const rectWidth = 45;
+        const rectHeight = 11;
+        drawRotatedRectangle(
+          context,
+          icon.x,
+          icon.y,
+          rectWidth,
+          rectHeight,
+          icon.angle
+        );
+      });
+      renderComments(context);
+      memoizedCallback(context);
     },
-    [file, iconPositions, renderSignature, drawRotatedRectangle, renderComments]
+    [
+      drawRotatedRectangle,
+      file,
+      iconPositions,
+      memoizedCallback,
+      renderComments,
+      setPdfSize,
+    ]
   );
 
   useEffect(() => {
     const canvas = canvasRef.current;
-
     if (!canvas || !file) return;
 
     const context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
-
     if (previewUrl) {
       const img = new Image();
       img.src = previewUrl;
@@ -373,26 +439,24 @@ function UploadFile() {
           );
         });
         renderComments(context);
-        renderSignature(context);
       };
     }
 
-    if (file.type === "application/pdf") {
+    if (file?.type === "application/pdf") {
       const reader = new FileReader();
-      reader.onload = async function (e) {
+      reader.onload = async (e) => {
         const pdfData = new Uint8Array(e.target.result);
         await renderPDFOnCanvas(pdfData);
       };
       reader.readAsArrayBuffer(file);
     }
   }, [
-    iconPositions,
-    file,
-    previewUrl,
-    renderPDFOnCanvas,
-    renderComments,
-    renderSignature,
     drawRotatedRectangle,
+    file,
+    iconPositions,
+    previewUrl,
+    renderComments,
+    renderPDFOnCanvas,
   ]);
 
   const saveAsPDF = async () => {
@@ -402,12 +466,27 @@ function UploadFile() {
       const page = pdfDoc.getPages()[0];
       const { width, height } = page.getSize();
       const pdfCanvas = canvasRef.current;
+      const stage = stageRef.current;
 
-      if (pdfCanvas) {
-        const imageData = pdfCanvas.toDataURL();
+      if (pdfCanvas && stage) {
+        const tempCanvas = document.createElement("canvas");
+        tempCanvas.width = width;
+        tempCanvas.height = height;
+        const tempContext = tempCanvas.getContext("2d");
+        tempContext.drawImage(pdfCanvas, 0, 0, width, height);
+        stage.draw();
+
+        const layer = stage.getChildren()[0];
+
+        if (layer) {
+          tempContext.drawImage(layer.getCanvas()._canvas, 0, 0, width, height);
+        }
+
+        const imageData = tempCanvas.toDataURL();
         const pngImage = await pdfDoc.embedPng(imageData);
 
         page.drawImage(pngImage, { x: 0, y: 0, width, height });
+
         const pdfBytes = await pdfDoc.save();
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
         const link = document.createElement("a");
@@ -417,9 +496,10 @@ function UploadFile() {
         setIsSaved(true);
       }
     } else {
-      setError("The selected file is not a PDF.");
+      alert("The selected file is not a PDF.");
     }
   };
+
   const clearCanvas = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -430,32 +510,37 @@ function UploadFile() {
     setIconPositions([]);
     setPreviewUrl(null);
     setIsSaved(false);
+    setRectangles([]);
+    setComments([]);
   };
 
   return (
-    <div className="upload-file">
-      <Helmet>
-        <title>Measurement System</title>
-      </Helmet>
+    <div>
       <Form className="btu-calculation-measure">
         <h1 className="mt-4 mb-4 title-measurement">
           Measurement Service System
         </h1>
         <Form.Label className="mb-4 label-upload">
-          Upload file sample.{" "}
+          Upload file sample.
         </Form.Label>
         <p className="warning fw-bold">
           *Supported: High Resolution PDFs files (.pdf). Recommended to place
           air conditioner (rectangle) above door in drawing.
         </p>
         <p className="warning fw-bold">
-          *Add rectangle: <kbd>Click on empty area</kbd>
+          *Add rectangle: <kbd>Click On Empty Area</kbd>
+        </p>
+        <p className="warning fw-bold">
+          Enter to appeared prompt window relevant to airi comditioner comment.
         </p>
         <p className="warning fw-bold">
           *Rotate rectangle: <kbd>Click</kbd>
         </p>
         <p className="warning fw-bold">
-          *Delete rectangle: <kbd>Double Click</kbd>
+          *Delete rectangle for small screens: <kbd>Tap And Hold</kbd>
+        </p>
+        <p className="warning fw-bold">
+          *Delete rectangle for large screens: <kbd>Right Click</kbd>
         </p>
         <p className="warning fw-bold">
           *For saving approved drawing: <kbd>Double Click</kbd>
@@ -466,53 +551,140 @@ function UploadFile() {
           onChange={handleChange}
           accept="application/pdf"
         />
-        <Form.Group className="mt-3">
-          <Form.Label>Select Icon Color:</Form.Label>
-          <Form.Control
-            type="color"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-          />
-        </Form.Group>
       </Form>
+
       <h2 className="mt-4 mb-4">Preview of selected file:</h2>
       {previewUrl && (
         <div>
-          <canvas
-            id="my-canvas"
-            ref={canvasRef}
-            width={window.innerWidth * 0.9}
-            height={window.innerHeight * 0.6}
-            onClick={handleCanvasEvent}
-            style={{
-              backgroundImage: `url(${previewUrl})`,
-              backgroundSize: "cover",
-              cursor: "pointer",
-              display: "block",
-              margin: "0 auto",
-            }}
-          />
+          {previewUrl && (
+            <div style={{ position: "relative", display: "inline-block" }}>
+              <canvas
+                id="my-canvas"
+                ref={canvasRef}
+                style={{ border: "1px solid black" }}
+                width={pdfSize.width}
+                height={pdfSize.height}
+                onClick={handleCanvasEvent}
+              />
+
+              <Stage
+                ref={stageRef}
+                width={pdfSize.width}
+                height={pdfSize.height}
+                onClick={handleStageClick}
+                onContextMenu={handleRectangleRightClick}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                }}
+              >
+                <Layer>
+                  {lines.map((line) => (
+                    <Line
+                      key={line.id}
+                      points={line.points}
+                      stroke={line.stroke}
+                      strokeWidth={line.strokeWidth}
+                    />
+                  ))}
+                  {rectangles.map((rect) => (
+                    <React.Fragment key={rect.id}>
+                      <Rect
+                        key={rect.id}
+                        id={rect.id}
+                        name="rect"
+                        x={rect.x}
+                        y={rect.y}
+                        width={rect.width}
+                        height={rect.height}
+                        fill={rect.fill}
+                        draggable={true}
+                        rotation={rect.rotation}
+                        onContextMenu={(event) => {
+                          event.evt.preventDefault();
+                          event.cancelBubble = true;
+                          const clickedRectId = event.target.attrs.id;
+                          console.log(
+                            "Rectangle right-clicked (removing)",
+                            clickedRectId
+                          );
+
+                          setRectangles((prevRects) =>
+                            prevRects.filter((r) => r.id !== clickedRectId)
+                          );
+
+                          setComments((prevComments) =>
+                            prevComments.filter(
+                              (comment) => comment.rectId !== clickedRectId
+                            )
+                          );
+                          setLines((prevLines) =>
+                            prevLines.filter(
+                              (line) => line.rectId !== clickedRectId
+                            )
+                          );
+                        }}
+                        onDragMove={handleDragMove}
+                        onDragEnd={handleDragEnd}
+                        onClick={(event) => {
+                          console.log(
+                            "Rectangle clicked",
+                            event.target.attrs.id
+                          );
+                          event.cancelBubble = true;
+                          const clickedRectId = event.target.attrs.id;
+                          setIsRotating(true);
+                          rotateRectangle(clickedRectId);
+                          setTimeout(() => setIsRotating(false), 100);
+                        }}
+                        onTouchStart={handleTouchStart}
+                      />
+                    </React.Fragment>
+                  ))}
+                  {comments.map((comment) => (
+                    <Text
+                      key={comment.id}
+                      id={comment.id}
+                      x={comment.x}
+                      y={comment.y}
+                      text={""}
+                      fill={comment.fill}
+                      draggable={true}
+                      onDragMove={handleDragMove}
+                      onDragEnd={handleDragEnd}
+                    />
+                  ))}
+                </Layer>
+              </Stage>
+            </div>
+          )}
+
+          <div className="d-flex">
+            {file && file.type === "application/pdf" && (
+              <>
+                <Button
+                  variant="secondary"
+                  onClick={saveAsPDF}
+                  className="mt-2 me-2"
+                >
+                  Save as PDF
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="mt-2"
+                  onClick={clearCanvas}
+                >
+                  Clear
+                </Button>
+              </>
+            )}
+          </div>
+          {error && <p className="error-message mt-4">{error}</p>}
         </div>
       )}
-      <div className="d-flex">
-        {file && file.type === "application/pdf" && (
-          <>
-            <Button
-              variant="secondary"
-              onClick={saveAsPDF}
-              className="mt-2 me-2"
-            >
-              Save as PDF
-            </Button>
-            <Button variant="secondary" className="mt-2" onClick={clearCanvas}>
-              Clear
-            </Button>
-          </>
-        )}
-      </div>
-      {error && <p className="error-message mt-4">{error}</p>}
     </div>
   );
-}
+};
 
 export default UploadFile;
