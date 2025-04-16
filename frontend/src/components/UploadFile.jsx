@@ -559,7 +559,6 @@ const UploadFile = () => {
           {previewUrl && (
             <div style={{ position: "relative", display: "inline-block" }}>
               <canvas
-                id="my-canvas"
                 ref={canvasRef}
                 style={{ border: "1px solid black" }}
                 width={pdfSize.width}
