@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Store } from "../Store";
@@ -37,9 +36,6 @@ export default function ForgetPasswordPage() {
 
   return (
     <Container className="small-container">
-      <Helmet>
-        <title>Forget Password</title>
-      </Helmet>
       <h1 className="my-3">Forget Password</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="email">

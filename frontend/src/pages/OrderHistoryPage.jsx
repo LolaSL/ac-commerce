@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useReducer } from "react";
-import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LoadingBox from "../components/LoadingBox.jsx";
@@ -62,10 +61,6 @@ export default function OrderHistoryPage() {
   }, [userInfo, currentPage]);
   return (
     <Container className="provider-container">
-      <Helmet>
-        <title>Order History</title>
-      </Helmet>
-
       <h1>Order History</h1>
 
       {loading ? (

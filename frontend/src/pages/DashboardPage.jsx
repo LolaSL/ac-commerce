@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Helmet } from "react-helmet-async";
 import UsersProductSales from "../components/UsersProductSales.jsx";
 import ServiceProviders from "../components/ServiceProviders.jsx";
 import Notifications from "../components/Notifications.jsx";
@@ -28,9 +27,6 @@ export default function DashboardPage() {
   return (
 
       <div className="dashboard-container">
-        <Helmet>
-          <title>Dashboard</title>
-        </Helmet>
         <div className="sidebar">
           <h3>Dashboard</h3>
           <ul>

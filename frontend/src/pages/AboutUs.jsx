@@ -1,12 +1,8 @@
 import React from "react";
-import { Helmet } from "react-helmet-async";
 import { Container } from "react-bootstrap";
 const AboutUs = () => {
   return (
     <Container className="site-container-about mt-4 p-4">
-      <Helmet>
-        <title>About Us</title>
-      </Helmet>
       <article className="about mt-4 mb-4">
         <div
           className="p-5 text-center responsive-image-about rounded mb-3"

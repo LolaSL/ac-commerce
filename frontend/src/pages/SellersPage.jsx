@@ -5,7 +5,6 @@ import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import { Link } from "react-router-dom";
 import { Container } from "react-bootstrap";
-import { Helmet } from "react-helmet-async";
 import { Card } from "react-bootstrap";
 
 const reducer = (state, action) => {
@@ -51,9 +50,6 @@ export default function SellersPage() {
   
   return (
     <Container className="seller-container">
-      <Helmet>
-        <title>Sellers</title>
-      </Helmet>
       <h1 className="sellers-title">Suppliers</h1>
       <h2>Air Conditioning Products and VRF Systems</h2>
       {loading ? (

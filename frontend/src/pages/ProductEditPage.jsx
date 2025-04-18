@@ -7,7 +7,6 @@ import { getError } from "../utils";
 import Container from "react-bootstrap/Container";
 import ListGroup from "react-bootstrap/ListGroup";
 import Form from "react-bootstrap/Form";
-import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import Button from "react-bootstrap/Button";
@@ -200,9 +199,6 @@ const ProductEditPage = () => {
 
   return (
     <Container className="small-container">
-      <Helmet>
-        <title>Edit Product {productId}</title>
-      </Helmet>
       <h1>Edit Product {productId}</h1>
       {loading ? (
         <LoadingBox />

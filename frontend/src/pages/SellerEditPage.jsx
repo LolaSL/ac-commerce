@@ -6,7 +6,6 @@ import { Store } from "../Store";
 import { getError } from "../utils";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
-import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import Button from "react-bootstrap/Button";
@@ -99,9 +98,6 @@ export default function SellerEditPage() {
 
   return (
     <Container className="small-container">
-      <Helmet>
-        <title>Edit Seller {id}</title>
-      </Helmet>
       <h1>Edit Seller {id}</h1>
       {loading ? (
         <LoadingBox></LoadingBox>

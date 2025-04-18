@@ -5,7 +5,6 @@ import { Store } from "../Store";
 import { getError } from "../utils";
 import LoadingBox from "../components/LoadingBox.jsx";
 import MessageBox from "../components/MessageBox.jsx";
-import { Helmet } from "react-helmet-async";
 import { Container, Table } from "react-bootstrap";
 
 const reducer = (state, action) => {
@@ -124,9 +123,6 @@ const ServiceProviders = () => {
 
   return (
     <Container className="provider-container">
-      <Helmet>
-        <title>Service Providers Dashboard</title>
-      </Helmet>
       <h1 className="mb-4 mt-4">Service Providers Dashboard</h1>
       {loading ? (
         <LoadingBox />

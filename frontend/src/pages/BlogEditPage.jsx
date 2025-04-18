@@ -6,7 +6,6 @@ import { Store } from "../Store";
 import { getError } from "../utils";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
-import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import Button from "react-bootstrap/Button";
@@ -128,9 +127,6 @@ const BlogEditPage = () => {
 
   return (
     <Container className="small-container">
-      <Helmet>
-        <title>Edit Blog {blogId}</title>
-      </Helmet>
       <h1>Edit Blog {blogId}</h1>
       {loading ? (
         <LoadingBox />

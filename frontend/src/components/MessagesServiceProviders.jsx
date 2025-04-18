@@ -4,7 +4,7 @@ import { Store } from "../Store";
 import { getError } from "../utils";
 import { Container, Table, Button } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -154,9 +154,6 @@ const MessagesServiceProviders = () => {
 
   return (
     <Container>
-      <Helmet>
-        <title>Service Provider Messagese</title>
-      </Helmet>
       <h1 className="mt-4 mb-4 fw-bold">Service Provider Messages</h1>
       {messages.length === 0 && (
         <div>

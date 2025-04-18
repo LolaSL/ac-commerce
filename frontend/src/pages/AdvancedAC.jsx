@@ -1,14 +1,11 @@
 import React from "react";
-import { Helmet } from "react-helmet-async";
+
 import Image from "react-bootstrap/Image";
 import { Link } from "react-router-dom";
 
 const AdvancedAC = () => {
   return (
     <div className="site-container mt-3 pt-3">
-      <Helmet>
-        <title>Advanced Air Conditioning</title>
-      </Helmet>
       <article>
         <h2>Advanced Air Conditioning 2025</h2>
         <h3 className="mb-3 p-3">

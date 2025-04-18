@@ -1,5 +1,4 @@
 import React, { useContext, useReducer, useState, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Store } from "../Store";
@@ -93,9 +92,6 @@ export default function ServiceProviderProfile() {
 
   return (
     <Container className="container small-container">
-      <Helmet>
-        <title>Service Provider Profile</title>
-      </Helmet>
       <h1 className="mt-4 mb-4 fw-bold">Service Provider Profile</h1>
       <div className="card p-3 mb-4">
         <h1 className="mt-2 mb-2-italic">{name}</h1>

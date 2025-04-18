@@ -9,7 +9,6 @@ import Form from "react-bootstrap/Form";
 import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import Rating from "../components/Rating";
-import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import { getError } from "../utils";
@@ -136,9 +135,6 @@ function ProductPage() {
     <MessageBox variant="danger">{error}</MessageBox>
   ) : (
     <div className="p-4">
-      <Helmet>
-        <title>{product.name}</title>
-      </Helmet>
       <Row>
         <Col md={6}>
           <ListGroup.Item>

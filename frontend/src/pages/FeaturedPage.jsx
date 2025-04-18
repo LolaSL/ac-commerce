@@ -3,7 +3,6 @@ import axios from "axios";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Product from "../components/Product.jsx";
-import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox.jsx";
 import MessageBox from "../components/MessageBox.jsx";
 import { Link } from "react-router-dom";
@@ -45,9 +44,6 @@ const FeaturedPage = () => {
 
   return (
     <div>
-      <Helmet>
-        <title>Featured Products</title>
-      </Helmet>
       <article className="py-4 mb-4">
         <h1 className="featured-title text-center pt-4 mb-4 fw-bold">
           Featured Products

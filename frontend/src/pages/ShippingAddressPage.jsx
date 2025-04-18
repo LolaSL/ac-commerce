@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
@@ -59,9 +58,6 @@ export default function ShippingAddressPage() {
 
   return (
     <div className="p-4">
-      <Helmet>
-        <title>Shipping Address</title>
-      </Helmet>
       <CheckoutSteps step1 step2></CheckoutSteps>
       <div className="container small-container">
         <h1 className="my-3">Shipping Address</h1>

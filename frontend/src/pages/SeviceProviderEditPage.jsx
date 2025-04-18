@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useReducer, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoadingBox from "../components/LoadingBox";
@@ -92,9 +91,6 @@ export default function ServiceProviderEditPage() {
 
   return (
     <Container className="small-container">
-      <Helmet>
-        <title>{`Edit Service Provider ${serviceProviderId}`}</title>
-      </Helmet>
       <h1>Edit Service Provider {serviceProviderId}</h1>
 
       {loading ? (

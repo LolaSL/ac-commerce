@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Helmet } from "react-helmet-async";
 import { useContext, useEffect, useState } from "react";
 import { Store } from "../Store";
 import { toast } from "react-toastify";
@@ -54,9 +53,6 @@ const ServiceProviderRegister = () => {
   }, [navigate, redirect, serviceProviderInfo]);
   return (
     <Container className="small-container">
-      <Helmet>
-        <title>Register</title>
-      </Helmet>
       <h1 className="text-center pt-4 mb-4 fw-bold my-3">Register</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="name">

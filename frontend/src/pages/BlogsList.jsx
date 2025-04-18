@@ -2,7 +2,6 @@ import React, { useReducer, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
-import { Helmet } from "react-helmet-async";
 import LoadingBox from "../components/LoadingBox.jsx";
 import MessageBox from "../components/MessageBox.jsx";
 
@@ -48,9 +47,6 @@ function BlogList() {
 
   return (
     <Container className="blog-container p-4">
-      <Helmet>
-        <title>Blogs</title>
-      </Helmet>
       <h1 className="blogs-title">Blogs</h1>
       {loading ? (
         <LoadingBox />

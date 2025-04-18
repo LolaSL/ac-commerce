@@ -8,7 +8,7 @@ import MessageBox from "./MessageBox.jsx";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
-import { Helmet } from "react-helmet-async";
+
 
 const initialState = {
   loading: true,
@@ -117,9 +117,6 @@ export default function UsersProductSales() {
 
   return (
     <div>
-      <Helmet>
-        <title>Users Dashboard</title>
-      </Helmet>
       <h1 className="mb-4 mt-4">Users Product Sales Dashboard</h1>
 
       {loading ? (

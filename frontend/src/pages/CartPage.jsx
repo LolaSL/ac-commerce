@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from "react";
 import { Store } from "../Store";
-import { Helmet } from "react-helmet-async";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import MessageBox from "../components/MessageBox";
@@ -136,11 +135,7 @@ export default function CartPage() {
 
   return (
     <div className="p-4">
-      <Helmet>
-        <title>Shopping Cart</title>
-      </Helmet>
       <h1>Shopping Cart</h1>
-
       <div className="p-4">
         {showAlert && (
           <div className="bg-info p-3 mb-3 text-center">

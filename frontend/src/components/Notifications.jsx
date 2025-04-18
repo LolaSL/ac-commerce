@@ -4,7 +4,6 @@ import { Store } from "../Store.js";
 import { getError } from "../utils.js";
 import LoadingBox from "./LoadingBox.jsx";
 import MessageBox from "./MessageBox.jsx";
-import { Helmet } from "react-helmet-async";
 import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 
@@ -108,9 +107,6 @@ export default function Notifications() {
 
   return (
     <div>
-      <Helmet>
-        <title>Notifications</title>
-      </Helmet>
       <h2>Notifications</h2>
       {loading ? (
         <LoadingBox />

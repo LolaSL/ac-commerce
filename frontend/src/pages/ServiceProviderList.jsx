@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useContext, useEffect, useReducer } from "react";
-import { Helmet } from "react-helmet-async";
 import { toast } from "react-toastify";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
@@ -107,9 +106,6 @@ export default function ServiceProviderList() {
 
   return (
     <Container className="provider-container">
-      <Helmet>
-        <title>Service Providers</title>
-      </Helmet>
       <h1>Service Providers</h1>
 
       {loadingDelete && <LoadingBox />}

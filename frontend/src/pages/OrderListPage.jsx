@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import { toast } from "react-toastify";
 import { Container, Table, Button } from "react-bootstrap";
-import { Helmet } from "react-helmet-async";
 import { useNavigate, useLocation } from "react-router-dom";
 import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
@@ -134,9 +133,6 @@ export default function OrderListPage() {
 
   return (
     <Container className="provider-container">
-      <Helmet>
-        <title>Orders</title>
-      </Helmet>
       <h1>Orders</h1>
       {loadingDelete && <LoadingBox />}
       {loading ? (

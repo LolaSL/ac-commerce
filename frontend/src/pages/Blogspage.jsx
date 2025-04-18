@@ -10,7 +10,6 @@ import { Store } from "../Store.js";
 import LoadingBox from "../components/LoadingBox.jsx";
 import MessageBox from "../components/MessageBox.jsx";
 import { getError } from "../utils.js";
-import { Helmet } from "react-helmet-async";
 import { Table } from "react-bootstrap";
 
 const reducer = (state, action) => {
@@ -139,9 +138,6 @@ export default function BlogsPage() {
 
   return (
     <Container className="provider-container">
-      <Helmet>
-        <title>Blogs</title>
-      </Helmet>
       <Row>
         <Col>
           <h1>Blogs</h1>

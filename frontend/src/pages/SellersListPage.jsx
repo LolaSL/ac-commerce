@@ -7,7 +7,7 @@ import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import { getError } from "../utils";
 import { Container, Table, Button } from "react-bootstrap";
-import { Helmet } from "react-helmet-async";
+
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -106,10 +106,6 @@ const SellersEditPage = () => {
 
   return (
     <Container className="provider-container">
-      <Helmet>
-        <title>Hours Page</title>
-      </Helmet>
-
       {loadingCreate && <LoadingBox></LoadingBox>}
       {loadingDelete && <LoadingBox></LoadingBox>}
 

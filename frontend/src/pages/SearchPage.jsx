@@ -3,7 +3,6 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { getError } from "../utils";
-import { Helmet } from "react-helmet-async";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Rating from "../components/Rating.jsx";
@@ -133,9 +132,6 @@ export default function SearchPage() {
 
   return (
     <div>
-      <Helmet>
-        <title>Search Products</title>
-      </Helmet>
       <div className="search">
         <Row className="mt-4 p-4">
           <Col md={3}>

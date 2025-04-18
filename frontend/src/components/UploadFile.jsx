@@ -96,10 +96,8 @@ const UploadFile = () => {
     const handleTouchEnd = () => {
       const touchDuration = Date.now() - touchStartTime;
       if (touchDuration >= 800) {
-        // 800ms = tap-and-hold
         console.log("Tap-and-hold detected for:", clickedRectId);
 
-        // Deletion logic:
         setRectangles((prevRects) =>
           prevRects.filter((r) => r.id !== clickedRectId)
         );

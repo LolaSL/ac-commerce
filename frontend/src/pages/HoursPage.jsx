@@ -3,7 +3,7 @@ import axios from "axios";
 import { Store } from "../Store";
 import { getError } from "../utils";
 import { Container, Table } from "react-bootstrap";
-import { Helmet } from "react-helmet-async";
+
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -57,9 +57,6 @@ const HoursPage = () => {
 
   return (
     <Container className="provider-container">
-          <Helmet>
-      <title>Hours Page</title>
-    </Helmet>
       <h1 className="mt-4 mb-4 fw-bold">Work Duration</h1>
       <div className="table-responsive">
         <Table striped bordered hover>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert, Image } from "react-bootstrap";
 import axios from "axios";
-import { Helmet } from "react-helmet-async";
 
 const ContactPage = () => {
   const [fullName, setFullName] = useState("");
@@ -72,9 +71,6 @@ const ContactPage = () => {
 
   return (
     <Container>
-      <Helmet>
-        <title>Contact</title>
-      </Helmet>
       <div>
         <Image
           src="/images/contact.jpg"
