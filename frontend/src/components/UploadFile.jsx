@@ -367,12 +367,14 @@ const UploadFile = () => {
     []
   );
 
-  const renderPDFOnCanvas = useCallback(
-    async (pdfData) => {
-      const canvas = canvasRef.current;
-      if (!canvas || !file) return;
-      const context = canvas.getContext("2d");
-
+  const renderPDFOnCanvas = useCallback(async (pdfData) => {
+    const canvas = canvasRef.current;
+    if (!canvas || !file) return;
+  
+    const context = canvas.getContext("2d");
+    if (!context) return;
+  
+    try {
       const loadingTask = pdfjsLib.getDocument({ data: pdfData });
       const pdf = await loadingTask.promise;
       const page = await pdf.getPage(1);
@@ -380,14 +382,12 @@ const UploadFile = () => {
       setPdfSize({ width: viewport.width, height: viewport.height });
       canvas.width = viewport.width;
       canvas.height = viewport.height;
-
-      const renderContext = {
+  
+      await page.render({
         canvasContext: context,
-        viewport: viewport,
-      };
-
-      await page.render(renderContext).promise;
-
+        viewport
+      }).promise;
+  
       iconPositions.forEach((icon) => {
         const rectWidth = 45;
         const rectHeight = 11;
@@ -402,27 +402,26 @@ const UploadFile = () => {
       });
       renderComments(context);
       memoizedCallback(context);
-    },
-    [
-      drawRotatedRectangle,
-      file,
-      iconPositions,
-      memoizedCallback,
-      renderComments,
-      setPdfSize,
-    ]
-  );
+    } catch (err) {
+      console.error("Error rendering PDF:", err);
+    }
+  }, [drawRotatedRectangle, file, iconPositions, memoizedCallback, renderComments]);
+  
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || !file) return;
-
+  
     const context = canvas.getContext("2d");
+    if (!context) return;
+  
     context.clearRect(0, 0, canvas.width, canvas.height);
+  
     if (previewUrl) {
       const img = new Image();
       img.src = previewUrl;
       img.onload = () => {
+        if (!canvas) return;  // double-check
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
         iconPositions.forEach((icon) => {
           const rectWidth = 65;
@@ -439,7 +438,7 @@ const UploadFile = () => {
         renderComments(context);
       };
     }
-
+  
     if (file?.type === "application/pdf") {
       const reader = new FileReader();
       reader.onload = async (e) => {
@@ -454,8 +453,9 @@ const UploadFile = () => {
     iconPositions,
     previewUrl,
     renderComments,
-    renderPDFOnCanvas,
+    renderPDFOnCanvas
   ]);
+  
 
   const saveAsPDF = async () => {
     if (file && file.type === "application/pdf") {
