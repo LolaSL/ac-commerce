@@ -24,7 +24,7 @@
     "fs-extra": "^11.2.0",
     "konva": "^9.3.20",
     "pdf-lib": "^1.17.1",
-    "pdfjs-dist": "^4.4.168",
+    "pdfjs-dist": "^2.10.377",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.4",
     "react-dom": "^19.1.0",
