@@ -4,7 +4,7 @@ import { Button, Form } from "react-bootstrap";
 import { PDFDocument } from "pdf-lib";
 import * as pdfjsLib from "pdfjs-dist";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js`;
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js`;
 
 const UploadFile = () => {
   const [iconPositions, setIconPositions] = useState([]);
@@ -91,7 +91,7 @@ const UploadFile = () => {
 
   const handleTouchStart = (e) => {
     console.log("Touch started!", e.target.attrs.id);
-    const clickedRectId = e.target.attrs.id; 
+    const clickedRectId = e.target.attrs.id;
 
     const handleTouchEnd = () => {
       const touchDuration = Date.now() - touchStartTime;
@@ -289,66 +289,112 @@ const UploadFile = () => {
     const context = canvas.getContext("2d");
     if (!context) return;
 
+    const drawGlobe = (x, y, radius) => {
+      context.beginPath();
+      context.arc(x, y, radius, 0, 2 * Math.PI);
+      context.strokeStyle = "#00008B";
+      context.lineWidth = 1.5;
+      context.stroke();
+
+      context.strokeStyle = "#808080";
+      context.lineWidth = 0.5;
+      const numParallels = 2;
+      for (let i = 1; i <= numParallels; i++) {
+        const yOffset = (i / (numParallels + 1)) * radius * 0.7;
+        context.beginPath();
+        context.arc(x, y, radius - yOffset, 0, 2 * Math.PI);
+        context.stroke();
+        context.beginPath();
+        context.arc(x, y, radius + yOffset, 0, 2 * Math.PI);
+        context.stroke();
+      }
+
+      const numMeridians = 4;
+      for (let i = 0; i < numMeridians; i++) {
+        const angle = (i / numMeridians) * 2 * Math.PI;
+        context.beginPath();
+        context.ellipse(x, y, radius * 0.35, radius * 0.7, angle, 0, Math.PI);
+        context.stroke();
+        context.beginPath();
+        context.ellipse(
+          x,
+          y,
+          radius * 0.35,
+          radius * 0.7,
+          angle + Math.PI,
+          0,
+          Math.PI
+        );
+        context.stroke();
+      }
+
+      context.beginPath();
+      context.arc(x, y, radius * 0.7, 0, 2 * Math.PI);
+      context.stroke();
+      context.beginPath();
+      context.moveTo(x - radius * 0.5, y);
+      context.lineTo(x + radius * 0.5, y);
+      context.stroke();
+    };
+
     const renderSignature = () => {
       if (isSaved) {
         const text = "APPROVED";
-        const padding = 10;
-        const fontSize = 14;
-        context.font = `bold ${fontSize}px Calibri italic`;
+        const subText = "AC-COMMERCE";
+        const padding = 12;
+        const fontSize = 17;
+        const subFontSize = 13;
+        const globeRadius = 20;
+        const globeMarginRight = 20;
+        const outerLineWidth = 2;
 
+        context.font = `bold ${fontSize}px Arial`;
         const textMetrics = context.measureText(text);
         const textWidth = textMetrics.width;
         const textHeight = fontSize;
 
-        const textX = context.canvas.width - textWidth - padding - 500;
-        const textY = 100 + textHeight + padding;
+        context.font = `normal ${subFontSize}px Arial`;
+        const subTextMetrics = context.measureText(subText);
+        const subTextWidth = subTextMetrics.width;
+        const subTextHeight = subFontSize;
 
-        const drawRoundedRect = (x, y, width, height, radius) => {
-          context.beginPath();
-          context.moveTo(x + radius, y);
-          context.lineTo(x + width - radius, y);
-          context.quadraticCurveTo(x + width, y, x + width, y + radius);
-          context.lineTo(x + width, y + height - radius);
-          context.quadraticCurveTo(
-            x + width,
-            y + height,
-            x + width - radius,
-            y + height
-          );
-          context.lineTo(x + radius, y + height);
-          context.quadraticCurveTo(x, y + height, x, y + height - radius);
-          context.lineTo(x, y + radius);
-          context.quadraticCurveTo(x, y, x + radius, y);
-          context.closePath();
-        };
-
-        context.fillStyle = "white";
-        drawRoundedRect(
-          textX - padding,
-          textY - textHeight - padding / 2,
-          textWidth + 2 * padding,
-          textHeight + padding,
-          10
+        const totalTextWidth = Math.max(textWidth, subTextWidth);
+        const totalContentWidth =
+          globeRadius * 2 + globeMarginRight + totalTextWidth;
+        const totalHeight = Math.max(
+          globeRadius * 2,
+          textHeight + subTextHeight
         );
-        context.fill();
+        const outerWidth = totalContentWidth + 2 * padding;
+        const outerHeight = totalHeight + 2 * padding;
 
-        context.strokeStyle = "#0933ce";
-        context.lineWidth = 1.5;
-        context.setLineDash([5, 5]);
-        context.stroke();
+        const rectX = context.canvas.width - outerWidth - 40;
+        const rectY = 80;
 
-        context.shadowColor = "rgba(0, 0, 0, 0.5)";
-        context.shadowBlur = 4;
-        context.shadowOffsetX = 2;
-        context.shadowOffsetY = 2;
+        const globeX = rectX + padding + globeRadius;
+        const globeY = rectY + padding + globeRadius;
 
-        context.fillStyle = "#ce092d";
+        const textX = globeX + globeRadius + globeMarginRight;
+        const textY = rectY + padding + textHeight;
+        const subTextX = textX;
+        const subTextY = textY + subFontSize;
+
+        context.strokeStyle = "#00008B";
+        context.lineWidth = outerLineWidth;
+        context.strokeRect(rectX, rectY, outerWidth, outerHeight);
+        context.fillStyle = "#f0f0f0";
+        context.fillRect(rectX, rectY, outerWidth, outerHeight);
+
+        drawGlobe(globeX, globeY, globeRadius);
+
+        context.fillStyle = "#00008B";
+        context.font = `bold ${fontSize}px Arial`;
         context.fillText(text, textX, textY);
 
-        context.shadowColor = "transparent";
-        context.shadowBlur = 0;
-        context.shadowOffsetX = 0;
-        context.shadowOffsetY = 0;
+        context.fillStyle = "#00008B";
+        context.font = `normal ${subFontSize}px Arial`;
+        context.fillText(subText, subTextX, subTextY + 5);
+
         context.setLineDash([]);
       }
     };
@@ -367,61 +413,69 @@ const UploadFile = () => {
     []
   );
 
-  const renderPDFOnCanvas = useCallback(async (pdfData) => {
-    const canvas = canvasRef.current;
-    if (!canvas || !file) return;
-  
-    const context = canvas.getContext("2d");
-    if (!context) return;
-  
-    try {
-      const loadingTask = pdfjsLib.getDocument({ data: pdfData });
-      const pdf = await loadingTask.promise;
-      const page = await pdf.getPage(1);
-      const viewport = page.getViewport({ scale: 1.5 });
-      setPdfSize({ width: viewport.width, height: viewport.height });
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
-  
-      await page.render({
-        canvasContext: context,
-        viewport
-      }).promise;
-  
-      iconPositions.forEach((icon) => {
-        const rectWidth = 45;
-        const rectHeight = 11;
-        drawRotatedRectangle(
-          context,
-          icon.x,
-          icon.y,
-          rectWidth,
-          rectHeight,
-          icon.angle
-        );
-      });
-      renderComments(context);
-      memoizedCallback(context);
-    } catch (err) {
-      console.error("Error rendering PDF:", err);
-    }
-  }, [drawRotatedRectangle, file, iconPositions, memoizedCallback, renderComments]);
-  
+  const renderPDFOnCanvas = useCallback(
+    async (pdfData) => {
+      const canvas = canvasRef.current;
+      if (!canvas || !file) return;
+
+      const context = canvas.getContext("2d");
+      if (!context) return;
+
+      try {
+        const loadingTask = pdfjsLib.getDocument({ data: pdfData });
+        const pdf = await loadingTask.promise;
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1.5 });
+        setPdfSize({ width: viewport.width, height: viewport.height });
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        await page.render({
+          canvasContext: context,
+          viewport,
+        }).promise;
+
+        iconPositions.forEach((icon) => {
+          const rectWidth = 45;
+          const rectHeight = 11;
+          drawRotatedRectangle(
+            context,
+            icon.x,
+            icon.y,
+            rectWidth,
+            rectHeight,
+            icon.angle
+          );
+        });
+        renderComments(context);
+        memoizedCallback(context);
+      } catch (err) {
+        console.error("Error rendering PDF:", err);
+      }
+    },
+    [
+      drawRotatedRectangle,
+      file,
+      iconPositions,
+      memoizedCallback,
+      renderComments,
+    ]
+  );
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || !file) return;
-  
+
     const context = canvas.getContext("2d");
     if (!context) return;
-  
+
     context.clearRect(0, 0, canvas.width, canvas.height);
-  
+
     if (previewUrl) {
       const img = new Image();
       img.src = previewUrl;
       img.onload = () => {
-        if (!canvas) return;  // double-check
+        if (!canvas) return;
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
         iconPositions.forEach((icon) => {
           const rectWidth = 65;
@@ -438,7 +492,7 @@ const UploadFile = () => {
         renderComments(context);
       };
     }
-  
+
     if (file?.type === "application/pdf") {
       const reader = new FileReader();
       reader.onload = async (e) => {
@@ -453,9 +507,8 @@ const UploadFile = () => {
     iconPositions,
     previewUrl,
     renderComments,
-    renderPDFOnCanvas
+    renderPDFOnCanvas,
   ]);
-  
 
   const saveAsPDF = async () => {
     if (file && file.type === "application/pdf") {
@@ -521,26 +574,26 @@ const UploadFile = () => {
         <Form.Label className="mb-4 label-upload">
           Upload file sample.
         </Form.Label>
-        <p className="warning fw-bold">
+        <p className="text-primary fw-bold upload-paragraph">
           *Supported: High Resolution PDFs files (.pdf). Recommended to place
           air conditioner (rectangle) above door in drawing.
         </p>
-        <p className="warning fw-bold">
+        <p className="text-primary fw-bold upload-paragraph">
           *Add rectangle: <kbd>Click On Empty Area</kbd>
         </p>
-        <p className="warning fw-bold">
-          Enter to appeared prompt window relevant to airi comditioner comment.
+        <p className="text-primary fw-bold upload-paragraph">
+          *Enter to appeared prompt window relevant to air conditioner comment.
         </p>
-        <p className="warning fw-bold">
+        <p className="text-primary fw-bold upload-paragraph">
           *Rotate rectangle: <kbd>Click</kbd>
         </p>
-        <p className="warning fw-bold">
+        <p className="text-primary fw-bold upload-paragraph">
           *Delete rectangle for small screens: <kbd>Tap And Hold</kbd>
         </p>
-        <p className="warning fw-bold">
+        <p className="text-primary fw-bold upload-paragraph">
           *Delete rectangle for large screens: <kbd>Right Click</kbd>
         </p>
-        <p className="warning fw-bold">
+        <p className="text-primary fw-bold upload-paragraph">
           *For saving approved drawing: <kbd>Double Click</kbd>
         </p>
         <Form.Control
@@ -557,6 +610,7 @@ const UploadFile = () => {
           {previewUrl && (
             <div style={{ position: "relative", display: "inline-block" }}>
               <canvas
+                id="my-canvas"
                 ref={canvasRef}
                 style={{ border: "1px solid black" }}
                 width={pdfSize.width}
