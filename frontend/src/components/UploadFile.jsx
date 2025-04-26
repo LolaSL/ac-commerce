@@ -55,7 +55,7 @@ const UploadFile = () => {
           x: pointerPosition.x,
           y: pointerPosition.y,
           width: 50,
-          height: 20,
+          height: 17,
           fill: "rgba(20, 205, 230)",
           rotation: 0,
         };
@@ -91,13 +91,12 @@ const UploadFile = () => {
 
   const handleTouchStart = (e) => {
     console.log("Touch started!", e.target.attrs.id);
-    const clickedRectId = e.target.attrs.id;
+    const clickedRectId = e.target.attrs.id; 
 
     const handleTouchEnd = () => {
       const touchDuration = Date.now() - touchStartTime;
       if (touchDuration >= 800) {
         console.log("Tap-and-hold detected for:", clickedRectId);
-
         setRectangles((prevRects) =>
           prevRects.filter((r) => r.id !== clickedRectId)
         );
@@ -264,7 +263,7 @@ const UploadFile = () => {
           adjustedY = canvasHeight - frameHeight - padding;
         }
 
-        context.fillStyle = "rgba(255, 255, 224, 0.5)";
+        context.fillStyle = "rgba(252, 252, 243, 0.2)";
         context.fillRect(adjustedX, adjustedY, frameWidth, frameHeight);
 
         context.strokeStyle = "grey";
@@ -283,20 +282,21 @@ const UploadFile = () => {
     [comments]
   );
 
+
   const memoizedCallback = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const context = canvas.getContext("2d");
     if (!context) return;
-
+  
     const drawGlobe = (x, y, radius) => {
       context.beginPath();
       context.arc(x, y, radius, 0, 2 * Math.PI);
-      context.strokeStyle = "#00008B";
+      context.strokeStyle = "#00008B"; // Dark Blue for the globe
       context.lineWidth = 1.5;
       context.stroke();
-
-      context.strokeStyle = "#808080";
+  
+      context.strokeStyle = "#808080"; // Gray for lines
       context.lineWidth = 0.5;
       const numParallels = 2;
       for (let i = 1; i <= numParallels; i++) {
@@ -308,7 +308,7 @@ const UploadFile = () => {
         context.arc(x, y, radius + yOffset, 0, 2 * Math.PI);
         context.stroke();
       }
-
+  
       const numMeridians = 4;
       for (let i = 0; i < numMeridians; i++) {
         const angle = (i / numMeridians) * 2 * Math.PI;
@@ -316,18 +316,10 @@ const UploadFile = () => {
         context.ellipse(x, y, radius * 0.35, radius * 0.7, angle, 0, Math.PI);
         context.stroke();
         context.beginPath();
-        context.ellipse(
-          x,
-          y,
-          radius * 0.35,
-          radius * 0.7,
-          angle + Math.PI,
-          0,
-          Math.PI
-        );
+        context.ellipse(x, y, radius * 0.35, radius * 0.7, angle + Math.PI, 0, Math.PI);
         context.stroke();
       }
-
+      // Simplified globe lines
       context.beginPath();
       context.arc(x, y, radius * 0.7, 0, 2 * Math.PI);
       context.stroke();
@@ -336,7 +328,7 @@ const UploadFile = () => {
       context.lineTo(x + radius * 0.5, y);
       context.stroke();
     };
-
+  
     const renderSignature = () => {
       if (isSaved) {
         const text = "APPROVED";
@@ -345,60 +337,62 @@ const UploadFile = () => {
         const fontSize = 17;
         const subFontSize = 13;
         const globeRadius = 20;
-        const globeMarginRight = 20;
+        const globeMarginRight =20;
         const outerLineWidth = 2;
-
-        context.font = `bold ${fontSize}px Arial`;
+  
+        context.font = `bold ${fontSize}px Arial`; // Using Arial font
         const textMetrics = context.measureText(text);
         const textWidth = textMetrics.width;
         const textHeight = fontSize;
-
+  
         context.font = `normal ${subFontSize}px Arial`;
         const subTextMetrics = context.measureText(subText);
         const subTextWidth = subTextMetrics.width;
         const subTextHeight = subFontSize;
-
+  
         const totalTextWidth = Math.max(textWidth, subTextWidth);
-        const totalContentWidth =
-          globeRadius * 2 + globeMarginRight + totalTextWidth;
-        const totalHeight = Math.max(
-          globeRadius * 2,
-          textHeight + subTextHeight
-        );
+        const totalContentWidth = globeRadius * 2 + globeMarginRight + totalTextWidth;
+        const totalHeight = Math.max(globeRadius * 2, textHeight + subTextHeight);
         const outerWidth = totalContentWidth + 2 * padding;
         const outerHeight = totalHeight + 2 * padding;
-
-        const rectX = context.canvas.width - outerWidth - 40;
-        const rectY = 80;
-
+  
+        const rectX = context.canvas.width - outerWidth - 40; // Adjusted positioning
+        const rectY = 80; // Adjusted positioning
+  
         const globeX = rectX + padding + globeRadius;
         const globeY = rectY + padding + globeRadius;
-
+  
         const textX = globeX + globeRadius + globeMarginRight;
         const textY = rectY + padding + textHeight;
         const subTextX = textX;
         const subTextY = textY + subFontSize;
-
-        context.strokeStyle = "#00008B";
+  
+        // Draw outer rectangle
+        context.strokeStyle = "#00008B"; // Dark Blue
         context.lineWidth = outerLineWidth;
         context.strokeRect(rectX, rectY, outerWidth, outerHeight);
-        context.fillStyle = "#f0f0f0";
+  
+        // Draw background
+        context.fillStyle = "rgba(252, 252, 243, 0.2)"; // Light gray background
         context.fillRect(rectX, rectY, outerWidth, outerHeight);
-
+  
+        // Draw the globe
         drawGlobe(globeX, globeY, globeRadius);
-
-        context.fillStyle = "#00008B";
+  
+        // Draw the text
+        context.fillStyle = "#00008B"; // Dark Blue
         context.font = `bold ${fontSize}px Arial`;
         context.fillText(text, textX, textY);
-
+  
+        // Draw the sub-text
         context.fillStyle = "#00008B";
         context.font = `normal ${subFontSize}px Arial`;
-        context.fillText(subText, subTextX, subTextY + 5);
-
+        context.fillText(subText, subTextX, subTextY + 5); // Adjusted subtext position
+  
         context.setLineDash([]);
       }
     };
-
+  
     renderSignature();
   }, [isSaved]);
 
@@ -417,41 +411,37 @@ const UploadFile = () => {
     async (pdfData) => {
       const canvas = canvasRef.current;
       if (!canvas || !file) return;
-
       const context = canvas.getContext("2d");
-      if (!context) return;
 
-      try {
-        const loadingTask = pdfjsLib.getDocument({ data: pdfData });
-        const pdf = await loadingTask.promise;
-        const page = await pdf.getPage(1);
-        const viewport = page.getViewport({ scale: 1.5 });
-        setPdfSize({ width: viewport.width, height: viewport.height });
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
+      const loadingTask = pdfjsLib.getDocument({ data: pdfData });
+      const pdf = await loadingTask.promise;
+      const page = await pdf.getPage(1);
+      const viewport = page.getViewport({ scale: 1.5 });
+      setPdfSize({ width: viewport.width, height: viewport.height });
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
 
-        await page.render({
-          canvasContext: context,
-          viewport,
-        }).promise;
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport,
+      };
 
-        iconPositions.forEach((icon) => {
-          const rectWidth = 45;
-          const rectHeight = 11;
-          drawRotatedRectangle(
-            context,
-            icon.x,
-            icon.y,
-            rectWidth,
-            rectHeight,
-            icon.angle
-          );
-        });
-        renderComments(context);
-        memoizedCallback(context);
-      } catch (err) {
-        console.error("Error rendering PDF:", err);
-      }
+      await page.render(renderContext).promise;
+
+      iconPositions.forEach((icon) => {
+        const rectWidth = 45;
+        const rectHeight = 11;
+        drawRotatedRectangle(
+          context,
+          icon.x,
+          icon.y,
+          rectWidth,
+          rectHeight,
+          icon.angle
+        );
+      });
+      renderComments(context);
+      memoizedCallback(context);
     },
     [
       drawRotatedRectangle,
@@ -459,6 +449,7 @@ const UploadFile = () => {
       iconPositions,
       memoizedCallback,
       renderComments,
+      setPdfSize,
     ]
   );
 
@@ -467,15 +458,11 @@ const UploadFile = () => {
     if (!canvas || !file) return;
 
     const context = canvas.getContext("2d");
-    if (!context) return;
-
     context.clearRect(0, 0, canvas.width, canvas.height);
-
     if (previewUrl) {
       const img = new Image();
       img.src = previewUrl;
       img.onload = () => {
-        if (!canvas) return;
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
         iconPositions.forEach((icon) => {
           const rectWidth = 65;
@@ -571,7 +558,7 @@ const UploadFile = () => {
         <h1 className="mt-4 mb-4 title-measurement">
           Measurement Service System
         </h1>
-        <Form.Label className="mb-4 label-upload">
+        <Form.Label className="mb-4 label-upload fw-bold">
           Upload file sample.
         </Form.Label>
         <p className="text-primary fw-bold upload-paragraph">
@@ -717,13 +704,13 @@ const UploadFile = () => {
                 <Button
                   variant="secondary"
                   onClick={saveAsPDF}
-                  className="mt-2 me-2"
+                  className="mt-2 me-2 rounded mb-3"
                 >
                   Save as PDF
                 </Button>
                 <Button
                   variant="secondary"
-                  className="mt-2"
+                  className="mt-2 rounded mb-3"
                   onClick={clearCanvas}
                 >
                   Clear
